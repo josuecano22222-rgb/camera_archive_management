@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Dataset Identity"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Catalog details"
+  },
+  {
    "fieldname": "dataset_id",
    "fieldtype": "Data",
    "label": "Dataset Id",
@@ -30,6 +40,11 @@
    "reqd": 1
   },
   {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "License & attribution"
+  },
+  {
    "fieldname": "license_id",
    "fieldtype": "Data",
    "label": "License Id",
@@ -46,6 +61,16 @@
    "fieldtype": "Small Text",
    "label": "Country Tags",
    "description": "Comma-separated ISO country/region tags; not an administrative hierarchy."
+  },
+  {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Coverage"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Geographic extent"
   },
   {
    "fieldname": "west",
@@ -72,10 +97,25 @@
    "description": "Exact decimal string; WGS84 is validated server-side."
   },
   {
+   "fieldname": "layout_tab_3",
+   "fieldtype": "Tab Break",
+   "label": "Import & Index"
+  },
+  {
+   "fieldname": "layout_section_3_1",
+   "fieldtype": "Section Break",
+   "label": "Import source"
+  },
+  {
    "fieldname": "source_file",
    "fieldtype": "Attach",
    "label": "Source File",
    "description": "Private GeoJSON FeatureCollection for a background import."
+  },
+  {
+   "fieldname": "layout_section_3_2",
+   "fieldtype": "Section Break",
+   "label": "Progress & outcome"
   },
   {
    "fieldname": "import_status",
@@ -118,18 +158,26 @@
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "dataset_id",
   "label",
   "version",
   "source",
+  "layout_section_1_2",
   "license_id",
   "attribution",
   "country_tags",
+  "layout_tab_2",
+  "layout_section_2_1",
   "west",
   "south",
   "east",
   "north",
+  "layout_tab_3",
+  "layout_section_3_1",
   "source_file",
+  "layout_section_3_2",
   "import_status",
   "import_progress",
   "feature_count",

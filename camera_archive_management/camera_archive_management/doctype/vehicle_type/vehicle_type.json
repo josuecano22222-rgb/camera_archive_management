@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Vehicle Classification"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Type identity"
+  },
+  {
    "fieldname": "type_name",
    "fieldtype": "Data",
    "label": "Type Name",
@@ -13,16 +23,26 @@
    "in_list_view": 1
   },
   {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "default": "1"
+  },
+  {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Illustration"
+  },
+  {
    "fieldname": "vehicle_type_image",
    "fieldtype": "Attach Image",
    "label": "Vehicle Type Image",
    "description": "Fallback movement icon when a vehicle has no primary image."
   },
   {
-   "fieldname": "is_active",
-   "fieldtype": "Check",
-   "label": "Is Active",
-   "default": "1"
+   "fieldname": "layout_section_1_3",
+   "fieldtype": "Section Break",
+   "label": "Description"
   },
   {
    "fieldname": "description",
@@ -31,9 +51,13 @@
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "type_name",
-  "vehicle_type_image",
   "is_active",
+  "layout_section_1_2",
+  "vehicle_type_image",
+  "layout_section_1_3",
   "description"
  ],
  "permissions": [
@@ -106,5 +130,6 @@
  "sort_order": "DESC",
  "links": [],
  "autoname": "field:type_name",
- "title_field": "type_name"
+ "title_field": "type_name",
+ "image_field": "vehicle_type_image"
 }

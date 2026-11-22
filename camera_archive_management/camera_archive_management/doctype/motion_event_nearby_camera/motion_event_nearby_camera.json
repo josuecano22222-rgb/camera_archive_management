@@ -10,13 +10,15 @@
    "label": "Camera",
    "options": "Camera",
    "reqd": 1,
-   "read_only": 1
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "distance_m",
    "fieldtype": "Float",
    "label": "Distance M",
-   "read_only": 1
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "bearing_deg",
@@ -28,14 +30,16 @@
    "fieldname": "bearing_compass",
    "fieldtype": "Data",
    "label": "Bearing Compass",
-   "read_only": 1
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "area",
    "fieldtype": "Link",
    "label": "Area",
    "options": "Camera Area",
-   "read_only": 1
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "camera_status",

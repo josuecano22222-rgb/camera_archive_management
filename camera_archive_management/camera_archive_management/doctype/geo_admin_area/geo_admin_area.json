@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Administrative Hierarchy"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Dataset & identity"
+  },
+  {
    "fieldname": "dataset",
    "fieldtype": "Link",
    "label": "Dataset",
@@ -34,6 +44,11 @@
    "in_list_view": 1
   },
   {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Parentage"
+  },
+  {
    "fieldname": "is_group",
    "fieldtype": "Check",
    "label": "Is Group",
@@ -44,6 +59,16 @@
    "fieldtype": "Link",
    "label": "Parent Area",
    "options": "Geo Admin Area"
+  },
+  {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Geographic Reference"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Location & tags"
   },
   {
    "fieldname": "country_tags",
@@ -61,6 +86,16 @@
    "label": "Longitude"
   },
   {
+   "fieldname": "layout_tab_3",
+   "fieldtype": "Tab Break",
+   "label": "Source & Quality"
+  },
+  {
+   "fieldname": "layout_section_3_1",
+   "fieldtype": "Section Break",
+   "label": "Provenance"
+  },
+  {
    "fieldname": "source_kind",
    "fieldtype": "Select",
    "label": "Source Kind",
@@ -71,6 +106,11 @@
    "fieldname": "source_notes",
    "fieldtype": "Small Text",
    "label": "Source Notes"
+  },
+  {
+   "fieldname": "layout_section_3_2",
+   "fieldtype": "Section Break",
+   "label": "Tree maintenance fields"
   },
   {
    "fieldname": "lft",
@@ -95,17 +135,25 @@
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "dataset",
   "code",
   "label",
   "level",
+  "layout_section_1_2",
   "is_group",
   "parent_area",
+  "layout_tab_2",
+  "layout_section_2_1",
   "country_tags",
   "latitude",
   "longitude",
+  "layout_tab_3",
+  "layout_section_3_1",
   "source_kind",
   "source_notes",
+  "layout_section_3_2",
   "lft",
   "rgt",
   "old_parent"

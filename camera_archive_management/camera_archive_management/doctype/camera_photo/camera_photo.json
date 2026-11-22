@@ -7,23 +7,27 @@
   {
    "fieldname": "image",
    "fieldtype": "Attach Image",
-   "label": "Image"
+   "label": "Image",
+   "in_list_view": 1
   },
   {
    "fieldname": "caption",
    "fieldtype": "Data",
-   "label": "Caption"
+   "label": "Caption",
+   "in_list_view": 1
   },
   {
    "fieldname": "is_primary",
    "fieldtype": "Check",
    "label": "Is Primary",
-   "default": "0"
+   "default": "0",
+   "in_list_view": 1
   },
   {
    "fieldname": "sort_order",
    "fieldtype": "Int",
-   "label": "Sort Order"
+   "label": "Sort Order",
+   "in_list_view": 1
   },
   {
    "fieldname": "description",

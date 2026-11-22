@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Event Overview"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Detection"
+  },
+  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Series",
@@ -42,6 +52,18 @@
    "in_standard_filter": 1
   },
   {
+   "fieldname": "importance",
+   "fieldtype": "Select",
+   "label": "Importance",
+   "options": "Low\nMedium\nHigh\nCritical",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Vehicle"
+  },
+  {
    "fieldname": "vehicle",
    "fieldtype": "Link",
    "label": "CAM Vehicle",
@@ -54,16 +76,14 @@
    "label": "Vehicle Movement Icon"
   },
   {
-   "fieldname": "importance",
-   "fieldtype": "Select",
-   "label": "Importance",
-   "options": "Low\nMedium\nHigh\nCritical",
-   "in_standard_filter": 1
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Camera Snapshot"
   },
   {
-   "fieldname": "camera_snapshot_section",
+   "fieldname": "layout_section_2_1",
    "fieldtype": "Section Break",
-   "label": "Camera Snapshot"
+   "label": "Camera at detection"
   },
   {
    "fieldname": "camera_name_snapshot",
@@ -90,6 +110,11 @@
    "read_only": 1
   },
   {
+   "fieldname": "layout_section_2_2",
+   "fieldtype": "Section Break",
+   "label": "Resolved location"
+  },
+  {
    "fieldname": "latitude_snapshot",
    "fieldtype": "Data",
    "label": "Latitude Snapshot",
@@ -112,6 +137,11 @@
    "fieldtype": "Data",
    "label": "Geo Admin Area Snapshot",
    "read_only": 1
+  },
+  {
+   "fieldname": "layout_section_2_3",
+   "fieldtype": "Section Break",
+   "label": "Lookup confidence"
   },
   {
    "fieldname": "location_source_snapshot",
@@ -138,9 +168,14 @@
    "read_only": 1
   },
   {
-   "fieldname": "details_section",
+   "fieldname": "layout_tab_3",
+   "fieldtype": "Tab Break",
+   "label": "Notes & Proximity"
+  },
+  {
+   "fieldname": "layout_section_3_1",
    "fieldtype": "Section Break",
-   "label": "Details"
+   "label": "Operator notes"
   },
   {
    "fieldname": "notes",
@@ -148,9 +183,9 @@
    "label": "Notes"
   },
   {
-   "fieldname": "nearby_section",
+   "fieldname": "layout_section_3_2",
    "fieldtype": "Section Break",
-   "label": "Nearby Cameras"
+   "label": "Nearby cameras"
   },
   {
    "fieldname": "nearby_cameras",
@@ -161,27 +196,36 @@
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "naming_series",
   "camera",
   "motion_type",
   "detected_at",
+  "importance",
+  "layout_section_1_2",
   "vehicle",
   "vehicle_visual",
-  "importance",
-  "camera_snapshot_section",
+  "layout_tab_2",
+  "layout_section_2_1",
   "camera_name_snapshot",
   "camera_type_snapshot",
   "camera_area_snapshot",
   "address_snapshot",
+  "layout_section_2_2",
   "latitude_snapshot",
   "longitude_snapshot",
   "location_snapshot",
   "geo_admin_area_snapshot",
+  "layout_section_2_3",
   "location_source_snapshot",
   "location_confidence_snapshot",
-  "details_section",
+  "location_ambiguous_snapshot",
+  "location_resolved_at_snapshot",
+  "layout_tab_3",
+  "layout_section_3_1",
   "notes",
-  "nearby_section",
+  "layout_section_3_2",
   "nearby_cameras"
  ],
  "permissions": [

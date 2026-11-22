@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Operational Defaults"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Reporting"
+  },
+  {
    "fieldname": "default_report_days",
    "fieldtype": "Int",
    "label": "Default Report Days",
@@ -18,32 +28,9 @@
    "default": "Medium"
   },
   {
-   "fieldname": "enable_daily_integrity_check",
-   "fieldtype": "Check",
-   "label": "Enable Daily Integrity Check",
-   "default": "0"
-  },
-  {
-   "fieldname": "enable_nearby_camera_alerts",
-   "fieldtype": "Check",
-   "label": "Enable Nearby Camera Alerts",
-   "default": "1"
-  },
-  {
-   "fieldname": "nearby_camera_radius",
-   "fieldtype": "Int",
-   "label": "Nearby Camera Radius (m)",
-   "default": "500"
-  },
-  {
-   "fieldname": "nearby_alert_roles",
-   "fieldtype": "Small Text",
-   "label": "Nearby Alert Roles"
-  },
-  {
-   "fieldname": "report_schedule_note",
-   "fieldtype": "Small Text",
-   "label": "Report Schedule Note"
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Retention & integrity"
   },
   {
    "fieldname": "default_retention_days",
@@ -61,19 +48,68 @@
    "fieldtype": "Check",
    "label": "Allow External Archive References",
    "default": "1"
+  },
+  {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Monitoring & Alerts"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Scheduled checks"
+  },
+  {
+   "fieldname": "enable_daily_integrity_check",
+   "fieldtype": "Check",
+   "label": "Enable Daily Integrity Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "report_schedule_note",
+   "fieldtype": "Small Text",
+   "label": "Report Schedule Note"
+  },
+  {
+   "fieldname": "layout_section_2_2",
+   "fieldtype": "Section Break",
+   "label": "Nearby camera alerts"
+  },
+  {
+   "fieldname": "enable_nearby_camera_alerts",
+   "fieldtype": "Check",
+   "label": "Enable Nearby Camera Alerts",
+   "default": "1"
+  },
+  {
+   "fieldname": "nearby_camera_radius",
+   "fieldtype": "Int",
+   "label": "Nearby Camera Radius (m)",
+   "default": "500"
+  },
+  {
+   "fieldname": "nearby_alert_roles",
+   "fieldtype": "Small Text",
+   "label": "Nearby Alert Roles"
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "default_report_days",
   "default_motion_importance",
-  "enable_daily_integrity_check",
-  "enable_nearby_camera_alerts",
-  "nearby_camera_radius",
-  "nearby_alert_roles",
-  "report_schedule_note",
+  "layout_section_1_2",
   "default_retention_days",
   "require_archive_checksum",
-  "allow_external_archive_references"
+  "allow_external_archive_references",
+  "layout_tab_2",
+  "layout_section_2_1",
+  "enable_daily_integrity_check",
+  "report_schedule_note",
+  "layout_section_2_2",
+  "enable_nearby_camera_alerts",
+  "nearby_camera_radius",
+  "nearby_alert_roles"
  ],
  "permissions": [
   {

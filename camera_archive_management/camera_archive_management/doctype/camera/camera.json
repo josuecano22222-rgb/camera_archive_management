@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Camera Profile"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Identification"
+  },
+  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Series",
@@ -43,18 +53,23 @@
    "in_standard_filter": 1
   },
   {
+   "fieldname": "importance",
+   "fieldtype": "Select",
+   "label": "Importance",
+   "options": "Low\nMedium\nHigh\nCritical"
+  },
+  {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Deployment"
+  },
+  {
    "fieldname": "area",
    "fieldtype": "Link",
    "label": "Area",
    "options": "Camera Area",
    "in_list_view": 1,
    "in_standard_filter": 1
-  },
-  {
-   "fieldname": "importance",
-   "fieldtype": "Select",
-   "label": "Importance",
-   "options": "Low\nMedium\nHigh\nCritical"
   },
   {
    "fieldname": "serial_number",
@@ -74,9 +89,14 @@
    "label": "Installation Date"
   },
   {
-   "fieldname": "connection_section",
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Connectivity"
+  },
+  {
+   "fieldname": "layout_section_2_1",
    "fieldtype": "Section Break",
-   "label": "Connection"
+   "label": "Connection details"
   },
   {
    "fieldname": "ip_address",
@@ -89,9 +109,14 @@
    "label": "Port"
   },
   {
-   "fieldname": "location_section",
+   "fieldname": "layout_tab_3",
+   "fieldtype": "Tab Break",
+   "label": "Location & Mapping"
+  },
+  {
+   "fieldname": "layout_section_3_1",
    "fieldtype": "Section Break",
-   "label": "Location"
+   "label": "Position"
   },
   {
    "fieldname": "location",
@@ -117,6 +142,11 @@
    "description": "Operator-entered address. Reverse lookup never replaces this field automatically."
   },
   {
+   "fieldname": "layout_section_3_2",
+   "fieldtype": "Section Break",
+   "label": "Geographic references"
+  },
+  {
    "fieldname": "geo_admin_area",
    "fieldtype": "Link",
    "label": "Geo Admin Area",
@@ -127,6 +157,11 @@
    "fieldtype": "Link",
    "label": "Geo Boundary",
    "options": "Geo Boundary"
+  },
+  {
+   "fieldname": "layout_section_3_3",
+   "fieldtype": "Section Break",
+   "label": "Lookup provenance"
   },
   {
    "fieldname": "lookup_source",
@@ -149,7 +184,12 @@
    "label": "Lookup Resolved At"
   },
   {
-   "fieldname": "coverage_section",
+   "fieldname": "layout_tab_4",
+   "fieldtype": "Tab Break",
+   "label": "Coverage & Notes"
+  },
+  {
+   "fieldname": "layout_section_4_1",
    "fieldtype": "Section Break",
    "label": "Coverage"
   },
@@ -164,9 +204,14 @@
    "label": "Description"
   },
   {
-   "fieldname": "photo_section",
+   "fieldname": "layout_tab_5",
+   "fieldtype": "Tab Break",
+   "label": "Media & Proximity"
+  },
+  {
+   "fieldname": "layout_section_5_1",
    "fieldtype": "Section Break",
-   "label": "Photos"
+   "label": "Camera photos"
   },
   {
    "fieldname": "camera_photos",
@@ -175,9 +220,9 @@
    "options": "Camera Photo"
   },
   {
-   "fieldname": "nearby_section",
+   "fieldname": "layout_section_5_2",
    "fieldtype": "Section Break",
-   "label": "Nearby Cameras"
+   "label": "Nearby cameras"
   },
   {
    "fieldname": "nearby_cameras",
@@ -187,35 +232,44 @@
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "naming_series",
   "camera_name",
   "status",
   "camera_type",
-  "area",
   "importance",
+  "layout_section_1_2",
+  "area",
   "serial_number",
   "camera_number",
   "installation_date",
-  "connection_section",
+  "layout_tab_2",
+  "layout_section_2_1",
   "ip_address",
   "port",
-  "location_section",
+  "layout_tab_3",
+  "layout_section_3_1",
   "location",
   "latitude",
   "longitude",
   "address",
+  "layout_section_3_2",
   "geo_admin_area",
   "geo_boundary",
+  "layout_section_3_3",
   "lookup_source",
   "lookup_confidence",
   "lookup_ambiguous",
   "lookup_resolved_at",
-  "coverage_section",
+  "layout_tab_4",
+  "layout_section_4_1",
   "field_of_view",
   "description",
-  "photo_section",
+  "layout_tab_5",
+  "layout_section_5_1",
   "camera_photos",
-  "nearby_section",
+  "layout_section_5_2",
   "nearby_cameras"
  ],
  "permissions": [

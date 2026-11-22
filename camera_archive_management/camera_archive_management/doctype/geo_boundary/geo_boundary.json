@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Boundary Profile"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Identity & hierarchy"
+  },
+  {
    "fieldname": "dataset",
    "fieldtype": "Link",
    "label": "Dataset",
@@ -46,6 +56,33 @@
    "options": "Geo Admin Area"
   },
   {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Provenance"
+  },
+  {
+   "fieldname": "source_id",
+   "fieldtype": "Data",
+   "label": "Source Id"
+  },
+  {
+   "fieldname": "source_kind",
+   "fieldtype": "Select",
+   "label": "Source Kind",
+   "options": "Manual\nImported\nVerified\nDisputed",
+   "default": "Imported"
+  },
+  {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Spatial Extent"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Bounding box"
+  },
+  {
    "fieldname": "west",
    "fieldtype": "Data",
    "label": "West",
@@ -70,6 +107,11 @@
    "description": "Exact decimal string; WGS84 is validated server-side."
   },
   {
+   "fieldname": "layout_section_2_2",
+   "fieldtype": "Section Break",
+   "label": "Centroid & area"
+  },
+  {
    "fieldname": "centroid_lat",
    "fieldtype": "Data",
    "label": "Centroid Lat",
@@ -87,16 +129,14 @@
    "label": "Area M2"
   },
   {
-   "fieldname": "source_id",
-   "fieldtype": "Data",
-   "label": "Source Id"
+   "fieldname": "layout_tab_3",
+   "fieldtype": "Tab Break",
+   "label": "Geometry"
   },
   {
-   "fieldname": "source_kind",
-   "fieldtype": "Select",
-   "label": "Source Kind",
-   "options": "Manual\nImported\nVerified\nDisputed",
-   "default": "Imported"
+   "fieldname": "layout_section_3_1",
+   "fieldtype": "Section Break",
+   "label": "Boundary geometries"
   },
   {
    "fieldname": "geometries",
@@ -107,21 +147,29 @@
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "dataset",
   "boundary_code",
   "label",
   "level",
   "parent_boundary",
   "admin_area",
+  "layout_section_1_2",
+  "source_id",
+  "source_kind",
+  "layout_tab_2",
+  "layout_section_2_1",
   "west",
   "south",
   "east",
   "north",
+  "layout_section_2_2",
   "centroid_lat",
   "centroid_lon",
   "area_m2",
-  "source_id",
-  "source_kind",
+  "layout_tab_3",
+  "layout_section_3_1",
   "geometries"
  ],
  "permissions": [

@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Submission"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Source & idempotency"
+  },
+  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Series",
@@ -30,6 +40,11 @@
    "in_list_view": 1
   },
   {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Manifest"
+  },
+  {
    "fieldname": "source_manifest",
    "fieldtype": "Attach",
    "label": "Source Manifest",
@@ -40,6 +55,16 @@
    "fieldtype": "Long Text",
    "label": "Manifest Json",
    "description": "Optional bounded JSON manifest payload."
+  },
+  {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Processing"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Run status"
   },
   {
    "fieldname": "status",
@@ -71,6 +96,11 @@
    "read_only": 1
   },
   {
+   "fieldname": "layout_section_2_2",
+   "fieldtype": "Section Break",
+   "label": "Outcome"
+  },
+  {
    "fieldname": "processed_count",
    "fieldtype": "Int",
    "label": "Processed Count",
@@ -85,15 +115,21 @@
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "naming_series",
   "source_scope",
   "idempotency_key",
+  "layout_section_1_2",
   "source_manifest",
   "manifest_json",
+  "layout_tab_2",
+  "layout_section_2_1",
   "status",
   "queued_by",
   "started_at",
   "finished_at",
+  "layout_section_2_2",
   "processed_count",
   "error_log"
  ],

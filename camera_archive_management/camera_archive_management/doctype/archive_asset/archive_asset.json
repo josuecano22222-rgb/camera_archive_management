@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Archive Record"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Identity & context"
+  },
+  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Series",
@@ -39,6 +49,53 @@
    "in_list_view": 1
   },
   {
+   "fieldname": "ingest_batch",
+   "fieldtype": "Link",
+   "label": "Ingest Batch",
+   "options": "Archive Ingest Batch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Capture window"
+  },
+  {
+   "fieldname": "recorded_from",
+   "fieldtype": "Datetime",
+   "label": "Recorded From"
+  },
+  {
+   "fieldname": "recorded_to",
+   "fieldtype": "Datetime",
+   "label": "Recorded To"
+  },
+  {
+   "fieldname": "layout_section_1_3",
+   "fieldtype": "Section Break",
+   "label": "Asset properties"
+  },
+  {
+   "fieldname": "media_type",
+   "fieldtype": "Data",
+   "label": "Media Type"
+  },
+  {
+   "fieldname": "size_bytes",
+   "fieldtype": "Int",
+   "label": "Size Bytes"
+  },
+  {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Storage & Integrity"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Storage location"
+  },
+  {
    "fieldname": "storage_backend",
    "fieldtype": "Select",
    "label": "Storage Backend",
@@ -65,42 +122,14 @@
    "label": "External Storage Scope"
   },
   {
-   "fieldname": "ingest_batch",
-   "fieldtype": "Link",
-   "label": "Ingest Batch",
-   "options": "Archive Ingest Batch",
-   "read_only": 1
-  },
-  {
-   "fieldname": "ingest_item_key",
-   "fieldtype": "Data",
-   "label": "Ingest Item Key",
-   "read_only": 1
+   "fieldname": "layout_section_2_2",
+   "fieldtype": "Section Break",
+   "label": "Verification"
   },
   {
    "fieldname": "checksum_sha256",
    "fieldtype": "Data",
    "label": "Checksum Sha256"
-  },
-  {
-   "fieldname": "size_bytes",
-   "fieldtype": "Int",
-   "label": "Size Bytes"
-  },
-  {
-   "fieldname": "media_type",
-   "fieldtype": "Data",
-   "label": "Media Type"
-  },
-  {
-   "fieldname": "recorded_from",
-   "fieldtype": "Datetime",
-   "label": "Recorded From"
-  },
-  {
-   "fieldname": "recorded_to",
-   "fieldtype": "Datetime",
-   "label": "Recorded To"
   },
   {
    "fieldname": "retention_state",
@@ -109,6 +138,11 @@
    "options": "Active\nHold\nExpired\nDeleted",
    "default": "Active",
    "reqd": 1
+  },
+  {
+   "fieldname": "layout_section_2_3",
+   "fieldtype": "Section Break",
+   "label": "Indexing"
   },
   {
    "fieldname": "index_status",
@@ -123,30 +157,56 @@
    "label": "Index Error"
   },
   {
+   "fieldname": "layout_section_2_4",
+   "fieldtype": "Section Break",
+   "label": "Ingest provenance"
+  },
+  {
+   "fieldname": "ingest_item_key",
+   "fieldtype": "Data",
+   "label": "Ingest Item Key",
+   "read_only": 1
+  },
+  {
+   "fieldname": "layout_section_2_5",
+   "fieldtype": "Section Break",
+   "label": "Extended metadata"
+  },
+  {
    "fieldname": "metadata_json",
    "fieldtype": "Long Text",
    "label": "Metadata Json"
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "naming_series",
   "title",
   "camera",
   "motion_event",
+  "ingest_batch",
+  "layout_section_1_2",
+  "recorded_from",
+  "recorded_to",
+  "layout_section_1_3",
+  "media_type",
+  "size_bytes",
+  "layout_tab_2",
+  "layout_section_2_1",
   "storage_backend",
   "file_url",
   "external_reference",
   "external_storage_scope",
-  "ingest_batch",
-  "ingest_item_key",
+  "layout_section_2_2",
   "checksum_sha256",
-  "size_bytes",
-  "media_type",
-  "recorded_from",
-  "recorded_to",
   "retention_state",
+  "layout_section_2_3",
   "index_status",
   "index_error",
+  "layout_section_2_4",
+  "ingest_item_key",
+  "layout_section_2_5",
   "metadata_json"
  ],
  "permissions": [

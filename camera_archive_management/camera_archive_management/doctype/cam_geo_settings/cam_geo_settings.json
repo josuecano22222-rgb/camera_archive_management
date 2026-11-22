@@ -5,6 +5,16 @@
  "engine": "InnoDB",
  "fields": [
   {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Search & Geocoding"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Search precision"
+  },
+  {
    "fieldname": "active_dataset",
    "fieldtype": "Link",
    "label": "Active Dataset",
@@ -21,6 +31,11 @@
    "fieldtype": "Int",
    "label": "Ambiguity Threshold M",
    "default": "250"
+  },
+  {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Online geocoder"
   },
   {
    "fieldname": "enable_online_geocoder",
@@ -60,6 +75,16 @@
    "default": "0"
   },
   {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Map Tile Operations"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Fetch controls"
+  },
+  {
    "fieldname": "enable_online_tile_fetch",
    "fieldtype": "Check",
    "label": "Enable Online Tile Fetch",
@@ -74,6 +99,11 @@
    "description": "Persist validated provider tiles to the shared private/siraj_tile_cache. Also requires online tile fetching to be enabled."
   },
   {
+   "fieldname": "layout_section_2_2",
+   "fieldtype": "Section Break",
+   "label": "Network timeouts"
+  },
+  {
    "fieldname": "tile_connect_timeout_seconds",
    "fieldtype": "Int",
    "label": "Tile Connect Timeout Seconds",
@@ -86,6 +116,16 @@
    "default": "3"
   },
   {
+   "fieldname": "layout_tab_3",
+   "fieldtype": "Tab Break",
+   "label": "Dataset Provenance"
+  },
+  {
+   "fieldname": "layout_section_3_1",
+   "fieldtype": "Section Break",
+   "label": "Last import"
+  },
+  {
    "fieldname": "last_dataset_import",
    "fieldtype": "Datetime",
    "label": "Last Dataset Import",
@@ -93,19 +133,27 @@
   }
  ],
  "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
   "active_dataset",
   "default_search_radius_m",
   "ambiguity_threshold_m",
+  "layout_section_1_2",
   "enable_online_geocoder",
   "online_provider",
   "online_user_agent",
   "online_rate_limit_per_min",
   "online_cache_days",
   "allow_online_setup",
+  "layout_tab_2",
+  "layout_section_2_1",
   "enable_online_tile_fetch",
   "allow_tile_cache_write",
+  "layout_section_2_2",
   "tile_connect_timeout_seconds",
   "tile_read_timeout_seconds",
+  "layout_tab_3",
+  "layout_section_3_1",
   "last_dataset_import"
  ],
  "permissions": [

@@ -12,6 +12,51 @@ MAX_CAMERAS = 500
 MAX_EVENTS = 2000
 MAX_PHOTOS_PER_CAMERA = 12
 
+
+@frappe.whitelist()
+def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
+	"""Return permission-filtered point markers for DocTypes with nonstandard coordinate fields."""
+	coordinate_fields = {
+		"Geo Boundary": ("centroid_lat", "centroid_lon"),
+		"Motion Event": ("latitude_snapshot", "longitude_snapshot"),
+	}
+	if not isinstance(doctype, str) or doctype not in coordinate_fields:
+		frappe.throw("Map coordinates are not available for this DocType.", frappe.ValidationError)
+	if not frappe.has_permission(doctype, "read"):
+		frappe.throw("You do not have permission to read this DocType.", frappe.PermissionError)
+
+	if isinstance(filters, str):
+		filters = frappe.parse_json(filters)
+	if filters is not None and not isinstance(filters, (list, dict)):
+		frappe.throw("Map filters must be a list or object.", frappe.ValidationError)
+
+	latitude_field, longitude_field = coordinate_fields[doctype]
+	rows = frappe.get_list(
+		doctype,
+		filters=filters or [],
+		fields=["name", latitude_field, longitude_field],
+		order_by="name asc",
+		limit_page_length=5000,
+	)
+	features = []
+	for row in rows:
+		try:
+			latitude, longitude = validate_pair(row.get(latitude_field), row.get(longitude_field))
+		except ValueError:
+			continue
+		if latitude is None or longitude is None:
+			continue
+		features.append({
+			"type": "Feature",
+			"properties": {"name": row.name},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [float(longitude), float(latitude)],
+			},
+		})
+	return {"type": "FeatureCollection", "features": features}
+
+
 def _clean_image_url(value: str | None, file_map: dict[str, object]) -> str | None:
 	if not is_safe_frappe_file_url(value):
 		return None
