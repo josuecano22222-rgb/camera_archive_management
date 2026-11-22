@@ -16,7 +16,7 @@ class TestMotionEvent(FrappeTestCase):
 				"latitude": "52.3",
 				"longitude": "4.9",
 				"location": '{"type":"Point","coordinates":[4.9,52.3]}',
-				"camera_photos": [],
+				"camera_photos_json": "[]",
 				"nearby_cameras": [],
 			}
 		).insert(ignore_permissions=True)

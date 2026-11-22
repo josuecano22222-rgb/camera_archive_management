@@ -4,6 +4,8 @@ import json
 import unittest
 from pathlib import Path
 
+from camera_archive_management.geo.geometry import point_in_geometry
+
 DOCTYPE_DIR = Path(__file__).parent / "doctype"
 
 
@@ -14,7 +16,7 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 
 	def test_all_doctype_field_orders_match_definitions(self):
 		definitions = sorted(DOCTYPE_DIR.glob("*/*.json"))
-		self.assertEqual(len(definitions), 19)
+		self.assertEqual(len(definitions), 18)
 
 		for path in definitions:
 			with self.subTest(doctype=path.parent.name):
@@ -23,6 +25,41 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 				self.assertEqual(len(field_names), len(set(field_names)))
 				self.assertEqual(len(definition["field_order"]), len(set(definition["field_order"])))
 				self.assertEqual(set(definition["field_order"]), set(field_names))
+
+	def test_core_reference_catalog_is_separate_from_opt_in_demo_scenario(self):
+		catalog_path = Path(__file__).parents[1] / "data" / "core_reference_data.json"
+		catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+		self.assertGreaterEqual(len(catalog["camera_types"]), 5)
+		self.assertGreaterEqual(len(catalog["vehicle_types"]), 6)
+		for rows in catalog.values():
+			self.assertEqual(len({row["type_name"] for row in rows}), len(rows))
+		demo_source = (Path(__file__).parents[1] / "setup" / "demo_data.py").read_text(encoding="utf-8")
+		self.assertIn("SYNTHETIC DEMO DATA", demo_source)
+		self.assertIn('== "frappe.com"', demo_source)
+		self.assertIn("save_file(", demo_source)
+		assets = Path(__file__).parents[1] / "data" / "demo_camera_images"
+		images = sorted(assets.glob("camera_*.png"))
+		self.assertEqual(len(images), 12)
+		for image in images:
+			with self.subTest(image=image.name):
+				self.assertTrue(image.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
+				self.assertLess(image.stat().st_size, 100_000)
+		self.assertNotIn("demo_data", (Path(__file__).parents[1] / "hooks.py").read_text(encoding="utf-8"))
+
+	def test_global_country_core_dataset_is_pinned_and_contains_jordan(self):
+		data_dir = Path(__file__).parents[1] / "data"
+		world = json.loads((data_dir / "natural_earth_admin0_countries.geojson").read_text(encoding="utf-8"))
+		self.assertEqual(world["type"], "FeatureCollection")
+		self.assertGreater(len(world["features"]), 150)
+		jordan = [feature for feature in world["features"] if feature["properties"]["boundary_code"] == "JOR"]
+		self.assertEqual(len(jordan), 1)
+		self.assertEqual(jordan[0]["properties"]["label"], "Jordan")
+		self.assertTrue(point_in_geometry(35.93, 31.95, jordan[0]["geometry"]))  # Amman, Jordan
+		self.assertFalse(point_in_geometry(32.0, 32.0, jordan[0]["geometry"]))
+		data_readme = (data_dir / "README.md").read_text(encoding="utf-8")
+		self.assertIn("public domain", data_readme.lower())
+		self.assertIn("not cadastral", data_readme.lower())
+		self.assertIn("not legal boundaries or sovereignty", (Path(__file__).parents[1] / "setup" / "seed.py").read_text(encoding="utf-8").lower())
 
 	def test_nested_table_targets_exist(self):
 		for path in sorted(DOCTYPE_DIR.glob("*/*.json")):
@@ -35,6 +72,23 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 	def test_views_are_enabled_only_where_schema_supports_them(self):
 		camera = self.load_doctype("camera")
 		self.assertTrue(any(f["fieldname"] == "location" and f["fieldtype"] == "Geolocation" for f in camera["fields"]))
+		self.assertEqual(camera["image_field"], "primary_image")
+		map_script = Path(__file__).parent / "page" / "camera_archive_map" / "camera_archive_map.js"
+		self.assertIn("iconAnchor: [24, 62]", map_script.read_text(encoding="utf-8"))
+		camera_fields = {field["fieldname"]: field for field in camera["fields"]}
+		self.assertEqual(camera_fields["camera_photos_json"]["fieldtype"], "Long Text")
+		self.assertEqual(camera_fields["camera_photo_gallery"]["fieldtype"], "HTML")
+		self.assertFalse((DOCTYPE_DIR / "camera_photo").exists())
+		for folder in ("camera", "cam_vehicle", "motion_event"):
+			fields = {field["fieldname"]: field for field in self.load_doctype(folder)["fields"]}
+			self.assertEqual(fields["is_demo_record"]["fieldtype"], "Check")
+			self.assertEqual(fields["demo_scenario"]["fieldtype"], "Data")
+		map_script_text = map_script.read_text(encoding="utf-8")
+		for feature in (
+			"Measure distance", "Measure area", "Locate me", "Country borders", "cam-map-time", "include_demo",
+			"cam-map-activity-chart", "render_map_insights", "data-kpi-vehicles",
+		):
+			self.assertIn(feature, map_script_text)
 
 		for folder in ("camera_area", "geo_admin_area"):
 			self.assertEqual(self.load_doctype(folder)["is_tree"], 1)

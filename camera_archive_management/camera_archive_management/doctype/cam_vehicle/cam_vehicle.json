@@ -35,6 +35,23 @@
    "in_standard_filter": 1
   },
   {
+   "fieldname": "is_demo_record",
+   "fieldtype": "Check",
+   "label": "Synthetic Demo Record",
+   "default": "0",
+   "read_only": 1,
+   "in_list_view": 1,
+   "description": "Identifies clearly synthetic records generated only for demonstration and test workflows."
+  },
+  {
+   "fieldname": "demo_scenario",
+   "fieldtype": "Data",
+   "label": "Demo Scenario",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
    "fieldname": "vehicle_number",
    "fieldtype": "Data",
    "label": "Vehicle Number",
@@ -106,6 +123,8 @@
   "layout_section_1_1",
   "naming_series",
   "vehicle_name",
+  "is_demo_record",
+  "demo_scenario",
   "vehicle_number",
   "vehicle_type",
   "layout_section_1_2",

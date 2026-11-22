@@ -9,7 +9,7 @@ The app enables other views only where the DocType has the data shape they need:
 | Archive Asset | Calendar, Gantt | `recorded_from` / `recorded_to` are a meaningful capture interval; the list query also loads those dates for Gantt. |
 | CAM Vehicle | Image | Existing `vehicle_list_image` image field. |
 | Vehicle Type | Image | Existing `vehicle_type_image` attachment. |
-| Camera | Map | Existing Geolocation field and coordinate fields. |
+| Camera | Image, Map | Main image is stored on Camera for the native Image view; location and coordinates support Map view. |
 | Camera Area | Tree | Existing nested-set hierarchy and parent field. |
 | Geo Admin Area | Tree, Map | Existing nested-set hierarchy and latitude/longitude. |
 | Geo Boundary | Map | Permission-filtered centroid markers using the boundary-specific centroid fields. |
@@ -18,4 +18,4 @@ The app enables other views only where the DocType has the data shape they need:
 
 Geo Boundary and Motion Event use a small permission-filtered adapter for their nonstandard centroid / snapshot coordinate fields; invalid or blank coordinate pairs are skipped. Motion Event is a point-in-time event with no end field; because Frappe v15 couples Calendar and Gantt availability to the same calendar configuration, it is not given a misleading editable Gantt interval.
 
-Form fields for substantive records are grouped into workflow tabs and labeled sections. Inline child-table DocTypes remain compact so grid editing is not burdened with nested tabs. Frappe-managed nested-set maintenance fields on Camera Area and Geo Admin Area are hidden from routine form editing.
+Form fields for substantive records are grouped into workflow tabs and labeled sections. Camera images are an ordered gallery without an application-imposed image-count cap and stored on the Camera record, with captions, one main image, and native Frappe File attachments for the binary content; the former Camera Photo child DocType is retired by a fail-closed, data-preserving migration. The map renders the selected main image as a circular portrait with a pin tip anchored at the camera coordinates, and includes country-boundary context, layer controls, movement replay, geodesic measuring tools, coordinate copy, and browser-local geolocation. Generalized Natural Earth country outlines and classification catalogs are additive core data; sample records are a separate, explicit, non-production-only scenario and default out of the map. Other inline child-table DocTypes remain compact so grid editing is not burdened with nested tabs. Frappe-managed nested-set maintenance fields on Camera Area and Geo Admin Area are hidden from routine form editing.

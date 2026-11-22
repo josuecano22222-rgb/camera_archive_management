@@ -39,7 +39,7 @@ Camera Map,Camera Map
 Camera Name,Camera Name
 Camera Number,Camera Number
 Camera Offline Map,Camera Offline Map
-Camera Photos,Camera Photos
+Image Gallery,Image Gallery
 Camera Security Register,Camera Security Register
 Camera Snapshot,Camera Snapshot
 Camera Status,Camera Status
@@ -321,7 +321,6 @@ Power & Connectivity,Power & Connectivity
 Power supply within specification,Power supply within specification
 Preventive,Preventive
 Primary,Primary
-"Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list.","Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list."
 Priority,Priority
 Quick Facts,Quick Facts
 REF,REF
@@ -513,3 +512,56 @@ Offline: showing cached data ({0} assets); data never downloaded is unavailable.
 Camera details unavailable offline (never downloaded),Camera details unavailable offline (never downloaded)
 Unavailable offline,Unavailable offline
 Currently displayed layer,Currently displayed layer
+Map tools and layers,Map tools and layers
+Measure distance,Measure distance
+Measure area,Measure area
+Finish,Finish
+Clear tools,Clear tools
+Locate me,Locate me
+Copy coordinates,Copy coordinates
+Movement tracks,Movement tracks
+Country borders,Country borders
+Include synthetic demo records,Include synthetic demo records
+"Click the map to inspect coordinates, or choose a measurement tool.","Click the map to inspect coordinates, or choose a measurement tool."
+"Distance tool: click points along a route, then choose Finish.","Distance tool: click points along a route, then choose Finish."
+"Area tool: click polygon corners, then choose Finish.","Area tool: click polygon corners, then choose Finish."
+{0} points · {1},{0} points · {1}
+Add at least one more corner to measure area.,Add at least one more corner to measure area.
+{0} vertices · approximate area {1},{0} vertices · approximate area {1}
+Area measurement complete: {0},Area measurement complete: {0}
+Distance measurement complete: {0},Distance measurement complete: {0}
+Add more points before finishing this measurement.,Add more points before finishing this measurement.
+"Map tools cleared. Click the map to inspect coordinates, or choose a tool.","Map tools cleared. Click the map to inspect coordinates, or choose a tool."
+{0} cameras · showing {1} of {2} movements,{0} cameras · showing {1} of {2} movements
+events,events
+Timeline at start,Timeline at start
+No events,No events
+Play movement timeline,Play movement timeline
+Pause movement timeline,Pause movement timeline
+click to copy,click to copy
+Copied coordinates: {0},Copied coordinates: {0}
+Clipboard access is unavailable; coordinates: {0},Clipboard access is unavailable; coordinates: {0}
+This browser does not provide geolocation.,This browser does not provide geolocation.
+Waiting for browser location permission…,Waiting for browser location permission…
+Your browser-reported location is shown locally; it was not sent to the server.,Your browser-reported location is shown locally; it was not sent to the server.
+Unable to access browser location.,Unable to access browser location.
+No bundled country boundary data is available.,No bundled country boundary data is available.
+SYNTHETIC DEMO DATA,SYNTHETIC DEMO DATA
+Map activity insights,Map activity insights
+CAMERA ARCHIVE · FIELD INTELLIGENCE,CAMERA ARCHIVE · FIELD INTELLIGENCE
+Field pulse,Field pulse
+Active cameras,Active cameras
+in this view,in this view
+Movements,Movements
+in selected window,in selected window
+Vehicles tracked,Vehicles tracked
+unique records,unique records
+Daily movement rhythm,Daily movement rhythm
+latest 14 days,latest 14 days
+Daily camera movement activity chart,Daily camera movement activity chart
+Movement type breakdown,Movement type breakdown
+DEMO INCLUDED,DEMO INCLUDED
+movements,movements
+{0} movements in the chart window,{0} movements in the chart window
+"Movement mix: {0} entries, {1} exits, {2} other","Movement mix: {0} entries, {1} exits, {2} other"
+Other,Other

@@ -1,0 +1,21 @@
+{
+  "camera_types": [
+    {"type_name": "Fixed", "description": "Fixed-view camera with a stationary field of view."},
+    {"type_name": "PTZ", "description": "Pan-tilt-zoom camera with steerable optics."},
+    {"type_name": "Dome", "description": "Dome-housed camera; specify fixed or PTZ behavior in the record."},
+    {"type_name": "Bullet", "description": "Weather-resistant directional camera housing."},
+    {"type_name": "Thermal", "description": "Thermal or infrared imaging camera."},
+    {"type_name": "ANPR", "description": "Automatic number-plate recognition camera."},
+    {"type_name": "Multi-sensor", "description": "Multi-imager or panoramic surveillance device."}
+  ],
+  "vehicle_types": [
+    {"type_name": "Passenger car", "description": "Passenger vehicles including saloons, estates, and SUVs."},
+    {"type_name": "Van", "description": "Light commercial vans and delivery vehicles."},
+    {"type_name": "Truck", "description": "Heavy goods and freight vehicles."},
+    {"type_name": "Bus", "description": "Public, school, and charter buses."},
+    {"type_name": "Motorcycle", "description": "Powered two- and three-wheel vehicles."},
+    {"type_name": "Bicycle", "description": "Pedal bicycles and cargo bicycles."},
+    {"type_name": "Emergency vehicle", "description": "Emergency response and public-safety vehicles."},
+    {"type_name": "Other / unknown", "description": "Unclassified or not-yet-identified vehicle."}
+  ]
+}

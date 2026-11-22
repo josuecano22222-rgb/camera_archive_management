@@ -35,6 +35,23 @@
    "in_standard_filter": 1
   },
   {
+   "fieldname": "is_demo_record",
+   "fieldtype": "Check",
+   "label": "Synthetic Demo Record",
+   "default": "0",
+   "read_only": 1,
+   "in_list_view": 1,
+   "description": "Identifies clearly synthetic records generated only for demonstration and test workflows."
+  },
+  {
+   "fieldname": "demo_scenario",
+   "fieldtype": "Data",
+   "label": "Demo Scenario",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
@@ -211,13 +228,29 @@
   {
    "fieldname": "layout_section_5_1",
    "fieldtype": "Section Break",
-   "label": "Camera photos"
+   "label": "Image Gallery & Main Image"
   },
   {
-   "fieldname": "camera_photos",
-   "fieldtype": "Table",
-   "label": "Camera Photos",
-   "options": "Camera Photo"
+   "fieldname": "primary_image",
+   "fieldtype": "Attach Image",
+   "label": "Main Image",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "camera_photos_json",
+   "fieldtype": "Long Text",
+   "label": "Camera Image Gallery Data",
+   "hidden": 1,
+   "read_only": 1,
+   "default": "[]",
+   "description": "Application-managed ordered image gallery metadata; use the gallery controls below."
+  },
+  {
+   "fieldname": "camera_photo_gallery",
+   "fieldtype": "HTML",
+   "label": "Image Gallery",
+   "description": "Upload, order, caption, and choose the main camera image."
   },
   {
    "fieldname": "layout_section_5_2",
@@ -236,6 +269,8 @@
   "layout_section_1_1",
   "naming_series",
   "camera_name",
+  "is_demo_record",
+  "demo_scenario",
   "status",
   "camera_type",
   "importance",
@@ -268,7 +303,9 @@
   "description",
   "layout_tab_5",
   "layout_section_5_1",
-  "camera_photos",
+  "primary_image",
+  "camera_photos_json",
+  "camera_photo_gallery",
   "layout_section_5_2",
   "nearby_cameras"
  ],
@@ -343,5 +380,6 @@
  "links": [],
  "autoname": "naming_series:",
  "title_field": "camera_name",
- "search_fields": "camera_name,serial_number,camera_number"
+ "search_fields": "camera_name,serial_number,camera_number",
+ "image_field": "primary_image"
 }

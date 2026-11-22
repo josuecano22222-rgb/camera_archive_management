@@ -39,7 +39,7 @@ Camera Map,خريطة الكاميرات
 Camera Name,اسم الكاميرا
 Camera Number,رقم الكاميرا
 Camera Offline Map,خريطة الكاميرا دون اتصال
-Camera Photos,صور الكاميرا
+Image Gallery,معرض الصور
 Camera Security Register,سجل أمان الكاميرات
 Camera Snapshot,لقطة الكاميرا
 Camera Status,حالة الكاميرا
@@ -321,7 +321,6 @@ Power & Connectivity,الطاقة والاتصال
 Power supply within specification,مصدر الطاقة ضمن المواصفات
 Preventive,وقائية
 Primary,رئيسية
-"Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list.",صورة الشارع الأساسية، تُزامن تلقائيًا من صور الكاميرا. تفعّل عرض الصور الأصلي (المعرض) في قائمة الكاميرا.
 Priority,الأولوية
 Quick Facts,حقائق سريعة
 REF,المرجع
@@ -513,3 +512,56 @@ Offline: showing cached data ({0} assets); data never downloaded is unavailable.
 Camera details unavailable offline (never downloaded),تفاصيل الكاميرا غير متاحة دون اتصال (لم تُحمَّل مسبقًا)
 Unavailable offline,غير متاح دون اتصال
 Currently displayed layer,الطبقة المعروضة حاليًا
+Map tools and layers,أدوات وطبقات الخريطة
+Measure distance,قياس المسافة
+Measure area,قياس المساحة
+Finish,إنهاء
+Clear tools,مسح الأدوات
+Locate me,تحديد موقعي
+Copy coordinates,نسخ الإحداثيات
+Movement tracks,مسارات الحركة
+Country borders,حدود الدول
+Include synthetic demo records,تضمين السجلات التجريبية الاصطناعية
+"Click the map to inspect coordinates, or choose a measurement tool.",انقر على الخريطة لعرض الإحداثيات أو اختر أداة قياس.
+"Distance tool: click points along a route, then choose Finish.",أداة المسافة: انقر نقاطاً على المسار ثم اختر إنهاء.
+"Area tool: click polygon corners, then choose Finish.",أداة المساحة: انقر زوايا المضلع ثم اختر إنهاء.
+{0} points · {1},{0} نقاط · {1}
+Add at least one more corner to measure area.,أضف زاوية أخرى على الأقل لقياس المساحة.
+{0} vertices · approximate area {1},{0} رؤوس · المساحة التقريبية {1}
+Area measurement complete: {0},اكتمل قياس المساحة: {0}
+Distance measurement complete: {0},اكتمل قياس المسافة: {0}
+Add more points before finishing this measurement.,أضف نقاطاً أخرى قبل إنهاء القياس.
+"Map tools cleared. Click the map to inspect coordinates, or choose a tool.",تم مسح أدوات الخريطة. انقر لعرض الإحداثيات أو اختر أداة.
+{0} cameras · showing {1} of {2} movements,{0} كاميرات · عرض {1} من {2} حركة
+events,أحداث
+Timeline at start,الخط الزمني عند البداية
+No events,لا توجد أحداث
+Play movement timeline,تشغيل الخط الزمني للحركة
+Pause movement timeline,إيقاف الخط الزمني مؤقتاً
+click to copy,انقر للنسخ
+Copied coordinates: {0},تم نسخ الإحداثيات: {0}
+Clipboard access is unavailable; coordinates: {0},تعذر الوصول إلى الحافظة؛ الإحداثيات: {0}
+This browser does not provide geolocation.,هذا المتصفح لا يوفر خدمة تحديد الموقع.
+Waiting for browser location permission…,بانتظار إذن المتصفح لتحديد الموقع…
+Your browser-reported location is shown locally; it was not sent to the server.,يُعرض الموقع الذي أبلغ عنه المتصفح محلياً ولم يُرسل إلى الخادم.
+Unable to access browser location.,تعذر الوصول إلى موقع المتصفح.
+No bundled country boundary data is available.,لا تتوفر بيانات حدود دول مضمنة.
+SYNTHETIC DEMO DATA,بيانات تجريبية اصطناعية
+Map activity insights,رؤى نشاط الخريطة
+CAMERA ARCHIVE · FIELD INTELLIGENCE,أرشيف الكاميرات · ذكاء ميداني
+Field pulse,نبض الميدان
+Active cameras,كاميرات نشطة
+in this view,في هذا العرض
+Movements,التحركات
+in selected window,في الفترة المحددة
+Vehicles tracked,المركبات المتتبعة
+unique records,سجلات فريدة
+Daily movement rhythm,إيقاع الحركة اليومي
+latest 14 days,آخر 14 يومًا
+Daily camera movement activity chart,مخطط نشاط حركة الكاميرات اليومي
+Movement type breakdown,توزيع أنواع الحركة
+DEMO INCLUDED,بيانات تجريبية مضمنة
+movements,حركات
+{0} movements in the chart window,{0} حركة ضمن نافذة المخطط
+"Movement mix: {0} entries, {1} exits, {2} other",توزيع الحركة: {0} دخول، {1} خروج، {2} أخرى
+Other,أخرى

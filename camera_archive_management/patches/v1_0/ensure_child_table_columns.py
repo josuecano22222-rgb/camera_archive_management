@@ -1,9 +1,9 @@
 """Ensure legacy app child tables have Frappe's parent-link columns.
 
-Early app metadata omitted `istable` for the two nearby-camera child DocTypes
-(and Camera Photo). Frappe model sync marks them as child tables but does not
-add the three system columns when altering an existing table, so add them
-idempotently after model sync. New child tables already have these columns.
+Early app metadata omitted `istable` for the two nearby-camera child DocTypes.
+Frappe model sync marks them as child tables but does not add the three system
+columns when altering an existing table, so add them idempotently after model
+sync. New child tables already have these columns.
 """
 
 from __future__ import annotations

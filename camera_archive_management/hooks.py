@@ -59,5 +59,7 @@ scheduler_events = {
 	"daily": ["camera_archive_management.tasks.reconcile.requeue_pending_work"],
 }
 
+after_migrate = "camera_archive_management.setup.seed.seed_core_reference_data"
+
 # Offline assets are local. No tile or geocoder provider is configured here;
 # all network integrations require a later explicit administrator opt-in.

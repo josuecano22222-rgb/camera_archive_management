@@ -77,10 +77,50 @@ function initialize_map_page(wrapper, leaflet) {
 			<span class="cam-map-filter-note"></span>
 			<span class="cam-map-tile-status text-muted" aria-live="polite"></span>
 		</div>
+		<div class="cam-map-toolbox" role="toolbar" aria-label="${__("Map tools and layers")}">
+			<div class="cam-map-toolgroup">
+				<button class="btn btn-default cam-map-tool" data-tool="distance" type="button">${__("Measure distance")}</button>
+				<button class="btn btn-default cam-map-tool" data-tool="area" type="button">${__("Measure area")}</button>
+				<button class="btn btn-default cam-map-finish" type="button" disabled>${__("Finish")}</button>
+				<button class="btn btn-default cam-map-cancel-tool" type="button">${__("Clear tools")}</button>
+				<button class="btn btn-default cam-map-locate" type="button">${__("Locate me")}</button>
+				<button class="btn btn-default cam-map-copy-coords" type="button" disabled>${__("Copy coordinates")}</button>
+			</div>
+			<div class="cam-map-toolgroup cam-map-layer-toggles">
+				<label><input type="checkbox" class="cam-map-show-cameras" checked> ${__("Cameras")}</label>
+				<label><input type="checkbox" class="cam-map-show-events" checked> ${__("Events")}</label>
+				<label><input type="checkbox" class="cam-map-show-tracks" checked> ${__("Movement tracks")}</label>
+				<label><input type="checkbox" class="cam-map-show-countries" checked> ${__("Country borders")}</label>
+				<label class="cam-map-demo-toggle"><input type="checkbox" class="cam-map-include-demo"> ${__("Include synthetic demo records")}</label>
+			</div>
+			<span class="cam-map-tool-status" aria-live="polite">${__("Click the map to inspect coordinates, or choose a measurement tool.")}</span>
+			<div class="cam-map-playback">
+				<button class="btn btn-default cam-map-play" type="button" disabled aria-label="${__("Play movement timeline")}">▶</button>
+				<input class="cam-map-time" type="range" min="0" max="0" value="0" disabled aria-label="${__("Movement timeline")}">
+				<output class="cam-map-time-label">${__("No events")}</output>
+			</div>
+		</div>
 		<div class="cam-map-shell">
 			<div class="cam-map-canvas" role="application" aria-label="${__("Camera and vehicle movement map")}"></div>
 			<aside class="cam-map-sidebar">
-				<div class="cam-map-summary text-muted">${__("Loading cameras and movements…")}</div>
+				<section class="cam-map-insights" aria-label="${__("Map activity insights")}">
+					<div class="cam-map-insight-heading">
+						<div><span class="cam-map-eyebrow">${__("CAMERA ARCHIVE · FIELD INTELLIGENCE")}</span><h3>${__("Field pulse")}</h3></div>
+						<span class="cam-map-window" data-insight-window></span>
+					</div>
+					<div class="cam-map-kpis">
+						<article class="cam-map-kpi cam-kpi-camera"><span>${__("Active cameras")}</span><strong data-kpi-cameras>—</strong><small>${__("in this view")}</small></article>
+						<article class="cam-map-kpi cam-kpi-movement"><span>${__("Movements")}</span><strong data-kpi-movements>—</strong><small>${__("in selected window")}</small></article>
+						<article class="cam-map-kpi cam-kpi-vehicles"><span>${__("Vehicles tracked")}</span><strong data-kpi-vehicles>—</strong><small>${__("unique records")}</small></article>
+					</div>
+					<div class="cam-map-chart-heading"><strong>${__("Daily movement rhythm")}</strong><span>${__("latest 14 days")}</span></div>
+					<svg class="cam-map-activity-chart" viewBox="0 0 288 112" role="img" aria-label="${__("Daily camera movement activity chart")}"></svg>
+					<div class="cam-map-mix" aria-label="${__("Movement type breakdown")}">
+						<div class="cam-map-mix-bar" role="img" aria-label="${__("Movement type breakdown")}"><span class="cam-mix-entry"></span><span class="cam-mix-exit"></span><span class="cam-mix-other"></span></div>
+						<div class="cam-map-mix-legend"><span><i class="cam-dot-entry"></i>${__("Entry")}</span><span><i class="cam-dot-exit"></i>${__("Exit")}</span><span data-mix-counts></span></div>
+					</div>
+					<div class="cam-map-summary text-muted">${__("Loading cameras and movements…")}</div>
+				</section>
 				<div class="cam-map-movement-list"></div>
 			</aside>
 		</div>`;
@@ -116,21 +156,56 @@ function initialize_map_page(wrapper, leaflet) {
 	if (!page.cam_map_route_listener && frappe.router?.on) {
 		page.cam_map_route_listener = () => {
 			const current_route = frappe.get_route() || [];
-			if (current_route[0] !== "camera-archive-map") page.cam_map_was_away = true;
+			if (current_route[0] !== "camera-archive-map") {
+				page.cam_map_was_away = true;
+				if (page.cam_playback_timer) toggle_movement_playback(page);
+			}
 		};
 		frappe.router.on("change", page.cam_map_route_listener);
 	}
 	page.cam_base_layers = {};
 	page.cam_overlay = null;
-	page.cam_markers = leaflet.featureGroup().addTo(page.cam_map);
+	page.cam_camera_markers = leaflet.featureGroup().addTo(page.cam_map);
+	page.cam_event_markers = leaflet.featureGroup().addTo(page.cam_map);
 	page.cam_tracks = leaflet.featureGroup().addTo(page.cam_map);
+	page.cam_measurements = leaflet.featureGroup().addTo(page.cam_map);
+	page.cam_location_layer = leaflet.featureGroup().addTo(page.cam_map);
+	page.cam_country_layer = leaflet.geoJSON(null, {
+		style: () => ({ color: "#0f766e", weight: 1.4, opacity: 0.72, fillColor: "#14b8a6", fillOpacity: 0.025, dashArray: "3 3" }),
+		onEachFeature: (feature, layer) => {
+			if (feature.properties?.label) layer.bindTooltip(feature.properties.label, { sticky: true, direction: "auto" });
+		}
+	}).addTo(page.cam_map);
+	page.cam_tool_mode = null;
+	page.cam_measure_points = [];
+	page.cam_last_coordinate = null;
+	page.cam_movement_data = [];
 	host.querySelector(".cam-map-apply").addEventListener("click", () => {
 		read_filter_controls(page);
 		update_filter_note(page);
 		load_map(page);
 	});
 	host.querySelector(".cam-map-layer").addEventListener("change", () => set_basemap(page));
+	host.querySelectorAll(".cam-map-tool").forEach((button) => {
+		button.addEventListener("click", () => start_map_measurement(page, button.dataset.tool));
+	});
+	host.querySelector(".cam-map-finish").addEventListener("click", () => finish_map_measurement(page));
+	host.querySelector(".cam-map-cancel-tool").addEventListener("click", () => clear_map_tools(page));
+	host.querySelector(".cam-map-copy-coords").addEventListener("click", () => copy_map_coordinates(page));
+	host.querySelector(".cam-map-locate").addEventListener("click", () => locate_map_user(page));
+	host.querySelector(".cam-map-show-cameras").addEventListener("change", (event) => set_group_visibility(page, page.cam_camera_markers, event.target.checked));
+	host.querySelector(".cam-map-show-events").addEventListener("change", (event) => set_group_visibility(page, page.cam_event_markers, event.target.checked));
+	host.querySelector(".cam-map-show-tracks").addEventListener("change", (event) => set_group_visibility(page, page.cam_tracks, event.target.checked));
+	host.querySelector(".cam-map-show-countries").addEventListener("change", (event) => set_country_visibility(page, event.target.checked));
+	host.querySelector(".cam-map-time").addEventListener("input", () => render_movement_slice(page));
+	host.querySelector(".cam-map-play").addEventListener("click", () => toggle_movement_playback(page));
+	page.cam_map.on("mousemove", (event) => update_coordinate_readout(page, event.latlng));
+	page.cam_map.on("click", (event) => handle_map_click(page, event.latlng));
+	page.cam_map.on("dblclick", () => {
+		if (page.cam_tool_mode) finish_map_measurement(page);
+	});
 	load_tile_config(page);
+	load_country_boundaries(page);
 	for (const selector of [".cam-map-camera", ".cam-map-vehicle", ".cam-map-event"]) {
 		const input = host.querySelector(selector);
 		input.addEventListener("input", () => {
@@ -290,6 +365,34 @@ function set_tile_status(page, message) {
 	}
 }
 
+function set_country_visibility(page, visible) {
+	set_group_visibility(page, page.cam_country_layer, visible);
+	if (visible) load_country_boundaries(page);
+}
+
+async function load_country_boundaries(page) {
+	if (page.cam_country_data) return;
+	if (page.cam_country_request) return page.cam_country_request;
+	page.cam_country_request = frappe.call({
+		method: "camera_archive_management.api.map.get_core_country_boundaries",
+		type: "GET"
+	}).then((response) => {
+		page.cam_country_data = response.message || { type: "FeatureCollection", features: [] };
+		page.cam_country_layer.clearLayers();
+		page.cam_country_layer.addData(page.cam_country_data);
+		if (!page.cam_country_data.features.length) {
+			set_tool_status(page, __("No bundled country boundary data is available."));
+		}
+	}).catch((error) => {
+		page.cam_country_request = null;
+		const checkbox = page.main.get(0).querySelector(".cam-map-show-countries");
+		checkbox.checked = false;
+		set_group_visibility(page, page.cam_country_layer, false);
+		set_tool_status(page, error.message || __("Country boundaries could not be loaded."));
+	});
+	return page.cam_country_request;
+}
+
 async function load_tile_config(page) {
 	try {
 		const response = await frappe.call({ method: "camera_archive_management.api.tiles.config", type: "GET" });
@@ -365,6 +468,294 @@ function set_basemap(page) {
 	}
 }
 
+function set_tool_status(page, message) {
+	const status = page.main.get(0).querySelector(".cam-map-tool-status");
+	if (status) status.textContent = message;
+}
+
+function set_group_visibility(page, group, visible) {
+	if (visible && !page.cam_map.hasLayer(group)) group.addTo(page.cam_map);
+	if (!visible && page.cam_map.hasLayer(group)) page.cam_map.removeLayer(group);
+}
+
+function start_map_measurement(page, mode) {
+	page.cam_tool_mode = mode;
+	page.cam_measure_points = [];
+	page.cam_measurements.clearLayers();
+	page.cam_map.doubleClickZoom.disable();
+	page.main.get(0).querySelector(".cam-map-finish").disabled = true;
+	set_tool_status(page, mode === "distance"
+		? __("Distance tool: click points along a route, then choose Finish.")
+		: __("Area tool: click polygon corners, then choose Finish."));
+}
+
+function handle_map_click(page, latlng) {
+	page.cam_last_coordinate = latlng;
+	page.main.get(0).querySelector(".cam-map-copy-coords").disabled = false;
+	if (!page.cam_tool_mode) return;
+	page.cam_measure_points.push(latlng);
+	const leaflet = page.cam_leaflet;
+	page.cam_measurements.clearLayers();
+	if (page.cam_tool_mode === "distance") {
+		if (page.cam_measure_points.length >= 2) {
+			const distance = page.cam_measure_points.slice(1).reduce(
+				(total, point, index) => total + point.distanceTo(page.cam_measure_points[index]), 0
+			);
+			leaflet.polyline(page.cam_measure_points, { color: "#0f766e", weight: 4, dashArray: "8 6" }).addTo(page.cam_measurements);
+			set_tool_status(page, __("{0} points · {1}", [page.cam_measure_points.length, format_distance(distance)]));
+		}
+	} else if (page.cam_measure_points.length >= 2) {
+		if (page.cam_measure_points.length >= 3) {
+			leaflet.polygon(page.cam_measure_points, { color: "#7c3aed", fillColor: "#8b5cf6", fillOpacity: 0.14, weight: 3 }).addTo(page.cam_measurements);
+			set_tool_status(page, __("{0} vertices · approximate area {1}", [page.cam_measure_points.length, format_area(spherical_polygon_area(page.cam_measure_points))]));
+		} else {
+			leaflet.polyline(page.cam_measure_points, { color: "#7c3aed", weight: 3, dashArray: "6 5" }).addTo(page.cam_measurements);
+			set_tool_status(page, __("Add at least one more corner to measure area."));
+		}
+	}
+	page.main.get(0).querySelector(".cam-map-finish").disabled = page.cam_measure_points.length < (page.cam_tool_mode === "distance" ? 2 : 3);
+}
+
+function spherical_polygon_area(points) {
+	if (points.length < 3) return 0;
+	const radius = 6371008.8;
+	let total = 0;
+	for (let index = 0; index < points.length; index++) {
+		const current = points[index];
+		const next = points[(index + 1) % points.length];
+		const longitude_delta = (next.lng - current.lng) * Math.PI / 180;
+		total += longitude_delta * (2 + Math.sin(current.lat * Math.PI / 180) + Math.sin(next.lat * Math.PI / 180));
+	}
+	return Math.abs(total * radius * radius / 2);
+}
+
+function format_distance(meters) {
+	return meters >= 1000 ? `${(meters / 1000).toFixed(2)} km` : `${Math.round(meters)} m`;
+}
+
+function format_area(square_meters) {
+	return square_meters >= 1_000_000
+		? `${(square_meters / 1_000_000).toFixed(2)} km²`
+		: `${Math.round(square_meters)} m²`;
+}
+
+function finish_map_measurement(page) {
+	if (!page.cam_tool_mode) return;
+	if (page.cam_tool_mode === "area" && page.cam_measure_points.length >= 3) {
+		const leaflet = page.cam_leaflet;
+		page.cam_measurements.clearLayers();
+		leaflet.polygon(page.cam_measure_points, { color: "#7c3aed", fillColor: "#8b5cf6", fillOpacity: 0.14, weight: 3 }).addTo(page.cam_measurements);
+		set_tool_status(page, __("Area measurement complete: {0}", [format_area(spherical_polygon_area(page.cam_measure_points))]));
+	} else if (page.cam_tool_mode === "distance" && page.cam_measure_points.length >= 2) {
+		let total = 0;
+		for (let index = 1; index < page.cam_measure_points.length; index++) {
+			total += page.cam_measure_points[index - 1].distanceTo(page.cam_measure_points[index]);
+		}
+		set_tool_status(page, __("Distance measurement complete: {0}", [format_distance(total)]));
+	} else {
+		set_tool_status(page, __("Add more points before finishing this measurement."));
+		return;
+	}
+	page.cam_tool_mode = null;
+	page.cam_map.doubleClickZoom.enable();
+	page.main.get(0).querySelector(".cam-map-finish").disabled = true;
+}
+
+function clear_map_tools(page) {
+	page.cam_tool_mode = null;
+	page.cam_measure_points = [];
+	page.cam_measurements.clearLayers();
+	page.cam_location_layer.clearLayers();
+	page.cam_map.doubleClickZoom.enable();
+	page.main.get(0).querySelector(".cam-map-finish").disabled = true;
+	set_tool_status(page, __("Map tools cleared. Click the map to inspect coordinates, or choose a tool."));
+}
+
+function update_coordinate_readout(page, latlng) {
+	page.cam_last_coordinate = latlng;
+	page.main.get(0).querySelector(".cam-map-copy-coords").disabled = false;
+	if (!page.cam_tool_mode) {
+		set_tool_status(page, `${latlng.lat.toFixed(6)}, ${latlng.lng.toFixed(6)} · ${__("click to copy")}`);
+	}
+}
+
+async function copy_map_coordinates(page) {
+	if (!page.cam_last_coordinate) return;
+	const value = `${page.cam_last_coordinate.lat.toFixed(6)}, ${page.cam_last_coordinate.lng.toFixed(6)}`;
+	try {
+		await navigator.clipboard.writeText(value);
+		set_tool_status(page, __("Copied coordinates: {0}", [value]));
+	} catch (_error) {
+		set_tool_status(page, __("Clipboard access is unavailable; coordinates: {0}", [value]));
+	}
+}
+
+function locate_map_user(page) {
+	if (!navigator.geolocation) {
+		set_tool_status(page, __("This browser does not provide geolocation."));
+		return;
+	}
+	set_tool_status(page, __("Waiting for browser location permission…"));
+	navigator.geolocation.getCurrentPosition((position) => {
+		const point = [position.coords.latitude, position.coords.longitude];
+		page.cam_location_layer.clearLayers();
+		page.cam_leaflet.circle(point, { radius: Math.max(5, position.coords.accuracy), color: "#2563eb", fillOpacity: 0.08 }).addTo(page.cam_location_layer);
+		page.cam_leaflet.circleMarker(point, { radius: 7, color: "#fff", weight: 3, fillColor: "#2563eb", fillOpacity: 1 }).addTo(page.cam_location_layer);
+		page.cam_map.setView(point, Math.max(page.cam_map.getZoom(), 15));
+		set_tool_status(page, __("Your browser-reported location is shown locally; it was not sent to the server."));
+	}, (error) => set_tool_status(page, error.message || __("Unable to access browser location.")), {
+		enableHighAccuracy: true,
+		timeout: 10000,
+		maximumAge: 30000
+	});
+}
+
+function render_map_insights(page, cameras, movements) {
+	const host = page.main.get(0);
+	const insight = host.querySelector(".cam-map-insights");
+	if (!insight) return;
+	const vehicles = new Set(movements.map((row) => row.vehicle).filter(Boolean));
+	insight.querySelector("[data-kpi-cameras]").textContent = String(cameras.length);
+	insight.querySelector("[data-kpi-movements]").textContent = String(movements.length);
+	insight.querySelector("[data-kpi-vehicles]").textContent = String(vehicles.size);
+	const endValue = host.querySelector(".cam-map-to").value || new Date().toISOString().slice(0, 10);
+	const startValue = host.querySelector(".cam-map-from").value || endValue;
+	const parseDay = (value) => {
+		const parts = value.split("-").map(Number);
+		return new Date(parts[0], parts[1] - 1, parts[2]);
+	};
+	const endDay = parseDay(endValue);
+	const requestedStart = parseDay(startValue);
+	const chartStart = new Date(endDay);
+	chartStart.setDate(chartStart.getDate() - 13);
+	const firstDay = requestedStart > chartStart ? requestedStart : chartStart;
+	const days = Math.max(1, Math.min(14, Math.round((endDay - firstDay) / 86400000) + 1));
+	const dateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+	const daily = new Map();
+	const series = [];
+	for (let index = 0; index < days; index += 1) {
+		const date = new Date(firstDay);
+		date.setDate(firstDay.getDate() + index);
+		const key = dateKey(date);
+		series.push({ key, count: 0 });
+		daily.set(key, series[series.length - 1]);
+	}
+	for (const movement of movements) {
+		const day = String(movement.detected_at || "").slice(0, 10);
+		if (daily.has(day)) daily.get(day).count += 1;
+	}
+	const svg = insight.querySelector(".cam-map-activity-chart");
+	const svgNS = "http://www.w3.org/2000/svg";
+	const makeSvg = (tag, attrs = {}) => {
+		const element = document.createElementNS(svgNS, tag);
+		for (const [key, value] of Object.entries(attrs)) element.setAttribute(key, String(value));
+		return element;
+	};
+	svg.replaceChildren();
+	const maxCount = Math.max(1, ...series.map((item) => item.count));
+	for (const fraction of [0, 0.5, 1]) {
+		const y = 78 - fraction * 58;
+		svg.append(makeSvg("line", { x1: 7, x2: 281, y1: y, y2: y, class: "cam-chart-gridline" }));
+	}
+	const slot = 274 / series.length;
+	series.forEach((item, index) => {
+		const width = Math.min(12, slot - 4);
+		const height = item.count ? Math.max(3, (item.count / maxCount) * 56) : 2;
+		const x = 7 + index * slot + (slot - width) / 2;
+		const rect = makeSvg("rect", {
+			x,
+			y: 78 - height,
+			width,
+			height,
+			rx: 4,
+			class: index === series.length - 1 ? "cam-chart-bar cam-chart-bar-current" : "cam-chart-bar",
+		});
+		const title = makeSvg("title");
+		title.textContent = `${item.key}: ${item.count} ${__("movements")}`;
+		rect.append(title);
+		svg.append(rect);
+		if (index === 0 || index === series.length - 1 || index % 3 === 0) {
+			const tick = makeSvg("text", { x: x + width / 2, y: 101, "text-anchor": "middle", class: "cam-chart-tick" });
+			tick.textContent = item.key.slice(5);
+			svg.append(tick);
+		}
+	});
+	const totalChart = series.reduce((sum, item) => sum + item.count, 0);
+	svg.setAttribute("aria-label", __("{0} movements in the chart window", [totalChart]));
+	insight.querySelector("[data-insight-window]").textContent = host.querySelector(".cam-map-include-demo").checked
+		? __("DEMO INCLUDED")
+		: `${series[0].key.slice(5)} — ${series[series.length - 1].key.slice(5)}`;
+	const counts = movements.reduce((result, row) => {
+		const kind = String(row.motion_type || "").toLowerCase();
+		if (kind === "entry") result.entry += 1;
+		else if (kind === "exit") result.exit += 1;
+		else result.other += 1;
+		return result;
+	}, { entry: 0, exit: 0, other: 0 });
+	const total = movements.length || 1;
+	insight.querySelector(".cam-mix-entry").style.width = `${(counts.entry / total) * 100}%`;
+	insight.querySelector(".cam-mix-exit").style.width = `${(counts.exit / total) * 100}%`;
+	insight.querySelector(".cam-mix-other").style.width = `${(counts.other / total) * 100}%`;
+	insight.querySelector(".cam-map-mix-bar").setAttribute(
+		"aria-label",
+		__("Movement mix: {0} entries, {1} exits, {2} other", [counts.entry, counts.exit, counts.other])
+	);
+	insight.querySelector("[data-mix-counts]").textContent = `${__("Entry")}: ${counts.entry} · ${__("Exit")}: ${counts.exit} · ${__("Other")}: ${counts.other}`;
+}
+
+function render_movement_slice(page) {
+	const slider = page.main.get(0).querySelector(".cam-map-time");
+	const count = Number(slider.value);
+	const rows = page.cam_movement_data.slice(0, count);
+	page.cam_event_markers.clearLayers();
+	page.cam_tracks.clearLayers();
+	page.main.get(0).querySelector(".cam-map-movement-list").replaceChildren();
+	const tracks = new Map();
+	for (const movement of rows) {
+		const point = [Number(movement.latitude), Number(movement.longitude)];
+		const marker = page.cam_leaflet.marker(point, { icon: vehicle_icon(movement, page.cam_leaflet), zIndexOffset: 500 });
+		marker.cam_record_name = movement.name;
+		marker.bindPopup(movement_popup(movement), { maxWidth: 300 });
+		page.cam_event_markers.addLayer(marker);
+		const key = movement.vehicle || `unassigned:${movement.camera}`;
+		if (!tracks.has(key)) tracks.set(key, []);
+		tracks.get(key).push(point);
+		add_movement_card(page, movement);
+	}
+	for (const points of tracks.values()) {
+		if (points.length > 1) page.cam_leaflet.polyline(points, { color: "#f97316", weight: 3, opacity: 0.65 }).addTo(page.cam_tracks);
+	}
+	page.main.get(0).querySelector(".cam-map-time-label").textContent = rows.length
+		? `${rows.length} / ${page.cam_movement_data.length} ${__("events")} · ${rows[rows.length - 1].detected_at}`
+		: (page.cam_movement_data.length ? __("Timeline at start") : __("No events"));
+	const summary = page.main.get(0).querySelector(".cam-map-summary");
+	if (summary && page.cam_movement_data.length) {
+		summary.textContent = __("{0} cameras · showing {1} of {2} movements", [page.cam_camera_count || 0, rows.length, page.cam_movement_data.length]);
+	}
+}
+
+function toggle_movement_playback(page) {
+	const button = page.main.get(0).querySelector(".cam-map-play");
+	if (page.cam_playback_timer) {
+		clearInterval(page.cam_playback_timer);
+		page.cam_playback_timer = null;
+		button.textContent = "▶";
+		button.setAttribute("aria-label", __("Play movement timeline"));
+		return;
+	}
+	const slider = page.main.get(0).querySelector(".cam-map-time");
+	if (!page.cam_movement_data.length) return;
+	if (Number(slider.value) >= page.cam_movement_data.length) slider.value = "0";
+	button.textContent = "Ⅱ";
+	button.setAttribute("aria-label", __("Pause movement timeline"));
+	page.cam_playback_timer = window.setInterval(() => {
+		const next = Math.min(Number(slider.value) + 1, page.cam_movement_data.length);
+		slider.value = String(next);
+		render_movement_slice(page);
+		if (next >= page.cam_movement_data.length) toggle_movement_playback(page);
+	}, 700);
+}
+
 function node(tag, class_name, text) {
 	const element = document.createElement(tag);
 	if (class_name) element.className = class_name;
@@ -383,13 +774,13 @@ function image_node(url, alt, class_name) {
 }
 
 function camera_icon(camera, leaflet) {
-	const shell = node("div", "cam-pin cam-camera-pin");
+	const shell = node("div", `cam-pin cam-camera-pin${camera.is_demo_record ? " cam-pin-demo" : ""}`);
 	const primary = camera.photos.find((photo) => photo.primary) || camera.photos[0];
 	const photo = primary && image_node(primary.url, camera.label, "cam-pin-image");
 	if (photo) shell.append(photo);
 	else shell.append(node("span", "cam-pin-fallback", "◉"));
 	if (camera.photos.length > 1) shell.append(node("span", "cam-pin-count", camera.photos.length));
-	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 48], iconAnchor: [24, 24], popupAnchor: [0, -24] });
+	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 62], iconAnchor: [24, 62], popupAnchor: [0, -58] });
 }
 
 function vehicle_icon(movement, leaflet) {
@@ -403,6 +794,7 @@ function vehicle_icon(movement, leaflet) {
 function camera_popup(camera) {
 	const root = node("div", "cam-map-popup");
 	root.append(node("h4", "", camera.label));
+	if (camera.is_demo_record) root.append(node("span", "cam-demo-badge", __("SYNTHETIC DEMO DATA")));
 	if (camera.address) root.append(node("p", "cam-popup-address", camera.address));
 	root.append(node("p", "cam-popup-meta", [camera.camera_type, camera.area].filter(Boolean).join(" · ") || __("Camera")));
 	if (camera.photos.length) {
@@ -447,6 +839,7 @@ function camera_popup(camera) {
 function movement_popup(movement) {
 	const root = node("div", "cam-map-popup");
 	root.append(node("h4", "", movement.vehicle_name || __("Unidentified vehicle")));
+	if (movement.is_demo_record) root.append(node("span", "cam-demo-badge", __("SYNTHETIC DEMO DATA")));
 	root.append(node("p", "cam-popup-meta", `${movement.motion_type} · ${movement.detected_at}`));
 	if (movement.vehicle_number) root.append(node("p", "", `${__("Vehicle number")}: ${movement.vehicle_number}`));
 	if (movement.address) root.append(node("p", "cam-popup-address", movement.address));
@@ -470,7 +863,7 @@ function add_movement_card(page, movement) {
 	card.append(text);
 	card.addEventListener("click", () => {
 		page.cam_map.setView([Number(movement.latitude), Number(movement.longitude)], Math.max(page.cam_map.getZoom(), 14));
-		const marker = page.cam_markers.getLayers().find((item) => item.cam_record_name === movement.name);
+		const marker = page.cam_event_markers.getLayers().find((item) => item.cam_record_name === movement.name);
 		if (marker) marker.openPopup();
 	});
 	page.main.find(".cam-map-movement-list").append(card);
@@ -483,7 +876,8 @@ async function load_map(page) {
 	read_filter_controls(page);
 	update_filter_note(page);
 	set_basemap(page);
-	page.cam_markers.clearLayers();
+	page.cam_camera_markers.clearLayers();
+	page.cam_event_markers.clearLayers();
 	page.cam_tracks.clearLayers();
 	const host = page.main.get(0);
 	const summary = host.querySelector(".cam-map-summary");
@@ -495,7 +889,8 @@ async function load_map(page) {
 		vehicle: page.cam_map_options.vehicle || undefined,
 		event: page.cam_map_options.event || undefined,
 		start: host.querySelector(".cam-map-from").value || undefined,
-		end: host.querySelector(".cam-map-to").value || undefined
+		end: host.querySelector(".cam-map-to").value || undefined,
+		include_demo: host.querySelector(".cam-map-include-demo").checked ? 1 : 0
 	};
 	try {
 		const response = await frappe.call({ method: "camera_archive_management.api.map.map_payload", args, type: "GET" });
@@ -506,26 +901,30 @@ async function load_map(page) {
 			const marker = leaflet.marker([Number(camera.latitude), Number(camera.longitude)], { icon: camera_icon(camera, leaflet) });
 			marker.cam_record_name = camera.name;
 			marker.bindPopup(camera_popup(camera), { maxWidth: 320, minWidth: 220 });
-			page.cam_markers.addLayer(marker);
+			page.cam_camera_markers.addLayer(marker);
 			positions.push([Number(camera.latitude), Number(camera.longitude)]);
 		}
-		const tracks = new Map();
-		for (const movement of data.movements || []) {
-			const point = [Number(movement.latitude), Number(movement.longitude)];
-			const marker = leaflet.marker(point, { icon: vehicle_icon(movement, leaflet), zIndexOffset: 500 });
-			marker.cam_record_name = movement.name;
-			marker.bindPopup(movement_popup(movement), { maxWidth: 300 });
-			page.cam_markers.addLayer(marker);
-			positions.push(point);
-			const key = movement.vehicle || `unassigned:${movement.camera}`;
-			if (!tracks.has(key)) tracks.set(key, []);
-			tracks.get(key).push(point);
-			add_movement_card(page, movement);
+		page.cam_camera_count = (data.cameras || []).length;
+		page.cam_movement_data = (data.movements || []).slice().sort((left, right) =>
+			String(left.detected_at).localeCompare(String(right.detected_at)) || String(left.name).localeCompare(String(right.name))
+		);
+		render_map_insights(page, data.cameras || [], page.cam_movement_data);
+		const slider = host.querySelector(".cam-map-time");
+		const play = host.querySelector(".cam-map-play");
+		slider.min = "0";
+		slider.max = String(page.cam_movement_data.length);
+		slider.value = String(page.cam_movement_data.length);
+		slider.disabled = !page.cam_movement_data.length;
+		play.disabled = !page.cam_movement_data.length;
+		if (page.cam_playback_timer) {
+			clearInterval(page.cam_playback_timer);
+			page.cam_playback_timer = null;
+			play.textContent = "▶";
+			play.setAttribute("aria-label", __("Play movement timeline"));
 		}
-		for (const points of tracks.values()) {
-			if (points.length > 1) leaflet.polyline(points, { color: "#f97316", weight: 3, opacity: 0.65 }).addTo(page.cam_tracks);
-		}
-		summary.textContent = __("{0} cameras · {1} vehicle movements", [data.cameras.length, data.movements.length]);
+		for (const movement of page.cam_movement_data) positions.push([Number(movement.latitude), Number(movement.longitude)]);
+		render_movement_slice(page);
+		summary.textContent = __("{0} cameras · {1} vehicle movements", [data.cameras.length, page.cam_movement_data.length]);
 		if (positions.length === 1) page.cam_map.setView(positions[0], 14);
 		else if (positions.length > 1) page.cam_map.fitBounds(leaflet.latLngBounds(positions).pad(0.12), { maxZoom: 14 });
 		else page.cam_map.setView([52.37, 4.90], 5);

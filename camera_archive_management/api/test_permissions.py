@@ -19,8 +19,16 @@ class TestCredentialPermissions(FrappeTestCase):
 	def test_system_manager_and_site_administrator_are_authorized(self):
 		with patch.object(frappe, "get_roles", return_value=["System Manager"]):
 			self.assertTrue(permissions.camera_credential_has_permission(user="manager@example.invalid"))
-		self.assertEqual(permissions.camera_credential_query_conditions("manager@example.invalid"), "")
+			self.assertTrue(permissions._is_credential_authorized(user="manager@example.invalid"))
 		self.assertTrue(permissions.camera_credential_has_permission(user="Administrator"))
+
+	def test_query_condition_follows_authorization_decision(self):
+		with patch.object(permissions, "_is_credential_authorized", return_value=True) as authorize:
+			self.assertEqual(permissions.camera_credential_query_conditions("manager@example.invalid"), "")
+		authorize.assert_called_once_with("manager@example.invalid")
+		with patch.object(permissions, "_is_credential_authorized", return_value=False) as authorize:
+			self.assertEqual(permissions.camera_credential_query_conditions("viewer@example.invalid"), "1=0")
+		authorize.assert_called_once_with("viewer@example.invalid")
 
 	def test_map_payload_never_serializes_camera_credentials(self):
 		original_user = frappe.session.user
@@ -34,7 +42,7 @@ class TestCredentialPermissions(FrappeTestCase):
 				"status": "Active",
 				"latitude": "52.3",
 				"longitude": "4.9",
-				"camera_photos": [],
+				"camera_photos_json": "[]",
 				"nearby_cameras": [],
 			}
 		).insert(ignore_permissions=True)
