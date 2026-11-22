@@ -32,7 +32,6 @@ def execute() -> None:
 		"DocType",
 		_OLD_NAME,
 		_NEW_NAME,
-		ignore_permissions=True,
 		show_alert=False,
 		rebuild_search=False,
 	)

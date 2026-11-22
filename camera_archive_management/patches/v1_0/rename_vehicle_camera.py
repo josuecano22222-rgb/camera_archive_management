@@ -20,7 +20,6 @@ def _rename_metadata(old_name: str) -> None:
 		"DocType",
 		old_name,
 		TARGET_DOCTYPE,
-		ignore_permissions=True,
 		show_alert=False,
 		rebuild_search=False,
 	)
@@ -50,20 +49,16 @@ def execute() -> None:
 			frappe.throw("Cannot rename this app's Vehicle: CAM Vehicle already exists.")
 		_rename_metadata(INTERMEDIATE_DOCTYPE)
 		target_meta = True
-		if intermediate_table:
-			frappe.db.rename_table(INTERMEDIATE_DOCTYPE, TARGET_DOCTYPE)
-			target_table = True
-			intermediate_table = False
+		target_table = bool(frappe.db.table_exists(TARGET_DOCTYPE))
+		intermediate_table = False
 
 	if legacy_meta:
 		if target_meta or target_table:
 			frappe.throw("Cannot migrate Vehicle Camera: CAM Vehicle already exists.")
 		_rename_metadata(LEGACY_DOCTYPE)
 		target_meta = True
-		if legacy_table:
-			frappe.db.rename_table(LEGACY_DOCTYPE, TARGET_DOCTYPE)
-			target_table = True
-			legacy_table = False
+		target_table = bool(frappe.db.table_exists(TARGET_DOCTYPE))
+		legacy_table = False
 	elif legacy_table:
 		if target_meta and not target_table:
 			frappe.db.rename_table(LEGACY_DOCTYPE, TARGET_DOCTYPE)
@@ -74,13 +69,6 @@ def execute() -> None:
 			frappe.throw(
 				"Vehicle Camera table exists without DocType metadata. Restore metadata or perform reviewed recovery."
 			)
-
-	if intermediate_meta and _doctype_app(INTERMEDIATE_DOCTYPE) == _APP_NAME:
-		# A metadata-only partial rename is safe to complete on retry.
-		if intermediate_table and not target_table:
-			frappe.db.rename_table(INTERMEDIATE_DOCTYPE, TARGET_DOCTYPE)
-		elif intermediate_table and target_table:
-			frappe.throw("Both legacy and target vehicle tables exist; no rows were merged or deleted.")
 
 	if target_meta and frappe.db.table_exists("File") and frappe.db.has_column("File", "attached_to_doctype"):
 		File = frappe.qb.DocType("File")
