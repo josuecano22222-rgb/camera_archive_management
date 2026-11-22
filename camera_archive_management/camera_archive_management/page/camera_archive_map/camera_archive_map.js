@@ -1,8 +1,15 @@
 frappe.pages["camera-archive-map"].on_page_load = function (wrapper) {
 	const page = frappe.ui.make_app_page({ parent: wrapper, title: __("Camera Archive Map"), single_column: true });
 	page.set_primary_action(__("Refresh"), () => load_map(page), "refresh");
-	const route = frappe.route_options || {};
-	frappe.route_options = null;
+	page.cam_map_options = Object.assign(
+		{ camera: null, vehicle: null, event: null },
+		page.cam_map_options || {}
+	);
+	page.cam_map_context = {
+		host: window.location.host,
+		origin: window.location.origin || `${window.location.protocol}//${window.location.host}`
+	};
+	const route_state = sync_route_filters_to_page(page, { force: true });
 	const host = page.main.get(0);
 	host.innerHTML = `
 		<div class="cam-map-toolbar">
@@ -30,26 +37,187 @@ frappe.pages["camera-archive-map"].on_page_load = function (wrapper) {
 	const today = new Date();
 	const start = new Date(today);
 	start.setDate(today.getDate() - 30);
-	host.querySelector(".cam-map-from").value = route.start || start.toISOString().slice(0, 10);
-	host.querySelector(".cam-map-to").value = route.end || today.toISOString().slice(0, 10);
-	host.querySelector(".cam-map-camera").value = route.camera || "";
-	host.querySelector(".cam-map-vehicle").value = route.vehicle || "";
-	host.querySelector(".cam-map-event").value = route.event || "";
-	if (route.layer && ["standard", "aerial", "hybrid"].includes(route.layer)) {
-		host.querySelector(".cam-map-layer").value = route.layer;
+	const default_start = start.toISOString().slice(0, 10);
+	const default_end = today.toISOString().slice(0, 10);
+	host.querySelector(".cam-map-from").value = route_state.controls.start || default_start;
+	host.querySelector(".cam-map-to").value = route_state.controls.end || default_end;
+	host.querySelector(".cam-map-camera").value = page.cam_map_options.camera || "";
+	host.querySelector(".cam-map-vehicle").value = page.cam_map_options.vehicle || "";
+	host.querySelector(".cam-map-event").value = page.cam_map_options.event || "";
+	if (["standard", "aerial", "hybrid"].includes(route_state.controls.layer)) {
+		host.querySelector(".cam-map-layer").value = route_state.controls.layer;
 	}
+	page.$filter_note = $(host.querySelector(".cam-map-filter-note"));
+	update_filter_note(page);
 	page.cam_map = L.map(host.querySelector(".cam-map-canvas"), { zoomControl: true }).setView([52.37, 4.90], 5);
+	if (!page.cam_map_route_listener && frappe.router?.on) {
+		page.cam_map_route_listener = () => {
+			const current_route = frappe.get_route() || [];
+			if (current_route[0] !== "camera-archive-map") page.cam_map_was_away = true;
+		};
+		frappe.router.on("change", page.cam_map_route_listener);
+	}
 	page.cam_base_layers = {};
 	page.cam_overlay = null;
 	page.cam_markers = L.featureGroup().addTo(page.cam_map);
 	page.cam_tracks = L.featureGroup().addTo(page.cam_map);
-	host.querySelector(".cam-map-apply").addEventListener("click", () => load_map(page));
+	host.querySelector(".cam-map-apply").addEventListener("click", () => {
+		read_filter_controls(page);
+		update_filter_note(page);
+		load_map(page);
+	});
 	host.querySelector(".cam-map-layer").addEventListener("change", () => set_basemap(page));
+	for (const selector of [".cam-map-camera", ".cam-map-vehicle", ".cam-map-event"]) {
+		const input = host.querySelector(selector);
+		input.addEventListener("input", () => {
+			read_filter_controls(page);
+			update_filter_note(page);
+			queue_map_reload(page);
+		});
+		input.addEventListener("change", () => {
+			clearTimeout(page.cam_map_reload_timer);
+			read_filter_controls(page);
+			update_filter_note(page);
+			load_map(page);
+		});
+		input.addEventListener("keydown", (event) => {
+			if (event.key === "Enter") {
+				clearTimeout(page.cam_map_reload_timer);
+				read_filter_controls(page);
+				update_filter_note(page);
+				load_map(page);
+			}
+		});
+	}
+	for (const selector of [".cam-map-from", ".cam-map-to"]) {
+		host.querySelector(selector).addEventListener("change", () => load_map(page));
+	}
 	load_map(page);
 };
 
-function tile_template(layer, variant) {
-	return `/api/method/camera_archive_management.api.tiles.tile?layer=${encodeURIComponent(layer)}&variant=${encodeURIComponent(variant)}&z={z}&x={x}&y={y}`;
+frappe.pages["camera-archive-map"].on_page_show = function (wrapper) {
+	const page = wrapper.page;
+	if (!page?.cam_map) return;
+	const route_state = sync_route_filters_to_page(page);
+	if (!route_state.changed) return;
+	const host = page.main.get(0);
+	page.$filter_note = $(host.querySelector(".cam-map-filter-note"));
+	host.querySelector(".cam-map-camera").value = page.cam_map_options.camera || "";
+	host.querySelector(".cam-map-vehicle").value = page.cam_map_options.vehicle || "";
+	host.querySelector(".cam-map-event").value = page.cam_map_options.event || "";
+	const today = new Date();
+	const start = new Date(today);
+	start.setDate(today.getDate() - 30);
+	host.querySelector(".cam-map-from").value = route_state.controls.start || start.toISOString().slice(0, 10);
+	host.querySelector(".cam-map-to").value = route_state.controls.end || today.toISOString().slice(0, 10);
+	if (["standard", "aerial", "hybrid"].includes(route_state.controls.layer)) {
+		host.querySelector(".cam-map-layer").value = route_state.controls.layer;
+	}
+	update_filter_note(page);
+	load_map(page);
+};
+
+const CAM_MAP_FILTER_KEYS = ["camera", "vehicle", "event"];
+const CAM_MAP_ROUTE_KEYS = [...CAM_MAP_FILTER_KEYS, "start", "end", "layer"];
+
+function clean_route_value(value) {
+	if (value === undefined || value === null) return null;
+	const text = String(value).trim();
+	return text || null;
+}
+
+function sync_route_filters_to_page(page, { force = false } = {}) {
+	page.cam_map_options = Object.assign(
+		{ camera: null, vehicle: null, event: null },
+		page.cam_map_options || {}
+	);
+	page.cam_map_route_values = Object.assign(
+		{ start: null, end: null, layer: null },
+		page.cam_map_route_values || {}
+	);
+	const route = frappe.get_route() || [];
+	const route_options = frappe.route_options && typeof frappe.route_options === "object"
+		? frappe.route_options
+		: {};
+	const from_route = {};
+	for (let i = 1; i < route.length; i += 2) {
+		const key = route[i];
+		if (key && CAM_MAP_ROUTE_KEYS.includes(key)) from_route[key] = route[i + 1] || null;
+	}
+	const has_route_filters = CAM_MAP_FILTER_KEYS.some((key) => Object.hasOwn(route_options, key));
+	const has_positional_filters = CAM_MAP_FILTER_KEYS.some((key) => Object.hasOwn(from_route, key));
+	const has_route_controls = ["start", "end", "layer"].some(
+		(key) => Object.hasOwn(route_options, key) || Object.hasOwn(from_route, key)
+	);
+	const identity = JSON.stringify(route);
+	const route_changed = identity !== page.cam_map_route_identity;
+	const route_was_away = Boolean(page.cam_map_was_away);
+	const has_route_options = Object.keys(route_options).length > 0;
+	let changed = route_changed || route_was_away || has_route_options || force;
+
+	if (has_route_filters || has_positional_filters) {
+		for (const key of CAM_MAP_FILTER_KEYS) {
+			const value = Object.hasOwn(route_options, key) ? route_options[key] : from_route[key];
+			const normalized = clean_route_value(value);
+			if (page.cam_map_options[key] !== normalized) changed = true;
+			page.cam_map_options[key] = normalized;
+		}
+	} else if (route_changed || route_was_away || has_route_options || force) {
+		for (const key of CAM_MAP_FILTER_KEYS) {
+			if (page.cam_map_options[key] !== null) changed = true;
+			page.cam_map_options[key] = null;
+		}
+	}
+
+	if (has_route_controls || route_changed || route_was_away || has_route_options || force) {
+		for (const key of ["start", "end", "layer"]) {
+			const value = Object.hasOwn(route_options, key) ? route_options[key] : from_route[key];
+			const normalized = clean_route_value(value);
+			if (page.cam_map_route_values[key] !== normalized) changed = true;
+			page.cam_map_route_values[key] = normalized;
+		}
+	}
+	page.cam_map_route_identity = identity;
+	page.cam_map_was_away = false;
+	if (has_route_options) frappe.route_options = {};
+	return { changed, controls: page.cam_map_route_values };
+}
+
+function read_filter_controls(page) {
+	const host = page.main.get(0);
+	page.cam_map_options = Object.assign(
+		{ camera: null, vehicle: null, event: null },
+		page.cam_map_options || {}
+	);
+	page.cam_map_options.camera = clean_route_value(host.querySelector(".cam-map-camera").value);
+	page.cam_map_options.vehicle = clean_route_value(host.querySelector(".cam-map-vehicle").value);
+	page.cam_map_options.event = clean_route_value(host.querySelector(".cam-map-event").value);
+}
+
+function queue_map_reload(page) {
+	clearTimeout(page.cam_map_reload_timer);
+	page.cam_map_reload_timer = window.setTimeout(() => load_map(page), 350);
+}
+
+function update_filter_note(page) {
+	const { camera, vehicle, event } = page.cam_map_options || {};
+	const parts = [];
+	if (camera) parts.push(`${__("Camera")}: ${camera}`);
+	if (vehicle) parts.push(`${__("Vehicle")}: ${vehicle}`);
+	if (event) parts.push(`${__("Event")}: ${event}`);
+	const summary = parts.length
+		? `${__("Active filters")} — ${parts.join(" • ")}`
+		: __("Showing all matching records (no camera, vehicle, or event filter active).");
+	if (page.$filter_note) page.$filter_note.text(summary);
+}
+
+function tile_template(layer, variant, context) {
+	const origin = context?.origin || pageOrigin();
+	return `${origin}/api/method/camera_archive_management.api.tiles.tile?layer=${encodeURIComponent(layer)}&variant=${encodeURIComponent(variant)}&z={z}&x={x}&y={y}`;
+}
+
+function pageOrigin() {
+	return window.location.origin || `${window.location.protocol}//${window.location.host}`;
 }
 
 function set_basemap(page) {
@@ -60,13 +228,13 @@ function set_basemap(page) {
 	});
 	if (page.cam_overlay && map.hasLayer(page.cam_overlay)) map.removeLayer(page.cam_overlay);
 	const attributions = { standard: "© OpenStreetMap contributors", aerial: "© Esri", hybrid: "© Esri" };
-	const base = page.cam_base_layers[selected] || L.tileLayer(tile_template(selected, "base"), {
+	const base = page.cam_base_layers[selected] || L.tileLayer(tile_template(selected, "base", page.cam_map_context), {
 		minZoom: 0, maxZoom: 19, attribution: attributions[selected], crossOrigin: false
 	});
 	page.cam_base_layers[selected] = base;
 	base.addTo(map);
 	if (selected === "hybrid") {
-		page.cam_overlay = page.cam_overlay || L.tileLayer(tile_template("hybrid", "overlay"), {
+		page.cam_overlay = page.cam_overlay || L.tileLayer(tile_template("hybrid", "overlay", page.cam_map_context), {
 			minZoom: 0, maxZoom: 19, attribution: "© Esri", opacity: 1
 		});
 		page.cam_overlay.addTo(map);
@@ -185,6 +353,10 @@ function add_movement_card(page, movement) {
 }
 
 async function load_map(page) {
+	const request_id = (page.cam_map_request_id || 0) + 1;
+	page.cam_map_request_id = request_id;
+	read_filter_controls(page);
+	update_filter_note(page);
 	set_basemap(page);
 	page.cam_markers.clearLayers();
 	page.cam_tracks.clearLayers();
@@ -194,14 +366,15 @@ async function load_map(page) {
 	movementList.replaceChildren();
 	summary.textContent = __("Loading cameras and movements…");
 	const args = {
-		camera: host.querySelector(".cam-map-camera").value.trim() || undefined,
-		vehicle: host.querySelector(".cam-map-vehicle").value.trim() || undefined,
-		event: host.querySelector(".cam-map-event").value.trim() || undefined,
+		camera: page.cam_map_options.camera || undefined,
+		vehicle: page.cam_map_options.vehicle || undefined,
+		event: page.cam_map_options.event || undefined,
 		start: host.querySelector(".cam-map-from").value || undefined,
 		end: host.querySelector(".cam-map-to").value || undefined
 	};
 	try {
 		const response = await frappe.call({ method: "camera_archive_management.api.map.map_payload", args, type: "GET" });
+		if (request_id !== page.cam_map_request_id) return;
 		const data = response.message || { cameras: [], movements: [] };
 		const positions = [];
 		for (const camera of data.cameras || []) {
@@ -227,17 +400,12 @@ async function load_map(page) {
 		for (const points of tracks.values()) {
 			if (points.length > 1) L.polyline(points, { color: "#f97316", weight: 3, opacity: 0.65 }).addTo(page.cam_tracks);
 		}
-		const filters = [
-			args.camera && `${__("Camera")}: ${args.camera}`,
-			args.vehicle && `${__("CAM Vehicle")}: ${args.vehicle}`,
-			args.event && `${__("Motion Event")}: ${args.event}`
-		].filter(Boolean);
-		host.querySelector(".cam-map-filter-note").textContent = filters.join(" · ");
 		summary.textContent = __("{0} cameras · {1} vehicle movements", [data.cameras.length, data.movements.length]);
 		if (positions.length === 1) page.cam_map.setView(positions[0], 14);
 		else if (positions.length > 1) page.cam_map.fitBounds(L.latLngBounds(positions).pad(0.12), { maxZoom: 14 });
 		else page.cam_map.setView([52.37, 4.90], 5);
 	} catch (error) {
+		if (request_id !== page.cam_map_request_id) return;
 		summary.textContent = __("Map data could not be loaded. Check Camera/Motion Event read permissions and the server logs.");
 		frappe.msgprint({ title: __("Camera map"), message: error.message || __("Request failed"), indicator: "red" });
 	}
