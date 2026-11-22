@@ -1,0 +1,37 @@
+[
+  {
+    "doctype": "Role",
+    "role_name": "CAM Viewer",
+    "desk_access": 1,
+    "disabled": 0,
+    "is_custom": 1
+  },
+  {
+    "doctype": "Role",
+    "role_name": "CAM Operator",
+    "desk_access": 1,
+    "disabled": 0,
+    "is_custom": 1
+  },
+  {
+    "doctype": "Role",
+    "role_name": "CAM Analyst",
+    "desk_access": 1,
+    "disabled": 0,
+    "is_custom": 1
+  },
+  {
+    "doctype": "Role",
+    "role_name": "CAM Archive Manager",
+    "desk_access": 1,
+    "disabled": 0,
+    "is_custom": 1
+  },
+  {
+    "doctype": "Role",
+    "role_name": "CAM Geo Administrator",
+    "desk_access": 1,
+    "disabled": 0,
+    "is_custom": 1
+  }
+]

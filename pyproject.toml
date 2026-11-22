@@ -1,14 +1,19 @@
 [project]
 name = "camera_archive_management"
 authors = [
-    { name = "Camera Archive Management", email = "josuecano22222@gmail.com"}
+    { name = "Camera Archive Management", email = "josuecano22222@gmail.com" }
 ]
-description = "Camera device inventory, vehicle registry, and motion entry/exit event management with native Frappe workspace, reports, map, calendar, and tree views."
+description = "Camera inventory, archive management, motion events, and offline-capable geographic tools for Frappe."
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
-    # "frappe~=15.0.0" # Installed and managed by bench.
+    "frappe>=15,<16",
+]
+
+[project.optional-dependencies]
+geo = [
+    "shapely>=2,<3",
 ]
 
 [build-system]
