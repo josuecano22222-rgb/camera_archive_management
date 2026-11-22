@@ -9,7 +9,8 @@ private/siraj_tile_cache/<layer>/<_|overlay>/<z>/<x>/<y>.<format>
 ```
 
 The API's `base` variant maps to Siraj's canonical `_` directory; existing
-explicit `base` directories are accepted when reading for compatibility.
+explicit `base` directories are accepted when reading for compatibility. When
+both contain the same tile, canonical `_` takes precedence.
 
 The server checks the Camera read permission before serving map tiles. Provider
 fetching is cache-first, server-side, and disabled unless all of these are true:

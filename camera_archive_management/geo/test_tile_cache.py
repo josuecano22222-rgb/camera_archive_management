@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import multiprocessing
 import sys
 import tempfile
 import time
@@ -16,7 +17,7 @@ JPEG = b"\xff\xd8\xff" + b"synthetic-jpeg-payload"
 
 
 class FakeRequestException(Exception):
-	pass
+	"""Stand-in for requests.RequestException in isolated fetch tests."""
 
 
 class FakeResponse:
@@ -33,6 +34,13 @@ class FakeResponse:
 
 	def iter_content(self, chunk_size=0):
 		yield self.data
+
+
+def _try_acquire_tile_lock(private_path, result_queue):
+	lock = tile_cache.tile_lock(private_path, "standard", "base", 5, 13, 8, timeout=0.2)
+	result_queue.put(lock is not False)
+	if lock:
+		lock.__exit__(None, None, None)
 
 
 class FakeSirajTileModule:
@@ -164,6 +172,24 @@ class TestTileCache(unittest.TestCase):
 		self.assertEqual(sum(result.source == "miss" for result in results), 1)
 		self.assertTrue(all(result.data == PNG for result in results))
 
+	def test_tile_miss_lock_is_shared_across_processes(self):
+		lock = tile_cache.tile_lock(self.private, "standard", "base", 5, 13, 8, timeout=1)
+		self.assertTrue(lock)
+		context = multiprocessing.get_context("fork")
+		result_queue = context.Queue()
+		process = context.Process(target=_try_acquire_tile_lock, args=(str(self.private), result_queue))
+		try:
+			process.start()
+			self.assertFalse(result_queue.get(timeout=3))
+			process.join(timeout=3)
+			self.assertEqual(process.exitcode, 0)
+		finally:
+			if process.is_alive():
+				process.terminate()
+				process.join(timeout=3)
+			lock.__exit__(None, None, None)
+			result_queue.close()
+
 	def test_symlinked_cache_root_is_rejected(self):
 		outside = Path(self.temp.name) / "outside"
 		outside.mkdir()
@@ -185,6 +211,16 @@ class TestTileCache(unittest.TestCase):
 		result = tile_cache.read_cached_tile(self.private, "standard", "base", 5, 13, 8)
 		self.assertEqual(result.data, PNG)
 		self.assertEqual(result.source, "hit")
+
+	def test_canonical_siraj_base_wins_over_legacy_duplicate(self):
+		legacy = self.private / "siraj_tile_cache/standard/base/5/13/8.png"
+		canonical = self.private / "siraj_tile_cache/standard/_/5/13/8.png"
+		legacy.parent.mkdir(parents=True)
+		canonical.parent.mkdir(parents=True)
+		legacy.write_bytes(PNG + b"legacy")
+		canonical.write_bytes(PNG + b"canonical")
+		result = tile_cache.read_cached_tile(self.private, "standard", "base", 5, 13, 8)
+		self.assertEqual(result.data, PNG + b"canonical")
 
 
 if __name__ == "__main__":

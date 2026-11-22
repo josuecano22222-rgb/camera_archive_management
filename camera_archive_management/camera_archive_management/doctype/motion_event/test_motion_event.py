@@ -35,6 +35,16 @@ class TestMotionEvent(FrappeTestCase):
 		self.assertEqual(str(event.longitude_snapshot), "4.9")
 		self.assertEqual(event.location_source_snapshot, "manual")
 		self.assertEqual(event.location_snapshot, camera.location)
+		original_location_snapshot = event.location_snapshot
+
+		camera.latitude = "52.4"
+		camera.longitude = "5.0"
+		camera.location = '{"type":"Point","coordinates":[5.0,52.4]}'
+		camera.save(ignore_permissions=True)
+		event.reload()
+		self.assertEqual(str(event.latitude_snapshot), "52.3")
+		self.assertEqual(str(event.longitude_snapshot), "4.9")
+		self.assertEqual(event.location_snapshot, original_location_snapshot)
 
 		event.notes = "Additional description"
 		event.save(ignore_permissions=True)

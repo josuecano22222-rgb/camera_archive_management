@@ -152,7 +152,8 @@ def _cache_root(private_path: str | Path, *, create: bool = False) -> Path | Non
 
 
 def _cache_relative_paths(layer: str, variant: str, z: int, x: int, y: int):
-	cache_variants = ("base", "_") if variant == "base" else ("overlay",)
+	# Canonical Siraj content wins when both layouts contain the same XYZ tile.
+	cache_variants = ("_", "base") if variant == "base" else ("overlay",)
 	for cache_variant in cache_variants:
 		for extension in _CACHE_EXTENSIONS[layer]:
 			yield Path(layer, cache_variant, str(z), str(x), f"{y}.{extension}"), extension
