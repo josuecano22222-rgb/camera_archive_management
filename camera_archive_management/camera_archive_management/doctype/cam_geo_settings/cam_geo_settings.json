@@ -1,0 +1,130 @@
+{
+ "doctype": "DocType",
+ "name": "CAM Geo Settings",
+ "module": "Camera Archive Management",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "active_dataset",
+   "fieldtype": "Link",
+   "label": "Active Dataset",
+   "options": "Geo Dataset"
+  },
+  {
+   "fieldname": "default_search_radius_m",
+   "fieldtype": "Int",
+   "label": "Default Search Radius M",
+   "default": "5000"
+  },
+  {
+   "fieldname": "ambiguity_threshold_m",
+   "fieldtype": "Int",
+   "label": "Ambiguity Threshold M",
+   "default": "250"
+  },
+  {
+   "fieldname": "enable_online_geocoder",
+   "fieldtype": "Check",
+   "label": "Enable Online Geocoder",
+   "default": "0"
+  },
+  {
+   "fieldname": "online_provider",
+   "fieldtype": "Select",
+   "label": "Online Provider",
+   "options": "Disabled\nNominatim (OpenStreetMap)",
+   "default": "Disabled"
+  },
+  {
+   "fieldname": "online_user_agent",
+   "fieldtype": "Data",
+   "label": "Online User Agent",
+   "description": "Required contact identifier when explicitly enabling Nominatim."
+  },
+  {
+   "fieldname": "online_rate_limit_per_min",
+   "fieldtype": "Int",
+   "label": "Online Rate Limit Per Min",
+   "default": "30"
+  },
+  {
+   "fieldname": "online_cache_days",
+   "fieldtype": "Int",
+   "label": "Online Cache Days",
+   "default": "30"
+  },
+  {
+   "fieldname": "allow_online_setup",
+   "fieldtype": "Check",
+   "label": "Allow Online Setup",
+   "default": "0"
+  },
+  {
+   "fieldname": "last_dataset_import",
+   "fieldtype": "Datetime",
+   "label": "Last Dataset Import",
+   "read_only": 1
+  }
+ ],
+ "field_order": [
+  "active_dataset",
+  "default_search_radius_m",
+  "ambiguity_threshold_m",
+  "enable_online_geocoder",
+  "online_provider",
+  "online_user_agent",
+  "online_rate_limit_per_min",
+  "online_cache_days",
+  "allow_online_setup",
+  "last_dataset_import"
+ ],
+ "permissions": [
+  {
+   "role": "CAM Geo Administrator",
+   "read": 1,
+   "write": 1,
+   "create": 0,
+   "delete": 0,
+   "report": 0,
+   "export": 0,
+   "print": 0,
+   "select": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "select": 1,
+   "import": 1
+  }
+ ],
+ "istable": 0,
+ "issingle": 1,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": []
+}

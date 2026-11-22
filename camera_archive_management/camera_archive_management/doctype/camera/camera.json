@@ -1,132 +1,72 @@
 {
- "actions": [],
- "allow_rename": 1,
- "creation": "2026-11-22 07:01:00.337529",
  "doctype": "DocType",
+ "name": "Camera",
+ "module": "Camera Archive Management",
  "engine": "InnoDB",
- "field_order": [
-  "naming_series",
-  "camera_name",
-  "status",
-  "importance",
-  "camera_type",
-  "area",
-  "column_break_1",
-  "image",
-  "camera_number",
-  "serial_number",
-  "installation_date",
-  "section_break_connection",
-  "ip_address",
-  "port",
-  "username",
-  "password",
-  "section_break_location",
-  "location",
-  "geometry_type",
-  "latitude",
-  "longitude",
-  "column_break_address",
-  "address",
-  "section_break_coverage",
-  "field_of_view",
-  "section_break_photos",
-  "camera_photos",
-  "section_break_nearby",
-  "nearby_cameras",
-  "section_break_details",
-  "description"
- ],
  "fields": [
- {
-   "default": "CAM-.####",
+  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
-   "hidden": 1,
    "label": "Series",
    "options": "CAM-.####",
+   "default": "CAM-.####",
    "reqd": 1,
+   "hidden": 1,
    "set_only_once": 1
   },
   {
-   "allow_in_quick_entry": 1,
    "fieldname": "camera_name",
    "fieldtype": "Data",
-   "in_filter": 1,
-   "in_global_search": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Camera Name",
    "reqd": 1,
-   "unique": 1
+   "unique": 1,
+   "in_list_view": 1,
+   "in_global_search": 1,
+   "in_standard_filter": 1
   },
   {
-   "default": "Active",
    "fieldname": "status",
    "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Status",
    "options": "Active\nInactive\nMaintenance",
+   "default": "Active",
    "reqd": 1,
-   "search_index": 1
-  },
-  {
-   "fieldname": "importance",
-   "fieldtype": "Select",
    "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Importance",
-   "options": "\nLow\nMedium\nHigh\nCritical",
-   "search_index": 1
+   "in_standard_filter": 1
   },
   {
-   "allow_in_quick_entry": 1,
    "fieldname": "camera_type",
    "fieldtype": "Link",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Camera Type",
    "options": "Camera Type",
-   "search_index": 1
+   "in_list_view": 1,
+   "in_standard_filter": 1
   },
   {
    "fieldname": "area",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Area",
    "options": "Camera Area",
-   "search_index": 1
+   "in_list_view": 1,
+   "in_standard_filter": 1
   },
   {
-   "fieldname": "column_break_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "description": "Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list.",
-   "fieldname": "image",
-   "fieldtype": "Attach Image",
-   "label": "Image",
-   "read_only": 1
-  },
-  {
-   "fieldname": "camera_number",
-   "fieldtype": "Data",
-   "label": "Camera Number",
-   "search_index": 1
+   "fieldname": "importance",
+   "fieldtype": "Select",
+   "label": "Importance",
+   "options": "Low\nMedium\nHigh\nCritical"
   },
   {
    "fieldname": "serial_number",
    "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Serial Number",
-   "search_index": 1
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "camera_number",
+   "fieldtype": "Data",
+   "label": "Camera Number"
   },
   {
    "fieldname": "installation_date",
@@ -134,107 +74,99 @@
    "label": "Installation Date"
   },
   {
-   "fieldname": "section_break_connection",
+   "fieldname": "connection_section",
    "fieldtype": "Section Break",
    "label": "Connection"
   },
   {
-   "allow_in_quick_entry": 1,
    "fieldname": "ip_address",
    "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "IP Address",
-   "search_index": 1
+   "label": "Ip Address"
   },
   {
-   "allow_in_quick_entry": 1,
    "fieldname": "port",
    "fieldtype": "Int",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Port"
   },
   {
-   "allow_in_quick_entry": 1,
-   "fieldname": "username",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Username"
-  },
-  {
-   "allow_in_quick_entry": 1,
-   "description": "Stored and displayed as plain text (local trust model).",
-   "fieldname": "password",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Password"
-  },
-  {
-   "fieldname": "section_break_location",
+   "fieldname": "location_section",
    "fieldtype": "Section Break",
    "label": "Location"
   },
   {
-   "description": "Draw points, lines, polygons, rectangles, or circles on the native map control. Stored as GeoJSON and rendered by the native Map list view.",
    "fieldname": "location",
    "fieldtype": "Geolocation",
    "label": "Location"
   },
   {
-   "fieldname": "geometry_type",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Geometry Type",
-   "read_only": 1
-  },
-  {
-   "allow_in_quick_entry": 1,
-   "description": "Exact decimal degrees derived from the location anchor. You may also enter coordinates here; they are saved into Location as a point.",
    "fieldname": "latitude",
    "fieldtype": "Data",
-   "label": "Latitude"
+   "label": "Latitude",
+   "description": "WGS84 latitude in decimal degrees."
   },
   {
-   "allow_in_quick_entry": 1,
-   "description": "Exact decimal degrees derived from the location anchor. You may also enter coordinates here; they are saved into Location as a point.",
    "fieldname": "longitude",
    "fieldtype": "Data",
-   "label": "Longitude"
-  },
-  {
-   "fieldname": "column_break_address",
-   "fieldtype": "Column Break"
+   "label": "Longitude",
+   "description": "WGS84 longitude in decimal degrees."
   },
   {
    "fieldname": "address",
    "fieldtype": "Small Text",
-   "label": "Address"
+   "label": "Address",
+   "description": "Operator-entered address. Reverse lookup never replaces this field automatically."
   },
   {
-   "fieldname": "section_break_coverage",
+   "fieldname": "geo_admin_area",
+   "fieldtype": "Link",
+   "label": "Geo Admin Area",
+   "options": "Geo Admin Area"
+  },
+  {
+   "fieldname": "geo_boundary",
+   "fieldtype": "Link",
+   "label": "Geo Boundary",
+   "options": "Geo Boundary"
+  },
+  {
+   "fieldname": "lookup_source",
+   "fieldtype": "Data",
+   "label": "Lookup Source"
+  },
+  {
+   "fieldname": "lookup_confidence",
+   "fieldtype": "Float",
+   "label": "Lookup Confidence"
+  },
+  {
+   "fieldname": "lookup_ambiguous",
+   "fieldtype": "Check",
+   "label": "Lookup Ambiguous"
+  },
+  {
+   "fieldname": "lookup_resolved_at",
+   "fieldtype": "Datetime",
+   "label": "Lookup Resolved At"
+  },
+  {
+   "fieldname": "coverage_section",
    "fieldtype": "Section Break",
    "label": "Coverage"
   },
   {
-   "description": "Describe the area this camera covers and its viewing angle, e.g. \"North gate entrance \u2014 wide-angle view over the main driveway.\"",
    "fieldname": "field_of_view",
    "fieldtype": "Small Text",
-   "label": "Field of View"
+   "label": "Field Of View"
   },
   {
-   "fieldname": "section_break_photos",
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "photo_section",
    "fieldtype": "Section Break",
-   "label": "Street Photos"
+   "label": "Photos"
   },
   {
    "fieldname": "camera_photos",
@@ -243,53 +175,119 @@
    "options": "Camera Photo"
   },
   {
-   "fieldname": "section_break_nearby",
+   "fieldname": "nearby_section",
    "fieldtype": "Section Break",
    "label": "Nearby Cameras"
   },
   {
-   "description": "Cameras considered nearby for motion-event context and alerts. Recorded automatically on every Motion Event and used for notifications.",
    "fieldname": "nearby_cameras",
    "fieldtype": "Table",
    "label": "Nearby Cameras",
    "options": "Camera Nearby Camera"
-  },
-  {
-   "fieldname": "section_break_details",
-   "fieldtype": "Section Break",
-   "label": "Details"
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Text Editor",
-   "label": "Description"
   }
  ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-11-22 07:01:00.337529",
- "modified_by": "Administrator",
- "module": "Camera Archive Management",
- "name": "Camera",
- "owner": "Administrator",
+ "field_order": [
+  "naming_series",
+  "camera_name",
+  "status",
+  "camera_type",
+  "area",
+  "importance",
+  "serial_number",
+  "camera_number",
+  "installation_date",
+  "connection_section",
+  "ip_address",
+  "port",
+  "location_section",
+  "location",
+  "latitude",
+  "longitude",
+  "address",
+  "geo_admin_area",
+  "geo_boundary",
+  "lookup_source",
+  "lookup_confidence",
+  "lookup_ambiguous",
+  "lookup_resolved_at",
+  "coverage_section",
+  "field_of_view",
+  "description",
+  "photo_section",
+  "camera_photos",
+  "nearby_section",
+  "nearby_cameras"
+ ],
  "permissions": [
   {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
+   "role": "CAM Viewer",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
    "export": 1,
    "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Operator",
    "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
    "report": 1,
+   "export": 0,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Analyst",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Archive Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
    "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
    "share": 1,
-   "write": 1
+   "select": 1,
+   "import": 1
   }
  ],
- "row_format": "Dynamic",
- "rows_threshold_for_grid_search": 20,
+ "istable": 0,
+ "issingle": 0,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "links": [],
+ "autoname": "naming_series:",
+ "title_field": "camera_name",
+ "search_fields": "camera_name,serial_number,camera_number"
 }

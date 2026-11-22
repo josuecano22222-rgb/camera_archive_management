@@ -1,0 +1,213 @@
+{
+ "doctype": "DocType",
+ "name": "Archive Asset",
+ "module": "Camera Archive Management",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "ARC-.########",
+   "default": "ARC-.########",
+   "reqd": 1,
+   "hidden": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_global_search": 1
+  },
+  {
+   "fieldname": "camera",
+   "fieldtype": "Link",
+   "label": "Camera",
+   "options": "Camera",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "motion_event",
+   "fieldtype": "Link",
+   "label": "Motion Event",
+   "options": "Motion Event",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "storage_backend",
+   "fieldtype": "Select",
+   "label": "Storage Backend",
+   "options": "Frappe File\nExternal",
+   "default": "Frappe File",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "file_url",
+   "fieldtype": "Attach",
+   "label": "File Url",
+   "description": "Frappe File URL; use for site-managed attachments."
+  },
+  {
+   "fieldname": "external_reference",
+   "fieldtype": "Small Text",
+   "label": "External Reference",
+   "description": "Opaque external archive URI/reference; never interpreted as a server filesystem path."
+  },
+  {
+   "fieldname": "external_storage_scope",
+   "fieldtype": "Data",
+   "label": "External Storage Scope"
+  },
+  {
+   "fieldname": "ingest_batch",
+   "fieldtype": "Link",
+   "label": "Ingest Batch",
+   "options": "Archive Ingest Batch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ingest_item_key",
+   "fieldtype": "Data",
+   "label": "Ingest Item Key",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checksum_sha256",
+   "fieldtype": "Data",
+   "label": "Checksum Sha256"
+  },
+  {
+   "fieldname": "size_bytes",
+   "fieldtype": "Int",
+   "label": "Size Bytes"
+  },
+  {
+   "fieldname": "media_type",
+   "fieldtype": "Data",
+   "label": "Media Type"
+  },
+  {
+   "fieldname": "recorded_from",
+   "fieldtype": "Datetime",
+   "label": "Recorded From"
+  },
+  {
+   "fieldname": "recorded_to",
+   "fieldtype": "Datetime",
+   "label": "Recorded To"
+  },
+  {
+   "fieldname": "retention_state",
+   "fieldtype": "Select",
+   "label": "Retention State",
+   "options": "Active\nHold\nExpired\nDeleted",
+   "default": "Active",
+   "reqd": 1
+  },
+  {
+   "fieldname": "index_status",
+   "fieldtype": "Select",
+   "label": "Index Status",
+   "options": "Pending\nQueued\nRunning\nComplete\nFailed",
+   "default": "Pending"
+  },
+  {
+   "fieldname": "index_error",
+   "fieldtype": "Small Text",
+   "label": "Index Error"
+  },
+  {
+   "fieldname": "metadata_json",
+   "fieldtype": "Long Text",
+   "label": "Metadata Json"
+  }
+ ],
+ "field_order": [
+  "naming_series",
+  "title",
+  "camera",
+  "motion_event",
+  "storage_backend",
+  "file_url",
+  "external_reference",
+  "external_storage_scope",
+  "ingest_batch",
+  "ingest_item_key",
+  "checksum_sha256",
+  "size_bytes",
+  "media_type",
+  "recorded_from",
+  "recorded_to",
+  "retention_state",
+  "index_status",
+  "index_error",
+  "metadata_json"
+ ],
+ "permissions": [
+  {
+   "role": "CAM Viewer",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Analyst",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Archive Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "select": 1,
+   "import": 1
+  }
+ ],
+ "istable": 0,
+ "issingle": 0,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "autoname": "naming_series:",
+ "title_field": "title",
+ "search_fields": "title,camera,motion_event,checksum_sha256"
+}

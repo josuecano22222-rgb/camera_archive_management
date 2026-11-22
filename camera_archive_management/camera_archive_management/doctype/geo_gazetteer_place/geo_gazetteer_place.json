@@ -1,0 +1,147 @@
+{
+ "doctype": "DocType",
+ "name": "Geo Gazetteer Place",
+ "module": "Camera Archive Management",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "dataset",
+   "fieldtype": "Link",
+   "label": "Dataset",
+   "options": "Geo Dataset",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "place_code",
+   "fieldtype": "Data",
+   "label": "Place Code",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "place_name",
+   "fieldtype": "Data",
+   "label": "Place Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "alternate_names",
+   "fieldtype": "Small Text",
+   "label": "Alternate Names"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Data",
+   "label": "Latitude",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "Exact decimal string; WGS84 is validated server-side."
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Data",
+   "label": "Longitude",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "Exact decimal string; WGS84 is validated server-side."
+  },
+  {
+   "fieldname": "admin_area",
+   "fieldtype": "Link",
+   "label": "Admin Area",
+   "options": "Geo Admin Area"
+  },
+  {
+   "fieldname": "feature_type",
+   "fieldtype": "Data",
+   "label": "Feature Type"
+  },
+  {
+   "fieldname": "source_id",
+   "fieldtype": "Data",
+   "label": "Source Id"
+  },
+  {
+   "fieldname": "source_kind",
+   "fieldtype": "Select",
+   "label": "Source Kind",
+   "options": "Manual\nImported\nVerified",
+   "default": "Imported"
+  }
+ ],
+ "field_order": [
+  "dataset",
+  "place_code",
+  "place_name",
+  "alternate_names",
+  "latitude",
+  "longitude",
+  "admin_area",
+  "feature_type",
+  "source_id",
+  "source_kind"
+ ],
+ "permissions": [
+  {
+   "role": "CAM Geo Administrator",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
+   "role": "CAM Viewer",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Analyst",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "select": 1,
+   "import": 1
+  }
+ ],
+ "istable": 0,
+ "issingle": 0,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "autoname": "hash",
+ "title_field": "place_name",
+ "search_fields": "place_code,place_name,alternate_names"
+}

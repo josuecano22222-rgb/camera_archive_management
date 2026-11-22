@@ -1,0 +1,188 @@
+{
+ "doctype": "DocType",
+ "name": "Geo Boundary",
+ "module": "Camera Archive Management",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "dataset",
+   "fieldtype": "Link",
+   "label": "Dataset",
+   "options": "Geo Dataset",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "boundary_code",
+   "fieldtype": "Data",
+   "label": "Boundary Code",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "level",
+   "fieldtype": "Int",
+   "label": "Level",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "parent_boundary",
+   "fieldtype": "Link",
+   "label": "Parent Boundary",
+   "options": "Geo Boundary"
+  },
+  {
+   "fieldname": "admin_area",
+   "fieldtype": "Link",
+   "label": "Admin Area",
+   "options": "Geo Admin Area"
+  },
+  {
+   "fieldname": "west",
+   "fieldtype": "Data",
+   "label": "West",
+   "description": "Exact decimal string; WGS84 is validated server-side."
+  },
+  {
+   "fieldname": "south",
+   "fieldtype": "Data",
+   "label": "South",
+   "description": "Exact decimal string; WGS84 is validated server-side."
+  },
+  {
+   "fieldname": "east",
+   "fieldtype": "Data",
+   "label": "East",
+   "description": "Exact decimal string; WGS84 is validated server-side."
+  },
+  {
+   "fieldname": "north",
+   "fieldtype": "Data",
+   "label": "North",
+   "description": "Exact decimal string; WGS84 is validated server-side."
+  },
+  {
+   "fieldname": "centroid_lat",
+   "fieldtype": "Data",
+   "label": "Centroid Lat",
+   "description": "Exact decimal string; WGS84 is validated server-side."
+  },
+  {
+   "fieldname": "centroid_lon",
+   "fieldtype": "Data",
+   "label": "Centroid Lon",
+   "description": "Exact decimal string; WGS84 is validated server-side."
+  },
+  {
+   "fieldname": "area_m2",
+   "fieldtype": "Float",
+   "label": "Area M2"
+  },
+  {
+   "fieldname": "source_id",
+   "fieldtype": "Data",
+   "label": "Source Id"
+  },
+  {
+   "fieldname": "source_kind",
+   "fieldtype": "Select",
+   "label": "Source Kind",
+   "options": "Manual\nImported\nVerified\nDisputed",
+   "default": "Imported"
+  },
+  {
+   "fieldname": "geometries",
+   "fieldtype": "Table",
+   "label": "Geometries",
+   "options": "Geo Boundary Geometry",
+   "reqd": 1
+  }
+ ],
+ "field_order": [
+  "dataset",
+  "boundary_code",
+  "label",
+  "level",
+  "parent_boundary",
+  "admin_area",
+  "west",
+  "south",
+  "east",
+  "north",
+  "centroid_lat",
+  "centroid_lon",
+  "area_m2",
+  "source_id",
+  "source_kind",
+  "geometries"
+ ],
+ "permissions": [
+  {
+   "role": "CAM Geo Administrator",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
+   "role": "CAM Viewer",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Analyst",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "select": 1,
+   "import": 1
+  }
+ ],
+ "istable": 0,
+ "issingle": 0,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "autoname": "hash",
+ "title_field": "label",
+ "search_fields": "boundary_code,label"
+}

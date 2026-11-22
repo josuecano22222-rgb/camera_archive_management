@@ -30,9 +30,12 @@ fixtures = [
 	}
 ]
 
-# Load only the local Leaflet stylesheet globally. Leaflet's JS is loaded by
-# map views on demand, avoiding Desk-wide JavaScript cost when no map is open.
-app_include_css = ["/assets/camera_archive_management/vendor/leaflet/leaflet.css"]
+# Keep the approved local Leaflet build and map styles available throughout Desk.
+app_include_css = [
+	"/assets/camera_archive_management/vendor/leaflet/leaflet.css",
+	"/assets/camera_archive_management/css/camera_archive.css",
+]
+app_include_js = ["/assets/camera_archive_management/vendor/leaflet/leaflet.js"]
 
 # Sensitive credentials are protected independently of future DocType metadata.
 permission_query_conditions = {
@@ -42,11 +45,21 @@ has_permission = {
 	"Camera Credential": "camera_archive_management.api.permissions.camera_credential_has_permission",
 }
 
-# Lifecycle and scheduled handlers are intentionally registered in Phase 3,
-# alongside their real controller/task implementations. Keeping these maps
-# empty makes Phase 2 migrations safe and avoids dangling hook paths.
-doc_events = {}
-scheduler_events = {}
+doc_events = {
+	"Archive Ingest Batch": {
+		"on_update": "camera_archive_management.jobs.dispatch.queue_ingest_batch",
+	},
+	"Geo Dataset": {
+		"on_update": "camera_archive_management.jobs.dispatch.queue_geo_dataset_import",
+	},
+	"Archive Asset": {
+		"on_update": "camera_archive_management.jobs.dispatch.queue_archive_asset_index",
+	},
+}
+
+scheduler_events = {
+	"daily": ["camera_archive_management.tasks.reconcile.requeue_pending_work"],
+}
 
 # Offline assets are local. No tile or geocoder provider is configured here;
 # all network integrations require a later explicit administrator opt-in.

@@ -1,7 +1,9 @@
 [pre_model_sync]
-# Phase 3 will add the Vehicle Camera -> Vehicle migration in the same change
-# that introduces the Vehicle DocType metadata and migration module. Do not
-# uncomment or register a patch before that module is present.
+camera_archive_management.patches.v1_0.migrate_archive_settings_single
+camera_archive_management.patches.v1_0.rename_vehicle_camera
+camera_archive_management.patches.v1_0.rename_geo_settings
+camera_archive_management.patches.v1_0.isolate_camera_credentials
+camera_archive_management.patches.v1_0.assert_doctype_namespace
 
 [post_model_sync]
-# Add post-schema data migrations here. Keep each patch idempotent.
+camera_archive_management.patches.v1_0.ensure_unique_keys

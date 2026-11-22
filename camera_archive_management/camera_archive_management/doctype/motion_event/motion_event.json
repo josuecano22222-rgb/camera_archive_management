@@ -1,257 +1,265 @@
 {
- "actions": [],
- "allow_rename": 1,
- "creation": "2026-11-22 07:03:27.433458",
  "doctype": "DocType",
+ "name": "Motion Event",
+ "module": "Camera Archive Management",
  "engine": "InnoDB",
- "field_order": [
-  "naming_series",
-  "camera",
-  "motion_type",
-  "detected_at",
-  "camera_name",
-  "camera_type",
-  "ip_address",
-  "username",
-  "password",
-  "area",
-  "field_of_view",
-  "column_break_1",
-  "vehicle",
-  "vehicle_name",
-  "vehicle_type",
-  "description",
-  "importance",
-  "section_break_details",
-  "notes",
-  "section_break_nearby",
-  "nearby_cameras"
- ],
  "fields": [
   {
-   "default": "MOT-.#####",
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Series",
    "options": "MOT-.#####",
-   "reqd": 1
+   "default": "MOT-.#####",
+   "reqd": 1,
+   "hidden": 1,
+   "set_only_once": 1
   },
   {
-   "allow_in_quick_entry": 1,
    "fieldname": "camera",
    "fieldtype": "Link",
-   "in_global_search": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Camera",
    "options": "Camera",
    "reqd": 1,
-   "search_index": 1
+   "in_list_view": 1,
+   "in_standard_filter": 1
   },
   {
    "fieldname": "motion_type",
    "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Motion Type",
-   "options": "\nEntry\nExit",
+   "options": "Entry\nExit",
    "reqd": 1,
-   "search_index": 1
+   "in_list_view": 1,
+   "in_standard_filter": 1
   },
   {
-   "default": "Now",
    "fieldname": "detected_at",
    "fieldtype": "Datetime",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Detected At",
    "reqd": 1,
-   "search_index": 1
+   "default": "Now",
+   "in_list_view": 1,
+   "in_standard_filter": 1
   },
   {
-   "fieldname": "column_break_1",
-   "fieldtype": "Column Break"
-  },
-  {
-   "allow_in_quick_entry": 1,
    "fieldname": "vehicle",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Vehicle",
-   "options": "Vehicle",
-   "search_index": 1
+   "label": "CAM Vehicle",
+   "options": "CAM Vehicle",
+   "in_list_view": 1
   },
   {
-   "allow_in_quick_entry": 1,
+   "fieldname": "vehicle_visual",
+   "fieldtype": "HTML",
+   "label": "Vehicle Movement Icon"
+  },
+  {
    "fieldname": "importance",
    "fieldtype": "Select",
-   "in_standard_filter": 1,
    "label": "Importance",
-   "options": "\nLow\nMedium\nHigh\nCritical",
-   "search_index": 1
+   "options": "Low\nMedium\nHigh\nCritical",
+   "in_standard_filter": 1
   },
   {
-   "fieldname": "section_break_details",
+   "fieldname": "camera_snapshot_section",
+   "fieldtype": "Section Break",
+   "label": "Camera Snapshot"
+  },
+  {
+   "fieldname": "camera_name_snapshot",
+   "fieldtype": "Data",
+   "label": "Camera Name Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "camera_type_snapshot",
+   "fieldtype": "Data",
+   "label": "Camera Type Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "camera_area_snapshot",
+   "fieldtype": "Data",
+   "label": "Camera Area Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "address_snapshot",
+   "fieldtype": "Small Text",
+   "label": "Address Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "latitude_snapshot",
+   "fieldtype": "Data",
+   "label": "Latitude Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "longitude_snapshot",
+   "fieldtype": "Data",
+   "label": "Longitude Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "location_snapshot",
+   "fieldtype": "Long Text",
+   "label": "Location Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "geo_admin_area_snapshot",
+   "fieldtype": "Data",
+   "label": "Geo Admin Area Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "location_source_snapshot",
+   "fieldtype": "Data",
+   "label": "Location Source Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "location_confidence_snapshot",
+   "fieldtype": "Float",
+   "label": "Location Confidence Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "location_ambiguous_snapshot",
+   "fieldtype": "Check",
+   "label": "Location Ambiguous Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "location_resolved_at_snapshot",
+   "fieldtype": "Datetime",
+   "label": "Location Resolved At Snapshot",
+   "read_only": 1
+  },
+  {
+   "fieldname": "details_section",
    "fieldtype": "Section Break",
    "label": "Details"
   },
   {
-   "allow_in_quick_entry": 1,
    "fieldname": "notes",
    "fieldtype": "Small Text",
    "label": "Notes"
   },
   {
-   "fieldname": "section_break_nearby",
+   "fieldname": "nearby_section",
    "fieldtype": "Section Break",
-   "label": "Nearby Cameras",
-   "read_only": 1
+   "label": "Nearby Cameras"
   },
   {
-   "description": "Cameras within the Nearby Camera Radius (Archive Settings), recorded automatically with the precise distance and direction from the detecting camera.",
    "fieldname": "nearby_cameras",
    "fieldtype": "Table",
    "label": "Nearby Cameras",
    "options": "Motion Event Nearby Camera",
    "read_only": 1
-  },
-  {
-   "fetch_from": "camera.camera_name",
-   "fieldname": "camera_name",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Camera Name",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "camera.ip_address",
-   "fieldname": "ip_address",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "IP Address",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "camera.username",
-   "fieldname": "username",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Username",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "camera.password",
-   "fieldname": "password",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Password",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "camera.camera_type",
-   "fieldname": "camera_type",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Camera Type",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "vehicle.vehicle_name",
-   "fieldname": "vehicle_name",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Vehicle Name",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "vehicle.vehicle_type",
-   "fieldname": "vehicle_type",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Vehicle Type",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "camera.area",
-   "fieldname": "area",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Area",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "vehicle.description",
-   "fieldname": "description",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Description",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "camera.field_of_view",
-   "fieldname": "field_of_view",
-   "fieldtype": "Data",
-   "in_filter": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Field of View",
-   "read_only": 1
   }
  ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-11-22 07:03:27.433458",
- "modified_by": "Administrator",
- "module": "Camera Archive Management",
- "name": "Motion Event",
- "owner": "Administrator",
+ "field_order": [
+  "naming_series",
+  "camera",
+  "motion_type",
+  "detected_at",
+  "vehicle",
+  "vehicle_visual",
+  "importance",
+  "camera_snapshot_section",
+  "camera_name_snapshot",
+  "camera_type_snapshot",
+  "camera_area_snapshot",
+  "address_snapshot",
+  "latitude_snapshot",
+  "longitude_snapshot",
+  "location_snapshot",
+  "geo_admin_area_snapshot",
+  "location_source_snapshot",
+  "location_confidence_snapshot",
+  "details_section",
+  "notes",
+  "nearby_section",
+  "nearby_cameras"
+ ],
  "permissions": [
   {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
+   "role": "CAM Viewer",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
    "export": 1,
    "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Operator",
    "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
    "report": 1,
+   "export": 0,
+   "print": 1,
+   "select": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1
+  },
+  {
+   "role": "CAM Analyst",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Archive Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
    "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
    "share": 1,
-   "write": 1
+   "select": 1,
+   "import": 1
   }
  ],
- "row_format": "Dynamic",
- "rows_threshold_for_grid_search": 20,
+ "istable": 0,
+ "issingle": 0,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "links": [],
+ "autoname": "naming_series:",
+ "is_submittable": 1,
+ "search_fields": "camera,camera_name_snapshot,vehicle"
 }

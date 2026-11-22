@@ -1,9 +1,43 @@
-# Copyright (c) 2026, Camera Archive Management and Contributors
-# See license.txt
+from __future__ import annotations
 
-# import frappe
+import frappe
 from frappe.tests.utils import FrappeTestCase
 
 
 class TestCamera(FrappeTestCase):
-	pass
+	def test_rejects_out_of_range_wgs84_coordinates(self):
+		camera = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Coordinate validation test",
+				"status": "Active",
+				"latitude": "91",
+				"longitude": "4.9",
+				"camera_photos": [],
+				"nearby_cameras": [],
+			}
+		)
+		with self.assertRaises(frappe.ValidationError):
+			camera.validate()
+
+	def test_before_save_preserves_manual_address_and_location(self):
+		address = "User-entered address"
+		location = '{"type":"Point","coordinates":[4.9,52.3]}'
+		camera = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Manual location test",
+				"status": "Active",
+				"address": address,
+				"location": location,
+				"latitude": "52.3",
+				"longitude": "4.9",
+				"camera_photos": [],
+				"nearby_cameras": [],
+			}
+		)
+		camera.before_save()
+		self.assertEqual(camera.address, address)
+		self.assertEqual(camera.location, location)

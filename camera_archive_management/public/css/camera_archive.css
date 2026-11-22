@@ -1,0 +1,43 @@
+.cam-map-toolbar {
+	display: flex;
+	align-items: end;
+	gap: 12px;
+	flex-wrap: wrap;
+	padding: 12px 0;
+}
+.cam-map-toolbar label { min-width: 130px; margin: 0; font-size: 12px; color: var(--text-muted); }
+.cam-map-toolbar .form-control { margin-top: 4px; }
+.cam-map-filter-note { color: var(--text-muted); font-size: 12px; padding-bottom: 8px; }
+.cam-map-shell { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 12px; min-height: 68vh; }
+.cam-map-canvas { min-height: 68vh; border: 1px solid var(--border-color); border-radius: 10px; z-index: 1; background: var(--control-bg); }
+.cam-map-sidebar { min-height: 68vh; max-height: 75vh; overflow: auto; border: 1px solid var(--border-color); border-radius: 10px; background: var(--card-bg); padding: 12px; }
+.cam-map-summary { padding: 4px 4px 12px; font-weight: 600; }
+.cam-leaflet-icon { background: transparent; border: 0; }
+.cam-pin { position: relative; width: 44px; height: 44px; border: 3px solid #fff; border-radius: 50%; overflow: visible; box-shadow: 0 2px 8px rgba(0,0,0,.38); background: #1e40af; display: flex; align-items: center; justify-content: center; }
+.cam-camera-pin { width: 48px; height: 48px; background: #0f766e; }
+.cam-vehicle-pin { background: #c2410c; }
+.cam-pin-image { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+.cam-pin-fallback { color: #fff; font-size: 22px; line-height: 1; text-shadow: 0 1px 2px #222; }
+.cam-pin-count { position: absolute; right: -5px; top: -5px; width: 19px; height: 19px; border-radius: 50%; background: #111827; border: 1px solid #fff; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.cam-map-popup { min-width: 210px; max-width: 300px; color: var(--text-color); }
+.cam-map-popup h4 { margin: 2px 0 8px; font-size: 15px; }
+.cam-popup-address, .cam-popup-meta { margin: 4px 0 8px; color: var(--text-muted); font-size: 12px; }
+.cam-gallery-frame { width: 100%; height: 160px; border-radius: 50%; overflow: hidden; background: #e5e7eb; margin: 8px auto; border: 3px solid #0f766e; }
+.cam-gallery-image { width: 100%; height: 100%; object-fit: cover; }
+.cam-gallery-controls { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.cam-gallery-count { min-width: 45px; text-align: center; }
+.cam-gallery-caption { min-height: 18px; text-align: center; color: var(--text-muted); font-size: 12px; margin: 5px 0; }
+.cam-popup-actions { margin-top: 8px; }
+.cam-movement-card { display: flex; gap: 10px; width: 100%; text-align: left; align-items: center; padding: 9px 6px; border: 0; border-top: 1px solid var(--border-color); background: transparent; color: var(--text-color); }
+.cam-movement-card:hover { background: var(--subtle-fg); }
+.cam-movement-image { width: 44px; height: 44px; min-width: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
+.cam-movement-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 11px; overflow-wrap: anywhere; }
+.cam-vehicle-preview { max-width: 160px; max-height: 120px; object-fit: contain; border-radius: 8px; margin: 8px 0; }
+.cam-vehicle-preview-fallback { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #e7e5e4; font-size: 24px; }
+.cam-report-vehicle-image { width: 42px; height: 42px; object-fit: cover; border-radius: 50%; border: 2px solid var(--border-color); }
+.cam-map-empty { padding: 18px; border-radius: 8px; background: var(--subtle-fg); color: var(--text-muted); }
+@media (max-width: 900px) {
+	.cam-map-shell { grid-template-columns: 1fr; }
+	.cam-map-canvas { min-height: 55vh; }
+	.cam-map-sidebar { min-height: 220px; max-height: 32vh; }
+}
