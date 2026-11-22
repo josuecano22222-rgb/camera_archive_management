@@ -1,0 +1,515 @@
+8-point compass label derived from the bearing.,8-point compass label derived from the bearing.
+ACCEPTED,ACCEPTED
+About this document,About this document
+Accepted,Accepted
+Access & Credentials,Access & Credentials
+Action,Action
+Active,Active
+Active Cameras,Active Cameras
+Additional observations…,Additional observations…
+Address,Address
+Adjusted,Adjusted
+Aerial,Aerial
+Alert Roles,Alert Roles
+All Day,All Day
+All areas,All areas
+All statuses,All statuses
+Archive Full Data,Archive Full Data
+Archive Library,Archive Library
+Archive Settings,Archive Settings
+Archive full data,Archive full data
+Area,Area
+Area Name,Area Name
+Audit,Audit
+Auto Email Report,Auto Email Report
+Average per period,Average per period
+Both latitude and longitude are required when setting coordinates,Both latitude and longitude are required when setting coordinates
+"Brackets, bolts, and housing show no looseness, rust, or damage.","Brackets, bolts, and housing show no looseness, rust, or damage."
+Cable routing safe,Cable routing safe
+"Cables strain-relieved, labeled, and clear of walkways.","Cables strain-relieved, labeled, and clear of walkways."
+Camera,Camera
+Camera Archive Home,Camera Archive Home
+Camera Archive Management,Camera Archive Management
+Camera Area,Camera Area
+Camera Areas,Camera Areas
+Camera Context,Camera Context
+Camera Images,Camera Images
+Camera Installation Inspection Checklist,Camera Installation Inspection Checklist
+Camera Map,Camera Map
+Camera Name,Camera Name
+Camera Number,Camera Number
+Camera Offline Map,Camera Offline Map
+Camera Photos,Camera Photos
+Camera Security Register,Camera Security Register
+Camera Snapshot,Camera Snapshot
+Camera Status,Camera Status
+Camera Status Report,Camera Status Report
+Camera Type,Camera Type
+Camera Utilization,Camera Utilization
+"Camera device with type, area, location, connection details, and operational status.","Camera device with type, area, location, connection details, and operational status."
+Camera is required,Camera is required
+Camera utilization,Camera utilization
+Camera {0} cannot list itself as a nearby camera,Camera {0} cannot list itself as a nearby camera
+Camera {0} does not exist,Camera {0} does not exist
+Camera {0} is already in the nearby cameras list,Camera {0} is already in the nearby cameras list
+Camera {0} was not found,Camera {0} was not found
+Cameras,Cameras
+Cameras by Area,Cameras by Area
+Cameras by Status,Cameras by Status
+Cameras by Type,Cameras by Type
+Cameras considered nearby for motion-event context and alerts. Recorded automatically on every Motion Event and used for notifications.,Cameras considered nearby for motion-event context and alerts. Recorded automatically on every Motion Event and used for notifications.
+Cameras on map: {0},Cameras on map: {0}
+Cameras ranked,Cameras ranked
+"Cameras within the Nearby Camera Radius (Archive Settings), recorded automatically with the precise distance and direction from the detecting camera.","Cameras within the Nearby Camera Radius (Archive Settings), recorded automatically with the precise distance and direction from the detecting camera."
+Cameras within this distance of each other are considered nearby.,Cameras within this distance of each other are considered nearby.
+Cannot delete Camera Area {0} linked to {1} cameras,Cannot delete Camera Area {0} linked to {1} cameras
+Cannot delete Camera Type {0} linked to {1} cameras,Cannot delete Camera Type {0} linked to {1} cameras
+Cannot delete Camera with {0} linked Motion Events,Cannot delete Camera with {0} linked Motion Events
+Cannot delete Camera {0}: it is listed as a nearby camera on {1} other Camera(s),Cannot delete Camera {0}: it is listed as a nearby camera on {1} other Camera(s)
+Cannot delete Vehicle Type {0} linked to {1} vehicles,Cannot delete Vehicle Type {0} linked to {1} vehicles
+Cannot delete Vehicle with {0} linked Motion Events,Cannot delete Vehicle with {0} linked Motion Events
+Caption,Caption
+Certificate,Certificate
+Commissioning Verification,Commissioning Verification
+Compass,Compass
+Compass Direction,Compass Direction
+Complete,Complete
+Completed,Completed
+Conditions,Conditions
+Conditions of Handover,Conditions of Handover
+Confidential,Confidential
+Connection,Connection
+Connection: {0},Connection: {0}
+Controlled copy,Controlled copy
+Controlled technical record,Controlled technical record
+Coordinates,Coordinates
+Coordinates verified on site,Coordinates verified on site
+Corrective,Corrective
+Could not load camera details,Could not load camera details
+Could not load cameras: {0},Could not load cameras: {0}
+Counts motion events per period ({0}) in the selected range.,Counts motion events per period ({0}) in the selected range.
+Coverage,Coverage
+Coverage & Field of View,Coverage & Field of View
+Coverage Statement,Coverage Statement
+Coverage matches the field of view description,Coverage matches the field of view description
+Coverage matches the recorded description,Coverage matches the recorded description
+Credentials,Credentials
+Critical,Critical
+Current photographs attached to the camera record.,Current photographs attached to the camera record.
+Current photographs uploaded to the camera record.,Current photographs uploaded to the camera record.
+Daily Motion Activity,Daily Motion Activity
+Daily motion activity,Daily motion activity
+Data Export,Data Export
+Data Import,Data Import
+Data Tools,Data Tools
+Date,Date
+Day,Day
+Day (06:00 – 18:00),Day (06:00 – 18:00)
+Day / night image acceptable,Day / night image acceptable
+Days Since Motion,Days Since Motion
+Default Motion Importance,Default Motion Importance
+Default Report Days,Default Report Days
+Default lookback window for analytics reports.,Default lookback window for analytics reports.
+Default range uses Archive Settings → Default Report Days.,Default range uses Archive Settings → Default Report Days.
+"Describe the area this camera covers and its viewing angle, e.g. ""North gate entrance — wide-angle view over the main driveway.""","Describe the area this camera covers and its viewing angle, e.g. ""North gate entrance — wide-angle view over the main driveway."""
+Description,Description
+Details,Details
+Detected At,Detected At
+Detected At cannot be in the future,Detected At cannot be in the future
+Device,Device
+Device Audit Report,Device Audit Report
+Device Description,Device Description
+Device Identifier,Device Identifier
+Device clock matches the archive server time.,Device clock matches the archive server time.
+Device mounted and housing sealed,Device mounted and housing sealed
+"Device technical data sheet — configuration, connectivity, geometry and coverage record.","Device technical data sheet — configuration, connectivity, geometry and coverage record."
+Direction,Direction
+Direction (degrees),Direction (degrees)
+Distance,Distance
+Distance (m),Distance (m)
+Documents,Documents
+"Draw points, lines, polygons, rectangles, or circles on the native map control. Stored as GeoJSON and rendered by the native Map list view.","Draw points, lines, polygons, rectangles, or circles on the native map control. Stored as GeoJSON and rendered by the native Map list view."
+East,East
+Enable Daily Integrity Check,Enable Daily Integrity Check
+Enable Nearby Camera Alerts,Enable Nearby Camera Alerts
+Endpoint,Endpoint
+Endpoint {0} reachable; no packet loss observed.,Endpoint {0} reachable; no packet loss observed.
+Endpoint {0} responds with no packet loss.,Endpoint {0} responds with no packet loss.
+Entry,Entry
+Entry Exit Trends,Entry Exit Trends
+Entry vs exit trends,Entry vs exit trends
+Entry/Exit comparison per {0} with net flow.,Entry/Exit comparison per {0} with net flow.
+Events,Events
+Events ({0}d),Events ({0}d)
+Events in period,Events in period
+"Exact bearing from the detecting camera to this camera, in degrees clockwise from true north.","Exact bearing from the detecting camera to this camera, in degrees clockwise from true north."
+Exact decimal degrees derived from the location anchor. You may also enter coordinates here; they are saved into Location as a point.,Exact decimal degrees derived from the location anchor. You may also enter coordinates here; they are saved into Location as a point.
+Executive Overview,Executive Overview
+Exit,Exit
+Fail,Fail
+Field Inspection,Field Inspection
+Field of View,Field of View
+File with the device record after commissioning,File with the device record after commissioning
+File with the device record after completion,File with the device record after completion
+Filtered motion events with Entry/Exit breakdown.,Filtered motion events with Entry/Exit breakdown.
+Findings,Findings
+Fit cameras,Fit cameras
+Flat export of motion events joined with camera and vehicle details.,Flat export of motion events joined with camera and vehicle details.
+"Focus, exposure, and IR illumination verified on a live view.","Focus, exposure, and IR illumination verified on a live view."
+From Date,From Date
+GPS reading agrees with {0}.,GPS reading agrees with {0}.
+Gaskets and cable glands sealed; no moisture ingress visible.,Gaskets and cable glands sealed; no moisture ingress visible.
+General remarks,General remarks
+Generated,Generated
+Geometry,Geometry
+Geometry Type,Geometry Type
+Geometry n/a,Geometry n/a
+Granularity,Granularity
+Great-circle distance from the detecting camera.,Great-circle distance from the detecting camera.
+Handed Over By,Handed Over By
+Handed over by — signature,Handed over by — signature
+Handover & Acceptance Certificate,Handover & Acceptance Certificate
+Handover Date,Handover Date
+Handover Date cannot be in the future,Handover Date cannot be in the future
+High,High
+Home,Home
+Hour,Hour
+Hourly Distribution,Hourly Distribution
+Hourly distribution,Hourly distribution
+ID,ID
+IP Address,IP Address
+ISSUE,ISSUE
+Identity & Classification,Identity & Classification
+Image,Image
+Image Quality & Recording,Image Quality & Recording
+Importance,Importance
+Inactive,Inactive
+Incident Report,Incident Report
+Inspected by — name,Inspected by — name
+Inspection,Inspection
+Inspection Checklist,Inspection Checklist
+Installation,Installation
+Installation Date,Installation Date
+Installation Date cannot be in the future,Installation Date cannot be in the future
+Installation Details,Installation Details
+Installation Report,Installation Report
+Installed,Installed
+Installed by — name,Installed by — name
+"Instructions: mark each item with ✓ (pass), ✗ (fail) or N/A, and record remarks on the line provided. Complete this sheet during the physical inspection of the device and file it with the camera record.","Instructions: mark each item with ✓ (pass), ✗ (fail) or N/A, and record remarks on the line provided. Complete this sheet during the physical inspection of the device and file it with the camera record."
+Internal management document,Internal management document
+Is Active,Is Active
+Is Group,Is Group
+Labeling matches the register,Labeling matches the register
+Labels,Labels
+Last Detected At,Last Detected At
+Last Modified,Last Modified
+Last Motion At,Last Motion At
+Latitude,Latitude
+Latitude and longitude must be valid decimal numbers,Latitude and longitude must be valid decimal numbers
+Latitude must be between -90 and 90,Latitude must be between -90 and 90
+Leave the date range empty to see all events regardless of date.,Leave the date range empty to see all events regardless of date.
+Left,Left
+"Lens and housing free of obstructions, scratches, or tamper marks.","Lens and housing free of obstructions, scratches, or tamper marks."
+Linked events,Linked events
+Loading cameras…,Loading cameras…
+Loading…,Loading…
+Location,Location
+Location & Coverage,Location & Coverage
+Longitude,Longitude
+Longitude must be between -180 and 180,Longitude must be between -180 and 180
+Low,Low
+Maintenance,Maintenance
+Maintenance Type,Maintenance Type
+Management summary for device {0} — prepared {1},Management summary for device {0} — prepared {1}
+Matches notes and camera names.,Matches notes and camera names.
+Matches notes.,Matches notes.
+Max Rows,Max Rows
+Media,Media
+Medium,Medium
+Month,Month
+Most recent event,Most recent event
+Motion Activity,Motion Activity
+Motion Calendar,Motion Calendar
+Motion Event,Motion Event
+Motion Event {0},Motion Event {0}
+Motion Events,Motion Events
+Motion Events Today,Motion Events Today
+Motion Events Trend,Motion Events Trend
+Motion Events by Type,Motion Events by Type
+Motion Events on File,Motion Events on File
+Motion Type,Motion Type
+Motion Type is required,Motion Type is required
+Motion activity,Motion activity
+Motion entry or exit event captured by a camera.,Motion entry or exit event captured by a camera.
+Motion {0} near {1} other camera(s),Motion {0} near {1} other camera(s)
+Mounting & Housing,Mounting & Housing
+Mounting hardware secure and corrosion-free,Mounting hardware secure and corrosion-free
+Mounting hardware verified secure; weather sealing intact.,Mounting hardware verified secure; weather sealing intact.
+Nearby Camera,Nearby Camera
+Nearby Camera Alerts,Nearby Camera Alerts
+Nearby Camera Radius (m),Nearby Camera Radius (m)
+Nearby Cameras,Nearby Cameras
+Needs Attention,Needs Attention
+Net Flow,Net Flow
+Net flow,Net flow
+Net flow = Entry − Exit: positive means more vehicles entered.,Net flow = Entry − Exit: positive means more vehicles entered.
+Network endpoint reachable,Network endpoint reachable
+Network link verified,Network link verified
+New Camera added near {0} other camera(s),New Camera added near {0} other camera(s)
+New Motion Event,New Motion Event
+Night (18:00 – 06:00),Night (18:00 – 06:00)
+No,No
+No FOV,No FOV
+No blind spots in the target scene,No blind spots in the target scene
+No camera number,No camera number
+No coordinates,No coordinates
+No coverage description on file.,No coverage description on file.
+No coverage description recorded.,No coverage description recorded.
+No credentials,No credentials
+No findings recorded.,No findings recorded.
+No installation notes recorded.,No installation notes recorded.
+No motion,No motion
+No motion in {0}d,No motion in {0}d
+No nearby cameras recorded for this event.,No nearby cameras recorded for this event.
+No operator notes recorded for this event.,No operator notes recorded for this event.
+No photographs on file.,No photographs on file.
+No photos,No photos
+No photos available,No photos available
+No records match the applied filters.,No records match the applied filters.
+No reproduction without authorization,No reproduction without authorization
+No special conditions recorded.,No special conditions recorded.
+No stored packages yet (browse or store layers once for everyone),No stored packages yet (browse or store layers once for everyone)
+No vehicle linked,No vehicle linked
+No work items recorded.,No work items recorded.
+No.,No.
+North,North
+Northeast,Northeast
+Northwest,Northwest
+Not Permitted,Not Permitted
+Not recorded,Not recorded
+Note,Note
+Notes,Notes
+"Notify users when a camera is added near existing cameras, or when motion is detected on a camera that has nearby cameras.","Notify users when a camera is added near existing cameras, or when motion is detected on a camera that has nearby cameras."
+Number,Number
+Offline,Offline
+Offline storage,Offline storage
+Old Parent,Old Parent
+On-device label agrees with name {0} / serial {1}.,On-device label agrees with name {0} / serial {1}.
+One original copy for each party,One original copy for each party
+Online,Online
+Only one camera photo can be marked as primary,Only one camera photo can be marked as primary
+Open,Open
+Open Camera,Open Camera
+Open Image Gallery,Open Image Gallery
+Operational Profile,Operational Profile
+PASS / FAIL / N-A,PASS / FAIL / N-A
+PENDING ACCEPTANCE,PENDING ACCEPTANCE
+Page 1 of 1,Page 1 of 1
+Parent Area,Parent Area
+Pass,Pass
+Password,Password
+Peak hour,Peak hour
+Peak period,Peak period
+Pending,Pending
+Period,Period
+Periods,Periods
+Photographs,Photographs
+Photos,Photos
+Port,Port
+Port must be between 1 and 65535,Port must be between 1 and 65535
+Power & Connectivity,Power & Connectivity
+Power supply within specification,Power supply within specification
+Preventive,Preventive
+Primary,Primary
+"Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list.","Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list."
+Priority,Priority
+Quick Facts,Quick Facts
+REF,REF
+Ranks cameras by motion event volume in the selected period.,Ranks cameras by motion event volume in the selected period.
+Ranks vehicles by linked motion events in the selected period.,Ranks vehicles by linked motion events in the selected period.
+Ready shared packages: {0},Ready shared packages: {0}
+Received By,Received By
+Received by — signature,Received by — signature
+Recent Motion Events,Recent Motion Events
+Record,Record
+Record ID,Record ID
+Record Owner,Record Owner
+Records,Records
+Records & Remarks,Records & Remarks
+Refresh,Refresh
+Region: {0},Region: {0}
+Region: —,Region: —
+Registered,Registered
+Related,Related
+Remarks,Remarks
+Replaced,Replaced
+Report Print,Report Print
+Report Schedule Note,Report Schedule Note
+Reports,Reports
+Restricted,Restricted
+Result,Result
+Results are capped at {0} rows; narrow the date range or filters for larger exports.,Results are capped at {0} rows; narrow the date range or filters for larger exports.
+Right,Right
+Roles that receive nearby-camera notifications.,Roles that receive nearby-camera notifications.
+Rows,Rows
+Scheduled Reports,Scheduled Reports
+Search,Search
+Security Record,Security Record
+Security Register,Security Register
+Security-relevant record,Security-relevant record
+Serial,Serial
+Serial Number,Serial Number
+Series,Series
+Service Date,Service Date
+Service Date cannot be in the future,Service Date cannot be in the future
+Share,Share
+Share is the percentage of all events attributed to the camera.,Share is the percentage of all events attributed to the camera.
+Share is the percentage of all linked events attributed to the vehicle.,Share is the percentage of all linked events attributed to the vehicle.
+Shift,Shift
+Shift filter applied: {0}.,Shift filter applied: {0}.
+Shows when motion events occur across the 24-hour clock.,Shows when motion events occur across the 24-hour clock.
+Signature,Signature
+Single map,Single map
+Site Reference,Site Reference
+Sort Order,Sort Order
+South,South
+Southeast,Southeast
+Southwest,Southwest
+Split: Standard + Aerial,Split: Standard + Aerial
+Standard,Standard
+Status,Status
+Stored and displayed as plain text (local trust model).,Stored and displayed as plain text (local trust model).
+Street Photos,Street Photos
+Street photo,Street photo
+Street photographs on file,Street photographs on file
+Street photographs uploaded to the record,Street photographs uploaded to the record
+Survey the scene from the recorded viewing position.,Survey the scene from the recorded viewing position.
+Technical Documentation,Technical Documentation
+Technical Sheet,Technical Sheet
+Technician,Technician
+Technician — name,Technician — name
+Terms,Terms
+Terrain,Terrain
+"The offline_maps app is not installed, so basemaps fall back to the online defaults. Install offline_maps (see README → “Offline Maps integration”) for fully offline maps.","The offline_maps app is not installed, so basemaps fall back to the online defaults. Install offline_maps (see README → “Offline Maps integration”) for fully offline maps."
+"The receiving party confirms that the device has been inspected, is in the described condition, and custody is transferred under the conditions stated above.","The receiving party confirms that the device has been inspected, is in the described condition, and custody is transferred under the conditions stated above."
+This card identifies the vehicle and its archive record.,This card identifies the vehicle and its archive record.
+This certificate confirms the transfer of custody of the device between the stated parties under the stated conditions.,This certificate confirms the transfer of custody of the device between the stated parties under the stated conditions.
+This certificate confirms the transfer of custody of the device described below.,This certificate confirms the transfer of custody of the device described below.
+This document confirms the commissioning of the camera installation and records the verification performed on site.,This document confirms the commissioning of the camera installation and records the verification performed on site.
+This document contains security-relevant device configuration. Store in a controlled location and destroy superseded copies. Distribution is limited to authorized archive personnel.,This document contains security-relevant device configuration. Store in a controlled location and destroy superseded copies. Distribution is limited to authorized archive personnel.
+"This document is a one-page management summary of the camera's operational posture: status, activity volume, last detection, and coverage statement.","This document is a one-page management summary of the camera's operational posture: status, activity volume, last detection, and coverage statement."
+This document is the field inspection form completed during physical checks of the camera installation; file it with the device record.,This document is the field inspection form completed during physical checks of the camera installation; file it with the device record.
+This document records security-relevant device configuration for authorized archive personnel and is subject to controlled-copy handling.,This document records security-relevant device configuration for authorized archive personnel and is subject to controlled-copy handling.
+"This document records the complete technical configuration of the camera device — identity, connectivity, geometry, coverage, and photographs. It is the controlled technical record for this device.","This document records the complete technical configuration of the camera device — identity, connectivity, geometry, coverage, and photographs. It is the controlled technical record for this device."
+This document reports a single maintenance service visit and the work performed on the camera.,This document reports a single maintenance service visit and the work performed on the camera.
+This document reports a single motion event and the precise nearby-camera context recorded at detection time.,This document reports a single motion event and the precise nearby-camera context recorded at detection time.
+This label identifies the camera device and its archive record. Affix it to the device housing or cable.,This label identifies the camera device and its archive record. Affix it to the device housing or cable.
+"This printout audits camera record completeness: photos, coordinates, credentials, coverage, and activity.","This printout audits camera record completeness: photos, coordinates, credentials, coverage, and activity."
+This printout compares Entry and Exit motion events per period with the computed net flow.,This printout compares Entry and Exit motion events per period with the computed net flow.
+This printout is the flat export of motion events joined with camera and vehicle details.,This printout is the flat export of motion events joined with camera and vehicle details.
+"This printout lists motion events matching the applied filters, with the Entry/Exit breakdown shown in the columns.","This printout lists motion events matching the applied filters, with the Entry/Exit breakdown shown in the columns."
+This printout ranks cameras by motion event volume in the selected period.,This printout ranks cameras by motion event volume in the selected period.
+This printout ranks vehicles by linked motion events in the selected period.,This printout ranks vehicles by linked motion events in the selected period.
+This printout shows the 24-hour distribution of motion events for the selected shift.,This printout shows the 24-hour distribution of motion events for the selected shift.
+This printout shows the current camera statuses with the last detected motion per camera.,This printout shows the current camera statuses with the last detected motion per camera.
+This printout shows the motion event time series for the selected granularity and period.,This printout shows the motion event time series for the selected granularity and period.
+Tiles: {0},Tiles: {0}
+Time synchronization correct,Time synchronization correct
+To Date,To Date
+Top N Cameras,Top N Cameras
+Top N Vehicles,Top N Vehicles
+Top camera,Top camera
+Top camera events,Top camera events
+Top vehicle,Top vehicle
+Top vehicle events,Top vehicle events
+Total,Total
+Total events,Total events
+Total recorded activity,Total recorded activity
+Type,Type
+Type Masters,Type Masters
+Type Name,Type Name
+Use the native CSV / Excel export action for offline analysis.,Use the native CSV / Excel export action for offline analysis.
+Username,Username
+Vandalism / tamper check,Vandalism / tamper check
+Vehicle,Vehicle
+Vehicle Activity,Vehicle Activity
+Vehicle Asset Card,Vehicle Asset Card
+Vehicle Context,Vehicle Context
+Vehicle Name,Vehicle Name
+Vehicle Number,Vehicle Number
+Vehicle Status,Vehicle Status
+Vehicle Type,Vehicle Type
+Vehicle activity,Vehicle activity
+Vehicle tracked in motion entry and exit events.,Vehicle tracked in motion entry and exit events.
+Vehicle {0} does not exist,Vehicle {0} does not exist
+Vehicles,Vehicles
+Vehicles ranked,Vehicles ranked
+Verified by — signature,Verified by — signature
+View,View
+View mode,View mode
+Voltage/current measured at the device match the datasheet.,Voltage/current measured at the device match the datasheet.
+Weather sealing intact,Weather sealing intact
+Week,Week
+West,West
+With vehicle,With vehicle
+Work Performed,Work Performed
+Yes,Yes
+You need an Offline Maps role (Offline Map User / Manager / Administrator) or System Manager to load offline map tiles. Camera markers still render — on the online fallback basemap.,You need an Offline Maps role (Offline Map User / Manager / Administrator) or System Manager to load offline map tiles. Camera markers still render — on the online fallback basemap.
+{0} camera(s) shown,`{0} camera(s) shown`
+native defaults (online),native defaults (online)
+offline packages + shared cache,offline packages + shared cache
+online fallback (no Offline Maps role),online fallback (no Offline Maps role)
+realtime proxy → shared cache,realtime proxy → shared cache
+shared cache,shared cache
+{0} cameras in same area,{0} cameras in same area
+{0} detected by {1}; nearby cameras: {2},{0} detected by {1}; nearby cameras: {2}
+{0} is not a valid IP address,{0} is not a valid IP address
+{0} is not a valid field of {1},{0} is not a valid field of {1}
+{0} photograph(s),{0} photograph(s)
+{0} was added within {1} m of: {2},{0} was added within {1} m of: {2}
+About this report,About this report
+Activity Trend,Activity Trend
+Analytics,Analytics
+Archive extract,Archive extract
+Audit window,Audit window
+"Audits each camera for completeness: photographs, coordinates, credentials, and field of view. Cameras missing required data are flagged for attention.","Audits each camera for completeness: photographs, coordinates, credentials, and field of view. Cameras missing required data are flagged for attention."
+Auto-generated,Auto-generated
+"Chronological register of motion events matching the applied filters. Each row is one Entry or Exit event with the detecting camera, area, vehicle and notes.","Chronological register of motion events matching the applied filters. Each row is one Entry or Exit event with the detecting camera, area, vehicle and notes."
+Clock profile,Clock profile
+"Compares the volume of Entry and Exit events per period and shows the resulting net flow, revealing traffic direction.","Compares the volume of Entry and Exit events per period and shows the resulting net flow, revealing traffic direction."
+"Counts motion events per period across the selected date range, showing the activity curve and its average intensity.","Counts motion events per period across the selected date range, showing the activity curve and its average intensity."
+Device audit,Device audit
+"Documents each camera's current status, importance, and most recent motion activity, flagging cameras with no motion in the window.","Documents each camera's current status, importance, and most recent motion activity, flagging cameras with no motion in the window."
+Entry / Exit Flow,Entry / Exit Flow
+"Flat export of motion events joined with camera and vehicle details, for offline analysis or archival. Rows are capped by the report limit; narrow the date range for larger exports.","Flat export of motion events joined with camera and vehicle details, for offline analysis or archival. Rows are capped by the report limit; narrow the date range for larger exports."
+Fleet analysis,Fleet analysis
+Hours,Hours
+Idle,Idle
+Last 30-day window,Last 30-day window
+Net flow = Entry − Exit,Net flow = Entry − Exit
+No cameras match the applied filters.,No cameras match the applied filters.
+Operational status,Operational status
+Profile across the 24-hour clock,Profile across the 24-hour clock
+Ranking,Ranking
+Ranks cameras by motion-event volume in the selected period. Share is the percentage of all events attributed to each camera.,Ranks cameras by motion-event volume in the selected period. Share is the percentage of all events attributed to each camera.
+Ranks vehicles by the number of linked motion events in the selected period. Share is the percentage of linked events attributed to each vehicle.,Ranks vehicles by the number of linked motion events in the selected period. Share is the percentage of linked events attributed to each vehicle.
+Register,Register
+Security operations record,Security operations record
+"Shows when motion events occur across the 24-hour clock, within the selected shift and filters. Useful for identifying operating hours and peak periods.","Shows when motion events occur across the 24-hour clock, within the selected shift and filters. Useful for identifying operating hours and peak periods."
+Time series,Time series
+Top,Top
+Traffic analysis,Traffic analysis
+camera(s),camera(s)
+last 30 days,last 30 days
+per selected period,per selected period
+Map camera payload is limited to {0} cameras; some cameras may be missing.,Map camera payload is limited to {0} cameras; some cameras may be missing.
+Zoom {0},Zoom {0}
+No basemap,No basemap
+no tiles at this zoom (min {0}),no tiles at this zoom (min {0})
+tiles upscaled (native max {0}),tiles upscaled (native max {0})
+Aerial zoom {0},Aerial zoom {0}
+Offline storage: {0} assets cached,Offline storage: {0} assets cached
+Offline: showing cached data ({0} assets); data never downloaded is unavailable.,Offline: showing cached data ({0} assets); data never downloaded is unavailable.
+Camera details unavailable offline (never downloaded),Camera details unavailable offline (never downloaded)
+Unavailable offline,Unavailable offline
+Currently displayed layer,Currently displayed layer

@@ -1,0 +1,515 @@
+8-point compass label derived from the bearing.,تسمية بوصلة من 8 اتجاهات مشتقة من الاتجاه.
+ACCEPTED,مقبول
+About this document,عن هذه الوثيقة
+Accepted,مقبول
+Access & Credentials,الوصول وبيانات الدخول
+Action,الإجراء
+Active,نشطة
+Active Cameras,الكاميرات النشطة
+Additional observations…,ملاحظات إضافية…
+Address,العنوان
+Adjusted,معدَّل
+Aerial,جوية
+Alert Roles,أدوار التنبيه
+All Day,طوال اليوم
+All areas,كل المناطق
+All statuses,كل الحالات
+Archive Full Data,بيانات الأرشيف الكاملة
+Archive Library,مكتبة الأرشيف
+Archive Settings,إعدادات الأرشيف
+Archive full data,بيانات الأرشيف الكاملة
+Area,المنطقة
+Area Name,اسم المنطقة
+Audit,التدقيق
+Auto Email Report,إرسال التقارير عبر البريد الإلكتروني
+Average per period,المتوسط لكل فترة
+Both latitude and longitude are required when setting coordinates,يجب إدخال خط العرض وخط الطول معًا عند تحديد الإحداثيات
+"Brackets, bolts, and housing show no looseness, rust, or damage.",البراغي والمسامير والهيكل خالية من الارتخاء أو الصدأ أو التلف.
+Cable routing safe,تمديد الكابلات آمن
+"Cables strain-relieved, labeled, and clear of walkways.",الكابلات مثبّتة ومرخّاة الضغط ومُعلَّمة وبعيدة عن الممرات.
+Camera,الكاميرا
+Camera Archive Home,الرئيسية لأرشيف الكاميرات
+Camera Archive Management,إدارة أرشيف الكاميرات
+Camera Area,منطقة الكاميرا
+Camera Areas,مناطق الكاميرات
+Camera Context,سياق الكاميرا
+Camera Images,صور الكاميرات
+Camera Installation Inspection Checklist,قائمة فحص تركيب الكاميرا
+Camera Map,خريطة الكاميرات
+Camera Name,اسم الكاميرا
+Camera Number,رقم الكاميرا
+Camera Offline Map,خريطة الكاميرا دون اتصال
+Camera Photos,صور الكاميرا
+Camera Security Register,سجل أمان الكاميرات
+Camera Snapshot,لقطة الكاميرا
+Camera Status,حالة الكاميرا
+Camera Status Report,تقرير حالة الكاميرات
+Camera Type,نوع الكاميرا
+Camera Utilization,استخدام الكاميرات
+"Camera device with type, area, location, connection details, and operational status.",جهاز كاميرا يتضمن النوع والمنطقة والموقع وبيانات الاتصال والحالة التشغيلية.
+Camera is required,الكاميرا مطلوبة
+Camera utilization,استخدام الكاميرات
+Camera {0} cannot list itself as a nearby camera,لا يمكن للكاميرا {0} إدراج نفسها ككاميرا قريبة
+Camera {0} does not exist,الكاميرا {0} غير موجودة
+Camera {0} is already in the nearby cameras list,الكاميرا {0} موجودة بالفعل في قائمة الكاميرات القريبة
+Camera {0} was not found,الكاميرا {0} غير موجودة
+Cameras,الكاميرات
+Cameras by Area,الكاميرات حسب المنطقة
+Cameras by Status,الكاميرات حسب الحالة
+Cameras by Type,الكاميرات حسب النوع
+Cameras considered nearby for motion-event context and alerts. Recorded automatically on every Motion Event and used for notifications.,الكاميرات القريبة المعتبرة لسياق أحداث الحركة والتنبيهات. تُسجل تلقائيًا في كل حدث حركة وتُستخدم للإشعارات.
+Cameras on map: {0},الكاميرات على الخريطة: {0}
+Cameras ranked,الكاميرات المرتبة
+"Cameras within the Nearby Camera Radius (Archive Settings), recorded automatically with the precise distance and direction from the detecting camera.",الكاميرات الواقعة ضمن نطاق الكاميرات القريبة (إعدادات الأرشيف)، تُسجَّل تلقائيًا مع المسافة والاتجاه الدقيقين من الكاميرا الراصدة.
+Cameras within this distance of each other are considered nearby.,تُعتبر الكاميرات الواقعة ضمن هذه المسافة من بعضها قريبة.
+Cannot delete Camera Area {0} linked to {1} cameras,لا يمكن حذف منطقة الكاميرا {0} المرتبطة بـ {1} كاميرات
+Cannot delete Camera Type {0} linked to {1} cameras,لا يمكن حذف نوع الكاميرا {0} المرتبط بـ {1} كاميرات
+Cannot delete Camera with {0} linked Motion Events,لا يمكن حذف كاميرا مرتبطة بـ {0} أحداث حركة
+Cannot delete Camera {0}: it is listed as a nearby camera on {1} other Camera(s),لا يمكن حذف الكاميرا {0}: مذكورة ككاميرا قريبة في {1} كاميرا أخرى
+Cannot delete Vehicle Type {0} linked to {1} vehicles,لا يمكن حذف نوع المركبة {0} المرتبط بـ {1} مركبات
+Cannot delete Vehicle with {0} linked Motion Events,لا يمكن حذف مركبة مرتبطة بـ {0} أحداث حركة
+Caption,التسمية
+Certificate,الشهادة
+Commissioning Verification,التحقق من التشغيل
+Compass,البوصلة
+Compass Direction,اتجاه البوصلة
+Complete,مكتمل
+Completed,مكتمل
+Conditions,الشروط
+Conditions of Handover,شروط التسليم
+Confidential,سري
+Connection,الاتصال
+Connection: {0},الاتصال: {0}
+Controlled copy,نسخة مراقبة
+Controlled technical record,سجل تقني مراقب
+Coordinates,الإحداثيات
+Coordinates verified on site,تم التحقق من الإحداثيات في الموقع
+Corrective,تصحيحية
+Could not load camera details,تعذّر تحميل تفاصيل الكاميرا
+Could not load cameras: {0},تعذّر تحميل الكاميرات: {0}
+Counts motion events per period ({0}) in the selected range.,يُحصي أحداث الحركة لكل فترة ({0}) ضمن النطاق المحدد.
+Coverage,التغطية
+Coverage & Field of View,التغطية ومجال الرؤية
+Coverage Statement,بيان التغطية
+Coverage matches the field of view description,التغطية مطابقة لوصف مجال الرؤية
+Coverage matches the recorded description,التغطية مطابقة للوصف المسجل
+Credentials,بيانات الدخول
+Critical,حرجة
+Current photographs attached to the camera record.,الصور الحالية مرفقة بسجل الكاميرا.
+Current photographs uploaded to the camera record.,الصور الحالية مرفوعة إلى سجل الكاميرا.
+Daily Motion Activity,نشاط الحركة اليومي
+Daily motion activity,نشاط الحركة اليومي
+Data Export,تصدير البيانات
+Data Import,استيراد البيانات
+Data Tools,أدوات البيانات
+Date,التاريخ
+Day,يوم
+Day (06:00 – 18:00),نهاري (06:00 – 18:00)
+Day / night image acceptable,الصورة نهارًا وليلًا مقبولة
+Days Since Motion,الأيام منذ آخر حركة
+Default Motion Importance,الأهمية الافتراضية للحركة
+Default Report Days,أيام التقارير الافتراضية
+Default lookback window for analytics reports.,نافذة الاسترجاع الافتراضية لتقارير التحليلات.
+Default range uses Archive Settings → Default Report Days.,يستخدم النطاق الافتراضي إعدادات الأرشيف ← أيام التقارير الافتراضية.
+"Describe the area this camera covers and its viewing angle, e.g. ""North gate entrance — wide-angle view over the main driveway.""",صِف المنطقة التي تغطيها هذه الكاميرا وزاوية الرؤية، مثال: «مدخل البوابة الشمالية — رؤية واسعة للممر الرئيسي».
+Description,الوصف
+Details,التفاصيل
+Detected At,تاريخ الاكتشاف
+Detected At cannot be in the future,لا يمكن أن يكون تاريخ الاكتشاف في المستقبل
+Device,الجهاز
+Device Audit Report,تقرير تدقيق الأجهزة
+Device Description,وصف الجهاز
+Device Identifier,معرّف الجهاز
+Device clock matches the archive server time.,ساعة الجهاز مطابقة لوقت خادم الأرشيف.
+Device mounted and housing sealed,الجهاز مثبّت والهيكل محكم الإغلاق
+"Device technical data sheet — configuration, connectivity, geometry and coverage record.",صحيفة البيانات التقنية للجهاز — سجل الإعدادات والاتصال والشكل الهندسي والتغطية.
+Direction,الاتجاه
+Direction (degrees),الاتجاه (بالدرجات)
+Distance,المسافة
+Distance (m),المسافة (متر)
+Documents,المستندات
+"Draw points, lines, polygons, rectangles, or circles on the native map control. Stored as GeoJSON and rendered by the native Map list view.",ارسم نقاطًا أو خطوطًا أو مضلعات أو مستطيلات أو دوائر على عنصر الخريطة. تُحفظ بصيغة GeoJSON وتُعرض في عرض الخريطة الأصلي.
+East,شرق
+Enable Daily Integrity Check,تفعيل فحص التكامل اليومي
+Enable Nearby Camera Alerts,تفعيل تنبيهات الكاميرات القريبة
+Endpoint,نقطة الاتصال
+Endpoint {0} reachable; no packet loss observed.,نقطة الاتصال {0} قابلة للوصول؛ لم يُرصد أي فقدان للحزم.
+Endpoint {0} responds with no packet loss.,نقطة الاتصال {0} تستجيب دون فقدان للحزم.
+Entry,دخول
+Entry Exit Trends,اتجاهات الدخول والخروج
+Entry vs exit trends,اتجاهات الدخول مقابل الخروج
+Entry/Exit comparison per {0} with net flow.,مقارنة الدخول/الخروج لكل {0} مع صافي التدفق.
+Events,الأحداث
+Events ({0}d),الأحداث ({0} يوم)
+Events in period,الأحداث في الفترة
+"Exact bearing from the detecting camera to this camera, in degrees clockwise from true north.",الاتجاه الدقيق من الكاميرا الراصدة إلى هذه الكاميرا، بالدرجات باتجاه عقارب الساعة من الشمال.
+Exact decimal degrees derived from the location anchor. You may also enter coordinates here; they are saved into Location as a point.,درجات عشرية دقيقة مشتقة من نقطة الموقع. يمكنك أيضًا إدخال الإحداثيات هنا وستُحفظ في الموقع كنقطة.
+Executive Overview,النظرة التنفيذية
+Exit,خروج
+Fail,راسب
+Field Inspection,الفحص الميداني
+Field of View,مجال الرؤية
+File with the device record after commissioning,يُحفظ مع سجل الجهاز بعد التشغيل
+File with the device record after completion,يُحفظ مع سجل الجهاز بعد الانتهاء
+Filtered motion events with Entry/Exit breakdown.,أحداث الحركة المفلترة مع تفصيل الدخول/الخروج.
+Findings,النتائج
+Fit cameras,ملاءمة الكاميرات
+Flat export of motion events joined with camera and vehicle details.,تصدير مسطح لأحداث الحركة مع تفاصيل الكاميرا والمركبة.
+"Focus, exposure, and IR illumination verified on a live view.",تم التحقق من التركيز والتعريض والإضاءة بالأشعة تحت الحمراء عبر معاينة حية.
+From Date,من تاريخ
+GPS reading agrees with {0}.,قراءة GPS مطابقة لـ {0}.
+Gaskets and cable glands sealed; no moisture ingress visible.,الحشوات ومداخل الكابلات محكمة الإغلاق؛ لا توجد رطوبة ظاهرة.
+General remarks,ملاحظات عامة
+Generated,أُنشئت
+Geometry,الشكل الهندسي
+Geometry Type,نوع الشكل الهندسي
+Geometry n/a,لا يوجد شكل هندسي
+Granularity,التجميع
+Great-circle distance from the detecting camera.,المسافة الدائرية الكبرى من الكاميرا الراصدة.
+Handed Over By,سلَّمها
+Handed over by — signature,المسلِّم — التوقيع
+Handover & Acceptance Certificate,شهادة التسليم والاستلام
+Handover Date,تاريخ التسليم
+Handover Date cannot be in the future,لا يمكن أن يكون تاريخ التسليم في المستقبل
+High,عالية
+Home,الرئيسية
+Hour,الساعة
+Hourly Distribution,التوزيع بالساعة
+Hourly distribution,التوزيع بالساعة
+ID,المعرّف
+IP Address,عنوان IP
+ISSUE,الإصدار
+Identity & Classification,الهوية والتصنيف
+Image,الصورة
+Image Quality & Recording,جودة الصورة والتسجيل
+Importance,الأهمية
+Inactive,غير نشطة
+Incident Report,تقرير الحادثة
+Inspected by — name,الفاحص — الاسم
+Inspection,فحص
+Inspection Checklist,قائمة الفحص
+Installation,التركيب
+Installation Date,تاريخ التركيب
+Installation Date cannot be in the future,لا يمكن أن يكون تاريخ التركيب في المستقبل
+Installation Details,تفاصيل التركيب
+Installation Report,تقرير التركيب
+Installed,تاريخ التركيب
+Installed by — name,المُركِّب — الاسم
+"Instructions: mark each item with ✓ (pass), ✗ (fail) or N/A, and record remarks on the line provided. Complete this sheet during the physical inspection of the device and file it with the camera record.",التعليمات: علِّم كل بند بـ ✓ (ناجح) أو ✗ (راسب) أو غير قابل للتطبيق، وسجّل الملاحظات في السطر المخصص. أكمِل هذه الورقة أثناء الفحص الميداني للجهاز واحفظها مع سجل الكاميرا.
+Internal management document,وثيقة إدارية داخلية
+Is Active,نشط
+Is Group,مجموعة
+Labeling matches the register,الملصقات مطابقة للسجل
+Labels,التسميات
+Last Detected At,آخر رصد في
+Last Modified,آخر تعديل
+Last Motion At,آخر حركة في
+Latitude,خط العرض
+Latitude and longitude must be valid decimal numbers,يجب أن يكون خط العرض وخط الطول أرقامًا عشرية صحيحة
+Latitude must be between -90 and 90,يجب أن يكون خط العرض بين -90 و 90
+Leave the date range empty to see all events regardless of date.,اترك نطاق التاريخ فارغًا لعرض جميع الأحداث بغض النظر عن التاريخ.
+Left,يسار
+"Lens and housing free of obstructions, scratches, or tamper marks.",العدسة والهيكل خاليان من العوائق أو الخدوش أو علامات العبث.
+Linked events,الأحداث المرتبطة
+Loading cameras…,جارٍ تحميل الكاميرات…
+Loading…,جارٍ التحميل…
+Location,الموقع
+Location & Coverage,الموقع والتغطية
+Longitude,خط الطول
+Longitude must be between -180 and 180,يجب أن يكون خط الطول بين -180 و 180
+Low,منخفضة
+Maintenance,صيانة
+Maintenance Type,نوع الصيانة
+Management summary for device {0} — prepared {1},الملخص الإداري للجهاز {0} — أُعد في {1}
+Matches notes and camera names.,يطابق الملاحظات وأسماء الكاميرات.
+Matches notes.,يطابق الملاحظات.
+Max Rows,الحد الأقصى للصفوف
+Media,الوسائط
+Medium,متوسطة
+Month,شهر
+Most recent event,أحدث حدث
+Motion Activity,نشاط الحركة
+Motion Calendar,تقويم الحركة
+Motion Event,حدث الحركة
+Motion Event {0},حدث الحركة {0}
+Motion Events,أحداث الحركة
+Motion Events Today,أحداث حركة اليوم
+Motion Events Trend,اتجاه أحداث الحركة
+Motion Events by Type,أحداث الحركة حسب النوع
+Motion Events on File,أحداث الحركة المسجلة
+Motion Type,نوع الحركة
+Motion Type is required,نوع الحركة مطلوب
+Motion activity,نشاط الحركة
+Motion entry or exit event captured by a camera.,حدث دخول أو خروج التقطته كاميرا.
+Motion {0} near {1} other camera(s),حركة {0} بالقرب من {1} كاميرا أخرى
+Mounting & Housing,التثبيت والهيكل
+Mounting hardware secure and corrosion-free,أجهزة التثبيت مثبّتة وخالية من التآكل
+Mounting hardware verified secure; weather sealing intact.,تم التحقق من ثبات أجهزة التثبيت وسلامة الإحكام ضد العوامل الجوية.
+Nearby Camera,الكاميرا القريبة
+Nearby Camera Alerts,تنبيهات الكاميرات القريبة
+Nearby Camera Radius (m),نطاق الكاميرات القريبة (متر)
+Nearby Cameras,الكاميرات القريبة
+Needs Attention,يحتاج انتباهًا
+Net Flow,صافي التدفق
+Net flow,صافي التدفق
+Net flow = Entry − Exit: positive means more vehicles entered.,صافي التدفق = الدخول − الخروج: القيمة الموجبة تعني دخول مركبات أكثر.
+Network endpoint reachable,نقطة اتصال الشبكة قابلة للوصول
+Network link verified,تم التحقق من اتصال الشبكة
+New Camera added near {0} other camera(s),تمت إضافة كاميرا جديدة بالقرب من {0} كاميرا أخرى
+New Motion Event,حدث حركة جديد
+Night (18:00 – 06:00),ليلي (18:00 – 06:00)
+No,لا
+No FOV,لا يوجد مجال رؤية
+No blind spots in the target scene,لا توجد نقاط عمياء في المشهد المستهدف
+No camera number,لا يوجد رقم كاميرا
+No coordinates,لا توجد إحداثيات
+No coverage description on file.,لا يوجد وصف تغطية في السجل.
+No coverage description recorded.,لم يُسجَّل وصف للتغطية.
+No credentials,لا توجد بيانات دخول
+No findings recorded.,لا توجد نتائج مسجلة.
+No installation notes recorded.,لا توجد ملاحظات تركيب مسجلة.
+No motion,لا توجد حركة
+No motion in {0}d,لا حركة خلال {0} يوم
+No nearby cameras recorded for this event.,لم تُسجَّل كاميرات قريبة لهذا الحدث.
+No operator notes recorded for this event.,لا توجد ملاحظات مشغّل لهذا الحدث.
+No photographs on file.,لا توجد صور في السجل.
+No photos,لا توجد صور
+No photos available,لا توجد صور متاحة
+No records match the applied filters.,لا توجد سجلات مطابقة لعوامل التصفية المطبقة.
+No reproduction without authorization,يُمنع النسخ دون تصريح
+No special conditions recorded.,لا توجد شروط خاصة مسجلة.
+No stored packages yet (browse or store layers once for everyone),لا توجد حزم مخزنة بعد (تصفّح أو خزّن الطبقات مرة واحدة للجميع)
+No vehicle linked,لا توجد مركبة مرتبطة
+No work items recorded.,لا توجد بنود عمل مسجلة.
+No.,رقم
+North,شمال
+Northeast,شمال شرق
+Northwest,شمال غرب
+Not Permitted,غير مسموح
+Not recorded,غير مسجَّل
+Note,ملاحظة
+Notes,ملاحظات
+"Notify users when a camera is added near existing cameras, or when motion is detected on a camera that has nearby cameras.",إشعار المستخدمين عند إضافة كاميرا بالقرب من كاميرات موجودة، أو عند رصد حركة على كاميرا لديها كاميرات قريبة.
+Number,الرقم
+Offline,دون اتصال
+Offline storage,التخزين دون اتصال
+Old Parent,الأب السابق
+On-device label agrees with name {0} / serial {1}.,ملصق الجهاز مطابق للاسم {0} / الرقم التسلسلي {1}.
+One original copy for each party,نسخة أصلية واحدة لكل طرف
+Online,متصل
+Only one camera photo can be marked as primary,يمكن تعيين صورة واحدة فقط كصورة رئيسية للكاميرا
+Open,مفتوح
+Open Camera,فتح الكاميرا
+Open Image Gallery,فتح معرض الصور
+Operational Profile,الملف التشغيلي
+PASS / FAIL / N-A,ناجح / راسب / غير مطبق
+PENDING ACCEPTANCE,بانتظار القبول
+Page 1 of 1,صفحة 1 من 1
+Parent Area,المنطقة الأم
+Pass,ناجح
+Password,كلمة المرور
+Peak hour,ساعة الذروة
+Peak period,فترة الذروة
+Pending,قيد الانتظار
+Period,الفترة
+Periods,الفترات
+Photographs,الصور
+Photos,الصور
+Port,المنفذ
+Port must be between 1 and 65535,يجب أن يكون المنفذ بين 1 و 65535
+Power & Connectivity,الطاقة والاتصال
+Power supply within specification,مصدر الطاقة ضمن المواصفات
+Preventive,وقائية
+Primary,رئيسية
+"Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list.",صورة الشارع الأساسية، تُزامن تلقائيًا من صور الكاميرا. تفعّل عرض الصور الأصلي (المعرض) في قائمة الكاميرا.
+Priority,الأولوية
+Quick Facts,حقائق سريعة
+REF,المرجع
+Ranks cameras by motion event volume in the selected period.,يرتب الكاميرات حسب حجم أحداث الحركة في الفترة المحددة.
+Ranks vehicles by linked motion events in the selected period.,يرتب المركبات حسب أحداث الحركة المرتبطة بها في الفترة المحددة.
+Ready shared packages: {0},الحزم المشتركة الجاهزة: {0}
+Received By,استلمها
+Received by — signature,المستلم — التوقيع
+Recent Motion Events,أحداث الحركة الأخيرة
+Record,السجل
+Record ID,معرّف السجل
+Record Owner,مالك السجل
+Records,السجلات
+Records & Remarks,السجلات والملاحظات
+Refresh,تحديث
+Region: {0},المنطقة: {0}
+Region: —,المنطقة: —
+Registered,تاريخ التسجيل
+Related,ذات صلة
+Remarks,ملاحظات
+Replaced,مستبدَل
+Report Print,طباعة التقرير
+Report Schedule Note,ملاحظة جدولة التقارير
+Reports,التقارير
+Restricted,مقيَّد
+Result,النتيجة
+Results are capped at {0} rows; narrow the date range or filters for larger exports.,النتائج محدودة بـ {0} صفًا؛ ضيّق نطاق التاريخ أو عوامل التصفية لتصدير أكبر.
+Right,يمين
+Roles that receive nearby-camera notifications.,الأدوار التي تتلقى إشعارات الكاميرات القريبة.
+Rows,الصفوف
+Scheduled Reports,التقارير المجدولة
+Search,بحث
+Security Record,سجل أمني
+Security Register,السجل الأمني
+Security-relevant record,سجل ذو صلة بالأمن
+Serial,التسلسلي
+Serial Number,الرقم التسلسلي
+Series,السلسلة
+Service Date,تاريخ الخدمة
+Service Date cannot be in the future,لا يمكن أن يكون تاريخ الخدمة في المستقبل
+Share,الحصة
+Share is the percentage of all events attributed to the camera.,الحصة هي النسبة المئوية لجميع الأحداث المنسوبة إلى الكاميرا.
+Share is the percentage of all linked events attributed to the vehicle.,الحصة هي النسبة المئوية لجميع الأحداث المرتبطة بالمركبة.
+Shift,الوردية
+Shift filter applied: {0}.,الوردية المطبقة: {0}.
+Shows when motion events occur across the 24-hour clock.,يوضح أوقات حدوث الحركة على مدار 24 ساعة.
+Signature,التوقيع
+Single map,خريطة واحدة
+Site Reference,المرجع الموقعي
+Sort Order,ترتيب الفرز
+South,جنوب
+Southeast,جنوب شرق
+Southwest,جنوب غرب
+Split: Standard + Aerial,تقسيم: قياسية + جوية
+Standard,قياسية
+Status,الحالة
+Stored and displayed as plain text (local trust model).,تُخزَّن وتُعرض كنص عادي (نموذج الثقة المحلي).
+Street Photos,صور الشارع
+Street photo,صورة شارع
+Street photographs on file,صور الشارع موجودة في السجل
+Street photographs uploaded to the record,صور الشارع مرفوعة إلى السجل
+Survey the scene from the recorded viewing position.,افحص المشهد من موضع الرؤية المسجّل.
+Technical Documentation,التوثيق التقني
+Technical Sheet,الصحيفة التقنية
+Technician,الفني
+Technician — name,الفني — الاسم
+Terms,الشروط
+Terrain,التضاريس
+"The offline_maps app is not installed, so basemaps fall back to the online defaults. Install offline_maps (see README → “Offline Maps integration”) for fully offline maps.",تطبيق offline_maps غير مثبّت، لذا تعود الخرائط الأساسية إلى الإعدادات الافتراضية عبر الإنترنت. ثبّت offline_maps (انظر README ← «تكامل خرائط دون اتصال») للحصول على خرائط دون اتصال بالكامل.
+"The receiving party confirms that the device has been inspected, is in the described condition, and custody is transferred under the conditions stated above.",يقرّ الطرف المستلم بأن الجهاز تم فحصه وأنه بالحالة الموصوفة، وأن العهدة انتقلت وفق الشروط المذكورة أعلاه.
+This card identifies the vehicle and its archive record.,تحدد هذه البطاقة المركبة وسجلها في الأرشيف.
+This certificate confirms the transfer of custody of the device between the stated parties under the stated conditions.,تؤكد هذه الشهادة نقل عهدة الجهاز بين الطرفين المذكورين وفق الشروط المذكورة.
+This certificate confirms the transfer of custody of the device described below.,تؤكد هذه الشهادة نقل عهدة الجهاز الموصوف أدناه.
+This document confirms the commissioning of the camera installation and records the verification performed on site.,تؤكد هذه الوثيقة تشغيل تركيب الكاميرا وتسجّل عمليات التحقق المنفذة في الموقع.
+This document contains security-relevant device configuration. Store in a controlled location and destroy superseded copies. Distribution is limited to authorized archive personnel.,تحتوي هذه الوثيقة على إعدادات جهاز ذات صلة بالأمن. احفظها في مكان مراقب وأتلِف النسخ المستبدلة. يقتصر توزيعها على موظفي الأرشيف المصرح لهم.
+"This document is a one-page management summary of the camera's operational posture: status, activity volume, last detection, and coverage statement.",هذه الوثيقة ملخص إداري من صفحة واحدة للوضع التشغيلي للكاميرا: الحالة وحجم النشاط وآخر رصد وبيان التغطية.
+This document is the field inspection form completed during physical checks of the camera installation; file it with the device record.,هذه الوثيقة هي نموذج الفحص الميداني الذي يُستكمل أثناء الفحوصات المادية لتركيب الكاميرا؛ يُحفظ مع سجل الجهاز.
+This document records security-relevant device configuration for authorized archive personnel and is subject to controlled-copy handling.,تسجّل هذه الوثيقة إعدادات الجهاز ذات الصلة بالأمن لموظفي الأرشيف المصرح لهم، وتخضع لمعاملة النسخ المراقبة.
+"This document records the complete technical configuration of the camera device — identity, connectivity, geometry, coverage, and photographs. It is the controlled technical record for this device.",تسجّل هذه الوثيقة الإعدادات التقنية الكاملة لجهاز الكاميرا — الهوية والاتصال والشكل الهندسي والتغطية والصور. وهي السجل التقني المراقب لهذا الجهاز.
+This document reports a single maintenance service visit and the work performed on the camera.,توثق هذه الوثيقة زيارة صيانة واحدة والأعمال المنفذة على الكاميرا.
+This document reports a single motion event and the precise nearby-camera context recorded at detection time.,توثق هذه الوثيقة حدث حركة واحدًا وسياق الكاميرات القريبة الدقيق المسجل لحظة الرصد.
+This label identifies the camera device and its archive record. Affix it to the device housing or cable.,تحدد هذه الملصقة جهاز الكاميرا وسجله في الأرشيف. ألصقها على هيكل الجهاز أو الكابل.
+"This printout audits camera record completeness: photos, coordinates, credentials, coverage, and activity.",تدقق هذه النسخة المطبوعة اكتمال سجلات الكاميرات: الصور والإحداثيات وبيانات الدخول والتغطية والنشاط.
+This printout compares Entry and Exit motion events per period with the computed net flow.,تقارن هذه النسخة المطبوعة أحداث الدخول والخروج لكل فترة مع صافي التدفق المحسوب.
+This printout is the flat export of motion events joined with camera and vehicle details.,هذه النسخة المطبوعة هي التصدير المسطح لأحداث الحركة مضمومًا إلى تفاصيل الكاميرا والمركبة.
+"This printout lists motion events matching the applied filters, with the Entry/Exit breakdown shown in the columns.",تعرض هذه النسخة المطبوعة أحداث الحركة المطابقة لعوامل التصفية المطبقة، مع تفصيل الدخول/الخروج في الأعمدة.
+This printout ranks cameras by motion event volume in the selected period.,ترتب هذه النسخة المطبوعة الكاميرات حسب حجم أحداث الحركة في الفترة المحددة.
+This printout ranks vehicles by linked motion events in the selected period.,ترتب هذه النسخة المطبوعة المركبات حسب أحداث الحركة المرتبطة بها في الفترة المحددة.
+This printout shows the 24-hour distribution of motion events for the selected shift.,تعرض هذه النسخة المطبوعة توزيع أحداث الحركة على مدار 24 ساعة حسب الوردية المحددة.
+This printout shows the current camera statuses with the last detected motion per camera.,تعرض هذه النسخة المطبوعة حالات الكاميرات الحالية مع آخر حركة رُصدت لكل كاميرا.
+This printout shows the motion event time series for the selected granularity and period.,تعرض هذه النسخة المطبوعة السلسلة الزمنية لأحداث الحركة حسب التجميع والفترة المحددين.
+Tiles: {0},البلاطات: {0}
+Time synchronization correct,مزامنة الوقت صحيحة
+To Date,إلى تاريخ
+Top N Cameras,أعلى N كاميرات
+Top N Vehicles,أعلى N مركبات
+Top camera,الكاميرا الأولى
+Top camera events,أحداث الكاميرا الأولى
+Top vehicle,المركبة الأولى
+Top vehicle events,أحداث المركبة الأولى
+Total,الإجمالي
+Total events,إجمالي الأحداث
+Total recorded activity,إجمالي النشاط المسجل
+Type,النوع
+Type Masters,الأنواع الأساسية
+Type Name,اسم النوع
+Use the native CSV / Excel export action for offline analysis.,استخدم خاصية التصدير الأصلية CSV / Excel للتحليل دون اتصال.
+Username,اسم المستخدم
+Vandalism / tamper check,فحص التخريب / العبث
+Vehicle,المركبة
+Vehicle Activity,نشاط المركبات
+Vehicle Asset Card,بطاقة أصل المركبة
+Vehicle Context,سياق المركبة
+Vehicle Name,اسم المركبة
+Vehicle Number,رقم المركبة
+Vehicle Status,حالة المركبة
+Vehicle Type,نوع المركبة
+Vehicle activity,نشاط المركبات
+Vehicle tracked in motion entry and exit events.,مركبة يتم تتبعها في أحداث الدخول والخروج.
+Vehicle {0} does not exist,المركبة {0} غير موجودة
+Vehicles,المركبات
+Vehicles ranked,المركبات المرتبة
+Verified by — signature,المُدقِّق — التوقيع
+View,عرض
+View mode,وضع العرض
+Voltage/current measured at the device match the datasheet.,الجهد/التيار المقاس على الجهاز مطابق لورقة المواصفات.
+Weather sealing intact,الإحكام ضد العوامل الجوية سليم
+Week,أسبوع
+West,غرب
+With vehicle,مرتبطة بمركبة
+Work Performed,الأعمال المنفذة
+Yes,نعم
+You need an Offline Maps role (Offline Map User / Manager / Administrator) or System Manager to load offline map tiles. Camera markers still render — on the online fallback basemap.,تحتاج دور خرائط دون اتصال (مستخدم / مدير / مسؤول خرائط دون اتصال) أو مدير النظام لتحميل بلاطات الخرائط دون اتصال. تبقى علامات الكاميرا معروضة — على الخريطة الأساسية البديلة عبر الإنترنت.
+{0} camera(s) shown,`{0} camera(s) shown`
+native defaults (online),الإعدادات الافتراضية (متصل)
+offline packages + shared cache,حزم دون اتصال + ذاكرة تخزين مشتركة
+online fallback (no Offline Maps role),بديل عبر الإنترنت (بدون دور خرائط دون اتصال)
+realtime proxy → shared cache,وكيل فوري ← ذاكرة تخزين مؤقت مشتركة
+shared cache,ذاكرة تخزين مؤقت مشتركة
+{0} cameras in same area,{0} كاميرات في نفس المنطقة
+{0} detected by {1}; nearby cameras: {2},{0} رصدتها {1}؛ الكاميرات القريبة: {2}
+{0} is not a valid IP address,{0} ليس عنوان IP صالحًا
+{0} is not a valid field of {1},{0} ليس حقلاً صالحًا في {1}
+{0} photograph(s),{0} صورة
+{0} was added within {1} m of: {2},تمت إضافة {0} ضمن {1} متر من: {2}
+About this report,عن هذا التقرير
+Activity Trend,اتجاه النشاط
+Analytics,التحليلات
+Archive extract,استخراج الأرشيف
+Audit window,نافذة التدقيق
+"Audits each camera for completeness: photographs, coordinates, credentials, and field of view. Cameras missing required data are flagged for attention.",يدقق كل كاميرا من حيث الاكتمال: الصور، الإحداثيات، وبيانات الاعتماد، ومدى الرؤية. يتم وضع علامة على الكاميرات التي تفتقد البيانات المطلوبة للانتباه.
+Auto-generated,يُنشأ تلقائيًا
+"Chronological register of motion events matching the applied filters. Each row is one Entry or Exit event with the detecting camera, area, vehicle and notes.",سجل زمني لأحداث الحركة المطابقة للفلاتر المطبّقة. كل صف يمثل حدث دخول أو خروج مع الكاميرا المكتشفة والمنطقة والمركبة والملاحظات.
+Clock profile,ملف الساعة
+"Compares the volume of Entry and Exit events per period and shows the resulting net flow, revealing traffic direction.",يقارن حجم أحداث الدخول والخروج لكل فترة ويعرض صافي التدفق الناتج، مما يكشف اتجاه الحركة.
+"Counts motion events per period across the selected date range, showing the activity curve and its average intensity.",يعدّ أحداث الحركة لكل فترة عبر النطاق الزمني المحدد، مع عرض منحنى النشاط ومتوسط شدّته.
+Device audit,تدقيق الجهاز
+"Documents each camera's current status, importance, and most recent motion activity, flagging cameras with no motion in the window.",يوثّق الحالة الحالية لكل كاميرا وأهميتها وآخر نشاط حركة لها، مع وضع علامة على الكاميرات التي ليس لديها حركة خلال النافذة.
+Entry / Exit Flow,تدفق الدخول / الخروج
+"Flat export of motion events joined with camera and vehicle details, for offline analysis or archival. Rows are capped by the report limit; narrow the date range for larger exports.",تصدير مسطّح لأحداث الحركة مدمجًا مع تفاصيل الكاميرا والمركبة، للتحليل دون اتصال أو للأرشفة. الصفوف محدودة بحد التقرير؛ قلّص النطاق الزمني لتصديرات أكبر.
+Fleet analysis,تحليل الأسطول
+Hours,الساعات
+Idle,خامل
+Last 30-day window,نافذة آخر 30 يومًا
+Net flow = Entry − Exit,صافي التدفق = الدخول − الخروج
+No cameras match the applied filters.,لا توجد كاميرات مطابقة للفلاتر المطبّقة.
+Operational status,الحالة التشغيلية
+Profile across the 24-hour clock,ملف عبر ساعات اليوم الأربع والعشرين
+Ranking,الترتيب
+Ranks cameras by motion-event volume in the selected period. Share is the percentage of all events attributed to each camera.,يرتّب الكاميرات بحسب حجم أحداث الحركة في الفترة المحددة. الحصة هي النسبة المئوية لكل الأحداث المنسوبة إلى كل كاميرا.
+Ranks vehicles by the number of linked motion events in the selected period. Share is the percentage of linked events attributed to each vehicle.,يرتّب المركبات بحسب عدد أحداث الحركة المرتبطة في الفترة المحددة. الحصة هي النسبة المئوية للأحداث المرتبطة المنسوبة إلى كل مركبة.
+Register,السجل
+Security operations record,سجل العمليات الأمنية
+"Shows when motion events occur across the 24-hour clock, within the selected shift and filters. Useful for identifying operating hours and peak periods.",يعرض متى تحدث أحداث الحركة عبر ساعات اليوم الأربع والعشرين، ضمن الوردية والفلاتر المحددة. مفيد لتحديد ساعات التشغيل وفترات الذروة.
+Time series,السلاسل الزمنية
+Top,الأعلى
+Traffic analysis,تحليل حركة المرور
+camera(s),كاميرا (كاميرات)
+last 30 days,آخر 30 يومًا
+per selected period,لكل فترة محددة
+Map camera payload is limited to {0} cameras; some cameras may be missing.,حمولة كاميرات الخريطة محدودة بـ {0} كاميرا؛ قد تكون بعض الكاميرات مفقودة.
+Zoom {0},التكبير {0}
+No basemap,لا توجد خريطة أساس
+no tiles at this zoom (min {0}),لا بلاط عند هذا التكبير (الحد الأدنى {0})
+tiles upscaled (native max {0}),بلاط مُكبَّر (الحد الأقصى الأصلي {0})
+Aerial zoom {0},تكبير الطبقة الجوية {0}
+Offline storage: {0} assets cached,التخزين دون اتصال: {0} عنصرًا مخزَّنًا
+Offline: showing cached data ({0} assets); data never downloaded is unavailable.,وضع عدم الاتصال: عرض البيانات المخزَّنة ({0} عنصرًا)؛ البيانات غير المُحمَّلة مسبقًا غير متاحة.
+Camera details unavailable offline (never downloaded),تفاصيل الكاميرا غير متاحة دون اتصال (لم تُحمَّل مسبقًا)
+Unavailable offline,غير متاح دون اتصال
+Currently displayed layer,الطبقة المعروضة حاليًا

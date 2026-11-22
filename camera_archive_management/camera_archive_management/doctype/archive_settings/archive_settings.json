@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-11-22 07:00:33.544332",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+   "default_report_days",
+  "column_break_1",
+  "default_motion_importance",
+  "enable_daily_integrity_check",
+  "section_break_alerts",
+  "enable_nearby_camera_alerts",
+  "nearby_camera_radius",
+  "column_break_alerts",
+  "nearby_alert_roles",
+  "section_break_reports",
+  "report_schedule_note"
+ ],
+ "fields": [
+{
+   "default": "30",
+   "description": "Default lookback window for analytics reports.",
+   "fieldname": "default_report_days",
+   "fieldtype": "Int",
+   "label": "Default Report Days",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_motion_importance",
+   "fieldtype": "Select",
+   "label": "Default Motion Importance",
+   "options": "\nLow\nMedium\nHigh\nCritical"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_daily_integrity_check",
+   "fieldtype": "Check",
+   "label": "Enable Daily Integrity Check"
+  },
+  {
+   "fieldname": "section_break_alerts",
+   "fieldtype": "Section Break",
+   "label": "Nearby Camera Alerts"
+  },
+  {
+   "default": "0",
+   "description": "Notify users when a camera is added near existing cameras, or when motion is detected on a camera that has nearby cameras.",
+   "fieldname": "enable_nearby_camera_alerts",
+   "fieldtype": "Check",
+   "label": "Enable Nearby Camera Alerts"
+  },
+  {
+   "default": "100",
+   "description": "Cameras within this distance of each other are considered nearby.",
+   "fieldname": "nearby_camera_radius",
+   "fieldtype": "Int",
+   "label": "Nearby Camera Radius (m)",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_alerts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "System Manager\nCam Archive User",
+   "description": "Roles that receive nearby-camera notifications.",
+   "fieldname": "nearby_alert_roles",
+   "fieldtype": "MultiSelect",
+   "label": "Alert Roles",
+   "options": "System Manager\nCam Archive User"
+  },
+  {
+   "fieldname": "section_break_reports",
+   "fieldtype": "Section Break",
+   "label": "Scheduled Reports"
+  },
+  {
+   "fieldname": "report_schedule_note",
+   "fieldtype": "HTML",
+   "label": "Report Schedule Note",
+   "options": "<p>Use Frappe <b>Auto Email Report</b> to schedule any Camera Archive report. Recommended: <i>Daily Motion Activity</i> and <i>Entry Exit Trends</i>.</p>"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-11-22 07:00:33.544332",
+ "modified_by": "Administrator",
+ "module": "Camera Archive Management",
+ "name": "Archive Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
