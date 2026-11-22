@@ -2,6 +2,7 @@
  "doctype": "Workspace",
  "name": "Camera Archive Management",
  "label": "Camera Archive Management",
+ "title": "Camera Archive Management",
  "module": "Camera Archive Management",
  "icon": "camera",
  "indicator_color": "blue",
