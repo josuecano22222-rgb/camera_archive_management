@@ -75,6 +75,7 @@ function initialize_map_page(wrapper, leaflet) {
 			</select></label>
 			<button class="btn btn-primary cam-map-apply">${__("Apply filters")}</button>
 			<span class="cam-map-filter-note"></span>
+			<span class="cam-map-tile-status text-muted" aria-live="polite"></span>
 		</div>
 		<div class="cam-map-shell">
 			<div class="cam-map-canvas" role="application" aria-label="${__("Camera and vehicle movement map")}"></div>
@@ -98,6 +99,18 @@ function initialize_map_page(wrapper, leaflet) {
 		host.querySelector(".cam-map-layer").value = route_state.controls.layer;
 	}
 	page.$filter_note = $(host.querySelector(".cam-map-filter-note"));
+	page.cam_tile_status = host.querySelector(".cam-map-tile-status");
+	page.cam_tile_errors = 0;
+	set_tile_status(page, __("Map tiles use the shared Siraj server cache."));
+	if (!page.cam_network_listener) {
+		page.cam_network_listener = () => {
+			set_tile_status(page, navigator.onLine
+				? __("Browser is online; missing tiles use the configured server provider when enabled.")
+				: __("Browser is offline; the Bench server must remain reachable to use cached tiles."));
+		};
+		window.addEventListener("online", page.cam_network_listener);
+		window.addEventListener("offline", page.cam_network_listener);
+	}
 	update_filter_note(page);
 	page.cam_map = leaflet.map(host.querySelector(".cam-map-canvas"), { zoomControl: true }).setView([52.37, 4.90], 5);
 	if (!page.cam_map_route_listener && frappe.router?.on) {
@@ -117,6 +130,7 @@ function initialize_map_page(wrapper, leaflet) {
 		load_map(page);
 	});
 	host.querySelector(".cam-map-layer").addEventListener("change", () => set_basemap(page));
+	load_tile_config(page);
 	for (const selector of [".cam-map-camera", ".cam-map-vehicle", ".cam-map-event"]) {
 		const input = host.querySelector(selector);
 		input.addEventListener("input", () => {
@@ -270,24 +284,83 @@ function pageOrigin() {
 	return window.location.origin || `${window.location.protocol}//${window.location.host}`;
 }
 
+function set_tile_status(page, message) {
+	if (page.cam_tile_status && page.cam_tile_status.textContent !== message) {
+		page.cam_tile_status.textContent = message;
+	}
+}
+
+async function load_tile_config(page) {
+	try {
+		const response = await frappe.call({ method: "camera_archive_management.api.tiles.config", type: "GET" });
+		const config = response.message || {};
+		const layers = Array.isArray(config.layers) ? config.layers : [];
+		if (!layers.length) {
+			set_tile_status(page, __("No enabled Siraj raster layers are available; cached camera markers remain visible."));
+			return;
+		}
+		page.cam_tile_config = Object.fromEntries(layers.map((layer) => [layer.id, layer]));
+		const select = page.main.get(0).querySelector(".cam-map-layer");
+		const current = select.value;
+		select.replaceChildren(...layers.map((layer) => {
+			const option = document.createElement("option");
+			option.value = layer.id;
+			option.textContent = layer.label;
+			return option;
+		}));
+		select.value = page.cam_tile_config[current] ? current : layers[0].id;
+		if (config.fetch_enabled) {
+			set_tile_status(page, __("Siraj online tile fetch and shared-cache writes are enabled."));
+		} else {
+			set_tile_status(page, __("Using the shared tile cache only; external fetching is disabled by settings."));
+		}
+		set_basemap(page);
+	} catch (error) {
+		set_tile_status(page, __("Tile settings could not be loaded; cached map tiles may still be available."));
+	}
+}
+
+function bind_tile_status(page, layer) {
+	if (layer.cam_status_bound) return layer;
+	layer.cam_status_bound = true;
+	layer.on("tileload", () => {
+		page.cam_tile_errors = Math.max(0, (page.cam_tile_errors || 0) - 1);
+		if (!page.cam_tile_errors) set_tile_status(page, __("Map tiles loaded from the shared server cache/provider."));
+	});
+	layer.on("tileerror", () => {
+		page.cam_tile_errors = (page.cam_tile_errors || 0) + 1;
+		set_tile_status(page, __("A tile is missing or unavailable; cached tiles remain usable and upstream retries are throttled."));
+	});
+	return layer;
+}
+
 function set_basemap(page) {
 	const leaflet = page.cam_leaflet;
-	const selected = page.main.find(".cam-map-layer").val() || "standard";
+	const select = page.main.find(".cam-map-layer");
+	let selected = select.val() || "standard";
+	const layers = page.cam_tile_config || {};
+	if (Object.keys(layers).length && !layers[selected]) {
+		selected = Object.keys(layers)[0];
+		select.val(selected);
+	}
+	const config = layers[selected];
+	if (!config) return; // Wait for Siraj's authorized catalog; never guess a provider/attribution.
 	const map = page.cam_map;
 	Object.values(page.cam_base_layers).forEach((layer) => {
 		if (map.hasLayer(layer)) map.removeLayer(layer);
 	});
 	if (page.cam_overlay && map.hasLayer(page.cam_overlay)) map.removeLayer(page.cam_overlay);
-	const attributions = { standard: "© OpenStreetMap contributors", aerial: "© Esri", hybrid: "© Esri" };
-	const base = page.cam_base_layers[selected] || leaflet.tileLayer(tile_template(selected, "base", page.cam_map_context), {
-		minZoom: 0, maxZoom: 19, attribution: attributions[selected], crossOrigin: false
-	});
+	const base = page.cam_base_layers[selected] || bind_tile_status(page, leaflet.tileLayer(
+		tile_template(selected, "base", page.cam_map_context),
+		{ minZoom: config.minZoom, maxZoom: config.maxZoom, attribution: config.attribution, crossOrigin: false }
+	));
 	page.cam_base_layers[selected] = base;
 	base.addTo(map);
-	if (selected === "hybrid") {
-		page.cam_overlay = page.cam_overlay || leaflet.tileLayer(tile_template("hybrid", "overlay", page.cam_map_context), {
-			minZoom: 0, maxZoom: 19, attribution: "© Esri", opacity: 1
-		});
+	if (selected === "hybrid" && config.overlay !== false) {
+		page.cam_overlay = page.cam_overlay || bind_tile_status(page, leaflet.tileLayer(
+			tile_template("hybrid", "overlay", page.cam_map_context),
+			{ minZoom: config.minZoom, maxZoom: config.maxZoom, attribution: config.attribution, opacity: 1 }
+		));
 		page.cam_overlay.addTo(map);
 	}
 }

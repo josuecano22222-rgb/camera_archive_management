@@ -30,3 +30,12 @@ class CAMGeoSettings(Document):
 			)
 		if self.default_search_radius_m is not None and not 1 <= int(self.default_search_radius_m) <= 100000:
 			frappe.throw("Default search radius must be between 1 and 100000 meters.", frappe.ValidationError)
+		if int(self.allow_tile_cache_write or 0) and not int(self.enable_online_tile_fetch or 0):
+			frappe.throw("Enable online tile fetching before allowing shared cache writes.", frappe.ValidationError)
+		for fieldname, label in (
+			("tile_connect_timeout_seconds", "Tile connect timeout"),
+			("tile_read_timeout_seconds", "Tile read timeout"),
+		):
+			value = getattr(self, fieldname, None)
+			if value is not None and not 1 <= int(value) <= 5:
+				frappe.throw(f"{label} must be between 1 and 5 seconds.", frappe.ValidationError)

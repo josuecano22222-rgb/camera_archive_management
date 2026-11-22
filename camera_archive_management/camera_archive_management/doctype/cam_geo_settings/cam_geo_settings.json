@@ -60,6 +60,32 @@
    "default": "0"
   },
   {
+   "fieldname": "enable_online_tile_fetch",
+   "fieldtype": "Check",
+   "label": "Enable Online Tile Fetch",
+   "default": "0",
+   "description": "Explicit opt-in. Fetching also requires Siraj Geo Settings > Allow server to fetch from provider. Review provider terms and attribution before enabling."
+  },
+  {
+   "fieldname": "allow_tile_cache_write",
+   "fieldtype": "Check",
+   "label": "Allow Shared Tile Cache Writes",
+   "default": "0",
+   "description": "Persist validated provider tiles to the shared private/siraj_tile_cache. Also requires online tile fetching to be enabled."
+  },
+  {
+   "fieldname": "tile_connect_timeout_seconds",
+   "fieldtype": "Int",
+   "label": "Tile Connect Timeout Seconds",
+   "default": "2"
+  },
+  {
+   "fieldname": "tile_read_timeout_seconds",
+   "fieldtype": "Int",
+   "label": "Tile Read Timeout Seconds",
+   "default": "3"
+  },
+  {
    "fieldname": "last_dataset_import",
    "fieldtype": "Datetime",
    "label": "Last Dataset Import",
@@ -76,6 +102,10 @@
   "online_rate_limit_per_min",
   "online_cache_days",
   "allow_online_setup",
+  "enable_online_tile_fetch",
+  "allow_tile_cache_write",
+  "tile_connect_timeout_seconds",
+  "tile_read_timeout_seconds",
   "last_dataset_import"
  ],
  "permissions": [
