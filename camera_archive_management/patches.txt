@@ -6,4 +6,5 @@ camera_archive_management.patches.v1_0.isolate_camera_credentials
 camera_archive_management.patches.v1_0.assert_doctype_namespace
 
 [post_model_sync]
+camera_archive_management.patches.v1_0.ensure_child_table_columns
 camera_archive_management.patches.v1_0.ensure_unique_keys
