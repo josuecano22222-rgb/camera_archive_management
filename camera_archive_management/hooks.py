@@ -30,12 +30,10 @@ fixtures = [
 	}
 ]
 
-# Keep the approved local Leaflet build and map styles available throughout Desk.
-app_include_css = [
-	"/assets/camera_archive_management/vendor/leaflet/leaflet.css",
-	"/assets/camera_archive_management/css/camera_archive.css",
-]
-app_include_js = ["/assets/camera_archive_management/vendor/leaflet/leaflet.js"]
+# Keep map presentation styles global, but load Leaflet only inside our map page.
+# Siraj's GeoPoint controls use their own Leaflet/Draw runtime; globally loading
+# another Leaflet copy would overwrite its `L.Control.Draw` plugin.
+app_include_css = ["/assets/camera_archive_management/css/camera_archive.css"]
 
 # Sensitive credentials are protected independently of future DocType metadata.
 permission_query_conditions = {

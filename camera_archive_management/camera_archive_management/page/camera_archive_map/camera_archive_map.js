@@ -1,5 +1,55 @@
+let cam_map_leaflet;
+let cam_map_leaflet_promise;
+
+function require_map_leaflet_css() {
+	const href = new URL("/assets/camera_archive_management/vendor/leaflet/leaflet.css", window.location.origin).href;
+	const existing = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).find(
+		(link) => link.href === href
+	);
+	if (existing) return Promise.resolve();
+	return new Promise((resolve, reject) => {
+		const link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href = href;
+		link.onload = resolve;
+		link.onerror = () => reject(new Error("The local Camera Archive Leaflet stylesheet did not load."));
+		document.head.appendChild(link);
+	});
+}
+
+function require_map_leaflet() {
+	if (cam_map_leaflet) return Promise.resolve(cam_map_leaflet);
+	if (!cam_map_leaflet_promise) {
+		const previous_leaflet = window.L;
+		cam_map_leaflet_promise = Promise.all([
+			require_map_leaflet_css(),
+			frappe.require("/assets/camera_archive_management/vendor/leaflet/leaflet.js")
+		]).then(() => {
+			const leaflet = window.L;
+			window.L = previous_leaflet;
+			if (!leaflet || typeof leaflet.map !== "function") {
+				throw new Error("The local Camera Archive Leaflet runtime did not load.");
+			}
+			cam_map_leaflet = leaflet;
+			return leaflet;
+		}).catch((error) => {
+			window.L = previous_leaflet;
+			cam_map_leaflet_promise = null;
+			throw error;
+		});
+	}
+	return cam_map_leaflet_promise;
+}
+
 frappe.pages["camera-archive-map"].on_page_load = function (wrapper) {
+	require_map_leaflet().then((leaflet) => initialize_map_page(wrapper, leaflet)).catch((error) => {
+		frappe.msgprint({ title: __("Camera map"), message: error.message, indicator: "red" });
+	});
+};
+
+function initialize_map_page(wrapper, leaflet) {
 	const page = frappe.ui.make_app_page({ parent: wrapper, title: __("Camera Archive Map"), single_column: true });
+	page.cam_leaflet = leaflet;
 	page.set_primary_action(__("Refresh"), () => load_map(page), "refresh");
 	page.cam_map_options = Object.assign(
 		{ camera: null, vehicle: null, event: null },
@@ -49,7 +99,7 @@ frappe.pages["camera-archive-map"].on_page_load = function (wrapper) {
 	}
 	page.$filter_note = $(host.querySelector(".cam-map-filter-note"));
 	update_filter_note(page);
-	page.cam_map = L.map(host.querySelector(".cam-map-canvas"), { zoomControl: true }).setView([52.37, 4.90], 5);
+	page.cam_map = leaflet.map(host.querySelector(".cam-map-canvas"), { zoomControl: true }).setView([52.37, 4.90], 5);
 	if (!page.cam_map_route_listener && frappe.router?.on) {
 		page.cam_map_route_listener = () => {
 			const current_route = frappe.get_route() || [];
@@ -59,8 +109,8 @@ frappe.pages["camera-archive-map"].on_page_load = function (wrapper) {
 	}
 	page.cam_base_layers = {};
 	page.cam_overlay = null;
-	page.cam_markers = L.featureGroup().addTo(page.cam_map);
-	page.cam_tracks = L.featureGroup().addTo(page.cam_map);
+	page.cam_markers = leaflet.featureGroup().addTo(page.cam_map);
+	page.cam_tracks = leaflet.featureGroup().addTo(page.cam_map);
 	host.querySelector(".cam-map-apply").addEventListener("click", () => {
 		read_filter_controls(page);
 		update_filter_note(page);
@@ -221,6 +271,7 @@ function pageOrigin() {
 }
 
 function set_basemap(page) {
+	const leaflet = page.cam_leaflet;
 	const selected = page.main.find(".cam-map-layer").val() || "standard";
 	const map = page.cam_map;
 	Object.values(page.cam_base_layers).forEach((layer) => {
@@ -228,13 +279,13 @@ function set_basemap(page) {
 	});
 	if (page.cam_overlay && map.hasLayer(page.cam_overlay)) map.removeLayer(page.cam_overlay);
 	const attributions = { standard: "© OpenStreetMap contributors", aerial: "© Esri", hybrid: "© Esri" };
-	const base = page.cam_base_layers[selected] || L.tileLayer(tile_template(selected, "base", page.cam_map_context), {
+	const base = page.cam_base_layers[selected] || leaflet.tileLayer(tile_template(selected, "base", page.cam_map_context), {
 		minZoom: 0, maxZoom: 19, attribution: attributions[selected], crossOrigin: false
 	});
 	page.cam_base_layers[selected] = base;
 	base.addTo(map);
 	if (selected === "hybrid") {
-		page.cam_overlay = page.cam_overlay || L.tileLayer(tile_template("hybrid", "overlay", page.cam_map_context), {
+		page.cam_overlay = page.cam_overlay || leaflet.tileLayer(tile_template("hybrid", "overlay", page.cam_map_context), {
 			minZoom: 0, maxZoom: 19, attribution: "© Esri", opacity: 1
 		});
 		page.cam_overlay.addTo(map);
@@ -258,22 +309,22 @@ function image_node(url, alt, class_name) {
 	return image;
 }
 
-function camera_icon(camera) {
+function camera_icon(camera, leaflet) {
 	const shell = node("div", "cam-pin cam-camera-pin");
 	const primary = camera.photos.find((photo) => photo.primary) || camera.photos[0];
 	const photo = primary && image_node(primary.url, camera.label, "cam-pin-image");
 	if (photo) shell.append(photo);
 	else shell.append(node("span", "cam-pin-fallback", "◉"));
 	if (camera.photos.length > 1) shell.append(node("span", "cam-pin-count", camera.photos.length));
-	return L.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 48], iconAnchor: [24, 24], popupAnchor: [0, -24] });
+	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 48], iconAnchor: [24, 24], popupAnchor: [0, -24] });
 }
 
-function vehicle_icon(movement) {
+function vehicle_icon(movement, leaflet) {
 	const shell = node("div", "cam-pin cam-vehicle-pin");
 	const image = image_node(movement.vehicle_image, movement.vehicle_name, "cam-pin-image");
 	if (image) shell.append(image);
 	else shell.append(node("span", "cam-pin-fallback", "🚘"));
-	return L.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [44, 44], iconAnchor: [22, 22], popupAnchor: [0, -22] });
+	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [44, 44], iconAnchor: [22, 22], popupAnchor: [0, -22] });
 }
 
 function camera_popup(camera) {
@@ -353,6 +404,7 @@ function add_movement_card(page, movement) {
 }
 
 async function load_map(page) {
+	const leaflet = page.cam_leaflet;
 	const request_id = (page.cam_map_request_id || 0) + 1;
 	page.cam_map_request_id = request_id;
 	read_filter_controls(page);
@@ -378,7 +430,7 @@ async function load_map(page) {
 		const data = response.message || { cameras: [], movements: [] };
 		const positions = [];
 		for (const camera of data.cameras || []) {
-			const marker = L.marker([Number(camera.latitude), Number(camera.longitude)], { icon: camera_icon(camera) });
+			const marker = leaflet.marker([Number(camera.latitude), Number(camera.longitude)], { icon: camera_icon(camera, leaflet) });
 			marker.cam_record_name = camera.name;
 			marker.bindPopup(camera_popup(camera), { maxWidth: 320, minWidth: 220 });
 			page.cam_markers.addLayer(marker);
@@ -387,7 +439,7 @@ async function load_map(page) {
 		const tracks = new Map();
 		for (const movement of data.movements || []) {
 			const point = [Number(movement.latitude), Number(movement.longitude)];
-			const marker = L.marker(point, { icon: vehicle_icon(movement), zIndexOffset: 500 });
+			const marker = leaflet.marker(point, { icon: vehicle_icon(movement, leaflet), zIndexOffset: 500 });
 			marker.cam_record_name = movement.name;
 			marker.bindPopup(movement_popup(movement), { maxWidth: 300 });
 			page.cam_markers.addLayer(marker);
@@ -398,11 +450,11 @@ async function load_map(page) {
 			add_movement_card(page, movement);
 		}
 		for (const points of tracks.values()) {
-			if (points.length > 1) L.polyline(points, { color: "#f97316", weight: 3, opacity: 0.65 }).addTo(page.cam_tracks);
+			if (points.length > 1) leaflet.polyline(points, { color: "#f97316", weight: 3, opacity: 0.65 }).addTo(page.cam_tracks);
 		}
 		summary.textContent = __("{0} cameras · {1} vehicle movements", [data.cameras.length, data.movements.length]);
 		if (positions.length === 1) page.cam_map.setView(positions[0], 14);
-		else if (positions.length > 1) page.cam_map.fitBounds(L.latLngBounds(positions).pad(0.12), { maxZoom: 14 });
+		else if (positions.length > 1) page.cam_map.fitBounds(leaflet.latLngBounds(positions).pad(0.12), { maxZoom: 14 });
 		else page.cam_map.setView([52.37, 4.90], 5);
 	} catch (error) {
 		if (request_id !== page.cam_map_request_id) return;
