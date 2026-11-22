@@ -7,9 +7,6 @@ description = "Camera inventory, archive management, motion events, and offline-
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
-dependencies = [
-    "frappe>=15,<16",
-]
 
 [project.optional-dependencies]
 geo = [
@@ -23,6 +20,12 @@ build-backend = "flit_core.buildapi"
 # These dependencies are only installed when developer mode is enabled
 [tool.bench.dev-dependencies]
 # package_name = "~=1.1.0"
+
+# Frappe is provided by Bench and must not be re-resolved as a PyPI dependency:
+# the v15 checkout includes URL dependencies that uv cannot resolve transitively.
+[tool.camera_archive_management]
+frappe-version = ">=15,<16"
+frappe-branch = "version-15"
 
 # These apt dependencies will be installed from Ubuntu repositories when you host your app on Frappe Cloud
 [deploy.dependencies.apt]
