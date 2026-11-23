@@ -11,5 +11,5 @@
  "reference_report": "Camera Coverage",
  "report_type": "Script Report",
  "report_reference_doctype": "Camera",
- "report_description": "Review the spatial and status coverage of registered cameras. Filter to the intended area, compare located versus unlocated records, and investigate duplicates or stale/inactive devices before interpreting gaps as real coverage gaps."
+ "report_description": "Compare camera location and status by area; investigate gaps, duplicates, and stale devices."
 }

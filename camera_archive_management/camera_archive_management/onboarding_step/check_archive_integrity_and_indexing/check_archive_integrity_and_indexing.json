@@ -11,5 +11,5 @@
  "reference_report": "Archive Integrity",
  "report_type": "Script Report",
  "report_reference_doctype": "Archive Asset",
- "report_description": "Review checksum, retention, external-reference, ingest, and indexing health. Resolve missing or mismatched checksums, failed indexes, and invalid references according to approved retention and incident procedures."
+ "report_description": "Review checksum, retention, ingest, and index health; investigate failures and invalid references."
 }

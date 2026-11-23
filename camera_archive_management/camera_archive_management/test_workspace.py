@@ -131,6 +131,21 @@ def _onboarding_is_deep_and_valid():
 		assert ordered.index(earlier) < ordered.index(later)
 
 
+def _onboarding_data_fields_fit_frappe_limits():
+	"""Frappe Data fields default to 140 chars; long guidance belongs in Markdown descriptions."""
+	for kind in ("module_onboarding", "onboarding_step", "number_card"):
+		for name, record in _records(kind).items():
+			for fieldname in (
+				"name", "title", "subtitle", "success_message", "documentation_url", "action_label",
+				"path", "reference_document", "reference_report", "report_description", "label", "module",
+			):
+				value = record.get(fieldname)
+				if isinstance(value, str):
+					assert len(value) <= 140, (
+						f"{kind}/{name}.{fieldname} is {len(value)} chars; Frappe Data fields allow 140"
+					)
+
+
 def _number_cards_use_real_fields():
 	doctypes = _doctypes()
 	cards = _records("number_card")
@@ -181,6 +196,9 @@ class WorkspaceContractTests(unittest.TestCase):
 
 	def test_onboarding_is_deep_and_valid(self):
 		_onboarding_is_deep_and_valid()
+
+	def test_onboarding_data_fields_fit_frappe_limits(self):
+		_onboarding_data_fields_fit_frappe_limits()
 
 	def test_number_cards_use_real_fields(self):
 		_number_cards_use_real_fields()

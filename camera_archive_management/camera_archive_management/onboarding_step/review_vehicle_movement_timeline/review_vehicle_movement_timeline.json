@@ -11,5 +11,5 @@
  "reference_report": "Vehicle Movement Timeline",
  "report_type": "Script Report",
  "report_reference_doctype": "Motion Event",
- "report_description": "Review event timestamps, cameras, directions, and linked vehicle identities. Validate timezone interpretation and chronological ordering; treat unlinked/uncertain identities as unknown rather than filling gaps with guesses."
+ "report_description": "Check event times, direction, camera, and vehicle links; verify timezone and chronology."
 }
