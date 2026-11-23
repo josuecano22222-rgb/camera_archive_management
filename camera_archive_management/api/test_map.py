@@ -220,6 +220,7 @@ class TestMapEndpoint(FrappeTestCase):
 		with (
 			patch.object(frappe, "has_permission", return_value=True),
 			patch.object(frappe, "get_list", side_effect=[[camera], [event]]) as get_list,
+			patch.object(frappe, "get_all", return_value=[]) as get_all,
 		):
 			result = map_api.map_payload(camera_status="Maintenance", area="AREA-1")
 
@@ -229,6 +230,7 @@ class TestMapEndpoint(FrappeTestCase):
 			"status": "Maintenance", "area": "AREA-1", "is_demo_record": 0,
 		})
 		self.assertEqual(get_list.call_args_list[1].kwargs["filters"]["camera"], ["in", [camera.name]])
+		self.assertEqual(get_all.call_args.kwargs["filters"], {"parent": ["in", [event.name]]})
 
 	def test_movement_payload_includes_camera_snapshots_and_nearby_camera_context(self):
 		event = frappe._dict(

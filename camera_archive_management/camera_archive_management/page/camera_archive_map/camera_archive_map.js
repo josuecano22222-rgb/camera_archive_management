@@ -1353,6 +1353,62 @@ function image_node(url, alt, class_name, page) {
 }
 
 function camera_icon(camera, leaflet, page, selected = false) {
+	return siraj_camera_pin_icon(camera, leaflet, page, selected) || camera_icon_fallback(camera, leaflet, page, selected);
+}
+
+function siraj_camera_pin_icon(camera, leaflet, page, selected = false) {
+	if (!window.sirajIcons?.pin || !leaflet?.divIcon) return null;
+	const size = 32;
+	const status = String(camera.status || "").toLowerCase();
+	const color = window.sirajColours?.Camera || "#3577c0";
+	const ring = status === "active" ? "#16a34a" : status === "inactive" ? "#64748b" : status === "maintenance" ? "#f59e0b" : color;
+	const host = document.createElement("div");
+	host.innerHTML = window.sirajIcons.pin("Camera", color, size, {
+		state: selected ? "selected" : status === "active" ? "active" : status === "inactive" ? "inactive" : undefined,
+		ring,
+		dot: false,
+	});
+	const pin = host.querySelector(".siraj-pin");
+	const body = pin?.querySelector(".siraj-pin-body");
+	if (!pin || !body) return null;
+	pin.classList.add("cam-camera-pin");
+	pin.setAttribute("aria-label", `${camera.label || camera.name} · ${camera.status || __("Unknown status")}`);
+	if (camera.is_demo_record) pin.classList.add("cam-pin-demo");
+	body.replaceChildren(camera_pin_glyph());
+	const photos = Array.isArray(camera.photos) ? camera.photos : [];
+	const primary = photos.find((photo) => photo.primary && photo.url)
+		|| photos.find((photo) => photo.url);
+	if (primary) {
+		const photo = image_node(primary.url, camera.label, "cam-siraj-pin-photo", page);
+		if (photo) {
+			photo.addEventListener("error", () => photo.replaceWith(camera_pin_glyph()), { once: true });
+			body.replaceChildren(photo);
+		}
+	}
+	if (photos.length > 1) {
+		const count = node("span", "cam-siraj-photo-count", photos.length);
+		count.setAttribute("aria-label", __("{0} photos", [photos.length]));
+		pin.append(count);
+	}
+	return leaflet.divIcon({
+		className: "sx-pin-wrapper cam-leaflet-icon",
+		iconSize: [size, Math.round(size * 1.15)],
+		iconAnchor: [size / 2, Math.round(size * 1.15)],
+		popupAnchor: [0, -Math.round(size * 0.8)],
+		tooltipAnchor: [0, -Math.round(size * 0.5)],
+		html: host,
+	});
+}
+
+function camera_pin_glyph() {
+	const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.setAttribute("viewBox", "0 0 24 24");
+	svg.setAttribute("aria-hidden", "true");
+	svg.innerHTML = '<path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/><path d="M18 10h.01"/>';
+	return svg;
+}
+
+function camera_icon_fallback(camera, leaflet, page, selected = false) {
 	const status = ["Active", "Inactive", "Maintenance"].includes(camera.status) ? camera.status.toLowerCase() : "unknown";
 	const shell = node("div", `cam-pin cam-camera-pin cam-camera-status-${status}${selected ? " cam-pin-selected" : ""}${camera.is_demo_record ? " cam-pin-demo" : ""}`);
 	shell.setAttribute("aria-label", `${camera.label} · ${camera.status || __("Unknown status")}`);
@@ -1388,10 +1444,13 @@ function schedule_camera_popup_close(page, marker) {
 
 function select_camera_marker(page, marker) {
 	const previous = page.cam_selected_camera_marker?.getElement()?.querySelector(".cam-camera-pin");
-	if (previous) previous.classList.remove("cam-pin-selected");
+	if (previous) previous.classList.remove("is-selected", "cam-pin-selected");
 	page.cam_selected_camera_marker = marker;
 	const selected = marker.getElement()?.querySelector(".cam-camera-pin");
-	if (selected) selected.classList.add("cam-pin-selected");
+	if (selected) {
+		selected.classList.add("is-selected");
+		if (!selected.classList.contains("siraj-pin")) selected.classList.add("cam-pin-selected");
+	}
 	const camera = page.cam_current_map_data?.cameras?.find((row) => row.name === marker.cam_record_name);
 	if (camera) {
 		page.cam_last_coordinate_text = `${camera.latitude}, ${camera.longitude}`;

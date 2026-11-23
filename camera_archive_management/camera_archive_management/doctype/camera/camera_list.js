@@ -44,6 +44,9 @@ function install_camera_map_view_override() {
 			marker.bindPopup(popup, { maxWidth: 360, minWidth: 280, maxHeight: Math.max(120, Math.min(720, Math.floor(this.map.getContainer().clientHeight * 0.76))), autoClose: true, closeOnClick: true, autoPan: true, autoPanPaddingTopLeft: [16, 72], autoPanPaddingBottomRight: [16, 20], keepInView: true });
 			marker.on("click", (event) => {
 				this.__camPinnedCamera = marker;
+				const pin = marker.getElement()?.querySelector(".cam-camera-pin");
+				pin?.classList.add("is-selected");
+				if (pin && !pin.classList.contains("siraj-pin")) pin.classList.add("cam-pin-selected");
 				event.originalEvent?.stopPropagation();
 				marker.openPopup();
 			});
@@ -58,6 +61,8 @@ function install_camera_map_view_override() {
 				element?.addEventListener("mouseleave", () => schedule_native_camera_popup_close(this, marker));
 			});
 			marker.on("popupclose", () => {
+				const pin = marker.getElement()?.querySelector(".cam-camera-pin");
+				pin?.classList.remove("is-selected", "cam-pin-selected");
 				if (this.__camPinnedCamera === marker) this.__camPinnedCamera = null;
 			});
 			this.markerLayer.addLayer(marker);
@@ -132,6 +137,67 @@ function schedule_native_camera_popup_close(mapView, marker) {
 }
 
 function camera_map_icon(camera) {
+	return siraj_camera_pin_icon(camera, L) || camera_map_icon_fallback(camera);
+}
+
+function siraj_camera_pin_icon(camera, leaflet, selected = false) {
+	if (!window.sirajIcons?.pin || !leaflet?.divIcon) return null;
+	const size = 32;
+	const status = String(camera.status || "").toLowerCase();
+	const color = window.sirajColours?.Camera || "#3577c0";
+	const ring = status === "active" ? "#16a34a" : status === "inactive" ? "#64748b" : status === "maintenance" ? "#f59e0b" : color;
+	const host = document.createElement("div");
+	host.innerHTML = window.sirajIcons.pin("Camera", color, size, {
+		state: selected ? "selected" : status === "active" ? "active" : status === "inactive" ? "inactive" : undefined,
+		ring,
+		dot: false,
+	});
+	const pin = host.querySelector(".siraj-pin");
+	const body = pin?.querySelector(".siraj-pin-body");
+	if (!pin || !body) return null;
+	pin.classList.add("cam-camera-pin");
+	pin.setAttribute("aria-label", `${camera.label || camera.name} · ${camera.status || __("Unknown status")}`);
+	if (camera.is_demo_record) pin.classList.add("cam-pin-demo");
+	body.replaceChildren(camera_pin_glyph());
+	const photos = Array.isArray(camera.photos) ? camera.photos : [];
+	const primary = photos.find((photo) => photo.primary && safe_camera_image_url(photo.url))
+		|| photos.find((photo) => safe_camera_image_url(photo.url));
+	if (primary) {
+		const image = document.createElement("img");
+		image.className = "cam-siraj-pin-photo";
+		image.alt = camera.label || camera.name || __("Camera image");
+		image.loading = "lazy";
+		image.referrerPolicy = "same-origin";
+		image.src = primary.url;
+		image.addEventListener("error", () => image.replaceWith(camera_pin_glyph()), { once: true });
+		body.replaceChildren(image);
+	}
+	if (photos.length > 1) {
+		const count = document.createElement("span");
+		count.className = "cam-siraj-photo-count";
+		count.textContent = String(photos.length);
+		count.setAttribute("aria-label", __("{0} photos", [photos.length]));
+		pin.append(count);
+	}
+	return leaflet.divIcon({
+		className: "sx-pin-wrapper cam-leaflet-icon",
+		iconSize: [size, Math.round(size * 1.15)],
+		iconAnchor: [size / 2, Math.round(size * 1.15)],
+		popupAnchor: [0, -Math.round(size * 0.8)],
+		tooltipAnchor: [0, -Math.round(size * 0.5)],
+		html: host,
+	});
+}
+
+function camera_pin_glyph() {
+	const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.setAttribute("viewBox", "0 0 24 24");
+	svg.setAttribute("aria-hidden", "true");
+	svg.innerHTML = '<path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.5"/><path d="M18 10h.01"/>';
+	return svg;
+}
+
+function camera_map_icon_fallback(camera) {
 	const shell = document.createElement("div");
 	shell.className = `cam-pin cam-camera-pin cam-camera-status-${String(camera.status || "unknown").toLowerCase()}${camera.is_demo_record ? " cam-pin-demo" : ""}`;
 	shell.setAttribute("aria-label", `${camera.label || camera.name} · ${camera.status || __("Unknown status")}`);
