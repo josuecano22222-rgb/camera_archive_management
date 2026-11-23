@@ -1361,14 +1361,21 @@ function camera_icon(camera, leaflet, page, selected = false) {
 		|| camera.photos.find((photo) => photo.primary)
 		|| camera.photos[0];
 	const photo = primary?.url && image_node(primary.url, camera.label, "cam-pin-image", page);
-	if (photo) shell.append(photo);
-	else {
-		const fallback = node("span", "cam-pin-fallback", camera.photos.length ? "▧" : "◉");
+	if (photo) {
+		photo.addEventListener("error", () => photo.replaceWith(camera_pin_initials(camera)), { once: true });
+		shell.append(photo);
+	} else {
+		const fallback = camera_pin_initials(camera);
 		if (camera.photos.length) fallback.title = __("Camera images are unavailable");
 		shell.append(fallback);
 	}
 	if (camera.photos.length > 1) shell.append(node("span", "cam-pin-count", camera.photos.length));
 	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 62], iconAnchor: [24, 62], popupAnchor: [0, -58] });
+}
+
+function camera_pin_initials(camera) {
+	const initials = String(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
+	return node("span", "cam-pin-fallback", initials || "◉");
 }
 
 function schedule_camera_popup_close(page, marker) {
@@ -1426,28 +1433,53 @@ function add_record_link(container, label, doctype, name, primary = false) {
 function camera_detail_card(camera, page) {
 	const card = node("section", "cam-camera-detail-card");
 	const avatar = node("div", "cam-camera-card-avatar");
-	const primaryPhoto = (camera.photos || []).find((photo) => photo.primary && photo.url)
-		|| (camera.photos || []).find((photo) => photo.url);
+	const photos = camera.photos || [];
+	const primaryPhoto = photos.find((photo) => photo.primary && photo.url)
+		|| photos.find((photo) => photo.url);
 	const avatarImage = primaryPhoto && image_node(primaryPhoto.url, camera.label, "cam-camera-card-image", page);
-	avatar.append(avatarImage || node("span", "cam-camera-card-fallback", "◉"));
+	if (avatarImage) {
+		avatarImage.addEventListener("error", () => avatarImage.replaceWith(node("span", "cam-camera-card-fallback", camera_pin_initials(camera).textContent)), { once: true });
+		avatar.setAttribute("role", "button");
+		avatar.tabIndex = 0;
+		avatar.setAttribute("aria-label", __("View camera photo gallery"));
+		const openGallery = () => card.closest(".cam-map-popup")?.querySelector(".cam-gallery-frame")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+		avatar.addEventListener("click", openGallery);
+		avatar.addEventListener("keydown", (event) => {
+			if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openGallery(); }
+		});
+		avatar.append(avatarImage);
+	} else {
+		const initials = String(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
+		avatar.append(node("span", "cam-camera-card-fallback", initials || "◉"));
+	}
 	const heading = node("div", "cam-camera-card-heading");
-	heading.append(node("strong", "cam-camera-card-title", camera.label));
-	heading.append(node("span", "cam-camera-card-subtitle", [camera.camera_type, camera.status].filter(Boolean).join(" · ") || __("Camera details")));
+	heading.append(node("strong", "cam-camera-card-title", camera.label || camera.name));
+	heading.append(node("span", "cam-camera-card-subtitle", [camera.name, camera.camera_type, camera.status].filter(Boolean).join(" · ") || __("Camera details")));
 	card.append(avatar, heading);
 	if (camera.is_demo_record) card.append(node("span", "cam-demo-badge", __("SYNTHETIC DEMO DATA")));
 	card.append(node("hr", "cam-camera-card-divider"));
 	const sections = node("div", "cam-camera-card-sections");
+	const endpoint = [camera.ip_address, camera.port ? `:${camera.port}` : ""].join("");
 	for (const [label, value] of [
-		["Exact coordinates", `${camera.latitude}, ${camera.longitude}`],
-		["Area / category", [camera.area, camera.camera_type].filter(Boolean).join(" · ")],
-		["Operational status", [camera.status, camera.importance].filter(Boolean).join(" · ")],
-		["Coverage / activity", [camera.field_of_view, __("{0} photos", [camera.photos?.length || 0]), __("{0} recent events", [camera.movement_count || 0])].filter(Boolean).join(" · ")],
+		["Coordinates", `${camera.latitude ?? ""}, ${camera.longitude ?? ""}`],
+		["Area & Address", [camera.area, camera.address].filter(Boolean).join(" · ")],
+		["Type & Endpoint", [camera.camera_type, camera.importance, endpoint].filter(Boolean).join(" · ")],
 	]) {
 		const section = node("div", "cam-camera-card-section");
 		section.append(node("span", "cam-camera-card-label", __(label)));
 		section.append(node("strong", "cam-camera-card-value", value || __("Not recorded")));
 		sections.append(section);
 	}
+	const activity = node("div", "cam-camera-card-section");
+	activity.append(node("span", "cam-camera-card-label", __("Status & Activity")));
+	activity.append(node("strong", "cam-camera-card-value", [camera.status || __("Unknown status"), __("{0} photos", [photos.length]), camera.latest_activity].filter(Boolean).join(" · ")));
+	if (!camera.latest_activity) {
+		const open = node("button", "cam-camera-card-action", __("Open Camera"));
+		open.type = "button";
+		open.addEventListener("click", () => frappe.set_route("Form", "Camera", camera.name));
+		activity.append(open);
+	}
+	sections.append(activity);
 	card.append(sections);
 	return card;
 }
@@ -1477,6 +1509,7 @@ function camera_popup(camera, page, movements) {
 		const update = () => {
 			const current = photos[index];
 			const image = current.url ? image_node(current.url, camera.label, "cam-gallery-image", page) : null;
+			if (image) image.addEventListener("error", () => image.replaceWith(node("span", "cam-image-unavailable", __("Image unavailable"))), { once: true });
 			frame.replaceChildren(image || node("span", "cam-image-unavailable", __("Image unavailable")));
 			caption.textContent = current.caption || current.description || "";
 			count.textContent = `${index + 1} / ${photos.length}`;
@@ -1584,7 +1617,10 @@ function render_map_payload(page, data, { offline = false, savedAt = null, fit =
 	);
 	const positions = [];
 	for (const camera of data.cameras || []) {
-		camera.movement_count = page.cam_movement_data.filter((movement) => movement.camera === camera.name).length;
+		const cameraMovements = page.cam_movement_data.filter((movement) => movement.camera === camera.name);
+		camera.movement_count = cameraMovements.length;
+		const latestMovement = cameraMovements[cameraMovements.length - 1];
+		camera.latest_activity = latestMovement ? [latestMovement.motion_type, latestMovement.detected_at].filter(Boolean).join(" · ") : "";
 		const marker = leaflet.marker([Number(camera.latitude), Number(camera.longitude)], { icon: camera_icon(camera, leaflet, page) });
 		marker.cam_record_name = camera.name;
 		marker.on("click", (event) => {
@@ -1599,7 +1635,7 @@ function render_map_payload(page, data, { offline = false, savedAt = null, fit =
 		});
 		marker.on("mouseout", () => schedule_camera_popup_close(page, marker));
 		marker.bindPopup(camera_popup(camera, page, page.cam_movement_data), {
-			maxWidth: 340, minWidth: 240, autoClose: true, closeOnClick: true,
+			maxWidth: 360, minWidth: 280, maxHeight: Math.max(120, Math.min(720, Math.floor(page.cam_map.getContainer().clientHeight * 0.76))), autoClose: true, closeOnClick: true, autoPan: true, autoPanPaddingTopLeft: [16, 72], autoPanPaddingBottomRight: [16, 20], keepInView: true,
 		});
 		marker.on("popupopen", (event) => {
 			select_camera_marker(page, marker);

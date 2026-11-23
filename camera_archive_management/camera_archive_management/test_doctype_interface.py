@@ -102,6 +102,21 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn("marker.openPopup()", camera_list_script)
 		self.assertIn("originalEvent?.stopPropagation()", camera_list_script)
 		self.assertIn("disableClickPropagation", camera_list_script)
+		self.assertIn("autoPanPaddingTopLeft", camera_list_script)
+		self.assertIn("Area & Address", camera_list_script)
+		self.assertIn("Type & Endpoint", camera_list_script)
+		self.assertIn("Status & Activity", camera_list_script)
+		self.assertIn("View camera photo gallery", camera_list_script)
+		self.assertIn("ip_address", camera_list_script)
+		self.assertNotIn('"username"', camera_list_script)
+		self.assertNotIn('"password"', camera_list_script)
+		self.assertIn("camera_pin_initials", map_script_text)
+		self.assertIn("camera.latest_activity", map_script_text)
+		self.assertIn("autoPanPaddingTopLeft", map_script_text)
+		self.assertIn("Area & Address", map_script_text)
+		self.assertIn("Type & Endpoint", map_script_text)
+		self.assertIn("Status & Activity", map_script_text)
+		self.assertIn("cam-camera-detail-card", (Path(__file__).parents[1] / "public" / "css" / "camera_archive.css").read_text(encoding="utf-8"))
 		for feature in (
 			"Measure distance", "Measure area", "Locate me", "Country borders", "cam-map-time", "include_demo",
 			"cam-map-activity-chart", "render_map_insights", "data-kpi-vehicles",

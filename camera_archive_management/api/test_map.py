@@ -84,7 +84,8 @@ class TestMapEndpoint(FrappeTestCase):
 		camera = frappe._dict(
 			name="CAM-MAP-1", camera_name="West Quay", status="Active", camera_type="PTZ",
 			importance="High", area="AREA-WEST", serial_number="SN-MAP-1", camera_number="C-17",
-			installation_date="2024-08-09", address="Harbour road", latitude="52.3700000009",
+			installation_date="2024-08-09", address="Harbour road", ip_address="10.0.0.7", port=554,
+			latitude="52.3700000009",
 			longitude="4.8900000008", geo_admin_area="Amsterdam", geo_boundary="BOUNDARY-1",
 			field_of_view="West quay approach", description="Outdoor fixed view", lookup_source="manual",
 			lookup_confidence=1.0, lookup_ambiguous=0, lookup_resolved_at=None,
@@ -100,6 +101,10 @@ class TestMapEndpoint(FrappeTestCase):
 		self.assertEqual(feature["properties"]["latitude"], "52.3700000009")
 		self.assertEqual(feature["properties"]["longitude"], "4.8900000008")
 		self.assertEqual(feature["properties"]["camera_type"], "PTZ")
+		self.assertEqual(feature["properties"]["ip_address"], "10.0.0.7")
+		self.assertEqual(feature["properties"]["port"], 554)
+		self.assertNotIn("username", feature["properties"])
+		self.assertNotIn("password", feature["properties"])
 		self.assertEqual(feature["properties"]["photos"], [])
 		self.assertEqual(feature["geometry"]["coordinates"], [4.8900000008, 52.3700000009])
 		self.assertEqual(get_list.call_args.kwargs["filters"], [["Camera", "status", "=", "Active"]])
@@ -127,6 +132,8 @@ class TestMapEndpoint(FrappeTestCase):
 			camera_number="CAM-01",
 			installation_date="2024-02-03",
 			address="",
+			ip_address="192.0.2.15",
+			port=443,
 			latitude="52.370000000",
 			longitude="4.8900",
 			field_of_view="North entrance",
@@ -157,6 +164,10 @@ class TestMapEndpoint(FrappeTestCase):
 		self.assertEqual(result["cameras"][0]["latitude"], "52.370000000")
 		self.assertEqual(result["cameras"][0]["longitude"], "4.8900")
 		self.assertEqual(result["cameras"][0]["serial_number"], "SN-EXACT-1")
+		self.assertEqual(result["cameras"][0]["ip_address"], "192.0.2.15")
+		self.assertEqual(result["cameras"][0]["port"], 443)
+		self.assertNotIn("username", result["cameras"][0])
+		self.assertNotIn("password", result["cameras"][0])
 		self.assertEqual(result["cameras"][0]["field_of_view"], "North entrance")
 		self.assertEqual(len(result["cameras"][0]["photos"]), 2)
 		self.assertTrue(result["cameras"][0]["photos"][1]["unavailable"])

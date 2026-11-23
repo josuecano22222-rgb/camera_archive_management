@@ -693,6 +693,12 @@ Location source,مصدر الموقع
 Location confidence,دقة الموقع
 Location ambiguous,التباس الموقع
 Resolved at,وقت تحديد الموقع
+Area & Address,المنطقة والعنوان
+Type & Endpoint,النوع ونقطة الاتصال
+Status & Activity,الحالة والنشاط
+More camera details,مزيد من تفاصيل الكاميرا
+View camera photo gallery,عرض معرض صور الكاميرا
+Camera image unavailable,صورة الكاميرا غير متاحة
 Camera image unavailable offline,صورة الكاميرا غير متاحة دون اتصال
 Loading shared Siraj map tiles…,جارٍ تحميل خرائط سيراج المشتركة…
 No Siraj raster layer is enabled; camera points remain available.,لا توجد طبقة خرائط نقطية مفعّلة في سيراج؛ تظل نقاط الكاميرات متاحة.

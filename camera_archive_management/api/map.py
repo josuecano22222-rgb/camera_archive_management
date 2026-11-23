@@ -81,7 +81,7 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 	if doctype == "Camera":
 		fields.extend([
 			"camera_name", "status", "camera_type", "importance", "area", "serial_number", "camera_number",
-			"installation_date", "address", "geo_admin_area", "geo_boundary", "field_of_view", "description",
+			"installation_date", "address", "ip_address", "port", "geo_admin_area", "geo_boundary", "field_of_view", "description",
 			"lookup_source", "lookup_confidence", "lookup_ambiguous", "lookup_resolved_at",
 			"camera_photos_json", "primary_image", "is_demo_record",
 		])
@@ -130,6 +130,8 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 				"camera_number": row.camera_number or "",
 				"installation_date": str(row.installation_date) if row.installation_date else "",
 				"address": row.address or "",
+				"ip_address": row.ip_address or "",
+				"port": row.port or "",
 				"latitude": str(latitude),
 				"longitude": str(longitude),
 				"geo_admin_area": row.geo_admin_area or "",
@@ -287,7 +289,7 @@ def map_payload(
 		filters=camera_filters,
 		fields=[
 			"name", "camera_name", "status", "camera_type", "importance", "area", "serial_number",
-			"camera_number", "installation_date", "address", "latitude", "longitude", "geo_admin_area",
+			"camera_number", "installation_date", "address", "ip_address", "port", "latitude", "longitude", "geo_admin_area",
 			"geo_boundary", "field_of_view", "description", "lookup_source", "lookup_confidence",
 			"lookup_ambiguous", "lookup_resolved_at", "camera_photos_json", "primary_image", "is_demo_record",
 		],
@@ -417,6 +419,8 @@ def map_payload(
 			"camera_number": row.camera_number or "",
 			"installation_date": str(row.installation_date) if row.installation_date else "",
 			"address": row.address or "",
+			"ip_address": row.ip_address or "",
+			"port": row.port or "",
 			"latitude": str(lat),
 			"longitude": str(lon),
 			"geo_admin_area": row.geo_admin_area,

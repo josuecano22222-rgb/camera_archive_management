@@ -693,6 +693,12 @@ Location source,Location source
 Location confidence,Location confidence
 Location ambiguous,Location ambiguous
 Resolved at,Resolved at
+Area & Address,Area & Address
+Type & Endpoint,Type & Endpoint
+Status & Activity,Status & Activity
+More camera details,More camera details
+View camera photo gallery,View camera photo gallery
+Camera image unavailable,Camera image unavailable
 Camera image unavailable offline,Camera image unavailable offline
 Loading shared Siraj map tiles…,Loading shared Siraj map tiles…
 No Siraj raster layer is enabled; camera points remain available.,No Siraj raster layer is enabled; camera points remain available.

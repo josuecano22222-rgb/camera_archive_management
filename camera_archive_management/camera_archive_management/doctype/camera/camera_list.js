@@ -41,7 +41,7 @@ function install_camera_map_view_override() {
 			if (!Number.isFinite(Number(latitude)) || !Number.isFinite(Number(longitude))) continue;
 			const marker = L.marker([Number(latitude), Number(longitude)], { icon: camera_map_icon(feature.properties || {}) });
 			const popup = camera_map_popup(feature.properties || {});
-			marker.bindPopup(popup, { maxWidth: 360, minWidth: 280, autoClose: true, closeOnClick: true, autoPan: true });
+			marker.bindPopup(popup, { maxWidth: 360, minWidth: 280, maxHeight: Math.max(120, Math.min(720, Math.floor(this.map.getContainer().clientHeight * 0.76))), autoClose: true, closeOnClick: true, autoPan: true, autoPanPaddingTopLeft: [16, 72], autoPanPaddingBottomRight: [16, 20], keepInView: true });
 			marker.on("click", (event) => {
 				this.__camPinnedCamera = marker;
 				event.originalEvent?.stopPropagation();
@@ -146,11 +146,11 @@ function camera_map_icon(camera) {
 		image.referrerPolicy = "same-origin";
 		image.src = primary.url;
 		image.addEventListener("error", () => {
-			image.replaceWith(camera_pin_fallback());
+			image.replaceWith(camera_pin_fallback(camera));
 		}, { once: true });
 		shell.append(image);
 	} else {
-		shell.append(camera_pin_fallback());
+		shell.append(camera_pin_fallback(camera));
 	}
 	if (photos.length > 1) {
 		const count = document.createElement("span");
@@ -161,10 +161,17 @@ function camera_map_icon(camera) {
 	return L.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 62], iconAnchor: [24, 62], popupAnchor: [0, -58] });
 }
 
-function camera_pin_fallback() {
+function camera_pin_fallback(camera = {}) {
 	const fallback = document.createElement("span");
 	fallback.className = "cam-pin-fallback";
-	fallback.textContent = "◉";
+	fallback.textContent = String(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "◉";
+	return fallback;
+}
+
+function camera_card_fallback(camera = {}) {
+	const fallback = document.createElement("span");
+	fallback.className = "cam-camera-card-fallback";
+	fallback.textContent = String(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "◉";
 	return fallback;
 }
 
@@ -183,11 +190,13 @@ function camera_map_popup(camera) {
 	const root = document.createElement("div");
 	root.className = "cam-map-popup cam-camera-detail-popup";
 	root.append(camera_map_detail_card(camera));
-	const status = document.createElement("span");
-	status.className = `cam-camera-status-badge cam-camera-status-${String(camera.status || "unknown").toLowerCase()}`;
-	status.textContent = __(camera.status || "Unknown status");
-	root.append(status);
+	append_camera_gallery(root, camera);
 
+	const more = document.createElement("details");
+	more.className = "cam-popup-more-details";
+	const summary = document.createElement("summary");
+	summary.textContent = __("More camera details");
+	more.append(summary);
 	const details = document.createElement("dl");
 	details.className = "cam-popup-details";
 	for (const [label, value] of [
@@ -208,8 +217,8 @@ function camera_map_popup(camera) {
 		row.append(title, valueNode);
 		details.append(row);
 	}
-	root.append(details);
-	append_camera_gallery(root, camera);
+	more.append(details);
+	root.append(more);
 
 	const actions = document.createElement("div");
 	actions.className = "cam-popup-actions";
@@ -228,22 +237,34 @@ function camera_map_popup(camera) {
 function camera_map_detail_card(camera) {
 	const card = document.createElement("section");
 	card.className = "cam-camera-detail-card";
-	const avatar = document.createElement("div");
-	avatar.className = "cam-camera-card-avatar";
 	const photos = Array.isArray(camera.photos) ? camera.photos : [];
 	const primary = photos.find((photo) => photo.primary && safe_camera_image_url(photo.url))
 		|| photos.find((photo) => safe_camera_image_url(photo.url));
+	const avatar = document.createElement("div");
+	avatar.className = "cam-camera-card-avatar";
+	avatar.setAttribute("aria-label", primary ? __("View camera photo gallery") : __("Camera image unavailable"));
 	if (primary) {
+		avatar.setAttribute("role", "button");
+		avatar.tabIndex = 0;
 		const image = document.createElement("img");
 		image.className = "cam-camera-card-image";
 		image.alt = camera.label || camera.name || __("Camera image");
 		image.loading = "lazy";
 		image.referrerPolicy = "same-origin";
 		image.src = primary.url;
-		image.addEventListener("error", () => image.replaceWith(camera_pin_fallback()), { once: true });
+		image.addEventListener("error", () => image.replaceWith(camera_card_fallback(camera)), { once: true });
+		const openGallery = () => card.closest(".cam-map-popup")?.querySelector(".cam-gallery-frame")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+		avatar.addEventListener("click", openGallery);
+		avatar.addEventListener("keydown", (event) => {
+			if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openGallery(); }
+		});
 		avatar.append(image);
 	} else {
-		avatar.append(camera_pin_fallback());
+		const initials = String(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
+		const fallback = document.createElement("span");
+		fallback.className = "cam-camera-card-fallback";
+		fallback.textContent = initials || "◉";
+		avatar.append(fallback);
 	}
 	const heading = document.createElement("div");
 	heading.className = "cam-camera-card-heading";
@@ -252,7 +273,7 @@ function camera_map_detail_card(camera) {
 	title.textContent = camera.label || camera.name || __("Camera details");
 	const subtitle = document.createElement("span");
 	subtitle.className = "cam-camera-card-subtitle";
-	subtitle.textContent = [camera.camera_type, camera.status].filter(Boolean).join(" · ") || __("Camera details");
+	subtitle.textContent = [camera.name, camera.camera_type, camera.status].filter(Boolean).join(" · ") || __("Camera details");
 	heading.append(title, subtitle);
 	card.append(avatar, heading);
 	if (camera.is_demo_record) {
@@ -266,11 +287,11 @@ function camera_map_detail_card(camera) {
 	card.append(divider);
 	const sections = document.createElement("div");
 	sections.className = "cam-camera-card-sections";
+	const endpoint = [camera.ip_address, camera.port ? `:${camera.port}` : ""].join("");
 	const rows = [
-		["Exact coordinates", `${camera.latitude || ""}, ${camera.longitude || ""}`],
-		["Area / category", [camera.area, camera.camera_type].filter(Boolean).join(" · ")],
-		["Operational status", [camera.status, camera.importance].filter(Boolean).join(" · ")],
-		["Coverage / activity", [camera.field_of_view, __("{0} photos", [photos.length])].filter(Boolean).join(" · ")],
+		["Coordinates", `${camera.latitude ?? ""}, ${camera.longitude ?? ""}`],
+		["Area & Address", [camera.area, camera.address].filter(Boolean).join(" · ")],
+		["Type & Endpoint", [camera.camera_type, camera.importance, endpoint].filter(Boolean).join(" · ")],
 	];
 	for (const [label, value] of rows) {
 		const section = document.createElement("div");
@@ -284,6 +305,24 @@ function camera_map_detail_card(camera) {
 		section.append(caption, detail);
 		sections.append(section);
 	}
+	const activity = document.createElement("div");
+	activity.className = "cam-camera-card-section";
+	const activityLabel = document.createElement("span");
+	activityLabel.className = "cam-camera-card-label";
+	activityLabel.textContent = __("Status & Activity");
+	const activityValue = document.createElement("strong");
+	activityValue.className = "cam-camera-card-value";
+	activityValue.textContent = [camera.status || __("Unknown status"), __("{0} photos", [photos.length]), camera.latest_activity].filter(Boolean).join(" · ");
+	activity.append(activityLabel, activityValue);
+	if (!camera.latest_activity) {
+		const open = document.createElement("button");
+		open.type = "button";
+		open.className = "cam-camera-card-action";
+		open.textContent = __("Open Camera");
+		open.addEventListener("click", () => frappe.set_route("Form", "Camera", camera.name));
+		activity.append(open);
+	}
+	sections.append(activity);
 	card.append(sections);
 	return card;
 }
