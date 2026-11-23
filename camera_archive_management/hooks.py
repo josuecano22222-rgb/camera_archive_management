@@ -31,8 +31,9 @@ fixtures = [
 ]
 
 # Keep map presentation styles global, but load Leaflet only inside our map page.
-# Siraj's GeoPoint controls use their own Leaflet/Draw runtime; globally loading
-# another Leaflet copy would overwrite its `L.Control.Draw` plugin.
+# The small compatibility script restores Frappe's Draw plugin only for the
+# Camera Geolocation control when another app has replaced the global Leaflet.
+app_include_js = ["/assets/camera_archive_management/js/camera_geolocation_compat.js"]
 app_include_css = ["/assets/camera_archive_management/css/camera_archive.css"]
 
 # Sensitive credentials are protected independently of future DocType metadata.

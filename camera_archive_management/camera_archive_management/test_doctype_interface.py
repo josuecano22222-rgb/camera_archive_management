@@ -94,6 +94,15 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		map_script_text = map_script.read_text(encoding="utf-8")
 		self.assertIn('split("T", 1)', map_script_text)
 		self.assertIn("daySpan", map_script_text)
+		self.assertIn("Math.max(1, Math.min(12, slot - 4))", map_script_text)
+		compat_script = Path(__file__).parents[1] / "public" / "js" / "camera_geolocation_compat.js"
+		compat_text = compat_script.read_text(encoding="utf-8")
+		self.assertIn('control?.frm?.doctype === "Camera"', compat_text)
+		self.assertIn('control?.df?.fieldname === "location"', compat_text)
+		self.assertIn("Control.prototype.load_lib", compat_text)
+		self.assertIn("leaflet_draw/leaflet.draw.js", compat_text)
+		self.assertIn('app_include_js = ["/assets/camera_archive_management/js/camera_geolocation_compat.js"]',
+			(Path(__file__).parents[1] / "hooks.py").read_text(encoding="utf-8"))
 		camera_list_script = (DOCTYPE_DIR / "camera" / "camera_list.js").read_text(encoding="utf-8")
 		self.assertIn("get_custom_map_coords", camera_list_script)
 		self.assertIn("render_map_data", camera_list_script)

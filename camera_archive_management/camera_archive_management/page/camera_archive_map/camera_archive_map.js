@@ -1220,7 +1220,9 @@ function render_map_insights(page, cameras, movements) {
 	}
 	const slot = 274 / series.length;
 	series.forEach((item, index) => {
-		const width = Math.min(12, slot - 4);
+		// Keep SVG geometry valid even if the chart window is ever expanded
+		// beyond the current 14-day cap or rendered in a narrower viewBox.
+		const width = Math.max(1, Math.min(12, slot - 4));
 		const height = item.count ? Math.max(3, (item.count / maxCount) * 56) : 2;
 		const x = 7 + index * slot + (slot - width) / 2;
 		const rect = makeSvg("rect", {
