@@ -147,8 +147,8 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn("is-selected", map_script_text)
 		self.assertIn("autoPanPaddingTopLeft", map_script_text)
 		self.assertIn("Camera Area", map_script_text)
-		self.assertIn("Type & Endpoint", map_script_text)
-		self.assertIn("Status & Activity", map_script_text)
+		self.assertIn("Type & Status", map_script_text)
+		self.assertIn("Gallery & Actions", map_script_text)
 		self.assertIn("Camera identity", map_script_text)
 		self.assertIn("Geographic context", map_script_text)
 		self.assertIn("Coordinate quality", map_script_text)
@@ -156,6 +156,10 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn("append_archive_camera_info_group", map_script_text)
 		self.assertIn("cam-camera-gallery", (Path(__file__).parents[1] / "public" / "css" / "camera_archive.css").read_text(encoding="utf-8"))
 		self.assertIn("cam-camera-detail-card", (Path(__file__).parents[1] / "public" / "css" / "camera_archive.css").read_text(encoding="utf-8"))
+		map_css_text = (Path(__file__).parents[1] / "public" / "css" / "camera_archive.css").read_text(encoding="utf-8")
+		self.assertIn(".cam-camera-card-section", map_css_text)
+		self.assertIn(".cam-camera-card-coordinate", map_css_text)
+		self.assertIn("height: 128px", map_css_text)
 		for feature in (
 			"Measure distance", "Measure area", "Locate me", "Country borders", "cam-map-time", "include_demo",
 			"cam-map-activity-chart", "render_map_insights", "data-kpi-vehicles",
@@ -166,13 +170,17 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 			"cam-pin-selected", "sync_page_route_to_controls", "Cameras in view", "Recent motion events",
 			"Coordinate latitude snapshot", "cam-map-fit", "Fit results", "fit_map_to_results(page)",
 			"cam_map_auto_fitted", "cam_map_user_navigated", "errorTileUrl", "missing_tile_fallback",
-			'cam-map-include-demo").addEventListener',
+			'cam-map-include-demo").addEventListener', "cam-camera-card-avatar", "cam-camera-card-meta",
+			"cam-camera-card-coordinate", "Gallery & Actions", "Type & Status", "cam-camera-gallery",
+			"show_image_unavailable",
 		):
 			self.assertIn(feature, map_script_text)
 
 		arabic_translations = (Path(__file__).parents[1] / "translations" / "ar.csv").read_text(encoding="utf-8")
 		self.assertIn("Fit results,احتواء النتائج", arabic_translations)
 		self.assertIn("Tile unavailable,المربع غير متاح", arabic_translations)
+		self.assertIn("Type & Status,النوع والحالة", arabic_translations)
+		self.assertIn("Gallery & Actions,المعرض والإجراءات", arabic_translations)
 
 		for folder in ("camera_area", "geo_admin_area"):
 			self.assertEqual(self.load_doctype(folder)["is_tree"], 1)

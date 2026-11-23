@@ -717,3 +717,7 @@ Shared map tiles unavailable; camera points remain available.,مربعات ال�
 This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.,هذا المربع غير موجود في مخزن سيراج المشترك؛ جلب المزوّد عبر الإنترنت معطّل. تظل علامات الكاميرات والحركة متاحة.
 Fit results,احتواء النتائج
 Tile unavailable,المربع غير متاح
+Type & Status,النوع والحالة
+Gallery & Actions,المعرض والإجراءات
+Gallery,المعرض
+No recent activity,لا يوجد نشاط حديث
