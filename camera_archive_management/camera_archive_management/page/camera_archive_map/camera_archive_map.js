@@ -1518,6 +1518,8 @@ function camera_popup(camera, page, movements) {
 	events.append(allEvents);
 	actions.append(events);
 	root.append(actions);
+	page.cam_leaflet.DomEvent.disableClickPropagation(root);
+	page.cam_leaflet.DomEvent.disableScrollPropagation(root);
 	return root;
 }
 
@@ -1585,9 +1587,11 @@ function render_map_payload(page, data, { offline = false, savedAt = null, fit =
 		camera.movement_count = page.cam_movement_data.filter((movement) => movement.camera === camera.name).length;
 		const marker = leaflet.marker([Number(camera.latitude), Number(camera.longitude)], { icon: camera_icon(camera, leaflet, page) });
 		marker.cam_record_name = camera.name;
-		marker.on("click", () => {
+		marker.on("click", (event) => {
 			page.cam_pinned_camera_marker = marker;
 			select_camera_marker(page, marker);
+			event.originalEvent?.stopPropagation();
+			marker.openPopup();
 		});
 		marker.on("mouseover", () => {
 			clearTimeout(page.cam_camera_popup_timer);

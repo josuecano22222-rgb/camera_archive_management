@@ -41,8 +41,12 @@ function install_camera_map_view_override() {
 			if (!Number.isFinite(Number(latitude)) || !Number.isFinite(Number(longitude))) continue;
 			const marker = L.marker([Number(latitude), Number(longitude)], { icon: camera_map_icon(feature.properties || {}) });
 			const popup = camera_map_popup(feature.properties || {});
-			marker.bindPopup(popup, { maxWidth: 360, minWidth: 280, autoClose: true });
-			marker.on("click", () => { this.__camPinnedCamera = marker; });
+			marker.bindPopup(popup, { maxWidth: 360, minWidth: 280, autoClose: true, closeOnClick: true, autoPan: true });
+			marker.on("click", (event) => {
+				this.__camPinnedCamera = marker;
+				event.originalEvent?.stopPropagation();
+				marker.openPopup();
+			});
 			marker.on("mouseover", () => {
 				clearTimeout(this.__camCameraPopupTimer);
 				if (!this.__camPinnedCamera) marker.openPopup();
@@ -216,6 +220,8 @@ function camera_map_popup(camera) {
 	open.addEventListener("click", () => frappe.set_route("Form", "Camera", camera.name));
 	actions.append(open);
 	root.append(actions);
+	L.DomEvent.disableClickPropagation(root);
+	L.DomEvent.disableScrollPropagation(root);
 	return root;
 }
 

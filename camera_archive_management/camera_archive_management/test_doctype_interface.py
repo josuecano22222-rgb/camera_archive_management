@@ -99,6 +99,9 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn("render_map_data", camera_list_script)
 		self.assertIn("camera_map_detail_card", camera_list_script)
 		self.assertIn("mouseover", camera_list_script)
+		self.assertIn("marker.openPopup()", camera_list_script)
+		self.assertIn("originalEvent?.stopPropagation()", camera_list_script)
+		self.assertIn("disableClickPropagation", camera_list_script)
 		for feature in (
 			"Measure distance", "Measure area", "Locate me", "Country borders", "cam-map-time", "include_demo",
 			"cam-map-activity-chart", "render_map_insights", "data-kpi-vehicles",
