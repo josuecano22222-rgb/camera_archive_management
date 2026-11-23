@@ -64,8 +64,12 @@ class TestMotionMapClustering(unittest.TestCase):
 		motion_list = MOTION_SCRIPT.read_text(encoding="utf-8")
 		archive_map = (MOTION_SCRIPT.parents[2] / "page" / "camera_archive_map" / "camera_archive_map.js").read_text(encoding="utf-8")
 		self.assertIn("vehicle_image", motion_list)
-		self.assertIn("cam-motion-user-point", motion_list)
+		self.assertIn('sirajIcons.pin("CAM Vehicle"', motion_list)
+		self.assertIn('className: "sx-pin-wrapper cam-leaflet-icon"', motion_list)
+		self.assertIn("motion_unconfigured_location_icon", motion_list)
 		self.assertIn("vehicle_image", archive_map)
+		self.assertIn('sirajIcons.pin("CAM Vehicle"', archive_map)
+		self.assertIn('className: "sx-pin-wrapper cam-leaflet-icon"', archive_map)
 		self.assertIn("cam-map-user-location-point", archive_map)
 		for source in (motion_list, archive_map):
 			self.assertNotIn("🚘", source)

@@ -1565,22 +1565,54 @@ function select_camera_marker(page, marker) {
 }
 
 function vehicle_icon(movement, leaflet, page) {
-	const kind = cam_archive_safe_text(movement?.motion_type).toLowerCase();
-	const vehicleName = cam_archive_safe_text(movement?.vehicle_name) || __("Unidentified vehicle");
-	const motionType = cam_archive_safe_text(movement?.motion_type) || __("Movement");
-	const eventMark = kind === "entry" ? "E" : kind === "exit" ? "X" : "•";
-	const shell = node("div", "cam-pin cam-vehicle-pin");
-	shell.setAttribute("aria-label", `${vehicleName} · ${motionType}`);
-	shell.title = `${vehicleName} · ${motionType}`;
-	const image = image_node(movement?.vehicle_image, vehicleName, "cam-pin-image", page);
-	if (image) shell.append(image);
+	return siraj_vehicle_pin_icon(movement, leaflet, page) || vehicle_location_point_icon(leaflet);
+}
+
+function siraj_vehicle_pin_icon(movement, leaflet, page) {
+	if (!window.sirajIcons?.pin || !leaflet?.divIcon) return null;
+	const size = 32;
+	const color = window.sirajColours?.["CAM Vehicle"] || window.sirajColours?.Vehicle
+		|| window.sirajColours?.Camera || "#3577c0";
+	let pinMarkup;
+	try {
+		pinMarkup = window.sirajIcons.pin("CAM Vehicle", color, size, { dot: false });
+	} catch (_error) {
+		return null;
+	}
+	const host = document.createElement("div");
+	if (!cam_archive_mount_icon_content(host, pinMarkup)) return null;
+	const pin = host.querySelector(".siraj-pin");
+	const body = pin?.querySelector(".siraj-pin-body");
+	if (!pin || !body) return null;
+	const label = cam_archive_safe_text(movement?.vehicle_name) || __("Vehicle movement");
+	pin.setAttribute("aria-label", label);
+	const image = image_node(movement?.vehicle_image, label, "cam-pin-image", page);
+	if (image) body.replaceChildren(image);
 	else {
 		const point = node("span", "cam-map-user-location-point");
 		point.setAttribute("aria-label", __("No user-configured vehicle image; showing the saved movement point"));
-		shell.append(point);
+		body.replaceChildren(point);
 	}
-	shell.append(node("span", `cam-vehicle-event-badge cam-vehicle-event-${kind || "other"}`, eventMark));
-	return leaflet.divIcon({ className: "cam-leaflet-icon", html: cam_archive_icon_html(shell), iconSize: [44, 44], iconAnchor: [22, 22], popupAnchor: [0, -22] });
+	return leaflet.divIcon({
+		className: "sx-pin-wrapper cam-leaflet-icon",
+		html: cam_archive_icon_html(host.innerHTML),
+		iconSize: [size, Math.round(size * 1.15)],
+		iconAnchor: [size / 2, Math.round(size * 1.15)],
+		popupAnchor: [0, -Math.round(size * 0.8)],
+		tooltipAnchor: [0, -Math.round(size * 0.5)],
+	});
+}
+
+function vehicle_location_point_icon(leaflet) {
+	const point = node("span", "cam-map-user-location-point");
+	point.setAttribute("aria-label", __("No user-configured vehicle image; showing the saved movement point"));
+	return leaflet.divIcon({
+		className: "cam-motion-user-location-leaflet",
+		html: cam_archive_icon_html(point),
+		iconSize: [32, 37],
+		iconAnchor: [16, 37],
+		popupAnchor: [0, -28],
+	});
 }
 
 function add_popup_detail(root, label, value) {

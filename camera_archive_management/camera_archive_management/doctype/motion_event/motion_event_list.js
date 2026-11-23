@@ -94,7 +94,7 @@ function render_motion_event_clusters(state) {
 		}
 		const vehicleGroups = group_motion_events_by_vehicle_and_camera(rows);
 		const marker = window.L.marker(cluster.center, {
-			icon: motion_cluster_icon(rows, vehicleGroups),
+			icon: motion_cluster_icon(rows),
 			title: __("{0} vehicle groups · {1} movements. Click to expand.", [vehicleGroups.length, rows.length]),
 			keyboard: true,
 			camMotionClusterKey: clusterKey,
@@ -207,58 +207,88 @@ function make_motion_vehicle_marker(features, position, totals, state) {
 	return marker;
 }
 
-function motion_cluster_icon(features, vehicleGroups) {
-	const host = document.createElement("div");
-	host.className = "cam-motion-cluster";
-	const ring = document.createElement("span");
-	ring.className = "cam-motion-cluster-logos";
-	const shown = new Set();
-	for (const feature of features) {
-		const props = feature.properties || {};
-		const key = safe_motion_text(props.vehicle) || safe_motion_text(props.name);
-		if (!key || !safe_motion_image_url(props.vehicle_image) || shown.has(key) || shown.size >= 3) continue;
-		shown.add(key);
-		const logo = motion_vehicle_logo(props, "cam-motion-cluster-logo");
-		ring.append(logo);
-	}
-	const total = document.createElement("strong");
-	total.textContent = String(vehicleGroups.length);
-	const caption = document.createElement("small");
-	caption.textContent = `${features.length} ${__("moves")}`;
-	host.append(ring, total, caption);
-	return window.L.divIcon({ className: "cam-motion-cluster-leaflet", html: host.outerHTML, iconSize: [76, 76], iconAnchor: [38, 38] });
+function motion_cluster_icon(features) {
+	const props = { vehicle_name: __("Vehicle movements"), vehicle_image: "" };
+	return motion_siraj_vehicle_icon(props, features.length)
+		|| motion_unconfigured_location_icon(__("{0} movements", [features.length]));
 }
 
 function motion_vehicle_icon(props, countAtCamera) {
-	const host = document.createElement("div");
-	host.className = "cam-motion-vehicle-marker";
-	host.setAttribute("aria-label", safe_motion_text(props.vehicle_name) || __("Unidentified vehicle"));
-	host.append(motion_vehicle_logo(props, "cam-motion-vehicle-logo"));
-	if (countAtCamera > 1) {
-		const count = document.createElement("span");
-		count.className = "cam-motion-vehicle-count";
-		count.textContent = String(countAtCamera);
-		host.append(count);
-	}
-	return window.L.divIcon({ className: "cam-motion-vehicle-leaflet", html: host.outerHTML, iconSize: [48, 48], iconAnchor: [24, 24], popupAnchor: [0, -22] });
+	return motion_siraj_vehicle_icon(props, countAtCamera > 1 ? countAtCamera : null)
+		|| motion_unconfigured_location_icon(__("Saved movement point"));
 }
 
-function motion_vehicle_logo(props, className) {
-	const host = document.createElement("span");
-	host.className = className;
+function motion_siraj_vehicle_icon(props, count) {
+	if (!window.sirajIcons?.pin || !window.L?.divIcon) return null;
+	const size = 32;
+	const color = window.sirajColours?.["CAM Vehicle"] || window.sirajColours?.Vehicle
+		|| window.sirajColours?.Camera || "#3577c0";
+	let markup;
+	try {
+		markup = window.sirajIcons.pin("CAM Vehicle", color, size, { dot: false });
+	} catch (_error) {
+		return null;
+	}
+	const host = document.createElement("div");
+	if (!motion_mount_siraj_pin(host, markup)) return null;
+	const pin = host.querySelector(".siraj-pin");
+	const body = pin?.querySelector(".siraj-pin-body");
+	if (!pin || !body) return null;
+	const label = safe_motion_text(props.vehicle_name) || __("Vehicle movement");
+	pin.setAttribute("aria-label", label);
 	const image = safe_motion_image_url(props.vehicle_image);
 	if (image) {
 		const photo = document.createElement("img");
 		photo.src = image;
-		photo.alt = safe_motion_text(props.vehicle_name) || __("Vehicle");
+		photo.alt = label;
 		photo.loading = "lazy";
 		photo.referrerPolicy = "same-origin";
-		host.append(photo);
+		body.replaceChildren(photo);
 	} else {
-		host.classList.add("cam-motion-user-point");
-		host.setAttribute("aria-label", __("No user-configured vehicle image; showing the saved movement point"));
+		const point = document.createElement("span");
+		point.className = "cam-map-user-location-point";
+		point.setAttribute("aria-label", __("No user-configured vehicle image; showing the saved movement point"));
+		body.replaceChildren(point);
 	}
-	return host;
+	if (count) {
+		const badge = document.createElement("span");
+		badge.className = "cam-pin-count";
+		badge.textContent = String(count);
+		badge.setAttribute("aria-label", __("{0} movements", [count]));
+		pin.append(badge);
+	}
+	return window.L.divIcon({
+		className: "sx-pin-wrapper cam-leaflet-icon",
+		html: host.innerHTML,
+		iconSize: [size, Math.round(size * 1.15)],
+		iconAnchor: [size / 2, Math.round(size * 1.15)],
+		popupAnchor: [0, -Math.round(size * 0.8)],
+		tooltipAnchor: [0, -Math.round(size * 0.5)],
+	});
+}
+
+function motion_mount_siraj_pin(host, content) {
+	if (typeof content === "string") {
+		if (!content.trim() || /\[object (?:Object|[A-Za-z0-9_]*Element)\]/i.test(content)) return false;
+		host.innerHTML = content;
+		return true;
+	}
+	const candidate = content?.jquery || typeof content?.length === "number" ? content[0] : content;
+	if (!candidate || ![1, 3, 11].includes(candidate.nodeType)) return false;
+	if (/\[object (?:Object|[A-Za-z0-9_]*Element)\]/i.test(candidate.textContent || "")) return false;
+	host.append(candidate.cloneNode(true));
+	return true;
+}
+
+function motion_unconfigured_location_icon(label) {
+	return window.L.divIcon({
+		className: "cam-motion-user-location-leaflet",
+		html: '<span class="cam-map-user-location-point" aria-hidden="true"></span>',
+		iconSize: [32, 37],
+		iconAnchor: [16, 37],
+		popupAnchor: [0, -28],
+		title: label,
+	});
 }
 
 function motion_vehicle_popup(group, totalMoves) {
