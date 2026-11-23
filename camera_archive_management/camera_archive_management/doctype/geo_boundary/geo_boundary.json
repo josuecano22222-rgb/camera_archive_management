@@ -232,5 +232,6 @@
  "links": [],
  "autoname": "hash",
  "title_field": "label",
- "search_fields": "boundary_code,label"
+ "search_fields": "boundary_code,label",
+ "allow_import": 1
 }

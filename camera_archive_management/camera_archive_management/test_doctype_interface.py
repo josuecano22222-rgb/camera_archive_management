@@ -66,6 +66,21 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn("not cadastral", data_readme.lower())
 		self.assertIn("not legal boundaries or sovereignty", (Path(__file__).parents[1] / "setup" / "seed.py").read_text(encoding="utf-8").lower())
 
+	def test_import_permissions_match_doctype_importability(self):
+		definitions = sorted(DOCTYPE_DIR.glob("*/*.json"))
+		for path in definitions:
+			with self.subTest(doctype=path.parent.name):
+				definition = json.loads(path.read_text(encoding="utf-8"))
+				import_permissions = [perm for perm in definition.get("permissions", []) if perm.get("import")]
+				if import_permissions:
+					self.assertTrue(definition.get("allow_import"), "Import permission requires allow_import")
+					self.assertFalse(definition.get("issingle"), "Single DocTypes cannot be imported")
+					self.assertFalse(definition.get("istable"), "Child DocTypes are not independently imported")
+		self.assertTrue(self.load_doctype("camera").get("allow_import"))
+		credential = self.load_doctype("camera_credential")
+		self.assertFalse(credential.get("allow_import"))
+		self.assertFalse(any(perm.get("import") for perm in credential.get("permissions", [])))
+
 	def test_nested_table_targets_exist(self):
 		for path in sorted(DOCTYPE_DIR.glob("*/*.json")):
 			definition = json.loads(path.read_text(encoding="utf-8"))

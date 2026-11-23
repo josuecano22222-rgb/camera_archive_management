@@ -209,5 +209,6 @@
  "autoname": "naming_series:",
  "image_field": "vehicle_list_image",
  "title_field": "vehicle_name",
- "search_fields": "vehicle_name,vehicle_number"
+ "search_fields": "vehicle_name,vehicle_number",
+ "allow_import": 1
 }

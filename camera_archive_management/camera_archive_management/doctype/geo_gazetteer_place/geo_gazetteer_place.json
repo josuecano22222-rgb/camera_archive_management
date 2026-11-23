@@ -173,5 +173,6 @@
  "links": [],
  "autoname": "hash",
  "title_field": "place_name",
- "search_fields": "place_code,place_name,alternate_names"
+ "search_fields": "place_code,place_name,alternate_names",
+ "allow_import": 1
 }

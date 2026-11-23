@@ -324,5 +324,6 @@
  "links": [],
  "autoname": "naming_series:",
  "is_submittable": 1,
- "search_fields": "camera,camera_name_snapshot,vehicle"
+ "search_fields": "camera,camera_name_snapshot,vehicle",
+ "allow_import": 1
 }

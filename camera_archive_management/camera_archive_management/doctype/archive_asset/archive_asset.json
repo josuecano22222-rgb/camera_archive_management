@@ -269,5 +269,6 @@
  "links": [],
  "autoname": "naming_series:",
  "title_field": "title",
- "search_fields": "title,camera,motion_event,checksum_sha256"
+ "search_fields": "title,camera,motion_event,checksum_sha256",
+ "allow_import": 1
 }

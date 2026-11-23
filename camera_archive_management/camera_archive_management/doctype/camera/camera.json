@@ -381,5 +381,6 @@
  "autoname": "naming_series:",
  "title_field": "camera_name",
  "search_fields": "camera_name,serial_number,camera_number",
- "image_field": "primary_image"
+ "image_field": "primary_image",
+ "allow_import": 1
 }

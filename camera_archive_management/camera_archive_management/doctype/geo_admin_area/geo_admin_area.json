@@ -219,5 +219,6 @@
  "autoname": "hash",
  "nsm_parent_field": "parent_area",
  "title_field": "label",
- "search_fields": "code,label"
+ "search_fields": "code,label",
+ "allow_import": 1
 }

@@ -179,8 +179,7 @@
    "print": 1,
    "email": 1,
    "share": 1,
-   "select": 1,
-   "import": 1
+   "select": 1
   },
   {
    "role": "System Manager",
@@ -193,8 +192,7 @@
    "print": 1,
    "email": 1,
    "share": 1,
-   "select": 1,
-   "import": 1
+   "select": 1
   }
  ],
  "istable": 0,

@@ -245,5 +245,6 @@
  "links": [],
  "autoname": "field:dataset_id",
  "title_field": "label",
- "search_fields": "dataset_id,label,source"
+ "search_fields": "dataset_id,label,source",
+ "allow_import": 1
 }

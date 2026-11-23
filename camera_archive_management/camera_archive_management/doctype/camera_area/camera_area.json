@@ -162,5 +162,6 @@
  "links": [],
  "autoname": "field:area_name",
  "nsm_parent_field": "parent_camera_area",
- "title_field": "area_name"
+ "title_field": "area_name",
+ "allow_import": 1
 }

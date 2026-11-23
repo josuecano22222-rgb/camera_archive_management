@@ -171,5 +171,6 @@
  "links": [],
  "autoname": "naming_series:",
  "title_field": "source_scope",
- "search_fields": "source_scope,idempotency_key,status"
+ "search_fields": "source_scope,idempotency_key,status",
+ "allow_import": 1
 }

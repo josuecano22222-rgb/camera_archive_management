@@ -95,5 +95,6 @@
  "sort_order": "DESC",
  "links": [],
  "autoname": "field:type_name",
- "title_field": "type_name"
+ "title_field": "type_name",
+ "allow_import": 1
 }

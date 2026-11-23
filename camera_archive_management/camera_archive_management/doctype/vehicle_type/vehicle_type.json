@@ -149,5 +149,6 @@
  "links": [],
  "autoname": "field:type_name",
  "title_field": "type_name",
- "image_field": "vehicle_type_image"
+ "image_field": "vehicle_type_image",
+ "allow_import": 1
 }
