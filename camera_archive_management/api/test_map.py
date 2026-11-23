@@ -123,7 +123,7 @@ class TestMapEndpoint(FrappeTestCase):
 	def test_map_hides_synthetic_records_by_default_and_can_include_them_explicitly(self):
 		with (
 			patch.object(frappe, "has_permission", return_value=True),
-			patch.object(frappe, "get_list", side_effect=[[], []]) as get_list,
+			patch.object(frappe, "get_list", side_effect=[[], [], [], []]) as get_list,
 		):
 			map_api.map_payload()
 			map_api.map_payload(include_demo="1")

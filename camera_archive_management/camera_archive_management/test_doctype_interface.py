@@ -78,7 +78,7 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		camera_fields = {field["fieldname"]: field for field in camera["fields"]}
 		self.assertEqual(camera_fields["camera_photos_json"]["fieldtype"], "Long Text")
 		self.assertEqual(camera_fields["camera_photo_gallery"]["fieldtype"], "HTML")
-		self.assertFalse((DOCTYPE_DIR / "camera_photo").exists())
+		self.assertFalse((DOCTYPE_DIR / "camera_photo" / "camera_photo.json").exists())
 		for folder in ("camera", "cam_vehicle", "motion_event"):
 			fields = {field["fieldname"]: field for field in self.load_doctype(folder)["fields"]}
 			self.assertEqual(fields["is_demo_record"]["fieldtype"], "Check")

@@ -15,7 +15,7 @@ A Frappe v15 application for camera inventory, controlled image galleries, vehic
 The reference catalogs in `camera_archive_management/data/core_reference_data.json` are application master data, not demonstrations. Synthetic records are separate, never created by install or migrate, and generated only by an explicit operator command after enabling the per-site Boolean `camera_archive_allow_demo_data=true`. The command works on a disposable test site and, when deliberately authorized, on `frappe.com`:
 
 ```bash
-bench --site <site-name> set-config camera_archive_allow_demo_data true --parse
+bench --site <site-name> set-config camera_archive_allow_demo_data True --parse
 bench --site <site-name> execute camera_archive_management.setup.demo_data.create_demo_scenario
 ```
 
@@ -23,7 +23,7 @@ Generated cameras, vehicles, events, and image attachments carry the `CAM-MAP-V1
 
 ```bash
 bench --site <site-name> execute camera_archive_management.setup.demo_data.delete_demo_scenario
-bench --site <site-name> set-config camera_archive_allow_demo_data false --parse
+bench --site <site-name> set-config camera_archive_allow_demo_data False --parse
 ```
 
 Do not enable the flag casually: production demo records are fictional and must never be mistaken for operational cameras or incidents.
