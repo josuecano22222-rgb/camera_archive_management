@@ -693,3 +693,13 @@ Location source,مصدر الموقع
 Location confidence,دقة الموقع
 Location ambiguous,التباس الموقع
 Resolved at,وقت تحديد الموقع
+Camera image unavailable offline,صورة الكاميرا غير متاحة دون اتصال
+Loading shared Siraj map tiles…,جارٍ تحميل خرائط سيراج المشتركة…
+No Siraj raster layer is enabled; camera points remain available.,لا توجد طبقة خرائط نقطية مفعّلة في سيراج؛ تظل نقاط الكاميرات متاحة.
+Shared Siraj map tiles loaded.,تم تحميل مربعات خرائط سيراج المشتركة.
+A shared map tile is unavailable; camera points remain available.,مربع خريطة مشترك غير متاح؛ تظل نقاط الكاميرات متاحة.
+Tile missing from shared cache; provider fetching is disabled. Camera points remain available.,المربع غير موجود في الذاكرة المؤقتة المشتركة؛ جلب المزوّد معطّل. تظل نقاط الكاميرات متاحة.
+Using shared Siraj cache and the configured provider.,يُستخدم مخزن سيراج المشترك والمزوّد المُعدّ.
+Using shared Siraj cache only; provider fetching is disabled.,يُستخدم مخزن سيراج المشترك فقط؛ جلب المزوّد معطّل.
+Shared map tiles unavailable; camera points remain available.,مربعات الخرائط المشتركة غير متاحة؛ تظل نقاط الكاميرات متاحة.
+This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.,هذا المربع غير موجود في مخزن سيراج المشترك؛ جلب المزوّد عبر الإنترنت معطّل. تظل علامات الكاميرات والحركة متاحة.

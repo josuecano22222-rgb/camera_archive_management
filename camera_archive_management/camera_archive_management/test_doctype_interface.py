@@ -92,10 +92,17 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 			self.assertEqual(fields["is_demo_record"]["fieldtype"], "Check")
 			self.assertEqual(fields["demo_scenario"]["fieldtype"], "Data")
 		map_script_text = map_script.read_text(encoding="utf-8")
+		self.assertIn('split("T", 1)', map_script_text)
+		self.assertIn("daySpan", map_script_text)
+		camera_list_script = (DOCTYPE_DIR / "camera" / "camera_list.js").read_text(encoding="utf-8")
+		self.assertIn("get_custom_map_coords", camera_list_script)
+		self.assertIn("render_map_data", camera_list_script)
+		self.assertIn("camera_map_detail_card", camera_list_script)
+		self.assertIn("mouseover", camera_list_script)
 		for feature in (
 			"Measure distance", "Measure area", "Locate me", "Country borders", "cam-map-time", "include_demo",
 			"cam-map-activity-chart", "render_map_insights", "data-kpi-vehicles",
-			"cam-map-status", "cam-map-area", "camera_status", "has_page_route_options",
+			"cam-map-status", 'data-cam-link="area"', "camera_status", "has_page_route_options",
 			"CAM_MAP_OFFLINE_DB", "cache_map_snapshot", "cache_viewed_detail", "show_cached_popup_details",
 			"cam-map-save-offline", "cam-map-show-saved", "Not saved for offline use",
 			"maxNativeZoom", "update_tile_telemetry", "cam-map-tile-telemetry", "cam-camera-status-${status}",

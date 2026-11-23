@@ -693,3 +693,13 @@ Location source,Location source
 Location confidence,Location confidence
 Location ambiguous,Location ambiguous
 Resolved at,Resolved at
+Camera image unavailable offline,Camera image unavailable offline
+Loading shared Siraj map tiles…,Loading shared Siraj map tiles…
+No Siraj raster layer is enabled; camera points remain available.,No Siraj raster layer is enabled; camera points remain available.
+Shared Siraj map tiles loaded.,Shared Siraj map tiles loaded.
+A shared map tile is unavailable; camera points remain available.,A shared map tile is unavailable; camera points remain available.
+Tile missing from shared cache; provider fetching is disabled. Camera points remain available.,Tile missing from shared cache; provider fetching is disabled. Camera points remain available.
+Using shared Siraj cache and the configured provider.,Using shared Siraj cache and the configured provider.
+Using shared Siraj cache only; provider fetching is disabled.,Using shared Siraj cache only; provider fetching is disabled.
+Shared map tiles unavailable; camera points remain available.,Shared map tiles unavailable; camera points remain available.
+This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.,This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.

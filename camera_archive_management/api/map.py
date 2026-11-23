@@ -64,6 +64,7 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 	coordinate_fields = {
 		"Geo Boundary": ("centroid_lat", "centroid_lon"),
 		"Motion Event": ("latitude_snapshot", "longitude_snapshot"),
+		"Camera": ("latitude", "longitude"),
 	}
 	if not isinstance(doctype, str) or doctype not in coordinate_fields:
 		frappe.throw("Map coordinates are not available for this DocType.", frappe.ValidationError)
@@ -76,13 +77,28 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 		frappe.throw("Map filters must be a list or object.", frappe.ValidationError)
 
 	latitude_field, longitude_field = coordinate_fields[doctype]
+	fields = ["name", latitude_field, longitude_field]
+	if doctype == "Camera":
+		fields.extend([
+			"camera_name", "status", "camera_type", "importance", "area", "serial_number", "camera_number",
+			"installation_date", "address", "geo_admin_area", "geo_boundary", "field_of_view", "description",
+			"lookup_source", "lookup_confidence", "lookup_ambiguous", "lookup_resolved_at",
+			"camera_photos_json", "primary_image", "is_demo_record",
+		])
 	rows = frappe.get_list(
 		doctype,
 		filters=filters or [],
-		fields=["name", latitude_field, longitude_field],
+		fields=fields,
 		order_by="name asc",
 		limit_page_length=5000,
 	)
+	gallery_by_camera = {row.name: _camera_gallery(row) for row in rows} if doctype == "Camera" else {}
+	all_urls = {
+		photo["url"]
+		for photos in gallery_by_camera.values()
+		for photo in photos
+	}
+	file_map = _load_file_map(all_urls)
 	features = []
 	for row in rows:
 		try:
@@ -91,9 +107,44 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 			continue
 		if latitude is None or longitude is None:
 			continue
+		properties = {"name": row.name}
+		if doctype == "Camera":
+			photos = []
+			for photo in gallery_by_camera.get(row.name, []):
+				url = _clean_image_url(photo["url"], file_map)
+				photos.append({
+					"url": url,
+					"caption": photo.get("caption") or "",
+					"description": photo.get("description") or "",
+					"primary": bool(photo.get("is_primary")),
+					"unavailable": not bool(url),
+				})
+			properties.update({
+				"label": row.camera_name or row.name,
+				"status": row.status or "",
+				"is_demo_record": bool(row.is_demo_record),
+				"camera_type": row.camera_type or "",
+				"importance": row.importance or "",
+				"area": row.area or "",
+				"serial_number": row.serial_number or "",
+				"camera_number": row.camera_number or "",
+				"installation_date": str(row.installation_date) if row.installation_date else "",
+				"address": row.address or "",
+				"latitude": str(latitude),
+				"longitude": str(longitude),
+				"geo_admin_area": row.geo_admin_area or "",
+				"geo_boundary": row.geo_boundary or "",
+				"field_of_view": row.field_of_view or "",
+				"description": row.description or "",
+				"lookup_source": row.lookup_source or "",
+				"lookup_confidence": row.lookup_confidence,
+				"lookup_ambiguous": bool(row.lookup_ambiguous),
+				"lookup_resolved_at": str(row.lookup_resolved_at) if row.lookup_resolved_at else "",
+				"photos": photos,
+			})
 		features.append({
 			"type": "Feature",
-			"properties": {"name": row.name},
+			"properties": properties,
 			"geometry": {
 				"type": "Point",
 				"coordinates": [float(longitude), float(latitude)],

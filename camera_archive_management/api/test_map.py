@@ -80,6 +80,31 @@ class TestMapEndpoint(FrappeTestCase):
 		self.assertEqual(result["features"][0]["geometry"]["coordinates"], [4.89, 52.37])
 		self.assertEqual(get_list.call_args.kwargs["filters"], [["Geo Boundary", "label", "like", "%Central%"]])
 
+	def test_custom_map_coords_returns_camera_details_and_exact_strings_for_native_map_view(self):
+		camera = frappe._dict(
+			name="CAM-MAP-1", camera_name="West Quay", status="Active", camera_type="PTZ",
+			importance="High", area="AREA-WEST", serial_number="SN-MAP-1", camera_number="C-17",
+			installation_date="2024-08-09", address="Harbour road", latitude="52.3700000009",
+			longitude="4.8900000008", geo_admin_area="Amsterdam", geo_boundary="BOUNDARY-1",
+			field_of_view="West quay approach", description="Outdoor fixed view", lookup_source="manual",
+			lookup_confidence=1.0, lookup_ambiguous=0, lookup_resolved_at=None,
+			camera_photos_json="[]", primary_image=None, is_demo_record=0,
+		)
+		filters = '[["Camera","status","=","Active"]]'
+		with patch.object(frappe, "has_permission", return_value=True), patch.object(
+			frappe, "get_list", return_value=[camera]
+		) as get_list:
+			result = map_api.get_custom_map_coords("Camera", filters=filters)
+
+		feature = result["features"][0]
+		self.assertEqual(feature["properties"]["latitude"], "52.3700000009")
+		self.assertEqual(feature["properties"]["longitude"], "4.8900000008")
+		self.assertEqual(feature["properties"]["camera_type"], "PTZ")
+		self.assertEqual(feature["properties"]["photos"], [])
+		self.assertEqual(feature["geometry"]["coordinates"], [4.8900000008, 52.3700000009])
+		self.assertEqual(get_list.call_args.kwargs["filters"], [["Camera", "status", "=", "Active"]])
+		self.assertIn("camera_photos_json", get_list.call_args.kwargs["fields"])
+
 	def test_custom_map_coords_uses_motion_event_snapshots(self):
 		row = frappe._dict(name="MOT-1", latitude_snapshot="52.37", longitude_snapshot="4.89")
 		with patch.object(frappe, "has_permission", return_value=True), patch.object(

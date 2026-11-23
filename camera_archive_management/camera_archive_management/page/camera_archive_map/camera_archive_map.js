@@ -1176,18 +1176,21 @@ function render_map_insights(page, cameras, movements) {
 	insight.querySelector("[data-kpi-cameras]").textContent = String(cameras.length);
 	insight.querySelector("[data-kpi-movements]").textContent = String(movements.length);
 	insight.querySelector("[data-kpi-vehicles]").textContent = String(vehicles.size);
-	const endValue = host.querySelector(".cam-map-to").value || new Date().toISOString().slice(0, 10);
-	const startValue = host.querySelector(".cam-map-from").value || endValue;
+	const endValue = host.querySelector(".cam-map-to").value || local_datetime_value(new Date());
+	const startValue = host.querySelector(".cam-map-from").value;
 	const parseDay = (value) => {
-		const parts = value.split("-").map(Number);
-		return new Date(parts[0], parts[1] - 1, parts[2]);
+		const datePart = String(value || "").split("T", 1)[0];
+		const parts = datePart.split("-").map(Number);
+		const date = new Date(parts[0], parts[1] - 1, parts[2]);
+		return Number.isNaN(date.getTime()) ? new Date() : date;
 	};
 	const endDay = parseDay(endValue);
-	const requestedStart = parseDay(startValue);
 	const chartStart = new Date(endDay);
 	chartStart.setDate(chartStart.getDate() - 13);
+	const requestedStart = startValue ? parseDay(startValue) : chartStart;
 	const firstDay = requestedStart > chartStart ? requestedStart : chartStart;
-	const days = Math.max(1, Math.min(14, Math.round((endDay - firstDay) / 86400000) + 1));
+	const daySpan = Math.round((endDay - firstDay) / 86400000);
+	const days = Number.isFinite(daySpan) ? Math.max(1, Math.min(14, daySpan + 1)) : 1;
 	const dateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 	const daily = new Map();
 	const series = [];
