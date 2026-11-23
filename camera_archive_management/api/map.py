@@ -237,7 +237,7 @@ def _clean_image_url(value: str | None, file_map: dict[str, object]) -> str | No
 	if len(matches) != 1:
 		return None
 	file_doc = matches[0]
-	if file_doc.is_private and not frappe.has_permission("File", "read", file_doc.name, raise_exception=False):
+	if file_doc.is_private and not frappe.has_permission("File", "read", file_doc.name, throw=False):
 		return None
 	return value
 

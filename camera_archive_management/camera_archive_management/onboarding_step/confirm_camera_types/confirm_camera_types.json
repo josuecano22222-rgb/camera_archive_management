@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Confirm camera types",
+ "title": "Confirm camera types",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Review camera types",
+ "description": "Review the seeded camera classifications first; the app installs missing core types additively and does not overwrite local edits. Add only types your organization actually uses, with consistent names, an active flag, and a short definition (for example, fixed, PTZ, ANPR, thermal). Deactivate obsolete types rather than silently reusing their meaning.\n\nThis vocabulary drives the camera inventory and coverage analysis. Keep device capabilities in the type description and per-camera fields, not as near-duplicate categories.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "Camera Type",
+ "show_full_form": 1
+}

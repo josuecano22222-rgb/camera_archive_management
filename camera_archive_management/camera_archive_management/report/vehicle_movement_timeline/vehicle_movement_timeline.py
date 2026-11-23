@@ -14,7 +14,7 @@ def _visible_image(value: str | None) -> str | None:
 	)
 	if len(files) != 1:
 		return None
-	if files[0].is_private and not frappe.has_permission("File", "read", files[0].name, raise_exception=False):
+	if files[0].is_private and not frappe.has_permission("File", "read", files[0].name, throw=False):
 		return None
 	return value
 

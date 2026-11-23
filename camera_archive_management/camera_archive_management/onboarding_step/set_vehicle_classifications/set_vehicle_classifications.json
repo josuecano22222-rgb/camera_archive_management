@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Set vehicle classifications",
+ "title": "Set vehicle classifications",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Review vehicle types",
+ "description": "Review the seeded vehicle types and add the classifications needed by movement analysis. Keep the taxonomy mutually understandable to operators (for example, passenger car, van, bus, bicycle, heavy goods vehicle); mark each active/inactive deliberately. Use illustrations only when you have rights to use them.\n\nVehicle Type is a reference record; the individual CAM Vehicle record stores the operational identity and any image. Avoid creating a type for every individual make/model unless that distinction is actually used in analysis.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "Vehicle Type",
+ "show_full_form": 1
+}

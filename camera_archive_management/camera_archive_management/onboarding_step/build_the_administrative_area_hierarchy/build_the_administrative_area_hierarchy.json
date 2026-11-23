@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Build the administrative area hierarchy",
+ "title": "Build the administrative area hierarchy",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Add Geo Admin Area",
+ "description": "Create the human-facing jurisdiction hierarchy against the correct Geo Dataset. Use stable source codes, a consistent level convention, explicit parent links, and honest source provenance (Imported, Verified, Manual, or Disputed). A parent must be saved before its child. Use `Is Group` only for nodes intended to contain children.\n\nDo not mix country datasets or invent codes that resemble source identifiers. Preserve disputed/uncertain jurisdiction labels transparently and retain source notes. Check the parent chain and level in the saved record; the map lookup should resolve the intended area rather than a similarly named neighbor.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "Geo Admin Area",
+ "show_full_form": 1
+}

@@ -33,6 +33,9 @@ fixtures = [
 		"filters": [["chart_name", "in", [
 			"Camera Archive - Camera Status", "Camera Archive - Daily Movements",
 			"Camera Archive - Movement Direction", "Camera Archive - Vehicles by Type",
+			"Camera Archive - Cameras by Area", "Camera Archive - Archive Retention State",
+			"Camera Archive - Archive Index Status", "Camera Archive - Ingest Batch Pipeline",
+			"Camera Archive - Archive Intake Trend",
 		]]],
 	},
 ]
@@ -67,7 +70,13 @@ scheduler_events = {
 	"daily": ["camera_archive_management.tasks.reconcile.requeue_pending_work"],
 }
 
-after_migrate = "camera_archive_management.setup.seed.seed_core_reference_data"
+# Install additive reference catalogs and the app-owned dashboard counters.
+# Number Card JSON is imported explicitly because Frappe v15 does not discover
+# Number Cards in third-party app module folders (the Siraj-Research pattern).
+after_migrate = [
+	"camera_archive_management.setup.seed.seed_core_reference_data",
+	"camera_archive_management.setup.dashboard.sync_number_cards",
+]
 
 # Offline assets are local. No tile or geocoder provider is configured here;
 # all network integrations require a later explicit administrator opt-in.

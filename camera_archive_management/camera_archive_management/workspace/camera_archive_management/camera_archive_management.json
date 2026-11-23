@@ -262,9 +262,47 @@
    "onboard": 0,
    "link_count": 0,
    "is_query_report": false
+  },
+  {
+   "type": "Card Break",
+   "label": "Supporting & Spatial Records",
+   "hidden": 0,
+   "onboard": 0,
+   "link_count": 0,
+   "is_query_report": 0
+  },
+  {
+   "type": "Link",
+   "label": "Camera Nearby Camera",
+   "link_to": "Camera Nearby Camera",
+   "link_type": "DocType",
+   "hidden": 0,
+   "onboard": 0,
+   "link_count": 0,
+   "is_query_report": false
+  },
+  {
+   "type": "Link",
+   "label": "Geo Boundary Geometry",
+   "link_to": "Geo Boundary Geometry",
+   "link_type": "DocType",
+   "hidden": 0,
+   "onboard": 0,
+   "link_count": 0,
+   "is_query_report": false
+  },
+  {
+   "type": "Link",
+   "label": "Motion Event Nearby Camera",
+   "link_to": "Motion Event Nearby Camera",
+   "link_type": "DocType",
+   "hidden": 0,
+   "onboard": 0,
+   "link_count": 0,
+   "is_query_report": false
   }
  ],
- "content": "[{\"id\":\"cam-hdr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Camera Archive Management</b></span>\",\"col\":12}},{\"id\":\"cam-desc\",\"type\":\"paragraph\",\"data\":{\"text\":\"Camera inventory, circular photo pins, vehicle movement history, archive integrity, and offline-first geographic lookup. Basemap tiles are read from Siraj’s shared private/siraj_tile_cache; coordinates remain exact decimal strings.\",\"col\":12}},{\"id\":\"cam-map\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Archive Map\",\"col\":4}},{\"id\":\"cam-camera\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera\",\"col\":4}},{\"id\":\"cam-event\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Motion Event\",\"col\":4}},{\"id\":\"cam-vehicle\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CAM Vehicle\",\"col\":4}},{\"id\":\"cam-asset\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Archive Asset\",\"col\":4}},{\"id\":\"cam-batch\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Archive Ingest Batch\",\"col\":4}},{\"id\":\"cam-reports-hdr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Operational &amp; Spatial Reports</b></span>\",\"col\":12}},{\"id\":\"cam-report-0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Coverage\",\"col\":3}},{\"id\":\"cam-report-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Movement Timeline\",\"col\":3}},{\"id\":\"cam-report-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Archive Integrity\",\"col\":3}},{\"id\":\"cam-report-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Location Quality\",\"col\":3}},{\"id\":\"cam-ref-hdr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reference &amp; Configuration</b></span>\",\"col\":12}},{\"id\":\"cam-ref-0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Area\",\"col\":3}},{\"id\":\"cam-ref-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Type\",\"col\":3}},{\"id\":\"cam-ref-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Credential\",\"col\":3}},{\"id\":\"cam-ref-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Type\",\"col\":3}},{\"id\":\"cam-ref-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Archive Settings\",\"col\":3}},{\"id\":\"cam-ref-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CAM Geo Settings\",\"col\":3}},{\"id\":\"cam-ref-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Dataset\",\"col\":3}},{\"id\":\"cam-ref-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Admin Area\",\"col\":3}},{\"id\":\"cam-ref-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Boundary\",\"col\":3}},{\"id\":\"cam-ref-9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Gazetteer Place\",\"col\":3}}]",
+ "content": "[{\"id\":\"cam-hdr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Camera Archive Management · Operational Control Room</b></span>\",\"col\":12}},{\"id\":\"cam-desc\",\"type\":\"paragraph\",\"data\":{\"text\":\"A practical home for camera inventory, geographic context, vehicle observations, and accountable archive operations. Follow the setup checklist from reference data to a verified movement; use the live counts and charts as signals, then inspect the underlying records. Map tiles and location services follow the site’s configured privacy and offline policy.\",\"col\":12}},{\"id\":\"cam-onboarding\",\"type\":\"onboarding\",\"data\":{\"onboarding_name\":\"Camera Archive Management Setup\",\"col\":12}},{\"id\":\"cam-quicknav-hdr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Quick actions</b></span>\",\"col\":12}},{\"id\":\"cam-shortcut-0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Archive Map\",\"col\":3}},{\"id\":\"cam-shortcut-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera\",\"col\":3}},{\"id\":\"cam-shortcut-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Motion Event\",\"col\":3}},{\"id\":\"cam-shortcut-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CAM Vehicle\",\"col\":3}},{\"id\":\"cam-shortcut-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Archive Asset\",\"col\":3}},{\"id\":\"cam-shortcut-5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Archive Ingest Batch\",\"col\":3}},{\"id\":\"cam-shortcut-6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Coverage\",\"col\":3}},{\"id\":\"cam-shortcut-7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Movement Timeline\",\"col\":3}},{\"id\":\"cam-shortcut-8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Archive Integrity\",\"col\":3}},{\"id\":\"cam-shortcut-9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Location Quality\",\"col\":3}},{\"id\":\"cam-shortcut-10\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Area\",\"col\":3}},{\"id\":\"cam-shortcut-11\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Type\",\"col\":3}},{\"id\":\"cam-shortcut-12\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Camera Credential\",\"col\":3}},{\"id\":\"cam-shortcut-13\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Type\",\"col\":3}},{\"id\":\"cam-shortcut-14\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Archive Settings\",\"col\":3}},{\"id\":\"cam-shortcut-15\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CAM Geo Settings\",\"col\":3}},{\"id\":\"cam-shortcut-16\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Dataset\",\"col\":3}},{\"id\":\"cam-shortcut-17\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Admin Area\",\"col\":3}},{\"id\":\"cam-shortcut-18\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Boundary\",\"col\":3}},{\"id\":\"cam-shortcut-19\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Geo Gazetteer Place\",\"col\":3}},{\"id\":\"cam-stat-hdr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Live operational pulse</b></span>\",\"col\":12}},{\"id\":\"cam-nc-0\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Cameras\",\"col\":3}},{\"id\":\"cam-nc-1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Cameras\",\"col\":3}},{\"id\":\"cam-nc-2\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Camera Areas\",\"col\":3}},{\"id\":\"cam-nc-3\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Recorded Movements\",\"col\":3}},{\"id\":\"cam-nc-4\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Registered Vehicles\",\"col\":3}},{\"id\":\"cam-nc-5\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Archive Assets\",\"col\":3}},{\"id\":\"cam-nc-6\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Archive Index\",\"col\":3}},{\"id\":\"cam-nc-7\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Failed Ingest Batches\",\"col\":3}},{\"id\":\"cam-charts-hdr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Trends, coverage &amp; archive health</b></span>\",\"col\":12}},{\"id\":\"cam-chart-0\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Camera Status\",\"col\":6}},{\"id\":\"cam-chart-1\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Daily Movements\",\"col\":6}},{\"id\":\"cam-chart-2\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Movement Direction\",\"col\":6}},{\"id\":\"cam-chart-3\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Vehicles by Type\",\"col\":6}},{\"id\":\"cam-chart-4\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Cameras by Area\",\"col\":6}},{\"id\":\"cam-chart-5\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Archive Retention State\",\"col\":6}},{\"id\":\"cam-chart-6\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Archive Index Status\",\"col\":6}},{\"id\":\"cam-chart-7\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Ingest Batch Pipeline\",\"col\":6}},{\"id\":\"cam-chart-8\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Camera Archive - Archive Intake Trend\",\"col\":6}},{\"id\":\"cam-explore-hdr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Explore the complete workspace</b></span>\",\"col\":12}},{\"id\":\"cam-section-0\",\"type\":\"card\",\"data\":{\"card_name\":\"Map & Geographic Data\",\"col\":4}},{\"id\":\"cam-section-1\",\"type\":\"card\",\"data\":{\"card_name\":\"Camera Registry & Events\",\"col\":4}},{\"id\":\"cam-section-2\",\"type\":\"card\",\"data\":{\"card_name\":\"Vehicle Movements\",\"col\":4}},{\"id\":\"cam-section-3\",\"type\":\"card\",\"data\":{\"card_name\":\"Archive Operations\",\"col\":6}},{\"id\":\"cam-section-4\",\"type\":\"card\",\"data\":{\"card_name\":\"Supporting & Spatial Records\",\"col\":6}}]",
  "charts": [
   {
    "chart_name": "Camera Archive - Camera Status",
@@ -281,6 +319,26 @@
   {
    "chart_name": "Camera Archive - Vehicles by Type",
    "label": "Vehicles by type"
+  },
+  {
+   "chart_name": "Camera Archive - Cameras by Area",
+   "label": "Cameras by Area"
+  },
+  {
+   "chart_name": "Camera Archive - Archive Retention State",
+   "label": "Archive Retention State"
+  },
+  {
+   "chart_name": "Camera Archive - Archive Index Status",
+   "label": "Archive Index Status"
+  },
+  {
+   "chart_name": "Camera Archive - Ingest Batch Pipeline",
+   "label": "Ingest Batch Pipeline"
+  },
+  {
+   "chart_name": "Camera Archive - Archive Intake Trend",
+   "label": "Archive Intake Trend"
   }
  ],
  "shortcuts": [
@@ -426,5 +484,39 @@
   }
  ],
  "cards": [],
- "custom_blocks": []
+ "custom_blocks": [],
+ "number_cards": [
+  {
+   "number_card_name": "Total Cameras",
+   "label": "Total Cameras"
+  },
+  {
+   "number_card_name": "Active Cameras",
+   "label": "Active Cameras"
+  },
+  {
+   "number_card_name": "Camera Areas",
+   "label": "Camera Areas"
+  },
+  {
+   "number_card_name": "Recorded Movements",
+   "label": "Recorded Movements"
+  },
+  {
+   "number_card_name": "Registered Vehicles",
+   "label": "Registered Vehicles"
+  },
+  {
+   "number_card_name": "Archive Assets",
+   "label": "Archive Assets"
+  },
+  {
+   "number_card_name": "Pending Archive Index",
+   "label": "Pending Archive Index"
+  },
+  {
+   "number_card_name": "Failed Ingest Batches",
+   "label": "Failed Ingest Batches"
+  }
+ ]
 }

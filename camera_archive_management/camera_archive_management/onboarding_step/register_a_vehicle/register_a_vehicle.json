@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Register a vehicle",
+ "title": "Register a vehicle",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Add a vehicle",
+ "description": "Create a reusable vehicle identity with a clear display name, vehicle type, and a stable registration/identifier only where collection and retention are authorized. Status should reflect the record's operational state. Vehicle images are optional and should have an approved source.\n\nDo not create a duplicate vehicle for every detection. A Motion Event can remain unlinked when the vehicle cannot be identified; use uncertainty rather than a speculative identity. Reopen the vehicle and verify its type and identifier before linking events.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "CAM Vehicle",
+ "show_full_form": 1
+}

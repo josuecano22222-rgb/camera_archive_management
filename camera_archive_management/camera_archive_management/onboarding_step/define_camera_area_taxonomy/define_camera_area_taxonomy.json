@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Define camera-area taxonomy",
+ "title": "Define camera-area taxonomy",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Create Camera Area",
+ "description": "Create the organizational/site hierarchy used to group cameras (for example, city → district → site). Save parent groups before child areas; mark a node as a group only when it has children. Choose concise, unique labels that operators will recognize and avoid encoding temporary status in the area name.\n\nA Camera Area is the operational inventory taxonomy; it is distinct from Geo Admin Area (jurisdiction) and Geo Boundary (geometry). A camera can have an operational area and separate geographic references. Verify parent/child navigation before assigning cameras.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "Camera Area",
+ "show_full_form": 1
+}

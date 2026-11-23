@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Load and verify boundary geometry",
+ "title": "Load and verify boundary geometry",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Add Geo Boundary",
+ "description": "A boundary links to its dataset and may link to a parent boundary and an administrative area. Use a stable boundary code, source ID, label, level, and source classification; include all four west/south/east/north bounds and valid WGS84 geometry rows. Geometry input is not a place to simplify away licensing or provenance.\n\nStart with a small, authorized test dataset. Confirm the importer reports successful features, that the geometry renders in the map and bounds contain the expected region, and that parent/area links are coherent. Keep the bundled coarse world-country shapes clearly distinguished from authoritative operational boundaries.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "Geo Boundary",
+ "show_full_form": 1
+}

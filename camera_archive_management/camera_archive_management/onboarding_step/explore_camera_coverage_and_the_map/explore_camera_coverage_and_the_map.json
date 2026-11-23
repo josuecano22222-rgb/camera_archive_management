@@ -1,0 +1,12 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Explore camera coverage and the map",
+ "title": "Explore camera coverage and the map",
+ "module": "Camera Archive Management",
+ "action": "Go to Page",
+ "action_label": "Open archive map",
+ "description": "Inspect registered cameras and recorded movement locations spatially. Confirm markers match the exact saved coordinates, active camera filters behave as expected, and no unexpected network tile/geocoder request occurs under your privacy policy. A missing background tile is not proof that a camera coordinate is missing; use the coordinate and location-quality reports too.\n\nThe map is a discovery/operations aid, not a substitute for source verification or authoritative boundary data. If the basemap is offline, review the offline tile/cache guide and its provider/license constraints.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "path": "camera-archive-map"
+}

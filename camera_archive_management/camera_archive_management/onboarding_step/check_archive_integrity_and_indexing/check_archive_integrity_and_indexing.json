@@ -1,0 +1,15 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Check archive integrity and indexing",
+ "title": "Check archive integrity and indexing",
+ "module": "Camera Archive Management",
+ "action": "View Report",
+ "action_label": "Review archive integrity",
+ "description": "Use this as a routine archive-control check. Investigate failed/missing checksum or index states, expired assets, and ingest failures. Do not delete or overwrite evidence to make a report clean; preserve audit trail and escalate according to policy.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_report": "Archive Integrity",
+ "report_type": "Script Report",
+ "report_reference_doctype": "Archive Asset",
+ "report_description": "Review checksum, retention, external-reference, ingest, and indexing health. Resolve missing or mismatched checksums, failed indexes, and invalid references according to approved retention and incident procedures."
+}

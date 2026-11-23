@@ -7,6 +7,9 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 
 from camera_archive_management.api import map as map_api
+from camera_archive_management.camera_archive_management.report.vehicle_movement_timeline import (
+	vehicle_movement_timeline as movement_timeline_report,
+)
 
 
 class TestMapEndpoint(FrappeTestCase):
@@ -166,6 +169,22 @@ class TestMapEndpoint(FrappeTestCase):
 		self.assertNotIn("username", props)
 		self.assertNotIn("password", props)
 		self.assertEqual(get_list.call_count, 4)
+
+	def test_private_camera_gallery_image_checks_file_read_with_frappe_v15_signature(self):
+		url = "/private/files/camera-secret.jpg"
+		file_doc = frappe._dict(name="FILE-PRIVATE", file_url=url, is_private=1)
+		with patch.object(frappe, "has_permission", return_value=False) as has_permission:
+			self.assertIsNone(map_api._clean_image_url(url, {url: [file_doc]}))
+		has_permission.assert_called_once_with("File", "read", "FILE-PRIVATE", throw=False)
+
+	def test_private_vehicle_report_image_checks_file_read_with_frappe_v15_signature(self):
+		file_doc = frappe._dict(name="FILE-PRIVATE", file_url="/private/files/vehicle-secret.jpg", is_private=1)
+		with (
+			patch.object(frappe, "get_all", return_value=[file_doc]),
+			patch.object(frappe, "has_permission", return_value=False) as has_permission,
+		):
+			self.assertIsNone(movement_timeline_report._visible_image(file_doc.file_url))
+		has_permission.assert_called_once_with("File", "read", "FILE-PRIVATE", throw=False)
 
 	def test_camera_main_image_is_returned_from_embedded_gallery(self):
 		camera = frappe._dict(
