@@ -1,5 +1,7 @@
 # Camera Archive Management — guided onboarding
 
+**العربية:** [دليل التهيئة باللغة العربية](../ar/onboarding/README.md)
+
 This guide follows the native Frappe **Module Onboarding → Onboarding Step** framework, as implemented in the public Siraj-Research app. The in-app checklist is called **Camera Archive Management Setup** and is embedded in the Camera Archive Management workspace. It walks from geographic and classification reference data to a camera, a vehicle, a movement observation, and an indexed/verified archive asset. The JSON records live under `camera_archive_management/camera_archive_management/module_onboarding/` and `onboarding_step/`; the workspace embeds the named onboarding block and tests verify every step target.
 
 ## Show the checklist
@@ -43,8 +45,17 @@ These are triage indicators, not evidence by themselves. A zero can mean no reco
 From the Bench directory, update the app branch that carries these changes, rebuild assets, migrate the `frappe.com` site, and clear its cache. Do not run a migration against a production site without your normal backup and change-approval procedure.
 
 ```bash
-# From your Bench directory; use the app branch used by this deployment.
-git -C apps/camera_archive_management pull origin arena/8970c81a-camera-archive-management
+# From your Bench directory. Review `git status --short` first and preserve local changes.
+APP=apps/camera_archive_management
+BRANCH=arena/8970c81a-camera-archive-management
+git -C "$APP" status --short
+git -C "$APP" fetch origin "$BRANCH"
+if git -C "$APP" show-ref --verify --quiet "refs/heads/$BRANCH"; then
+  git -C "$APP" switch "$BRANCH"
+else
+  git -C "$APP" switch --track -c "$BRANCH" "origin/$BRANCH"
+fi
+git -C "$APP" pull --ff-only origin "$BRANCH"
 bench build --app camera_archive_management
 bench --site frappe.com migrate
 bench --site frappe.com clear-cache

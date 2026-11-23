@@ -1,5 +1,7 @@
 # Built-in data packs
 
+**العربية:** [توثيق حزم البيانات باللغة العربية](README.ar.md)
+
 ## Core application references
 
 - `core_reference_data.json` seeds additive Camera Type and Vehicle Type classifications. Existing records are not modified.

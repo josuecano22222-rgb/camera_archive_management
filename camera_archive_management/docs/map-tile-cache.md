@@ -1,5 +1,7 @@
 # Camera map tiles: Siraj shared cache and online fallback
 
+**العربية:** [توثيق ذاكرة البلاطات باللغة العربية](ar/map-tile-cache.md)
+
 The Camera Archive map uses the installed `siraj_research` tile catalog; it does
 not define or substitute provider URLs. It reads and writes only the site's
 private `siraj_tile_cache` tree in Siraj's compatible layout:

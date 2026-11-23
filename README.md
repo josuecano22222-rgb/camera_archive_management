@@ -1,5 +1,7 @@
 # Camera Archive Management · 1.0.0
 
+**العربية:** [دليل التهيئة والتوثيق باللغة العربية](camera_archive_management/docs/ar/onboarding/README.md)
+
 A Frappe v15 application for camera inventory, controlled image galleries, vehicle registers, motion-event review, and permission-aware geospatial operations.
 
 ## Release highlights

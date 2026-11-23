@@ -1,5 +1,7 @@
 # Offline map and dataset storage
 
+**العربية:** [توثيق التخزين دون اتصال باللغة العربية](ar/offline-storage.md)
+
 The application ships Leaflet 1.9.4 and a generalized Natural Earth 1:110m
 world-boundary asset. It does not ship raster tiles, provider credentials, or
 country-scale administrative datasets. See the adjacent vendor license and

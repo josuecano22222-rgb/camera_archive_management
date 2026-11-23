@@ -1,5 +1,7 @@
 # Phase 5: Frappe integration and production hardening
 
+**العربية:** [توثيق التحصين للإنتاج باللغة العربية](ar/phase-5-hardening.md)
+
 ## Current verification boundary
 
 The repository tests can verify deterministic cache, controller, API and migration
