@@ -1,0 +1,12 @@
+World Atlas country-boundary asset
+
+File: countries-110m.json
+Source distribution: world-atlas 2.x, https://github.com/topojson/world-atlas
+The data represents Natural Earth 1:110m Admin 0 country boundaries:
+https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/
+
+Natural Earth data is in the public domain. The world-atlas package's
+redistribution license and copyright notice are reproduced in LICENSE.
+This generalized overview is not survey-grade and is not suitable as an
+authoritative administrative boundary dataset. Preserve the attribution and
+license notice when redistributing the asset.

@@ -1,9 +1,11 @@
-# Copyright (c) 2026, Camera Archive Management and contributors
-# For license information, please see license.txt
+from __future__ import annotations
 
-# import frappe
+import frappe
 from frappe.model.document import Document
 
 
 class CameraType(Document):
-	pass
+	def validate(self) -> None:
+		self.type_name = (self.type_name or "").strip()
+		if not self.type_name:
+			frappe.throw("Camera Type name is required.", frappe.ValidationError)

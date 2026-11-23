@@ -1,0 +1,15 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Review camera coverage report",
+ "title": "Review camera coverage report",
+ "module": "Camera Archive Management",
+ "action": "View Report",
+ "action_label": "View coverage",
+ "description": "Check camera status, type, area, and coordinate coverage. Use filters that match your operational scope, then follow up on cameras with missing or ambiguous locations. Coverage is only as good as the inventory and boundary sources supplied.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_report": "Camera Coverage",
+ "report_type": "Script Report",
+ "report_reference_doctype": "Camera",
+ "report_description": "Compare camera location and status by area; investigate gaps, duplicates, and stale devices."
+}

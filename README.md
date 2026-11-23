@@ -1,41 +1,66 @@
-### Camera Archive Management
+# Camera Archive Management · 1.0.0
 
-Camera device inventory, vehicle registry, and motion entry/exit event management with native Frappe workspace, reports, map, calendar, and tree views.
+**العربية:** [دليل التهيئة والتوثيق باللغة العربية](camera_archive_management/docs/ar/onboarding/README.md)
 
-### Installation
+A Frappe v15 application for camera inventory, controlled image galleries, vehicle registers, motion-event review, and permission-aware geospatial operations.
 
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+## Release highlights
+
+- Camera records own their ordered image gallery and selected main image. The main image is used for the native Frappe Image view and as the circular, coordinate-anchored map pin portrait.
+- The Camera Archive Map includes configurable basemaps, status/area and record filters, synchronized route state, Field pulse metrics, movement replay, geodesic tools, and rich camera/event popups. Vehicle imagery is reused on events, track endpoints, feeds, and reports; camera pins reflect status and selection.
+- With explicit browser-profile opt-in, the map can persist the current filtered snapshot, viewed popup details, and viewed images in IndexedDB for offline use. Uncached media and snapshots are visibly marked; storage can be cleared from the map. Raster tiles continue to use the shared Siraj server cache and are not copied into browser storage.
+- Geographic lookup is local-first and supports imported, attributed GeoJSON datasets. External geocoding remains opt-in. Map tile fetching and shared-cache writes remain governed by the Siraj administrator settings and must not be enabled by this app by default.
+- Camera and vehicle classification catalogs are additive core reference data. After migration, the app creates only missing classifications; it never overwrites site-defined descriptions or records.
+- A separate, explicitly enabled synthetic scenario exercises the map with fictional Amsterdam-area camera areas, multi-image cameras at precise decimal coordinates, vehicle types and illustrations (including per-vehicle and type-fallback cases), and timestamped Entry/Exit events with replay tracks and nearby-camera context. It is never installed or seeded automatically, is excluded from the map by default, and is visibly marked. Creation requires a deliberate per-site opt-in and explicit administrator command.
+
+## Data and safety
+
+The reference catalogs in `camera_archive_management/data/core_reference_data.json` are application master data, not demonstrations. Synthetic records are separate, never created by install or migrate, and generated only by an explicit operator command after enabling the per-site Boolean `camera_archive_allow_demo_data=true`. The command works on a disposable test site and, when deliberately authorized, on `frappe.com`:
 
 ```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch develop
-bench install-app camera_archive_management
+bench --site <site-name> set-config camera_archive_allow_demo_data True --parse
+bench --site <site-name> execute camera_archive_management.setup.demo_data.create_demo_scenario
 ```
 
-### Contributing
-
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
+The generator creates 12 cameras with two attached illustrations each and seven-decimal coordinate strings, four filterable demo areas, eight vehicles across four demo-only vehicle types (half have their own image; the rest exercise type-image fallback), and 72 Entry/Exit events arranged as nine timestamped track points per vehicle. Events carry nearby-camera distances and bearings. Synthetic camera and vehicle illustrations are bundled in `camera_archive_management/data/demo_camera_images/` and `camera_archive_management/data/demo_vehicle_images/`; none are real photographs or surveillance footage. Generated cameras, areas, vehicles, demo-only vehicle types, events, and their attached files carry the `CAM-MAP-V1-DEMO` tag. Demo records are excluded from the map unless the synthetic-data toggle is selected. Remove only this scenario and its owned attachments with:
 
 ```bash
-cd apps/camera_archive_management
-pre-commit install
+bench --site <site-name> execute camera_archive_management.setup.demo_data.delete_demo_scenario
+bench --site <site-name> set-config camera_archive_allow_demo_data False --parse
 ```
 
-Pre-commit is configured to use the following tools for checking and formatting your code:
+Do not enable the flag casually: production demo records are fictional and must never be mistaken for operational cameras or incidents.
 
-- ruff
-- eslint
-- prettier
-- pyupgrade
+The core pack includes Natural Earth generalized world country outlines (1:110m, public domain, pinned revision documented in `camera_archive_management/data/README.md`). These support global context and country-level local lookup, but are not legal, municipal, cadastral, or operational boundaries. The seed makes this pack active only when a site has no active dataset. Higher-resolution administrative or gazetteer datasets must be supplied by an administrator with verified provenance and license; the import path retains that attribution separately. The map can also be used for camera coordinates and authorized tile layers without any imported local data.
 
-### CI
+## Installation
 
-This app can use GitHub Actions for CI. The following workflows are configured:
+Install from the release branch/tag appropriate to your Bench and supported Frappe v15 environment:
 
-- CI: Installs this app and runs unit tests on every push to `develop` branch.
-- Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
+```bash
+cd ~/frappe-bench
+bench get-app https://github.com/josuecano22222-rgb/camera_archive_management --branch <release-ref>
+bench --site <site-name> install-app camera_archive_management
+```
 
+The additive reference catalog is seeded after migration. Import boundary or gazetteer data only after verifying its provenance, license, coverage, and source-specific import requirements.
 
-### License
+## Developer checks
 
-mit
+Run framework-independent tests from the app repository:
+
+```bash
+python -m unittest camera_archive_management.geo.test_tile_cache camera_archive_management.geo.test_geometry camera_archive_management.camera_archive_management.test_doctype_interface -v
+```
+
+Run Frappe-dependent tests from a Frappe Bench environment with the app installed:
+
+```bash
+bench --site <test-site> run-tests --app camera_archive_management
+```
+
+Also validate Python and JavaScript syntax, build app assets, and review the data migration on a disposable copy before any production update.
+
+## Version
+
+This project declares its first complete release as **1.0.0**. For this initial build, the operator has explicitly waived backup/staging-clone gates because there is no application data to preserve; schema changes still run in a controlled maintenance window, and the app test suite and asset build must be checked. Follow [`docs/v1.0.0-release-runbook.md`](docs/v1.0.0-release-runbook.md) for update, migration, verification, and explicit sample-data commands. No synthetic records are created automatically.

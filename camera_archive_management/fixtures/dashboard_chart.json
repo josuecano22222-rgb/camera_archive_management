@@ -1,0 +1,355 @@
+[
+ {
+  "chart_name": "Camera Archive - Camera Status",
+  "chart_type": "Group By",
+  "document_type": "Camera",
+  "group_by_based_on": "status",
+  "group_by_type": "Count",
+  "number_of_groups": 8,
+  "type": "Donut",
+  "filters_json": "[]",
+  "doctype": "Dashboard Chart",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ],
+  "name": "Camera Archive - Camera Status"
+ },
+ {
+  "chart_name": "Camera Archive - Daily Movements",
+  "chart_type": "Count",
+  "document_type": "Motion Event",
+  "based_on": "detected_at",
+  "timeseries": 1,
+  "timespan": "Last Month",
+  "time_interval": "Daily",
+  "type": "Bar",
+  "filters_json": "[]",
+  "doctype": "Dashboard Chart",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ],
+  "name": "Camera Archive - Daily Movements"
+ },
+ {
+  "chart_name": "Camera Archive - Movement Direction",
+  "chart_type": "Group By",
+  "document_type": "Motion Event",
+  "group_by_based_on": "motion_type",
+  "group_by_type": "Count",
+  "number_of_groups": 4,
+  "type": "Donut",
+  "filters_json": "[]",
+  "doctype": "Dashboard Chart",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ],
+  "name": "Camera Archive - Movement Direction"
+ },
+ {
+  "chart_name": "Camera Archive - Vehicles by Type",
+  "chart_type": "Group By",
+  "document_type": "CAM Vehicle",
+  "group_by_based_on": "vehicle_type",
+  "group_by_type": "Count",
+  "number_of_groups": 8,
+  "type": "Bar",
+  "filters_json": "[]",
+  "doctype": "Dashboard Chart",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ],
+  "name": "Camera Archive - Vehicles by Type"
+ },
+ {
+  "doctype": "Dashboard Chart",
+  "name": "Camera Archive - Cameras by Area",
+  "chart_name": "Camera Archive - Cameras by Area",
+  "chart_type": "Group By",
+  "document_type": "Camera",
+  "group_by_based_on": "area",
+  "group_by_type": "Count",
+  "number_of_groups": 12,
+  "type": "Bar",
+  "filters_json": "[]",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ]
+ },
+ {
+  "doctype": "Dashboard Chart",
+  "name": "Camera Archive - Archive Retention State",
+  "chart_name": "Camera Archive - Archive Retention State",
+  "chart_type": "Group By",
+  "document_type": "Archive Asset",
+  "group_by_based_on": "retention_state",
+  "group_by_type": "Count",
+  "number_of_groups": 12,
+  "type": "Donut",
+  "filters_json": "[]",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ]
+ },
+ {
+  "doctype": "Dashboard Chart",
+  "name": "Camera Archive - Archive Index Status",
+  "chart_name": "Camera Archive - Archive Index Status",
+  "chart_type": "Group By",
+  "document_type": "Archive Asset",
+  "group_by_based_on": "index_status",
+  "group_by_type": "Count",
+  "number_of_groups": 12,
+  "type": "Donut",
+  "filters_json": "[]",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ]
+ },
+ {
+  "doctype": "Dashboard Chart",
+  "name": "Camera Archive - Ingest Batch Pipeline",
+  "chart_name": "Camera Archive - Ingest Batch Pipeline",
+  "chart_type": "Group By",
+  "document_type": "Archive Ingest Batch",
+  "group_by_based_on": "status",
+  "group_by_type": "Count",
+  "number_of_groups": 12,
+  "type": "Donut",
+  "filters_json": "[]",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ]
+ },
+ {
+  "doctype": "Dashboard Chart",
+  "name": "Camera Archive - Archive Intake Trend",
+  "chart_name": "Camera Archive - Archive Intake Trend",
+  "chart_type": "Count",
+  "document_type": "Archive Asset",
+  "based_on": "creation",
+  "timeseries": 1,
+  "timespan": "Last Month",
+  "time_interval": "Daily",
+  "type": "Line",
+  "filters_json": "[]",
+  "is_public": 1,
+  "roles": [
+   {
+    "doctype": "Has Role",
+    "role": "CAM Viewer"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Operator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Analyst"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Archive Manager"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "CAM Geo Administrator"
+   },
+   {
+    "doctype": "Has Role",
+    "role": "System Manager"
+   }
+  ]
+ }
+]

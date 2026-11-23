@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Create an archive asset record",
+ "title": "Create an archive asset record",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Register archive asset",
+ "description": "Index a recording or evidence asset against its camera and, where applicable, Motion Event and ingest batch. Record the capture window, media type, byte size, storage backend, retention state, and a SHA-256 checksum when available/required. For Frappe File storage attach the approved file; for external storage, use the configured scope/reference and never expose a private URL.\n\nCheck that capture start is not after capture end, the camera/event association is correct, and the checksum describes the exact stored bytes. The index status is managed by the indexing workflow—do not mark an unverified asset complete by hand.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "Archive Asset",
+ "show_full_form": 1
+}

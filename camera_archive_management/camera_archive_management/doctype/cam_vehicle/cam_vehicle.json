@@ -1,0 +1,214 @@
+{
+ "doctype": "DocType",
+ "name": "CAM Vehicle",
+ "module": "Camera Archive Management",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Vehicle Profile"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CAM-VEH-.####",
+   "default": "CAM-VEH-.####",
+   "reqd": 1,
+   "hidden": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "vehicle_name",
+   "fieldtype": "Data",
+   "label": "Vehicle Name",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "in_global_search": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "is_demo_record",
+   "fieldtype": "Check",
+   "label": "Synthetic Demo Record",
+   "default": "0",
+   "read_only": 1,
+   "in_list_view": 1,
+   "description": "Identifies clearly synthetic records generated only for demonstration and test workflows."
+  },
+  {
+   "fieldname": "demo_scenario",
+   "fieldtype": "Data",
+   "label": "Demo Scenario",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "vehicle_number",
+   "fieldtype": "Data",
+   "label": "Vehicle Number",
+   "unique": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Link",
+   "label": "Vehicle Type",
+   "options": "Vehicle Type",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Image & status"
+  },
+  {
+   "fieldname": "vehicle_image",
+   "fieldtype": "Attach Image",
+   "label": "Vehicle Image",
+   "description": "Primary image used for vehicle movement markers and cards."
+  },
+  {
+   "fieldname": "vehicle_image_preview",
+   "fieldtype": "HTML",
+   "label": "Movement Icon Preview"
+  },
+  {
+   "fieldname": "vehicle_list_image",
+   "fieldtype": "Data",
+   "label": "List Image Source",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInactive",
+   "default": "Active",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Operator notes"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
+  "naming_series",
+  "vehicle_name",
+  "is_demo_record",
+  "demo_scenario",
+  "vehicle_number",
+  "vehicle_type",
+  "layout_section_1_2",
+  "vehicle_image",
+  "vehicle_image_preview",
+  "vehicle_list_image",
+  "status",
+  "layout_tab_2",
+  "layout_section_2_1",
+  "description",
+  "notes"
+ ],
+ "permissions": [
+  {
+   "role": "CAM Viewer",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "report": 1,
+   "export": 0,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Analyst",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Archive Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "select": 1,
+   "import": 1
+  }
+ ],
+ "istable": 0,
+ "issingle": 0,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "autoname": "naming_series:",
+ "image_field": "vehicle_list_image",
+ "title_field": "vehicle_name",
+ "search_fields": "vehicle_name,vehicle_number",
+ "allow_import": 1
+}

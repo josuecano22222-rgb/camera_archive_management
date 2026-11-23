@@ -1,6 +1,13 @@
 [pre_model_sync]
-# Patches added in this section will be executed before doctypes are migrated
-# Read docs to understand patches: https://frappeframework.com/docs/v14/user/en/database-migrations
+camera_archive_management.patches.v1_0.migrate_archive_settings_single
+camera_archive_management.patches.v1_0.rename_vehicle_camera
+camera_archive_management.patches.v1_0.rename_geo_settings
+camera_archive_management.patches.v1_0.isolate_camera_credentials
+camera_archive_management.patches.v1_0.assert_doctype_namespace
 
 [post_model_sync]
-# Patches added in this section will be executed after doctypes are migrated
+camera_archive_management.patches.v1_0.ensure_child_table_columns
+camera_archive_management.patches.v1_0.migrate_camera_photo_gallery
+camera_archive_management.patches.v1_0.ensure_unique_keys
+camera_archive_management.patches.v1_0.normalize_camera_geolocation
+camera_archive_management.patches.v1_0.remove_camera_archive_overview_page

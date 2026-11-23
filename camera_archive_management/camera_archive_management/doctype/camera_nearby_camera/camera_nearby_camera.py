@@ -1,9 +1,10 @@
-# Copyright (c) 2026, Camera Archive Management and contributors
-# For license information, please see license.txt
+from __future__ import annotations
 
-# import frappe
+import frappe
 from frappe.model.document import Document
 
 
 class CameraNearbyCamera(Document):
-	pass
+	def validate(self) -> None:
+		if self.parent and self.camera == self.parent:
+			frappe.throw("A Camera cannot be listed as its own nearby camera.", frappe.ValidationError)

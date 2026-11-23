@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Register a geographic dataset",
+ "title": "Register a geographic dataset",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Add Geo Dataset",
+ "description": "Create one provenance record for each geographic source: stable lowercase dataset ID (`[a-z0-9][a-z0-9._-]`, max 64 characters), human-readable label, source URL or publisher, version, license, attribution, country tags, and WGS84 coverage bounds. Keep source and license details with the dataset so downstream boundaries can be interpreted and audited.\n\nFor a file import, attach the source GeoJSON as a **private** Frappe File, then let the dataset importer process it; do not manually force Running/Complete/Failed status or claim an import completed when it has not. Confirm import status, feature count, timestamps, and error details before proceeding. Review your source's redistribution terms before uploading.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "Geo Dataset",
+ "show_full_form": 1
+}

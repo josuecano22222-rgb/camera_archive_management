@@ -1,0 +1,12 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Review geographic settings",
+ "title": "Review geographic settings",
+ "module": "Camera Archive Management",
+ "action": "Go to Page",
+ "action_label": "Open Geo Settings",
+ "description": "Review the active dataset and spatial lookup policy before entering locations. The install seeds a coarse Natural Earth world-country dataset; it is a generalized cartographic reference, not a legal boundary layer or detailed street map. Set the active dataset deliberately, check that online geocoding and tile fetching match your privacy policy, and prefer local/offline data where external disclosure is not approved.\n\nUse exact WGS84 decimal-degree coordinates (latitude −90…90, longitude −180…180). Do not round precise source coordinates. A blank active dataset or missing regional coverage is not fixed by creating a camera; import an authorized dataset first.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "path": "cam-geo-settings"
+}

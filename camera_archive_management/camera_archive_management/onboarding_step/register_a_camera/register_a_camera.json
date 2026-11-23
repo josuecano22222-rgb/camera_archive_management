@@ -1,0 +1,13 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Register a camera",
+ "title": "Register a camera",
+ "module": "Camera Archive Management",
+ "action": "Create Entry",
+ "action_label": "Register Camera",
+ "description": "Create the physical camera record after its area and type exist. Enter a stable camera name, active status, type, operational area, installation/serial identifiers where appropriate, and exact latitude/longitude. Add address and jurisdiction/boundary links only when supported by your source. Record location source and confidence; resolve ambiguous lookups instead of treating a guess as verified.\n\nConnectivity fields can reveal infrastructure; follow your access policy and do not put passwords here. Add a main image only when authorized and useful. Save, reopen, and verify the marker, coverage, location snapshots, and related area on the Camera Archive Map.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_document": "Camera",
+ "show_full_form": 1
+}

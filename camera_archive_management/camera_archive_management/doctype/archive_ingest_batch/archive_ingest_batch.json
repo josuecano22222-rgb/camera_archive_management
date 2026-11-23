@@ -1,0 +1,176 @@
+{
+ "doctype": "DocType",
+ "name": "Archive Ingest Batch",
+ "module": "Camera Archive Management",
+ "engine": "InnoDB",
+ "fields": [
+  {
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Submission"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Source & idempotency"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "ING-.#####",
+   "default": "ING-.#####",
+   "reqd": 1,
+   "hidden": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "source_scope",
+   "fieldtype": "Data",
+   "label": "Source Scope",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "fieldtype": "Data",
+   "label": "Idempotency Key",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Manifest"
+  },
+  {
+   "fieldname": "source_manifest",
+   "fieldtype": "Attach",
+   "label": "Source Manifest",
+   "description": "Operator-provided JSON manifest listing asset metadata; source media remains external/file storage."
+  },
+  {
+   "fieldname": "manifest_json",
+   "fieldtype": "Long Text",
+   "label": "Manifest Json",
+   "description": "Optional bounded JSON manifest payload."
+  },
+  {
+   "fieldname": "layout_tab_2",
+   "fieldtype": "Tab Break",
+   "label": "Processing"
+  },
+  {
+   "fieldname": "layout_section_2_1",
+   "fieldtype": "Section Break",
+   "label": "Run status"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nQueued\nRunning\nComplete\nFailed",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "queued_by",
+   "fieldtype": "Link",
+   "label": "Queued By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "started_at",
+   "fieldtype": "Datetime",
+   "label": "Started At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "finished_at",
+   "fieldtype": "Datetime",
+   "label": "Finished At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "layout_section_2_2",
+   "fieldtype": "Section Break",
+   "label": "Outcome"
+  },
+  {
+   "fieldname": "processed_count",
+   "fieldtype": "Int",
+   "label": "Processed Count",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_log",
+   "fieldtype": "Long Text",
+   "label": "Error Log",
+   "read_only": 1
+  }
+ ],
+ "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
+  "naming_series",
+  "source_scope",
+  "idempotency_key",
+  "layout_section_1_2",
+  "source_manifest",
+  "manifest_json",
+  "layout_tab_2",
+  "layout_section_2_1",
+  "status",
+  "queued_by",
+  "started_at",
+  "finished_at",
+  "layout_section_2_2",
+  "processed_count",
+  "error_log"
+ ],
+ "permissions": [
+  {
+   "role": "CAM Archive Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "select": 1,
+   "import": 1
+  }
+ ],
+ "istable": 0,
+ "issingle": 0,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "links": [],
+ "autoname": "naming_series:",
+ "title_field": "source_scope",
+ "search_fields": "source_scope,idempotency_key,status",
+ "allow_import": 1
+}

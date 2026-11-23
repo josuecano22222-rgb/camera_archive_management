@@ -39,7 +39,7 @@ Camera Map,Camera Map
 Camera Name,Camera Name
 Camera Number,Camera Number
 Camera Offline Map,Camera Offline Map
-Camera Photos,Camera Photos
+Image Gallery,Image Gallery
 Camera Security Register,Camera Security Register
 Camera Snapshot,Camera Snapshot
 Camera Status,Camera Status
@@ -321,7 +321,6 @@ Power & Connectivity,Power & Connectivity
 Power supply within specification,Power supply within specification
 Preventive,Preventive
 Primary,Primary
-"Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list.","Primary street photo, auto-synced from Camera Photos. Enables the native Image view (gallery) on the Camera list."
 Priority,Priority
 Quick Facts,Quick Facts
 REF,REF
@@ -513,3 +512,277 @@ Offline: showing cached data ({0} assets); data never downloaded is unavailable.
 Camera details unavailable offline (never downloaded),Camera details unavailable offline (never downloaded)
 Unavailable offline,Unavailable offline
 Currently displayed layer,Currently displayed layer
+Map tools and layers,Map tools and layers
+Measure distance,Measure distance
+Measure area,Measure area
+Finish,Finish
+Clear tools,Clear tools
+Locate me,Locate me
+Copy coordinates,Copy coordinates
+Movement tracks,Movement tracks
+Country borders,Country borders
+Include synthetic demo records,Include synthetic demo records
+"Click the map to inspect coordinates, or choose a measurement tool.","Click the map to inspect coordinates, or choose a measurement tool."
+"Distance tool: click points along a route, then choose Finish.","Distance tool: click points along a route, then choose Finish."
+"Area tool: click polygon corners, then choose Finish.","Area tool: click polygon corners, then choose Finish."
+{0} points · {1},{0} points · {1}
+Add at least one more corner to measure area.,Add at least one more corner to measure area.
+{0} vertices · approximate area {1},{0} vertices · approximate area {1}
+Area measurement complete: {0},Area measurement complete: {0}
+Distance measurement complete: {0},Distance measurement complete: {0}
+Add more points before finishing this measurement.,Add more points before finishing this measurement.
+"Map tools cleared. Click the map to inspect coordinates, or choose a tool.","Map tools cleared. Click the map to inspect coordinates, or choose a tool."
+{0} cameras · showing {1} of {2} movements,{0} cameras · showing {1} of {2} movements
+events,events
+Timeline at start,Timeline at start
+No events,No events
+Play movement timeline,Play movement timeline
+Pause movement timeline,Pause movement timeline
+click to copy,click to copy
+Copied coordinates: {0},Copied coordinates: {0}
+Clipboard access is unavailable; coordinates: {0},Clipboard access is unavailable; coordinates: {0}
+This browser does not provide geolocation.,This browser does not provide geolocation.
+Waiting for browser location permission…,Waiting for browser location permission…
+Your browser-reported location is shown locally; it was not sent to the server.,Your browser-reported location is shown locally; it was not sent to the server.
+Unable to access browser location.,Unable to access browser location.
+No bundled country boundary data is available.,No bundled country boundary data is available.
+SYNTHETIC DEMO DATA,SYNTHETIC DEMO DATA
+Map activity insights,Map activity insights
+CAMERA ARCHIVE · FIELD INTELLIGENCE,CAMERA ARCHIVE · FIELD INTELLIGENCE
+Field pulse,Field pulse
+Active cameras,Active cameras
+in this view,in this view
+Movements,Movements
+in selected window,in selected window
+Vehicles tracked,Vehicles tracked
+unique records,unique records
+Daily movement rhythm,Daily movement rhythm
+latest 14 days,latest 14 days
+Daily camera movement activity chart,Daily camera movement activity chart
+Movement type breakdown,Movement type breakdown
+DEMO INCLUDED,DEMO INCLUDED
+movements,movements
+{0} movements in the chart window,{0} movements in the chart window
+"Movement mix: {0} entries, {1} exits, {2} other","Movement mix: {0} entries, {1} exits, {2} other"
+Other,Other
+Camera status,Camera status
+Active (default),Active (default)
+Camera Area ID,Camera Area ID
+"Showing active cameras by default; no exact camera, vehicle, event, or area filter is active.","Showing active cameras by default; no exact camera, vehicle, event, or area filter is active."
+Stores viewed map details and images in this browser profile until cleared.,Stores viewed map details and images in this browser profile until cleared.
+Save viewed details and images offline,Save viewed details and images offline
+Clear offline data,Clear offline data
+Cameras in view,Cameras in view
+Offline images and details cleared from this browser profile.,Offline images and details cleared from this browser profile.
+Browser storage settings are unavailable.,Browser storage settings are unavailable.
+Could not clear browser offline storage.,Could not clear browser offline storage.
+Offline snapshot could not be saved; check browser storage.,Offline snapshot could not be saved; check browser storage.
+Offline snapshot could not be saved.,Offline snapshot could not be saved.
+Viewed detail could not be saved for offline use.,Viewed detail could not be saved for offline use.
+Offline saving is enabled for this user on this browser profile.,Offline saving is enabled for this user on this browser profile.
+Offline: showing only previously saved map details and images.,Offline: showing only previously saved map details and images.
+Offline saving is off; viewed imagery and details are not stored on this device.,Offline saving is off; viewed imagery and details are not stored on this device.
+Image unavailable,Image unavailable
+Not saved for offline use,Not saved for offline use
+native zoom limits unavailable,native zoom limits unavailable
+overlay on,overlay on
+overlay off,overlay off
+shared Siraj cache/provider,shared Siraj cache/provider
+upscaled beyond native zoom {0},upscaled beyond native zoom {0}
+native zoom up to {0},native zoom up to {0}
+Unknown status,Unknown status
+Camera type,Camera type
+Serial number,Serial number
+Camera number,Camera number
+Installation date,Installation date
+Latitude (exact),Latitude (exact)
+Longitude (exact),Longitude (exact)
+Geographic area,Geographic area
+Boundary,Boundary
+Field of view,Field of view
+Lookup source,Lookup source
+Lookup confidence,Lookup confidence
+Lookup ambiguous,Lookup ambiguous
+Lookup resolved at,Lookup resolved at
+Recent motion events,Recent motion events
+View all camera events,View all camera events
+Movement type,Movement type
+Detected at,Detected at
+Vehicle type,Vehicle type
+Coordinate latitude snapshot,Coordinate latitude snapshot
+Coordinate longitude snapshot,Coordinate longitude snapshot
+Address snapshot,Address snapshot
+"Selected camera coordinates: {0}, {1}","Selected camera coordinates: {0}, {1}"
+OFFLINE CACHED SNAPSHOT,OFFLINE CACHED SNAPSHOT
+Offline: this saved snapshot is shown; imagery not saved in this browser is marked unavailable.,Offline: this saved snapshot is shown; imagery not saved in this browser is marked unavailable.
+No exact matching offline snapshot is available; uncached cameras and events are not shown.,No exact matching offline snapshot is available; uncached cameras and events are not shown.
+Map request failed; no matching saved snapshot is available.,Map request failed; no matching saved snapshot is available.
+Offline: no matching saved snapshot. Uncached map records are unavailable.,Offline: no matching saved snapshot. Uncached map records are unavailable.
+"Stores the current filtered map snapshot, popup details and viewed images in this browser profile until cleared.","Stores the current filtered map snapshot, popup details and viewed images in this browser profile until cleared."
+"Save map snapshot, details and images offline","Save map snapshot, details and images offline"
+tile source,tile source
+shared cache plus configured provider,shared cache plus configured provider
+shared server cache only,shared server cache only
+native zoom range {0}–{1},native zoom range {0}–{1}
+Camera images are unavailable,Camera images are unavailable
+Current map snapshot is too large to save offline.,Current map snapshot is too large to save offline.
+Camera map,Camera map
+Camera Archive Map,Camera Archive Map
+From,From
+To,To
+Camera ID,Camera ID
+CAM Vehicle ID,CAM Vehicle ID
+Motion Event ID,Motion Event ID
+Basemap,Basemap
+Hybrid,Hybrid
+Apply filters,Apply filters
+Movement timeline,Movement timeline
+Camera and vehicle movement map,Camera and vehicle movement map
+Loading cameras and movements…,Loading cameras and movements…
+Map tiles use the shared Siraj server cache.,Map tiles use the shared Siraj server cache.
+Browser is online; missing tiles use the configured server provider when enabled.,Browser is online; missing tiles use the configured server provider when enabled.
+Browser is offline; the Bench server must remain reachable to use cached tiles.,Browser is offline; the Bench server must remain reachable to use cached tiles.
+Event,Event
+Active filters,Active filters
+Country boundaries could not be loaded.,Country boundaries could not be loaded.
+No enabled Siraj raster layers are available; cached camera markers remain visible.,No enabled Siraj raster layers are available; cached camera markers remain visible.
+Siraj online tile fetch and shared-cache writes are enabled.,Siraj online tile fetch and shared-cache writes are enabled.
+Using the shared tile cache only; external fetching is disabled by settings.,Using the shared tile cache only; external fetching is disabled by settings.
+Tile settings could not be loaded; cached map tiles may still be available.,Tile settings could not be loaded; cached map tiles may still be available.
+Map tiles loaded from the shared server cache/provider.,Map tiles loaded from the shared server cache/provider.
+A tile is missing or unavailable; cached tiles remain usable and upstream retries are throttled.,A tile is missing or unavailable; cached tiles remain usable and upstream retries are throttled.
+unidentified vehicle,unidentified vehicle
+Previous photo,Previous photo
+Next photo,Next photo
+Unidentified vehicle,Unidentified vehicle
+Request failed,Request failed
+Date range,Date range
+not restricted,not restricted
+SAVED SNAPSHOT (not live),SAVED SNAPSHOT (not live)
+Map service unavailable; showing saved data from {0}.,Map service unavailable; showing saved data from {0}.
+Show saved popup details,Show saved popup details
+No popup details have been saved on this browser profile.,No popup details have been saved on this browser profile.
+Showing previously viewed popup details only; these records are saved and may be stale.,Showing previously viewed popup details only; these records are saved and may be stale.
+Current filters are bypassed: showing only previously viewed saved records.,Current filters are bypassed: showing only previously viewed saved records.
+Latest position for {0},Latest position for {0}
+{0} cameras · {1} vehicle movements,{0} cameras · {1} vehicle movements
+This browser does not provide persistent offline storage.,This browser does not provide persistent offline storage.
+Map view,Map view
+Vehicle movements,Vehicle movements
+Camera locations,Camera locations
+Start date/time,Start date/time
+End date/time,End date/time
+Date range preset,Date range preset
+Custom range,Custom range
+Last 24 hours,Last 24 hours
+Last 7 days,Last 7 days
+Last 30 days,Last 30 days
+All time,All time
+Exact coordinates,Exact coordinates
+Area / category,Area / category
+Coverage / activity,Coverage / activity
+{0} photos,{0} photos
+{0} recent events,{0} recent events
+Camera category,Camera category
+Camera area,Camera area
+Nearby cameras,Nearby cameras
+Camera details,Camera details
+Open camera image map,Open camera image map
+Open vehicle movement map,Open vehicle movement map
+Location source,Location source
+Location confidence,Location confidence
+Location ambiguous,Location ambiguous
+Resolved at,Resolved at
+Type & Endpoint,Type & Endpoint
+Status & Activity,Status & Activity
+More camera details,More camera details
+Camera identity,Camera identity
+Geographic context,Geographic context
+Coordinate quality,Coordinate quality
+Photo gallery,Photo gallery
+Camera photo,Camera photo
+View camera events,View camera events
+Port {0},Port {0}
+View camera photo gallery,View camera photo gallery
+Camera image unavailable,Camera image unavailable
+Camera image unavailable offline,Camera image unavailable offline
+Loading shared Siraj map tiles…,Loading shared Siraj map tiles…
+No Siraj raster layer is enabled; camera points remain available.,No Siraj raster layer is enabled; camera points remain available.
+Shared Siraj map tiles loaded.,Shared Siraj map tiles loaded.
+A shared map tile is unavailable; camera points remain available.,A shared map tile is unavailable; camera points remain available.
+Tile missing from shared cache; provider fetching is disabled. Camera points remain available.,Tile missing from shared cache; provider fetching is disabled. Camera points remain available.
+Using shared Siraj cache and the configured provider.,Using shared Siraj cache and the configured provider.
+Using shared Siraj cache only; provider fetching is disabled.,Using shared Siraj cache only; provider fetching is disabled.
+Shared map tiles unavailable; camera points remain available.,Shared map tiles unavailable; camera points remain available.
+This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.,This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.
+Fit results,Fit results
+Tile unavailable,Tile unavailable
+Type & Status,Type & Status
+Gallery & Actions,Gallery & Actions
+Gallery,Gallery
+No recent activity,No recent activity
+Movement,Movement
+Camera image,Camera image
+Open camera,Open camera
+No results in this view have valid coordinates.,No results in this view have valid coordinates.
+There are no loaded map results to fit.,There are no loaded map results to fit.
+OPERATIONS CENTRE,OPERATIONS CENTRE
+"Live, permission-aware snapshots of cameras, movement activity, vehicles, archives, and geographic data.","Live, permission-aware snapshots of cameras, movement activity, vehicles, archives, and geographic data."
+Loading latest statistics…,Loading latest statistics…
+Refresh statistics,Refresh statistics
+Open map,Open map
+Daily movement activity,Daily movement activity
+Visible Motion Events from the last 14 days,Visible Motion Events from the last 14 days
+Cameras grouped by current status,Cameras grouped by current status
+Movement types,Movement types
+Visible entry and exit events,Visible entry and exit events
+Most-travelled vehicles,Most-travelled vehicles
+Top vehicles by visible movement records,Top vehicles by visible movement records
+No visible data for this chart yet.,No visible data for this chart yet.
+Chart data unavailable,Chart data unavailable
+Statistics are unavailable. Your shortcuts are still ready.,Statistics are unavailable. Your shortcuts are still ready.
+Updated {0},Updated {0}
+just now,just now
+Browse workspace,Browse workspace
+QUICK ACCESS,QUICK ACCESS
+"Choose a section to open its records, reports, or map.","Choose a section to open its records, reports, or map."
+Statistics follow your Frappe permissions. Sensitive credential records remain protected by their DocType permissions.,Statistics follow your Frappe permissions. Sensitive credential records remain protected by their DocType permissions.
+Maps & Analysis,Maps & Analysis
+Camera Registry,Camera Registry
+Movements & Vehicles,Movements & Vehicles
+Geographic Reference,Geographic Reference
+Archive & Configuration,Archive & Configuration
+Unknown camera,Unknown camera
+at this camera,at this camera
+moves,moves
+Open vehicle,Open vehicle
+All vehicle movements,All vehicle movements
+{0} movements at this camera,{0} movements at this camera
+{0} total movements in this map view,{0} total movements in this map view
+{0} vehicle groups · {1} movements. Click to expand.,{0} vehicle groups · {1} movements. Click to expand.
+Statistics chart,Statistics chart
+{0} total movements,{0} total movements
+Camera Coverage,Camera Coverage
+Vehicle Movement Timeline,Vehicle Movement Timeline
+Geo Location Quality,Geo Location Quality
+Camera Credential,Camera Credential
+CAM Vehicle,CAM Vehicle
+Geo Dataset,Geo Dataset
+Geo Admin Area,Geo Admin Area
+Geo Boundary,Geo Boundary
+Geo Gazetteer Place,Geo Gazetteer Place
+CAM Geo Settings,CAM Geo Settings
+Archive Asset,Archive Asset
+Archive Ingest Batch,Archive Ingest Batch
+Archive Integrity,Archive Integrity
+No user-configured vehicle image; showing the saved movement point,No user-configured vehicle image; showing the saved movement point
+No user-configured vehicle image,No user-configured vehicle image
+Vehicle image unavailable,Vehicle image unavailable
+Nearby camera alert,Nearby camera alert
+configured camera connection,configured camera connection
+within the configured nearby-camera radius,within the configured nearby-camera radius
+area: {0},area: {0}
+and {0} more camera(s),and {0} more camera(s)
+submitted,submitted
+saved,saved
+Movement {0}. Other camera coverage is available for this location:,Movement {0}. Other camera coverage is available for this location:

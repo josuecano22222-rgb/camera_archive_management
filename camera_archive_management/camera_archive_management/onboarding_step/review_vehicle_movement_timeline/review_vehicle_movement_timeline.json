@@ -1,0 +1,15 @@
+{
+ "doctype": "Onboarding Step",
+ "name": "Review vehicle movement timeline",
+ "title": "Review vehicle movement timeline",
+ "module": "Camera Archive Management",
+ "action": "View Report",
+ "action_label": "Open movement timeline",
+ "description": "Use the timeline to inspect one vehicle or time period across cameras. Check the source event records before acting on an apparent route; timestamps and camera locations must be independently reliable.",
+ "is_complete": 0,
+ "is_skipped": 0,
+ "reference_report": "Vehicle Movement Timeline",
+ "report_type": "Script Report",
+ "report_reference_doctype": "Motion Event",
+ "report_description": "Check event times, direction, camera, and vehicle links; verify timezone and chronology."
+}

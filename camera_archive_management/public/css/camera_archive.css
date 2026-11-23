@@ -1,0 +1,246 @@
+/* The Siraj coordinate picker is the visible map UI for Camera records. Keep it
+   on its own full-width form row and hide the stock Geolocation map through the
+   Camera DocType's hidden field metadata to avoid rendering two maps side by side. */
+.form-section.siraj-location-section .siraj-coord-group {
+	flex: 0 0 100%;
+	width: 100%;
+	max-width: 100%;
+}
+.form-section.siraj-location-section .siraj-coordinate-map,
+.form-section.siraj-location-section .siraj-coord-canvas {
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+}
+
+.cam-map-toolbar {
+	display: flex;
+	align-items: end;
+	gap: 12px;
+	flex-wrap: wrap;
+	padding: 12px 0;
+}
+.cam-map-toolbar label { min-width: 130px; margin: 0; font-size: 12px; color: var(--text-muted); }
+.cam-map-toolbar .form-control { margin-top: 4px; }
+.cam-map-link-filter { flex: 1 1 150px; min-width: 150px; margin: 0; }
+.cam-map-toolbar .cam-map-link-filter .form-group { margin: 0; }
+.cam-map-toolbar .cam-map-link-filter .control-label { margin-bottom: 2px; color: var(--text-muted); font-size: 12px; }
+.cam-map-date-preset { min-width: 145px; }
+.cam-map-filter-note { color: var(--text-muted); font-size: 12px; padding-bottom: 8px; }
+.cam-map-shell { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 12px; min-height: 68vh; }
+.cam-map-canvas { min-height: 68vh; border: 1px solid var(--border-color); border-radius: 10px; z-index: 1; background: var(--control-bg); }
+.cam-map-sidebar { min-height: 68vh; max-height: 75vh; overflow: auto; border: 1px solid var(--border-color); border-radius: 10px; background: var(--card-bg); padding: 12px; }
+.cam-map-summary { padding: 4px 4px 12px; font-weight: 600; }
+.cam-map-insights { margin: 0 0 10px; padding: 14px 12px 8px; border: 1px solid var(--border-color); border-radius: 14px; background: linear-gradient(145deg, var(--card-bg), var(--subtle-fg)); box-shadow: 0 8px 24px rgba(15,23,42,.08); }
+.cam-map-insight-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+.cam-map-insight-heading h3 { margin: 2px 0 0; font-size: 19px; font-weight: 750; letter-spacing: -.035em; color: var(--text-color); }
+.cam-map-eyebrow { color: #0f766e; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+.cam-map-window { max-width: 105px; padding: 4px 7px; border-radius: 999px; background: rgba(15,118,110,.10); color: #0f766e; font-size: 9px; font-weight: 750; text-align: center; }
+.cam-map-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.cam-map-kpi { min-width: 0; min-height: 76px; padding: 8px 7px 7px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--card-bg); }
+.cam-map-kpi > span, .cam-map-kpi small { display: block; overflow: hidden; color: var(--text-muted); font-size: 9px; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.cam-map-kpi > strong { display: block; margin: 5px 0 1px; color: var(--text-color); font-size: 21px; font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+.cam-kpi-camera > strong { color: #0f766e; }
+.cam-kpi-movement > strong { color: #c2410c; }
+.cam-kpi-vehicles > strong { color: #4f46e5; }
+.cam-map-chart-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 14px 1px 0; color: var(--text-color); font-size: 11px; }
+.cam-map-chart-heading span { color: var(--text-muted); font-size: 9px; }
+.cam-map-activity-chart { display: block; width: 100%; height: 112px; overflow: visible; }
+.cam-chart-gridline { stroke: var(--border-color); stroke-width: 1; stroke-dasharray: 2 4; }
+.cam-chart-bar { fill: #0f766e; opacity: .78; transition: opacity .15s ease; }
+.cam-chart-bar:hover { opacity: 1; }
+.cam-chart-bar-current { fill: #f97316; opacity: .95; }
+.cam-chart-tick { fill: var(--text-muted); font-size: 8px; }
+.cam-map-mix { padding: 4px 1px 8px; }
+.cam-map-mix-bar { display: flex; width: 100%; height: 7px; overflow: hidden; border-radius: 999px; background: var(--subtle-fg); }
+.cam-map-mix-bar > span { display: block; min-width: 0; transition: width .25s ease; }
+.cam-mix-entry { background: #0f766e; }
+.cam-mix-exit { background: #f97316; }
+.cam-mix-other { background: #8b5cf6; }
+.cam-map-mix-legend { display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-top: 6px; color: var(--text-muted); font-size: 8px; }
+.cam-map-mix-legend > span { white-space: nowrap; }
+.cam-map-mix-legend i { display: inline-block; width: 6px; height: 6px; margin-right: 3px; border-radius: 50%; }
+.cam-dot-entry { background: #0f766e; }
+.cam-dot-exit { background: #f97316; }
+.cam-map-insights .cam-map-summary { padding: 8px 2px 4px; border-top: 1px solid var(--border-color); font-size: 10px; }
+.cam-leaflet-icon { background: transparent; border: 0; }
+.cam-pin { position: relative; width: 44px; height: 44px; border: 3px solid #fff; border-radius: 50%; overflow: visible; box-shadow: 0 2px 8px rgba(0,0,0,.38); background: #1e40af; display: flex; align-items: center; justify-content: center; }
+.cam-camera-pin { width: 48px; height: 48px; background: #0f766e; z-index: 1; }
+.cam-camera-pin::before, .cam-camera-pin::after { content: ""; position: absolute; left: 50%; width: 0; height: 0; transform: translateX(-50%); border-left: 10px solid transparent; border-right: 10px solid transparent; }
+.cam-camera-pin::before { bottom: -14px; border-top: 15px solid #fff; filter: drop-shadow(0 2px 2px rgba(0,0,0,.28)); }
+.cam-camera-pin::after { bottom: -10px; border-left-width: 7px; border-right-width: 7px; border-top: 11px solid #0f766e; }
+.cam-camera-pin > * { position: relative; z-index: 2; }
+.cam-vehicle-pin { background: #c2410c; }
+.cam-vehicle-event-badge { position: absolute; right: -5px; bottom: -4px; display: flex; align-items: center; justify-content: center; width: 19px; height: 19px; border: 1px solid #fff; border-radius: 50%; background: #111827; color: #fff; font-size: 9px; font-weight: 800; line-height: 1; }
+.cam-vehicle-event-entry { background: #047857; }
+.cam-vehicle-event-exit { background: #b91c1c; }
+.cam-pin-image { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+.cam-pin-fallback { color: #fff; font-size: 22px; line-height: 1; text-shadow: 0 1px 2px #222; }
+.cam-pin-count { position: absolute; right: -5px; top: -5px; width: 19px; height: 19px; border-radius: 50%; background: #111827; border: 1px solid #fff; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.cam-map-popup { min-width: 210px; max-width: 300px; color: var(--text-color); }
+.cam-map-popup h4 { margin: 2px 0 8px; font-size: 15px; }
+.cam-camera-detail-popup { box-sizing: border-box; width: min(300px, calc(100vw - 56px)); min-width: 0; max-width: 320px; padding: 8px 2px 2px; direction: inherit; }
+.cam-motion-user-location-leaflet { background: transparent; border: 0; }
+
+.cam-motion-vehicle-popup { min-width: 210px; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--card-bg); color: var(--text-color); text-align: center; }
+.cam-motion-vehicle-popup h4 { margin: 0 0 5px; font-size: 15px; font-weight: 750; }
+.cam-motion-vehicle-popup p { margin: 0 0 10px; color: var(--text-muted); }
+.cam-motion-total-count { display: block; margin: 5px 0; color: #0f766e; font-size: 15px; }
+.cam-motion-camera-count { display: block; color: var(--text-muted); font-size: 11px; }
+.cam-motion-popup-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 10px; }
+.cam-motion-spider-leg { stroke-dasharray: 4 4; }
+.cam-camera-detail-card { box-sizing: border-box; display: flex; flex-direction: column; align-items: center; width: 100%; gap: 0; padding: 12px; margin: 0; border: 1px solid var(--border-color); border-radius: 14px; background: var(--card-bg); box-shadow: 0 6px 18px rgba(15,23,42,.14); color: var(--text-color); text-align: center; }
+.cam-camera-detail-card *, .cam-camera-detail-popup * { box-sizing: border-box; }
+.cam-camera-card-avatar { display: flex; align-items: center; justify-content: center; width: 72px; height: 72px; flex: 0 0 72px; overflow: hidden; border: 2px solid #0f766e; border-radius: 50%; background: var(--subtle-fg); box-shadow: 0 3px 12px rgba(15,23,42,.16); }
+.cam-camera-card-avatar[role="button"] { cursor: pointer; }
+.cam-camera-card-avatar[role="button"]:focus-visible { outline: 3px solid #facc15; outline-offset: 3px; }
+.cam-camera-card-image { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cam-camera-card-fallback { color: #0f766e; font-size: 20px; font-weight: 750; line-height: 1; }
+.cam-camera-card-heading { display: flex; flex-direction: column; align-items: center; gap: 5px; width: 100%; min-width: 0; padding-top: 8px; }
+.cam-camera-card-title { display: block; width: 100%; color: var(--text-color); font-size: 15px; font-weight: 750; line-height: 1.25; overflow-wrap: anywhere; }
+.cam-camera-card-meta { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 5px 7px; width: 100%; }
+.cam-camera-card-subtitle { min-width: 0; color: var(--text-muted); font-size: 10px; line-height: 1.35; overflow-wrap: anywhere; unicode-bidi: plaintext; }
+.cam-camera-card-heading .cam-demo-badge { margin: 0; padding: 2px 6px; font-size: 9px; }
+.cam-camera-card-divider { display: block; width: 100%; height: 0; margin: 10px 0 9px; border: 0; border-top: 1px solid var(--border-color); opacity: 1; }
+.cam-camera-card-sections { display: flex; flex-direction: column; align-self: stretch; gap: 6px; text-align: start; }
+.cam-camera-card-section { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 6px 8px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--subtle-fg); }
+.cam-camera-card-label { display: block; color: var(--text-muted); font-size: 9px; font-weight: 700; letter-spacing: .025em; line-height: 1.25; text-transform: uppercase; }
+.cam-camera-card-value { display: block; max-width: 100%; margin: 0; color: var(--text-color); font-size: 12px; font-weight: 650; line-height: 1.4; overflow-wrap: anywhere; unicode-bidi: plaintext; }
+.cam-camera-card-coordinate { direction: ltr; text-align: start; font-variant-numeric: tabular-nums; }
+.cam-camera-status-badge { display: inline-flex; align-items: center; padding: 2px 7px; margin: 0; border-radius: 999px; color: #fff; font-size: 9px; font-weight: 700; line-height: 1.3; background: #475569; white-space: nowrap; }
+.cam-camera-status-badge.cam-camera-status-active { background: #15803d; }
+.cam-camera-status-badge.cam-camera-status-inactive { background: #475569; }
+.cam-camera-status-badge.cam-camera-status-maintenance { background: #b45309; }
+.cam-camera-card-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+.cam-camera-card-actions .btn { min-height: 24px; padding: 3px 7px; line-height: 1.25; }
+.cam-camera-gallery { align-self: stretch; min-width: 0; margin-top: 8px; border: 1px solid var(--border-color); border-radius: 9px; background: var(--card-bg); }
+.cam-camera-gallery-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 32px; padding: 6px 8px; color: var(--text-color); cursor: pointer; text-align: start; list-style: none; }
+.cam-camera-gallery-heading::-webkit-details-marker { display: none; }
+.cam-camera-gallery-heading::after { content: "＋"; color: var(--text-muted); font-size: 12px; }
+.cam-camera-gallery[open] .cam-camera-gallery-heading::after { content: "−"; }
+.cam-camera-gallery-title { font-size: 11px; font-weight: 700; }
+.cam-gallery-total { color: var(--text-muted); font-size: 10px; white-space: nowrap; }
+.cam-gallery-frame { display: flex; align-items: center; justify-content: center; width: min(100%, 160px); height: 128px; margin: 0 auto; overflow: hidden; border: 1px solid var(--border-color); border-radius: 9px; background: var(--subtle-fg); }
+.cam-gallery-image { display: block; width: 100%; height: 100%; object-fit: contain; }
+.cam-gallery-controls { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 5px 0 0; }
+.cam-gallery-count { min-width: 45px; color: var(--text-muted); font-size: 10px; text-align: center; }
+.cam-gallery-caption { min-height: 16px; margin: 3px 8px 6px; color: var(--text-muted); font-size: 10px; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
+.cam-image-unavailable { box-sizing: border-box; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 8px; color: var(--text-muted); background: var(--subtle-fg); font-size: 10px; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
+.cam-camera-card-actions.cam-camera-related-actions { padding-top: 7px; border-top: 1px solid var(--border-color); }
+.cam-popup-more-details { align-self: stretch; margin-top: 8px; padding: 7px 8px; border: 1px solid var(--border-color); border-radius: 8px; text-align: start; }
+.cam-popup-more-details > summary { color: var(--text-color); cursor: pointer; font-size: 11px; font-weight: 700; }
+.cam-card-info-group { margin: 8px 0; }
+.cam-card-info-group h5, .cam-camera-more-heading { margin: 5px 0 4px; color: var(--text-color); font-size: 10px; font-weight: 700; }
+.cam-camera-card-description { margin: 7px 0 0; color: var(--text-muted); font-size: 11px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; text-align: start; }
+.cam-camera-event-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.cam-camera-detail-popup .cam-popup-details { max-height: none; }
+html[lang^="ar"] .cam-camera-card-label { letter-spacing: 0; }
+.cam-popup-address, .cam-popup-meta { margin: 4px 0 8px; color: var(--text-muted); font-size: 12px; }
+.cam-popup-actions { margin-top: 8px; }
+.cam-movement-card { display: flex; gap: 10px; width: 100%; text-align: left; align-items: center; padding: 9px 6px; border: 0; border-top: 1px solid var(--border-color); background: transparent; color: var(--text-color); }
+.cam-movement-card:hover { background: var(--subtle-fg); }
+.cam-movement-image { width: 44px; height: 44px; min-width: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
+.cam-movement-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 11px; overflow-wrap: anywhere; }
+.cam-vehicle-preview { max-width: 160px; max-height: 120px; object-fit: contain; border-radius: 8px; margin: 8px 0; }
+.cam-vehicle-preview-fallback { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #e7e5e4; }
+.cam-map-user-location-point { display: flex; align-items: center; justify-content: center; }
+.cam-map-user-location-point::before { content: ""; display: block; width: 12px; height: 12px; border: 2px solid #fff; border-radius: 50%; background: #64748b; box-shadow: 0 0 0 2px #64748b; }
+.cam-report-vehicle-image { width: 42px; height: 42px; object-fit: cover; border-radius: 50%; border: 2px solid var(--border-color); }
+.cam-map-empty { padding: 18px; border-radius: 8px; background: var(--subtle-fg); color: var(--text-muted); }
+.cam-native-map-status { position: absolute; z-index: 500; left: 10px; bottom: 10px; max-width: min(440px, calc(100% - 20px)); padding: 6px 9px; border: 1px solid var(--border-color); border-radius: 7px; background: var(--card-bg); box-shadow: 0 2px 8px rgba(15,23,42,.14); color: var(--text-muted); font-size: 11px; line-height: 1.35; }
+.map-view-container { position: relative; }
+@media (max-width: 900px) {
+	.cam-map-shell { grid-template-columns: 1fr; }
+	.cam-map-canvas { min-height: 55vh; }
+	.cam-map-sidebar { min-height: 220px; max-height: 32vh; }
+}
+.cam-photo-gallery-editor { padding: 10px 0; }
+.cam-photo-gallery-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.cam-photo-gallery-note { margin: 8px 0; font-size: 12px; }
+.cam-photo-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.cam-photo-card { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 8px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--card-bg); }
+.cam-photo-card > img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 50%; background: var(--subtle-fg); }
+.cam-photo-card.is-main { border: 2px solid #d4a017; box-shadow: 0 0 0 2px rgba(212,160,23,.14); }
+.cam-photo-main-badge { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); padding: 3px 8px; border-radius: 20px; background: #14532d; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .04em; white-space: nowrap; }
+.cam-photo-card:not(.is-main) .cam-photo-main-badge { left: auto; right: 12px; transform: none; width: 22px; height: 22px; padding: 0; display: flex; align-items: center; justify-content: center; background: rgba(17,24,39,.82); }
+.cam-photo-caption { font-size: 12px; }
+.cam-photo-actions { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; }
+.cam-photo-actions .btn { min-width: 30px; }
+.cam-map-toolbox { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 10px 0; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--card-bg); box-shadow: 0 2px 10px rgba(15,23,42,.06); }
+.cam-map-toolgroup { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.cam-map-toolgroup label { display: inline-flex; align-items: center; gap: 5px; margin: 0 6px 0 0; color: var(--text-muted); white-space: nowrap; }
+.cam-map-tool-status { flex: 1 1 250px; min-width: 180px; color: var(--text-muted); font-size: 12px; }
+.cam-map-playback { display: flex; flex: 1 1 300px; align-items: center; gap: 8px; min-width: 240px; }
+.cam-map-time { flex: 1; accent-color: #0f766e; }
+.cam-map-time-label { min-width: 94px; color: var(--text-muted); font-size: 11px; text-align: right; }
+.cam-map-demo-toggle { color: #9a3412 !important; font-weight: 600; }
+.cam-demo-badge { display: inline-flex; margin: 0 0 6px; padding: 3px 7px; border-radius: 999px; background: #fff7ed; color: #9a3412; font-size: 10px; font-weight: 800; letter-spacing: .04em; }
+.cam-pin-demo { outline: 2px dashed #f97316; outline-offset: 2px; }
+.cam-map-play { min-width: 36px; font-weight: 700; }
+.cam-map-tile-telemetry, .cam-map-offline-status { flex-basis: 100%; color: var(--text-muted); font-size: 11px; }
+.cam-map-offline-toggle { color: var(--text-muted) !important; white-space: normal !important; }
+.cam-camera-pin { transition: filter .18s ease, box-shadow .18s ease, transform .18s ease; }
+.cam-siraj-pin-photo { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.cam-siraj-photo-count { position: absolute; z-index: 5; top: -3px; right: 1px; display: flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 3px; border: 1px solid #fff; border-radius: 999px; background: #111827; color: #fff; font-size: 9px; font-weight: 800; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,.35); }
+.cam-camera-pin.cam-camera-status-active { box-shadow: 0 2px 8px rgba(0,0,0,.38), 0 0 0 2px #16a34a; }
+.cam-camera-pin.cam-camera-status-inactive { box-shadow: 0 2px 8px rgba(0,0,0,.38), 0 0 0 2px #64748b; filter: saturate(.55); }
+.cam-camera-pin.cam-camera-status-maintenance { box-shadow: 0 2px 8px rgba(0,0,0,.38), 0 0 0 3px #f59e0b; }
+.cam-camera-pin.cam-pin-selected { transform: scale(1.1); box-shadow: 0 2px 10px rgba(0,0,0,.45), 0 0 0 4px #facc15; z-index: 10; }
+.cam-camera-status-badge { display: inline-flex; align-self: center; padding: 3px 8px; margin-bottom: 5px; border-radius: 999px; color: #fff; font-size: 10px; font-weight: 700; background: #475569; }
+.cam-camera-status-badge.cam-camera-status-active { background: #15803d; }
+.cam-camera-status-badge.cam-camera-status-inactive { background: #475569; }
+.cam-camera-status-badge.cam-camera-status-maintenance { background: #b45309; }
+.cam-popup-details { display: grid; grid-template-columns: minmax(90px, .8fr) minmax(110px, 1.2fr); gap: 3px 8px; max-height: 175px; overflow: auto; margin: 8px 0; font-size: 11px; text-align: start; }
+.cam-popup-detail { display: contents; }
+.cam-popup-detail dt { color: var(--text-muted); font-weight: 500; }
+.cam-popup-detail dd { margin: 0; overflow-wrap: anywhere; color: var(--text-color); }
+.cam-popup-related { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.cam-popup-related > strong { flex-basis: 100%; font-size: 11px; }
+.cam-image-unavailable { box-sizing: border-box; display: flex; align-items: center; justify-content: center; min-width: 0; min-height: 0; padding: 8px; color: var(--text-muted); background: var(--subtle-fg); font-size: 10px; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
+.cam-gallery-frame > .cam-image-unavailable { width: 100%; height: 100%; flex: 1 1 auto; }
+.cam-pin > .cam-image-unavailable { width: 100%; height: 100%; border-radius: 50%; }
+.cam-movement-image.cam-image-unavailable { width: 66px; min-width: 66px; height: 44px; border-radius: 8px; }
+@media (max-width: 767px) {
+	.cam-map-toolbox { align-items: stretch; }
+	.cam-map-toolgroup { width: 100%; }
+	.cam-map-toolgroup .btn { flex: 1 1 auto; }
+	.cam-map-tool-status { flex-basis: 100%; }
+	.cam-map-playback { flex-basis: 100%; }
+}
+
+.cam-overview-page { padding-bottom: 28px; }
+.cam-overview-shell { --cam-overview-border: var(--border-color, #e2e8f0); --cam-overview-muted: var(--text-muted, #64748b); --cam-overview-card: var(--card-bg, #fff); --cam-overview-text: var(--text-color, #172033); max-width: 1440px; margin: 0 auto; color: var(--cam-overview-text); }
+.cam-overview-intro, .cam-overview-directory-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin: 8px 0 18px; }
+.cam-overview-intro h2, .cam-overview-directory-heading h2 { margin: 2px 0 5px; font-size: clamp(21px, 2.3vw, 30px); font-weight: 800; letter-spacing: -.035em; }
+.cam-overview-intro p, .cam-overview-directory-heading > span { max-width: 720px; margin: 0; color: var(--cam-overview-muted); }
+.cam-overview-eyebrow { color: #0f766e; font-size: 10px; font-weight: 850; letter-spacing: .14em; }
+.cam-overview-updated { padding: 7px 11px; border: 1px solid var(--cam-overview-border); border-radius: 999px; color: var(--cam-overview-muted); font-size: 11px; white-space: nowrap; }
+.cam-overview-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 18px 0; }
+.cam-overview-kpi { display: grid; grid-template-columns: 42px 1fr; grid-template-rows: auto 1fr; align-items: center; min-height: 98px; padding: 15px; border: 1px solid var(--cam-overview-border); border-radius: 14px; background: var(--cam-overview-card); box-shadow: 0 5px 18px rgba(15,23,42,.045); }
+.cam-overview-kpi-icon { grid-row: span 2; display: grid; width: 34px; height: 34px; place-items: center; border-radius: 10px; background: color-mix(in srgb, var(--cam-kpi-color) 12%, transparent); color: var(--cam-kpi-color); font-size: 19px; }
+.cam-overview-kpi > span:nth-child(2) { color: var(--cam-overview-muted); font-size: 11px; font-weight: 650; }
+.cam-overview-kpi strong { align-self: end; font-size: 26px; font-weight: 850; letter-spacing: -.04em; line-height: 1; }
+.cam-overview-charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.cam-overview-chart-card { min-width: 0; padding: 16px; border: 1px solid var(--cam-overview-border); border-radius: 14px; background: var(--cam-overview-card); }
+.cam-overview-chart-wide { grid-column: span 2; }
+.cam-overview-chart-card h3 { margin: 0; font-size: 14px; font-weight: 750; }
+.cam-overview-chart-card > p { margin: 3px 0 10px; color: var(--cam-overview-muted); font-size: 11px; }
+.cam-overview-chart-card svg { display: block; width: 100%; min-height: 180px; overflow: visible; }
+.cam-overview-bar { fill: #0f766e; opacity: .78; transition: opacity .15s ease; }
+.cam-overview-bar:hover { opacity: 1; }
+.cam-overview-bar.is-current { fill: #f97316; opacity: .95; }
+.cam-overview-chart-label { fill: var(--cam-overview-muted); font-size: 9px; }
+.cam-overview-chart-value { fill: var(--cam-overview-text); font-size: 9px; font-weight: 750; }
+.cam-overview-chart-empty { display: grid; min-height: 150px; place-items: center; color: var(--cam-overview-muted); font-size: 12px; }
+.cam-overview-directory-heading { margin: 30px 0 12px; }
+.cam-overview-directory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cam-overview-directory-card { min-width: 0; padding: 15px; border: 1px solid var(--cam-overview-border); border-radius: 14px; background: var(--cam-overview-card); }
+.cam-overview-directory-card h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 13px; font-weight: 750; }
+.cam-overview-directory-card h3 span { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 8px; background: rgba(15,118,110,.1); color: #0f766e; font-size: 17px; }
+.cam-overview-directory-links { display: grid; gap: 6px; }
+.cam-overview-link { display: flex; justify-content: space-between; align-items: center; min-height: 34px; padding: 6px 9px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--cam-overview-text); font-size: 11px; text-align: left; transition: background .12s ease, border-color .12s ease; }
+.cam-overview-link::after { content: "›"; color: var(--cam-overview-muted); font-size: 15px; }
+.cam-overview-link:hover, .cam-overview-link:focus-visible { border-color: var(--cam-overview-border); background: rgba(15,118,110,.06); outline: none; }
+.cam-overview-footnote { margin: 14px 2px 0; color: var(--cam-overview-muted); font-size: 10px; }
+@media (max-width: 1000px) { .cam-overview-kpis { grid-template-columns: repeat(3, minmax(0,1fr)); } .cam-overview-directory { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 640px) { .cam-overview-intro, .cam-overview-directory-heading { align-items: flex-start; flex-direction: column; } .cam-overview-kpis { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; } .cam-overview-kpi { padding: 11px; } .cam-overview-charts, .cam-overview-directory { grid-template-columns: 1fr; } .cam-overview-chart-wide { grid-column: auto; } }

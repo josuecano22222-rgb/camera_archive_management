@@ -1,70 +1,154 @@
 {
- "actions": [],
- "allow_rename": 1,
- "creation": "2026-11-22 07:05:30.674488",
  "doctype": "DocType",
+ "name": "Vehicle Type",
+ "module": "Camera Archive Management",
  "engine": "InnoDB",
- "field_order": [
-  "type_name",
-  "is_active",
-  "column_break_1",
-  "description"
- ],
  "fields": [
   {
-   "allow_in_quick_entry": 1,
+   "fieldname": "layout_tab_1",
+   "fieldtype": "Tab Break",
+   "label": "Vehicle Classification"
+  },
+  {
+   "fieldname": "layout_section_1_1",
+   "fieldtype": "Section Break",
+   "label": "Type identity"
+  },
+  {
    "fieldname": "type_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Type Name",
    "reqd": 1,
-   "unique": 1
+   "unique": 1,
+   "in_list_view": 1
   },
   {
-   "allow_in_quick_entry": 1,
-   "default": "1",
+   "fieldname": "is_demo_record",
+   "fieldtype": "Check",
+   "label": "Synthetic Demo Record",
+   "default": "0",
+   "read_only": 1,
+   "description": "Identifies a fictional vehicle type created for explicitly requested demonstration and test workflows."
+  },
+  {
+   "fieldname": "demo_scenario",
+   "fieldtype": "Data",
+   "label": "Demo Scenario",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
    "fieldname": "is_active",
    "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Is Active"
+   "label": "Is Active",
+   "default": "1"
   },
   {
-   "fieldname": "column_break_1",
-   "fieldtype": "Column Break"
+   "fieldname": "layout_section_1_2",
+   "fieldtype": "Section Break",
+   "label": "Illustration"
   },
   {
-   "allow_in_quick_entry": 1,
+   "fieldname": "vehicle_type_image",
+   "fieldtype": "Attach Image",
+   "label": "Vehicle Type Image",
+   "description": "Fallback movement icon when a vehicle has no primary image."
+  },
+  {
+   "fieldname": "layout_section_1_3",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
    "fieldname": "description",
    "fieldtype": "Small Text",
    "label": "Description"
   }
  ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-11-22 07:05:30.674488",
- "modified_by": "Administrator",
- "module": "Camera Archive Management",
- "name": "Vehicle Type",
- "owner": "Administrator",
+ "field_order": [
+  "layout_tab_1",
+  "layout_section_1_1",
+  "type_name",
+  "is_demo_record",
+  "demo_scenario",
+  "is_active",
+  "layout_section_1_2",
+  "vehicle_type_image",
+  "layout_section_1_3",
+  "description"
+ ],
  "permissions": [
   {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
+   "role": "CAM Analyst",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "report": 1,
    "export": 1,
    "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Viewer",
    "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
    "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Operator",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "report": 1,
+   "export": 0,
+   "print": 1,
+   "select": 1
+  },
+  {
+   "role": "CAM Archive Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "select": 1,
+   "import": 1
+  },
+  {
    "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
    "share": 1,
-   "write": 1
+   "select": 1,
+   "import": 1
   }
  ],
- "row_format": "Dynamic",
- "rows_threshold_for_grid_search": 20,
+ "istable": 0,
+ "issingle": 0,
+ "is_tree": 0,
+ "track_changes": 1,
+ "allow_rename": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "links": [],
+ "autoname": "field:type_name",
+ "title_field": "type_name",
+ "image_field": "vehicle_type_image",
+ "allow_import": 1
 }

@@ -1,0 +1,126 @@
+{
+ "doctype": "Module Onboarding",
+ "name": "Camera Archive Management Setup",
+ "title": "Camera Archive Management Setup",
+ "subtitle": "From reference data and camera registration to verified movements and archive operations",
+ "module": "Camera Archive Management",
+ "success_message": "Your Camera Archive workspace is ready. Keep the location, movement, and archive-integrity checks in your operating routine.",
+ "documentation_url": "https://github.com/josuecano22222-rgb/camera_archive_management/tree/main/camera_archive_management/docs/onboarding",
+ "is_complete": 0,
+ "allow_roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "CAM Operator"
+  },
+  {
+   "role": "CAM Archive Manager"
+  },
+  {
+   "role": "CAM Geo Administrator"
+  }
+ ],
+ "steps": [
+  {
+   "step": "Open the Camera Archive workspace",
+   "is_optional": 0,
+   "idx": 1
+  },
+  {
+   "step": "Review geographic settings",
+   "is_optional": 1,
+   "idx": 2
+  },
+  {
+   "step": "Register a geographic dataset",
+   "is_optional": 1,
+   "idx": 3
+  },
+  {
+   "step": "Build the administrative area hierarchy",
+   "is_optional": 1,
+   "idx": 4
+  },
+  {
+   "step": "Load and verify boundary geometry",
+   "is_optional": 1,
+   "idx": 5
+  },
+  {
+   "step": "Define camera-area taxonomy",
+   "is_optional": 1,
+   "idx": 6
+  },
+  {
+   "step": "Confirm camera types",
+   "is_optional": 1,
+   "idx": 7
+  },
+  {
+   "step": "Set vehicle classifications",
+   "is_optional": 1,
+   "idx": 8
+  },
+  {
+   "step": "Review archive policy and defaults",
+   "is_optional": 1,
+   "idx": 9
+  },
+  {
+   "step": "Register a camera",
+   "is_optional": 1,
+   "idx": 10
+  },
+  {
+   "step": "Store camera credentials securely (optional)",
+   "is_optional": 1,
+   "idx": 11
+  },
+  {
+   "step": "Register a vehicle",
+   "is_optional": 1,
+   "idx": 12
+  },
+  {
+   "step": "Record a vehicle movement event",
+   "is_optional": 1,
+   "idx": 13
+  },
+  {
+   "step": "Create an archive asset record",
+   "is_optional": 1,
+   "idx": 14
+  },
+  {
+   "step": "Prepare an idempotent ingest batch",
+   "is_optional": 1,
+   "idx": 15
+  },
+  {
+   "step": "Explore camera coverage and the map",
+   "is_optional": 0,
+   "idx": 16
+  },
+  {
+   "step": "Review camera coverage report",
+   "is_optional": 1,
+   "idx": 17
+  },
+  {
+   "step": "Review vehicle movement timeline",
+   "is_optional": 1,
+   "idx": 18
+  },
+  {
+   "step": "Check archive integrity and indexing",
+   "is_optional": 1,
+   "idx": 19
+  },
+  {
+   "step": "Review location quality and close the loop",
+   "is_optional": 1,
+   "idx": 20
+  }
+ ]
+}
