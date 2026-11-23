@@ -78,18 +78,14 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 			if not definition.get("istable")
 		}
 		self.assertTrue(standalone_doctypes <= workspace_link_names)
-		self.assertIn("camera-archive-overview", {row.get("link_to") for row in workspace["shortcuts"]})
-		self.assertTrue(any(row.get("data", {}).get("shortcut_name") == "Camera Archive Overview" for row in links))
-		overview_dir = Path(__file__).parent / "page" / "camera_archive_overview"
-		self.assertTrue((overview_dir / "camera_archive_overview.json").is_file())
-		overview_script = (overview_dir / "camera_archive_overview.js").read_text(encoding="utf-8")
-		for chart_name in ("daily_movements", "camera_status", "movement_types", "top_vehicles"):
-			self.assertIn(chart_name, overview_script)
-		self.assertIn("get_workspace_summary", overview_script)
-		self.assertIn('type: "GET"', overview_script)
-		self.assertIn('methods=["GET"]', (Path(__file__).parents[1] / "api" / "workspace.py").read_text(encoding="utf-8"))
-		self.assertIn("Camera Credential", overview_script)
-		self.assertIn("CAM Vehicle", overview_script)
+		self.assertNotIn("camera-archive-overview", {row.get("link_to") for row in workspace["shortcuts"]})
+		self.assertFalse(any(row.get("data", {}).get("shortcut_name") == "Camera Archive Overview" for row in links))
+		self.assertFalse(any(row.get("link_to") == "camera-archive-overview" for row in workspace["links"]))
+		self.assertFalse((Path(__file__).parent / "page" / "camera_archive_overview").exists())
+		self.assertIn(
+			"camera_archive_management.patches.v1_0.remove_camera_archive_overview_page",
+			(Path(__file__).parents[1] / "patches.txt").read_text(encoding="utf-8"),
+		)
 		chart_names = {row["chart_name"] for row in workspace["charts"]}
 		chart_fixtures = json.loads((Path(__file__).parents[1] / "fixtures" / "dashboard_chart.json").read_text(encoding="utf-8"))
 		self.assertEqual(chart_names, {chart["chart_name"] for chart in chart_fixtures})
