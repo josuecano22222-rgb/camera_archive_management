@@ -81,6 +81,9 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		map_script = Path(__file__).parent / "page" / "camera_archive_map" / "camera_archive_map.js"
 		self.assertIn("iconAnchor: [24, 62]", map_script.read_text(encoding="utf-8"))
 		camera_fields = {field["fieldname"]: field for field in camera["fields"]}
+		self.assertEqual(camera_fields["importance"]["options"].splitlines()[0], "")
+		event_fields = {field["fieldname"]: field for field in self.load_doctype("motion_event")["fields"]}
+		self.assertEqual(event_fields["importance"]["options"].splitlines()[0], "")
 		self.assertEqual(camera_fields["camera_photos_json"]["fieldtype"], "Long Text")
 		self.assertEqual(camera_fields["camera_photo_gallery"]["fieldtype"], "HTML")
 		self.assertFalse((DOCTYPE_DIR / "camera_photo" / "camera_photo.json").exists())

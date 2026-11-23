@@ -30,9 +30,10 @@ async function inherit_camera_importance(frm) {
 	frm.__cam_importance_request = request;
 	try {
 		const result = await frappe.db.get_value("Camera", cameraName, "importance");
+		const configuredDefault = await frappe.db.get_single_value("Archive Settings", "default_motion_importance");
 		if (frm.doc.camera !== cameraName || frm.__cam_importance_request !== request) return;
 		if (frm.doc.importance !== existingImportance && !frm.__cam_importance_inherited) return;
-		const importance = result?.message?.importance || "Medium";
+		const importance = result?.message?.importance || configuredDefault || "Medium";
 		if (frm.doc.importance !== importance) await frm.set_value("importance", importance);
 		frm.__cam_importance_inherited = true;
 	} catch (_error) {

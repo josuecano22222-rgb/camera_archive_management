@@ -72,7 +72,7 @@
    "fieldname": "importance",
    "fieldtype": "Select",
    "label": "Importance",
-   "options": "Low\nMedium\nHigh\nCritical",
+   "options": "\nLow\nMedium\nHigh\nCritical",
    "in_standard_filter": 1
   },
   {

@@ -73,7 +73,7 @@
    "fieldname": "importance",
    "fieldtype": "Select",
    "label": "Importance",
-   "options": "Low\nMedium\nHigh\nCritical"
+   "options": "\nLow\nMedium\nHigh\nCritical"
   },
   {
    "fieldname": "layout_section_1_2",

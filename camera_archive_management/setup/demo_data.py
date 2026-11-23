@@ -55,18 +55,47 @@ _VEHICLES = [
 def _guard_demo_generation() -> str | None:
 	"""Require an explicit site opt-in and operator permission; never seed implicitly."""
 	if frappe.conf.get("camera_archive_allow_demo_data") is not True:
-		return "Demo generation is disabled. Explicitly set camera_archive_allow_demo_data=True to run it."
+		return "Demo generation is disabled. Explicitly set camera_archive_allow_demo_data=true to run it."
 	if frappe.session.user != "Administrator" and "System Manager" not in frappe.get_roles():
 		return "Only System Managers may generate the synthetic map scenario."
 	return None
 
 
+def _demo_record_names(doctype: str) -> list[str]:
+	"""Find tagged records, plus exact area/type fixtures whose marker may be unavailable."""
+	names = set(
+		frappe.get_all(
+			doctype,
+			filters={"demo_scenario": _SCENARIO},
+			pluck="name",
+			limit_page_length=0,
+		)
+	)
+	known_names = {
+		"Camera Area": _AREAS,
+		"Vehicle Type": tuple(type_name for type_name, _ in _VEHICLE_TYPES),
+	}.get(doctype, ())
+	if known_names:
+		rows = frappe.get_all(
+			doctype,
+			filters={"name": ["in", known_names]},
+			fields=["name", "description", "is_demo_record"],
+			limit_page_length=0,
+		)
+		names.update(
+			row.name
+			for row in rows
+			if row.is_demo_record or _SCENARIO in (row.description or "")
+		)
+	return sorted(names)
+
+
 def _existing_counts() -> dict[str, int]:
 	return {
 		"cameras": frappe.db.count("Camera", {"demo_scenario": _SCENARIO}),
-		"camera_areas": frappe.db.count("Camera Area", {"demo_scenario": _SCENARIO}),
+		"camera_areas": len(_demo_record_names("Camera Area")),
 		"vehicles": frappe.db.count("CAM Vehicle", {"demo_scenario": _SCENARIO}),
-		"vehicle_types": frappe.db.count("Vehicle Type", {"demo_scenario": _SCENARIO}),
+		"vehicle_types": len(_demo_record_names("Vehicle Type")),
 		"events": frappe.db.count("Motion Event", {"demo_scenario": _SCENARIO}),
 	}
 
@@ -290,12 +319,8 @@ def delete_demo_scenario() -> dict[str, int | str | bool]:
 	counts = _existing_counts()
 	retained_links = {"camera_areas": 0, "vehicle_types": 0}
 	for doctype in ("Motion Event", "Camera", "CAM Vehicle", "Camera Area", "Vehicle Type"):
-		for name in frappe.get_all(
-			doctype,
-			filters={"demo_scenario": _SCENARIO},
-			pluck="name",
-			limit_page_length=0,
-		):
+		names = _demo_record_names(doctype)
+		for name in names:
 			if doctype == "Camera Area" and frappe.db.exists("Camera", {"area": name}):
 				retained_links["camera_areas"] += 1
 				continue

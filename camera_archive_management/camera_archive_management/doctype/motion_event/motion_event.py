@@ -57,6 +57,7 @@ class MotionEvent(Document):
 		fields = [
 			"camera_name",
 			"camera_type",
+			"importance",
 			"area",
 			"address",
 			"latitude",
