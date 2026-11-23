@@ -9,6 +9,7 @@ import frappe
 from frappe.utils import add_to_date, now_datetime
 from frappe.utils.file_manager import save_file
 
+from camera_archive_management.geo.coordinates import point_feature_collection
 from camera_archive_management.geo.geometry import bearing_degrees, compass_8, haversine_m
 from camera_archive_management.setup.seed import seed_core_reference_data
 
@@ -208,7 +209,7 @@ def create_demo_scenario() -> dict[str, int | str | bool]:
 			"address": "SYNTHETIC DEMO DATA — fictional location; not a real camera or address.",
 			"latitude": latitude,
 			"longitude": longitude,
-			"location": f'{{"type":"Point","coordinates":[{longitude},{latitude}]}}',
+			"location": point_feature_collection(latitude, longitude),
 			"description": f"Synthetic demonstration record in scenario {_SCENARIO}; safe to delete as a group.",
 			"is_demo_record": 1,
 			"demo_scenario": _SCENARIO,

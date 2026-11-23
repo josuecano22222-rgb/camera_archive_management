@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import math
 import re
 from decimal import Decimal, InvalidOperation
@@ -41,22 +42,118 @@ def validate_pair(latitude: Any, longitude: Any) -> tuple[Decimal | None, Decima
 	return lat, lon
 
 
+def _encode_json_exact(value: Any) -> str:
+	"""Serialize nested JSON values without converting Decimal coordinates to floats."""
+	if isinstance(value, Decimal):
+		return format(value, "f")
+	if isinstance(value, bool) or value is None or isinstance(value, int):
+		return json.dumps(value, ensure_ascii=False, allow_nan=False)
+	if isinstance(value, float):
+		if not math.isfinite(value):
+			raise ValueError("GeoJSON numbers must be finite")
+		return json.dumps(value, allow_nan=False)
+	if isinstance(value, str):
+		return json.dumps(value, ensure_ascii=False)
+	if isinstance(value, list):
+		return "[" + ",".join(_encode_json_exact(item) for item in value) + "]"
+	if isinstance(value, dict):
+		if not all(isinstance(key, str) for key in value):
+			raise ValueError("GeoJSON object keys must be strings")
+		return "{" + ",".join(
+			json.dumps(key, ensure_ascii=False) + ":" + _encode_json_exact(item)
+			for key, item in value.items()
+		) + "}"
+	raise ValueError("Unsupported GeoJSON value")
+
+
+def point_feature_collection(latitude: Any, longitude: Any) -> str:
+	"""Serialize a precise point in the FeatureCollection shape Frappe's Geolocation control expects."""
+	lat, lon = validate_pair(latitude, longitude)
+	if lat is None or lon is None:
+		raise ValueError("A point FeatureCollection requires latitude and longitude")
+	return _encode_json_exact({
+		"type": "FeatureCollection",
+		"features": [{
+			"type": "Feature",
+			"properties": {"point_type": "marker"},
+			"geometry": {"type": "Point", "coordinates": [lon, lat]},
+		}],
+	})
+
+
+def normalize_frappe_geolocation(value: Any) -> str:
+	"""Return a GeoJSON FeatureCollection with safe feature properties for Frappe's map control."""
+	if isinstance(value, str):
+		try:
+			payload = json.loads(value, parse_float=Decimal)
+		except (TypeError, json.JSONDecodeError) as exc:
+			raise ValueError("Location must contain valid GeoJSON") from exc
+	else:
+		payload = value
+	if not isinstance(payload, dict):
+		raise ValueError("Location must be a GeoJSON object")
+	kind = payload.get("type")
+	if kind == "Point":
+		features = [{
+			"type": "Feature",
+			"properties": {"point_type": "marker"},
+			"geometry": payload,
+		}]
+	elif kind == "Feature":
+		features = [payload]
+	elif kind == "FeatureCollection":
+		features = payload.get("features")
+		if not isinstance(features, list):
+			raise ValueError("GeoJSON FeatureCollection requires a features array")
+	else:
+		raise ValueError("Location must be a GeoJSON Point or FeatureCollection")
+
+	for feature in features:
+		if not isinstance(feature, dict) or feature.get("type") != "Feature":
+			raise ValueError("GeoJSON FeatureCollection entries must be Features")
+		geometry = feature.get("geometry")
+		if not isinstance(geometry, dict):
+			raise ValueError("GeoJSON Features must contain a geometry")
+		properties = feature.get("properties")
+		if not isinstance(properties, dict):
+			properties = {}
+			feature["properties"] = properties
+		if geometry.get("type") == "Point":
+			properties.setdefault("point_type", "marker")
+
+	return _encode_json_exact({"type": "FeatureCollection", "features": features})
+
+
 def point_from_geojson(value: Any) -> tuple[Decimal, Decimal] | None:
-	"""Extract the anchor from a GeoJSON Point or Feature<Point>."""
+	"""Extract the first Point anchor from a GeoJSON Point, Feature, or FeatureCollection."""
 	if not value:
 		return None
-	import json
-
 	try:
 		payload = json.loads(value, parse_float=Decimal) if isinstance(value, str) else value
 	except (TypeError, json.JSONDecodeError) as exc:
 		raise ValueError("Location must contain valid GeoJSON") from exc
 	if not isinstance(payload, dict):
 		raise ValueError("Location must be a GeoJSON object")
+	if payload.get("type") == "FeatureCollection":
+		features = payload.get("features")
+		if not isinstance(features, list):
+			raise ValueError("GeoJSON FeatureCollection requires a features array")
+		point_feature = next(
+			(
+				feature for feature in features
+				if isinstance(feature, dict)
+				and isinstance(feature.get("geometry"), dict)
+				and feature["geometry"].get("type") == "Point"
+			),
+			None,
+		)
+		if point_feature is None:
+			raise ValueError("GeoJSON FeatureCollection contains no Point location")
+		payload = point_feature
 	if payload.get("type") == "Feature":
 		payload = payload.get("geometry")
 	if not isinstance(payload, dict) or payload.get("type") != "Point":
-		raise ValueError("Camera location must be a GeoJSON Point")
+		raise ValueError("Camera location must contain a GeoJSON Point")
 	coordinates = payload.get("coordinates")
 	if not isinstance(coordinates, list) or len(coordinates) < 2:
 		raise ValueError("GeoJSON Point requires [longitude, latitude]")

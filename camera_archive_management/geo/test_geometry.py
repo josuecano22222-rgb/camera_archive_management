@@ -3,7 +3,13 @@ from __future__ import annotations
 import unittest
 from decimal import Decimal
 
-from camera_archive_management.geo.coordinates import parse_coordinate, point_from_geojson, validate_pair
+from camera_archive_management.geo.coordinates import (
+	normalize_frappe_geolocation,
+	parse_coordinate,
+	point_feature_collection,
+	point_from_geojson,
+	validate_pair,
+)
 from camera_archive_management.geo.geometry import (
 	bearing_degrees,
 	compass_8,
@@ -27,6 +33,25 @@ class TestCoordinates(unittest.TestCase):
 		self.assertEqual(
 			point_from_geojson('{"type":"Point","coordinates":[4.9,52.3]}'),
 			(Decimal("52.3"), Decimal("4.9")),
+		)
+
+	def test_feature_collection_anchor_and_frappe_safe_point_properties(self):
+		raw = (
+			'{"type":"FeatureCollection","features":[{"type":"Feature",'
+			'"properties":{},"geometry":{"type":"Point","coordinates":'
+			'[4.90000000000000000001,52.30000000000000000002]}}]}'
+		)
+		self.assertEqual(
+			point_from_geojson(raw),
+			(Decimal("52.30000000000000000002"), Decimal("4.90000000000000000001")),
+		)
+		normalized = normalize_frappe_geolocation('{"type":"Point","coordinates":[4.9,52.3]}')
+		self.assertIn('"type":"FeatureCollection"', normalized)
+		self.assertIn('"point_type":"marker"', normalized)
+		self.assertEqual(
+			point_feature_collection("52.30000000000000000002", "4.90000000000000000001"),
+			'{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"point_type":"marker"},'
+			'"geometry":{"type":"Point","coordinates":[4.90000000000000000001,52.30000000000000000002]}}]}',
 		)
 
 

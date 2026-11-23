@@ -12,12 +12,31 @@ from camera_archive_management.patches.v1_0 import (
 	isolate_camera_credentials,
 	migrate_archive_settings_single,
 	migrate_camera_photo_gallery,
+	normalize_camera_geolocation,
 	rename_geo_settings,
 	rename_vehicle_camera,
 )
 
 
 class TestMigrationGuards(FrappeTestCase):
+	def test_camera_geolocation_patch_wraps_legacy_point_for_native_map(self):
+		row = frappe._dict(
+			name="CAM-LEGACY-POINT",
+			location='{"type":"Point","coordinates":[4.90000000000000000001,52.30000000000000000002]}',
+			latitude="52.30000000000000000002",
+			longitude="4.90000000000000000001",
+		)
+		with (
+			patch.object(frappe, "get_all", return_value=[row]),
+			patch.object(frappe.db, "set_value") as set_value,
+			patch.object(frappe, "logger"),
+		):
+			normalize_camera_geolocation.execute()
+		updates = set_value.call_args.args[2]
+		self.assertIn('"type":"FeatureCollection"', updates["location"])
+		self.assertIn('"point_type":"marker"', updates["location"])
+		self.assertIn("[4.90000000000000000001,52.30000000000000000002]", updates["location"])
+
 	def test_namespace_check_is_repeatable_when_no_app_tables_exist_yet(self):
 		with patch.object(frappe.db, "exists", return_value=False):
 			assert_doctype_namespace.execute()

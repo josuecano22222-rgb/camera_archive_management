@@ -6,7 +6,12 @@ from pathlib import PurePosixPath
 import frappe
 from frappe.model.document import Document
 
-from camera_archive_management.geo.coordinates import point_from_geojson, validate_pair
+from camera_archive_management.geo.coordinates import (
+	normalize_frappe_geolocation,
+	point_feature_collection,
+	point_from_geojson,
+	validate_pair,
+)
 from camera_archive_management.utils.files import is_safe_frappe_file_url
 
 MAX_PHOTO_CAPTION_LENGTH = 240
@@ -90,6 +95,11 @@ class Camera(Document):
 				"Camera Location point and latitude/longitude disagree. Update them together explicitly.",
 				frappe.ValidationError,
 			)
+
+		if point:
+			self.location = normalize_frappe_geolocation(self.location)
+		elif latitude is not None and longitude is not None:
+			self.location = point_feature_collection(latitude, longitude)
 
 		if self.port and not 1 <= int(self.port) <= 65535:
 			frappe.throw("Port must be between 1 and 65535.", frappe.ValidationError)

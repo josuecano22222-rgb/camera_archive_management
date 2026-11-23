@@ -88,8 +88,12 @@ class TestCamera(FrappeTestCase):
 		reloaded = frappe.get_doc("Camera", camera.name)
 		self.assertEqual(reloaded.latitude, latitude)
 		self.assertEqual(reloaded.longitude, longitude)
+		location = frappe.parse_json(reloaded.location)
+		self.assertEqual(location["type"], "FeatureCollection")
+		self.assertIn(f"[{longitude},{latitude}]", reloaded.location)
+		self.assertEqual(location["features"][0]["properties"]["point_type"], "marker")
 
-	def test_before_save_preserves_manual_address_and_location(self):
+	def test_camera_point_is_normalized_for_frappe_geolocation_without_touching_address(self):
 		address = "User-entered address"
 		location = '{"type":"Point","coordinates":[4.9,52.3]}'
 		camera = frappe.get_doc(
@@ -106,6 +110,10 @@ class TestCamera(FrappeTestCase):
 				"nearby_cameras": [],
 			}
 		)
+		camera.validate()
 		camera.before_save()
 		self.assertEqual(camera.address, address)
-		self.assertEqual(camera.location, location)
+		parsed = frappe.parse_json(camera.location)
+		self.assertEqual(parsed["type"], "FeatureCollection")
+		self.assertEqual(parsed["features"][0]["properties"]["point_type"], "marker")
+		self.assertEqual(camera.location.count("FeatureCollection"), 1)

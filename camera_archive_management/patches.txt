@@ -9,3 +9,4 @@ camera_archive_management.patches.v1_0.assert_doctype_namespace
 camera_archive_management.patches.v1_0.ensure_child_table_columns
 camera_archive_management.patches.v1_0.migrate_camera_photo_gallery
 camera_archive_management.patches.v1_0.ensure_unique_keys
+camera_archive_management.patches.v1_0.normalize_camera_geolocation
