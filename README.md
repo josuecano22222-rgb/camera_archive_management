@@ -12,7 +12,14 @@ A Frappe v15 application for camera inventory, controlled image galleries, vehic
 
 ## Data and safety
 
-The reference catalogs in `camera_archive_management/data/core_reference_data.json` are application master data, not demonstrations. Synthetic records are separate and created only by `camera_archive_management.setup.demo_data.create_demo_scenario` on a disposable, non-production site whose config explicitly sets `camera_archive_allow_demo_data=true`. Delete only those generated records with `camera_archive_management.setup.demo_data.delete_demo_scenario` on that same safe site. Do not add fictional camera, vehicle, or incident records to production.
+The reference catalogs in `camera_archive_management/data/core_reference_data.json` are application master data, not demonstrations. Synthetic records are separate and created only by `camera_archive_management.setup.demo_data.create_demo_scenario` on a disposable, non-production site whose config explicitly sets `camera_archive_allow_demo_data=true`. On that disposable site only, enable the Boolean flag and invoke the generator with:
+
+```bash
+bench --site <disposable-demo-site> set-config camera_archive_allow_demo_data true --parse
+bench --site <disposable-demo-site> execute camera_archive_management.setup.demo_data.create_demo_scenario
+```
+
+Delete only those generated records with `camera_archive_management.setup.demo_data.delete_demo_scenario` on that same safe site. The generator explicitly refuses `frappe.com`; do not add fictional camera, vehicle, or incident records to production.
 
 The core pack includes Natural Earth generalized world country outlines (1:110m, public domain, pinned revision documented in `camera_archive_management/data/README.md`). These support global context and country-level local lookup, but are not legal, municipal, cadastral, or operational boundaries. The seed makes this pack active only when a site has no active dataset. Higher-resolution administrative or gazetteer datasets must be supplied by an administrator with verified provenance and license; the import path retains that attribution separately. The map can also be used for camera coordinates and authorized tile layers without any imported local data.
 

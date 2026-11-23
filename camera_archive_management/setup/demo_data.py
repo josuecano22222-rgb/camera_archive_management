@@ -38,16 +38,15 @@ _VEHICLES = [
 ]
 
 
-def _guard_non_production() -> None:
+def _guard_non_production() -> str | None:
+	"""Return a safe refusal reason instead of raising through Bench's execute wrapper."""
 	if getattr(frappe.local, "site", None) == "frappe.com":
-		frappe.throw("Synthetic map data is never allowed on the production site frappe.com.", frappe.PermissionError)
+		return "Synthetic map data is never allowed on the production site frappe.com."
 	if frappe.conf.get("camera_archive_allow_demo_data") is not True:
-		frappe.throw(
-			"Demo generation is disabled. Set camera_archive_allow_demo_data=true only on a disposable non-production site.",
-			frappe.PermissionError,
-		)
+		return "Demo generation is disabled. Enable camera_archive_allow_demo_data=true only on a disposable non-production site."
 	if frappe.session.user != "Administrator" and "System Manager" not in frappe.get_roles():
-		frappe.throw("Only System Managers may generate the synthetic map scenario.", frappe.PermissionError)
+		return "Only System Managers may generate the synthetic map scenario."
+	return None
 
 
 def _existing_counts() -> dict[str, int]:
@@ -58,13 +57,15 @@ def _existing_counts() -> dict[str, int]:
 	}
 
 
-def create_demo_scenario() -> dict[str, int | str]:
+def create_demo_scenario() -> dict[str, int | str | bool]:
 	"""Create a clearly tagged, fictional Amsterdam map/replay scenario, idempotently.
 
 	Run only on a disposable non-production site after explicitly setting
 	``camera_archive_allow_demo_data=true`` in that site's config.
 	"""
-	_guard_non_production()
+	blocked = _guard_non_production()
+	if blocked:
+		return {"scenario": _SCENARIO, "created": False, "reason": blocked}
 	existing = _existing_counts()
 	if any(existing.values()):
 		if existing == {"cameras": len(_CAMERAS), "vehicles": len(_VEHICLES), "events": 72}:
@@ -163,9 +164,11 @@ def create_demo_scenario() -> dict[str, int | str]:
 	}
 
 
-def delete_demo_scenario() -> dict[str, int]:
+def delete_demo_scenario() -> dict[str, int | str | bool]:
 	"""Remove only this generator's records, in dependency-safe order."""
-	_guard_non_production()
+	blocked = _guard_non_production()
+	if blocked:
+		return {"deleted": False, "reason": blocked}
 	counts = _existing_counts()
 	for doctype in ("Motion Event", "Camera", "CAM Vehicle"):
 		for name in frappe.get_all(doctype, filters={"demo_scenario": _SCENARIO}, pluck="name", limit_page_length=0):
