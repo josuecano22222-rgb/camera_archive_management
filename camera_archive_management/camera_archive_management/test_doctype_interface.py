@@ -86,6 +86,8 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		for chart_name in ("daily_movements", "camera_status", "movement_types", "top_vehicles"):
 			self.assertIn(chart_name, overview_script)
 		self.assertIn("get_workspace_summary", overview_script)
+		self.assertIn('type: "GET"', overview_script)
+		self.assertIn('methods=["GET"]', (Path(__file__).parents[1] / "api" / "workspace.py").read_text(encoding="utf-8"))
 		self.assertIn("Camera Credential", overview_script)
 		self.assertIn("CAM Vehicle", overview_script)
 		chart_names = {row["chart_name"] for row in workspace["charts"]}

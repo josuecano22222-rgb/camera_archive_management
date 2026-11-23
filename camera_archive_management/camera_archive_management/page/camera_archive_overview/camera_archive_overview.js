@@ -91,7 +91,7 @@ async function load_workspace_summary(page) {
 	const host = page.main.get(0);
 	host.querySelector("[data-updated]").textContent = __("Loading latest statistics…");
 	try {
-		const response = await frappe.call({ method: "camera_archive_management.api.workspace.get_workspace_summary" });
+		const response = await frappe.call({ method: "camera_archive_management.api.workspace.get_workspace_summary", type: "GET" });
 		const data = response.message || {};
 		render_workspace_kpis(host, data.counts || {});
 		for (const series of ["daily_movements", "camera_status", "movement_types", "top_vehicles"]) {
