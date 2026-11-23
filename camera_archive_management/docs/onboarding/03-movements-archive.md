@@ -6,6 +6,8 @@ Create a **Motion Event** after selecting the correct camera. Record Entry or Ex
 
 The event stores camera/location snapshots so later edits to the camera record do not silently rewrite what the event captured. Review the snapshot and event after save. The map, camera record, and **Vehicle Movement Timeline** report should agree on time, direction, and location. Correct a mistaken event at the source and retain the normal audit/version history; do not create a second event simply to hide the first.
 
+When **Enable Nearby Camera Alerts** is on in Archive Settings, saving a movement displays an in-form message for active cameras within the configured radius and cameras explicitly linked to the source Camera through its Nearby Cameras relation, in either direction. Submitting/approving the event displays the alert for that transition as well. The message distinguishes a configured connection from radius-only proximity and includes distance/direction/area where available. It does not claim that the other camera recorded the same vehicle; verify its own events before drawing conclusions.
+
 ## Create an Archive Asset
 
 An **Archive Asset** is the catalog/index entry for one recording or evidence object. Link the camera, optional Motion Event, and optional Archive Ingest Batch. Populate capture start/end, media type, byte size, storage backend, retention state, and checksum where available or required. The Frappe File backend uses an authorized attachment; External storage uses the configured storage scope/reference and should not expose public/private URLs in notes.

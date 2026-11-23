@@ -778,3 +778,11 @@ Archive Integrity,Archive Integrity
 No user-configured vehicle image; showing the saved movement point,No user-configured vehicle image; showing the saved movement point
 No user-configured vehicle image,No user-configured vehicle image
 Vehicle image unavailable,Vehicle image unavailable
+Nearby camera alert,Nearby camera alert
+configured camera connection,configured camera connection
+within the configured nearby-camera radius,within the configured nearby-camera radius
+area: {0},area: {0}
+and {0} more camera(s),and {0} more camera(s)
+submitted,submitted
+saved,saved
+Movement {0}. Other camera coverage is available for this location:,Movement {0}. Other camera coverage is available for this location:

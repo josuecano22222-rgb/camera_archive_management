@@ -7,6 +7,50 @@ from pathlib import Path
 
 MOTION_SCRIPT = Path(__file__).parent / "camera_archive_management" / "doctype" / "motion_event" / "motion_event_list.js"
 
+MOTION_FORM_SCRIPT = Path(__file__).parent / "camera_archive_management" / "doctype" / "motion_event" / "motion_event.js"
+
+NODE_NEARBY_ALERT_TEST = r"""
+const fs = require("node:fs");
+const vm = require("node:vm");
+const assert = require("node:assert/strict");
+const source = fs.readFileSync(process.argv[1], "utf8");
+const methods = {};
+const messages = [];
+const frappe = {
+  ui: { form: { on(doctype, handlers) { methods[doctype] = handlers; } } },
+  utils: { escape_html(value) {
+    return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+  } },
+  msgprint(message) { messages.push(message); },
+};
+function __(text, args) {
+  return (args || []).reduce((value, arg, index) => value.replace(`{${index}}`, arg), text);
+}
+vm.runInNewContext(source, { frappe, __ });
+const frm = { doc: {
+  name: "MOT-1", docstatus: 0,
+  nearby_cameras: [{
+    camera: "CAM-NEAR-1", note: "Configured connection: Shared intersection",
+    distance_m: 234.5, bearing_compass: "NW", area: "West",
+  }],
+} };
+methods["Motion Event"].after_save(frm);
+assert.equal(messages.length, 1, "saving with linked cameras shows an alert");
+assert.match(messages[0].message, /saved/);
+assert.match(messages[0].message, /configured camera connection/);
+assert.match(messages[0].message, /234\.5 m/);
+frm.doc.docstatus = 1;
+methods["Motion Event"].on_submit(frm);
+assert.equal(messages.length, 2, "submission shows the alert for the approval transition too");
+assert.match(messages[1].message, /submitted/);
+methods["Motion Event"].on_submit(frm);
+assert.equal(messages.length, 2, "the same submit transition is not announced twice");
+const empty = { doc: { name: "MOT-2", docstatus: 0, nearby_cameras: [] } };
+methods["Motion Event"].after_save(empty);
+assert.equal(messages.length, 2, "no nearby cameras produces no alert");
+"""
+
 NODE_CLUSTER_TEST = r"""
 const fs = require("node:fs");
 const vm = require("node:vm");
@@ -59,6 +103,15 @@ class TestMotionMapClustering(unittest.TestCase):
 	@unittest.skipUnless(shutil.which("node"), "Node.js is needed to run motion clustering regression checks")
 	def test_map_clustering_expansion_groups_and_vehicle_totals(self):
 		subprocess.run(["node", "-e", NODE_CLUSTER_TEST, str(MOTION_SCRIPT)], check=True, capture_output=True, text=True)
+
+	@unittest.skipUnless(shutil.which("node"), "Node.js is needed to run nearby-camera alert checks")
+	def test_nearby_camera_alert_appears_after_save_and_submit(self):
+		subprocess.run(
+			["node", "-e", NODE_NEARBY_ALERT_TEST, str(MOTION_FORM_SCRIPT)],
+			check=True,
+			capture_output=True,
+			text=True,
+		)
 
 	def test_motion_event_doctype_uses_siraj_pin_template_and_user_icons(self):
 		motion_list = MOTION_SCRIPT.read_text(encoding="utf-8")

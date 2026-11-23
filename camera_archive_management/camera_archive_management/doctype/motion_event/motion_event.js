@@ -18,6 +18,12 @@ frappe.ui.form.on("Motion Event", {
 	},
 	vehicle(frm) {
 		show_event_vehicle(frm);
+	},
+	after_save(frm) {
+		if (!frm.doc.docstatus) show_nearby_camera_alert(frm);
+	},
+	on_submit(frm) {
+		show_nearby_camera_alert(frm);
 	}
 });
 
@@ -39,6 +45,40 @@ async function inherit_camera_importance(frm) {
 	} catch (_error) {
 		// The server remains authoritative when an operator saves the event.
 	}
+}
+
+function show_nearby_camera_alert(frm) {
+	const rows = (Array.isArray(frm.doc.nearby_cameras) ? frm.doc.nearby_cameras : []).filter((row) => row.camera);
+	if (!rows.length) return;
+
+	const phase = frm.doc.docstatus === 1 ? __("submitted") : __("saved");
+	const signature = `${frm.doc.docstatus}:${rows.map((row) => `${row.camera}:${row.note || ""}`).join("|")}`;
+	if (frm.__camNearbyCameraAlerted === signature) return;
+	frm.__camNearbyCameraAlerted = signature;
+
+	const list = rows.slice(0, 8).map((row) => {
+		const camera = frappe.utils.escape_html(row.camera);
+		const relationship = String(row.note || "").startsWith("Configured connection")
+			? __("configured camera connection")
+			: __("within the configured nearby-camera radius");
+		const details = [relationship];
+		if (row.distance_m !== null && row.distance_m !== undefined && row.distance_m !== "") {
+			const distance = Number(row.distance_m);
+			if (Number.isFinite(distance)) details.push(`${distance.toFixed(1)} m`);
+		}
+		if (row.bearing_compass) details.push(frappe.utils.escape_html(row.bearing_compass));
+		if (row.area) details.push(__("area: {0}", [frappe.utils.escape_html(row.area)]));
+		return `<li><strong>${camera}</strong> — ${details.join(" · ")}</li>`;
+	});
+	if (rows.length > list.length) {
+		list.push(`<li>${__("and {0} more camera(s)", [rows.length - list.length])}</li>`);
+	}
+
+	frappe.msgprint({
+		title: __("Nearby camera alert"),
+		message: `<p>${__("Movement {0}. Other camera coverage is available for this location:", [phase])}</p><ul>${list.join("")}</ul>`,
+		indicator: "orange",
+	});
 }
 
 async function show_event_vehicle(frm) {

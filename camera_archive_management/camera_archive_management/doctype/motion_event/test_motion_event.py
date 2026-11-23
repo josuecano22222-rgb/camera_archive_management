@@ -55,6 +55,95 @@ class TestMotionEvent(FrappeTestCase):
 		with self.assertRaises(frappe.PermissionError):
 			event.save(ignore_permissions=True)
 
+	def test_event_captures_cameras_within_configured_alert_radius(self):
+		settings = frappe.get_single("Archive Settings")
+		settings.enable_nearby_camera_alerts = 1
+		settings.nearby_camera_radius = 200
+		settings.save(ignore_permissions=True)
+
+		camera = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Nearby alert source camera",
+				"status": "Active",
+				"latitude": "-70.123",
+				"longitude": "-40.456",
+				"camera_photos_json": "[]",
+			}
+		).insert(ignore_permissions=True)
+		nearby = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Nearby alert target camera",
+				"status": "Active",
+				"latitude": "-70.124",
+				"longitude": "-40.456",
+				"camera_photos_json": "[]",
+			}
+		).insert(ignore_permissions=True)
+
+		event = frappe.get_doc(
+			{
+				"doctype": "Motion Event",
+				"naming_series": "MOT-.#####",
+				"camera": camera.name,
+				"motion_type": "Entry",
+				"detected_at": add_to_date(now_datetime(), days=-1),
+			}
+		).insert(ignore_permissions=True)
+
+		nearby_rows = {row.camera: row for row in event.nearby_cameras}
+		self.assertIn(nearby.name, nearby_rows)
+		self.assertLessEqual(nearby_rows[nearby.name].distance_m, 200)
+		self.assertFalse(nearby_rows[nearby.name].note)
+
+	def test_event_includes_explicitly_connected_camera_even_outside_radius(self):
+		settings = frappe.get_single("Archive Settings")
+		settings.enable_nearby_camera_alerts = 1
+		settings.nearby_camera_radius = 100
+		settings.save(ignore_permissions=True)
+
+		source = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Connected alert source camera",
+				"status": "Active",
+				"latitude": "-70.123",
+				"longitude": "-40.456",
+				"camera_photos_json": "[]",
+			}
+		).insert(ignore_permissions=True)
+		connected = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Connected camera outside radius",
+				"status": "Active",
+				"latitude": "-69.9",
+				"longitude": "-40.456",
+				"camera_photos_json": "[]",
+				"nearby_cameras": [{"camera": source.name, "note": "Shared intersection"}],
+			}
+		).insert(ignore_permissions=True)
+
+		event = frappe.get_doc(
+			{
+				"doctype": "Motion Event",
+				"naming_series": "MOT-.#####",
+				"camera": source.name,
+				"motion_type": "Exit",
+				"detected_at": add_to_date(now_datetime(), days=-1),
+			}
+		).insert(ignore_permissions=True)
+
+		connected_rows = {row.camera: row for row in event.nearby_cameras}
+		self.assertIn(connected.name, connected_rows)
+		self.assertGreater(connected_rows[connected.name].distance_m, 100)
+		self.assertEqual(connected_rows[connected.name].note, "Configured connection: Shared intersection")
+
 	def test_explicit_importance_is_preserved_and_future_events_are_rejected(self):
 		camera = frappe.get_doc(
 			{

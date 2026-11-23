@@ -778,3 +778,11 @@ Archive Integrity,سلامة الأرشيف
 No user-configured vehicle image; showing the saved movement point,لا توجد صورة مركبة مخصصة من المستخدم؛ يتم عرض نقطة الحركة المحفوظة
 No user-configured vehicle image,لا توجد صورة مركبة مخصصة من المستخدم
 Vehicle image unavailable,صورة المركبة غير متاحة
+Nearby camera alert,تنبيه كاميرا قريبة
+configured camera connection,اتصال كاميرا مُعدّ مسبقًا
+within the configured nearby-camera radius,ضمن نصف قطر القرب المُعدّ للكاميرات
+area: {0},المنطقة: {0}
+and {0} more camera(s),و{0} كاميرات أخرى
+submitted,أُرسل
+saved,حُفظ
+Movement {0}. Other camera coverage is available for this location:,تم {0} الحركة. تتوفر تغطية كاميرات أخرى لهذا الموقع:

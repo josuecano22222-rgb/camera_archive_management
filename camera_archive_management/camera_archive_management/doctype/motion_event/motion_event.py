@@ -101,60 +101,130 @@ class MotionEvent(Document):
 			self.location_source_snapshot = "manual"
 
 	def _populate_nearby_cameras(self) -> None:
-		if (
-			self.nearby_cameras
-			or not self.camera
-			or self.latitude_snapshot is None
-			or self.longitude_snapshot is None
-		):
+		if self.nearby_cameras or not self.camera:
 			return
 		try:
 			settings = frappe.get_single("Archive Settings")
-			radius = int(settings.nearby_camera_radius or 0)
 		except Exception:
-			radius = 0
-			settings = None
-		if not radius or (settings and not settings.enable_nearby_camera_alerts):
 			return
-		lat, lon = float(self.latitude_snapshot), float(self.longitude_snapshot)
-		lat_delta = radius / 110_574.0
-		lon_delta = min(180.0, radius / (111_320.0 * max(0.01, math.cos(math.radians(lat)))))
-		Camera = frappe.qb.DocType("Camera")
-		latitude = Cast(Camera.latitude, "DECIMAL(65,30)")
-		longitude = Cast(Camera.longitude, "DECIMAL(65,30)")
-		west, east = lon - lon_delta, lon + lon_delta
-		if west < -180:
-			longitude_matches = (longitude >= west + 360) | (longitude <= east)
-		elif east > 180:
-			longitude_matches = (longitude >= west) | (longitude <= east - 360)
-		else:
-			longitude_matches = (longitude >= west) & (longitude <= east)
-		rows = (
-			frappe.qb.from_(Camera)
-			.select(Camera.name, Camera.area, Camera.status, Camera.latitude, Camera.longitude)
-			.where((Camera.status == "Active") & (Camera.name != self.camera))
-			.where((latitude >= max(-90, lat - lat_delta)) & (latitude <= min(90, lat + lat_delta)))
-			.where(longitude_matches)
-			.orderby(Camera.name)
-			.limit(500)
-			.run(as_dict=True)
-		)
-		for row in rows:
+		if not settings.enable_nearby_camera_alerts:
+			return
+		try:
+			radius = int(settings.nearby_camera_radius or 0)
+		except (TypeError, ValueError):
+			radius = 0
+
+		lat = lon = None
+		if self.latitude_snapshot is not None and self.longitude_snapshot is not None:
 			try:
-				distance = haversine_m(lat, lon, float(row.latitude), float(row.longitude))
+				lat, lon = float(self.latitude_snapshot), float(self.longitude_snapshot)
 			except (TypeError, ValueError):
-				continue
-			if distance > radius:
-				continue
-			bearing = bearing_degrees(lat, lon, float(row.latitude), float(row.longitude))
-			self.append(
-				"nearby_cameras",
-				{
+				pass
+
+		cameras: dict[str, dict] = {}
+		if radius and lat is not None and lon is not None:
+			lat_delta = radius / 110_574.0
+			lon_delta = min(180.0, radius / (111_320.0 * max(0.01, math.cos(math.radians(lat)))))
+			Camera = frappe.qb.DocType("Camera")
+			latitude = Cast(Camera.latitude, "DECIMAL(65,30)")
+			longitude = Cast(Camera.longitude, "DECIMAL(65,30)")
+			west, east = lon - lon_delta, lon + lon_delta
+			if west < -180:
+				longitude_matches = (longitude >= west + 360) | (longitude <= east)
+			elif east > 180:
+				longitude_matches = (longitude >= west) | (longitude <= east - 360)
+			else:
+				longitude_matches = (longitude >= west) & (longitude <= east)
+			rows = (
+				frappe.qb.from_(Camera)
+				.select(Camera.name, Camera.area, Camera.status, Camera.latitude, Camera.longitude)
+				.where((Camera.status == "Active") & (Camera.name != self.camera))
+				.where((latitude >= max(-90, lat - lat_delta)) & (latitude <= min(90, lat + lat_delta)))
+				.where(longitude_matches)
+				.orderby(Camera.name)
+				.limit(500)
+				.run(as_dict=True)
+			)
+			for row in rows:
+				try:
+					distance = haversine_m(lat, lon, float(row.latitude), float(row.longitude))
+				except (TypeError, ValueError):
+					continue
+				if distance > radius:
+					continue
+				bearing = bearing_degrees(lat, lon, float(row.latitude), float(row.longitude))
+				cameras[row.name] = {
 					"camera": row.name,
 					"distance_m": round(distance, 1),
 					"bearing_deg": round(bearing, 1),
 					"bearing_compass": compass_8(bearing),
 					"area": row.area,
 					"camera_status": row.status,
-				},
+					"note": "",
+				}
+
+		connected_rows = frappe.get_all(
+			"Camera Nearby Camera",
+			filters={
+				"parent": self.camera,
+				"parenttype": "Camera",
+				"parentfield": "nearby_cameras",
+			},
+			fields=["camera", "note", "idx"],
+			order_by="idx asc",
+			limit_page_length=500,
+		)
+		incoming_rows = frappe.get_all(
+			"Camera Nearby Camera",
+			filters={
+				"camera": self.camera,
+				"parenttype": "Camera",
+				"parentfield": "nearby_cameras",
+			},
+			fields=["parent", "note", "idx"],
+			order_by="idx asc",
+			limit_page_length=500,
+		)
+		linked_notes: dict[str, str] = {}
+		for row in connected_rows:
+			if row.camera and row.camera != self.camera:
+				linked_notes.setdefault(row.camera, row.note or "")
+		for row in incoming_rows:
+			if row.parent and row.parent != self.camera:
+				linked_notes.setdefault(row.parent, row.note or "")
+		if linked_notes:
+			linked_cameras = frappe.get_all(
+				"Camera",
+				filters={"name": ["in", sorted(linked_notes)]},
+				fields=["name", "area", "status", "latitude", "longitude"],
+				order_by="name asc",
+				limit_page_length=500,
 			)
+			for row in linked_cameras:
+				entry = cameras.get(row.name, {
+					"camera": row.name,
+					"distance_m": None,
+					"bearing_deg": None,
+					"bearing_compass": "",
+					"area": row.area,
+					"camera_status": row.status,
+				})
+				if entry["distance_m"] is None and lat is not None and lon is not None:
+					try:
+						target_lat, target_lon = float(row.latitude), float(row.longitude)
+						distance = haversine_m(lat, lon, target_lat, target_lon)
+						bearing = bearing_degrees(lat, lon, target_lat, target_lon)
+					except (TypeError, ValueError):
+						pass
+					else:
+						entry.update({
+							"distance_m": round(distance, 1),
+							"bearing_deg": round(bearing, 1),
+							"bearing_compass": compass_8(bearing),
+						})
+			link_note = (linked_notes.get(row.name) or "").strip()
+			entry["note"] = "Configured connection" + (f": {link_note}" if link_note else "")
+			cameras[row.name] = entry
+
+		for name in sorted(cameras):
+			self.append("nearby_cameras", cameras[name])
