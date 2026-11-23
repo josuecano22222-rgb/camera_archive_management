@@ -164,9 +164,15 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 			"cam-map-save-offline", "cam-map-show-saved", "Not saved for offline use",
 			"maxNativeZoom", "update_tile_telemetry", "cam-map-tile-telemetry", "cam-camera-status-${status}",
 			"cam-pin-selected", "sync_page_route_to_controls", "Cameras in view", "Recent motion events",
-			"Coordinate latitude snapshot",
+			"Coordinate latitude snapshot", "cam-map-fit", "Fit results", "fit_map_to_results(page)",
+			"cam_map_auto_fitted", "cam_map_user_navigated", "errorTileUrl", "missing_tile_fallback",
+			'cam-map-include-demo").addEventListener',
 		):
 			self.assertIn(feature, map_script_text)
+
+		arabic_translations = (Path(__file__).parents[1] / "translations" / "ar.csv").read_text(encoding="utf-8")
+		self.assertIn("Fit results,احتواء النتائج", arabic_translations)
+		self.assertIn("Tile unavailable,المربع غير متاح", arabic_translations)
 
 		for folder in ("camera_area", "geo_admin_area"):
 			self.assertEqual(self.load_doctype(folder)["is_tree"], 1)

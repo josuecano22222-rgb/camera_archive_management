@@ -715,3 +715,5 @@ Using shared Siraj cache and the configured provider.,يُستخدم مخزن س
 Using shared Siraj cache only; provider fetching is disabled.,يُستخدم مخزن سيراج المشترك فقط؛ جلب المزوّد معطّل.
 Shared map tiles unavailable; camera points remain available.,مربعات الخرائط المشتركة غير متاحة؛ تظل نقاط الكاميرات متاحة.
 This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.,هذا المربع غير موجود في مخزن سيراج المشترك؛ جلب المزوّد عبر الإنترنت معطّل. تظل علامات الكاميرات والحركة متاحة.
+Fit results,احتواء النتائج
+Tile unavailable,المربع غير متاح

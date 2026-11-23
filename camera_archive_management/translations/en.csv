@@ -715,3 +715,5 @@ Using shared Siraj cache and the configured provider.,Using shared Siraj cache a
 Using shared Siraj cache only; provider fetching is disabled.,Using shared Siraj cache only; provider fetching is disabled.
 Shared map tiles unavailable; camera points remain available.,Shared map tiles unavailable; camera points remain available.
 This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.,This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work.
+Fit results,Fit results
+Tile unavailable,Tile unavailable
