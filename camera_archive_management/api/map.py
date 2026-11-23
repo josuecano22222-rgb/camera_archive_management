@@ -85,6 +85,11 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 			"lookup_source", "lookup_confidence", "lookup_ambiguous", "lookup_resolved_at",
 			"camera_photos_json", "primary_image", "is_demo_record",
 		])
+	elif doctype == "Motion Event":
+		fields.extend([
+			"camera", "camera_name_snapshot", "camera_type_snapshot", "camera_area_snapshot",
+			"motion_type", "detected_at", "vehicle", "is_demo_record",
+		])
 	rows = frappe.get_list(
 		doctype,
 		filters=filters or [],
@@ -93,11 +98,49 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 		limit_page_length=5000,
 	)
 	gallery_by_camera = {row.name: _camera_gallery(row) for row in rows} if doctype == "Camera" else {}
+	vehicles_by_name = {}
+	vehicle_type_images = {}
+	vehicle_movement_totals = {}
+	if doctype == "Motion Event" and frappe.has_permission("Motion Event", "read"):
+		vehicle_names = sorted({row.get("vehicle") for row in rows if row.get("vehicle")})
+		if vehicle_names:
+			count_rows = frappe.get_list(
+				"Motion Event",
+				filters={"vehicle": ["in", vehicle_names]},
+				fields=["vehicle", "count(name) as total"],
+				group_by="vehicle",
+				limit_page_length=5000,
+			)
+			vehicle_movement_totals = {row.vehicle: _safe_map_count(row.total) for row in count_rows}
+	if doctype == "Motion Event" and frappe.has_permission("CAM Vehicle", "read"):
+		vehicle_names = sorted({row.get("vehicle") for row in rows if row.get("vehicle")})
+		vehicle_rows = frappe.get_list(
+			"CAM Vehicle",
+			filters={"name": ["in", vehicle_names]},
+			fields=["name", "vehicle_name", "vehicle_type", "vehicle_number", "vehicle_image", "status"],
+			order_by="vehicle_name asc, name asc",
+			limit_page_length=5000,
+		) if vehicle_names else []
+		vehicles_by_name = {vehicle.name: vehicle for vehicle in vehicle_rows}
+		vehicle_types = sorted({row.vehicle_type for row in vehicle_rows if row.vehicle_type})
+		if vehicle_types and frappe.has_permission("Vehicle Type", "read"):
+			type_rows = frappe.get_list(
+				"Vehicle Type",
+				filters={"name": ["in", vehicle_types]},
+				fields=["name", "vehicle_type_image"],
+				limit_page_length=500,
+			)
+			vehicle_type_images = {row.name: row.vehicle_type_image for row in type_rows}
 	all_urls = {
 		photo["url"]
 		for photos in gallery_by_camera.values()
 		for photo in photos
 	}
+	for vehicle in vehicles_by_name.values():
+		if vehicle.vehicle_image:
+			all_urls.add(vehicle.vehicle_image)
+		if vehicle_type_images.get(vehicle.vehicle_type):
+			all_urls.add(vehicle_type_images[vehicle.vehicle_type])
 	file_map = _load_file_map(all_urls)
 	features = []
 	for row in rows:
@@ -144,6 +187,31 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 				"lookup_resolved_at": str(row.lookup_resolved_at) if row.lookup_resolved_at else "",
 				"photos": photos,
 			})
+		elif doctype == "Motion Event":
+			vehicle = vehicles_by_name.get(row.get("vehicle"))
+			vehicle_image = _clean_image_url(vehicle.vehicle_image, file_map) if vehicle else None
+			vehicle_type_image = _clean_image_url(
+				vehicle_type_images.get(vehicle.vehicle_type), file_map
+			) if vehicle else None
+			properties.update({
+				"camera": row.get("camera") or "",
+				"camera_name": row.get("camera_name_snapshot") or row.get("camera") or "",
+				"camera_type": row.get("camera_type_snapshot") or "",
+				"camera_area": row.get("camera_area_snapshot") or "",
+				"motion_type": row.get("motion_type") or "",
+				"detected_at": str(row.get("detected_at") or ""),
+				"vehicle": row.get("vehicle") or "",
+				"vehicle_name": vehicle.vehicle_name if vehicle else (row.get("vehicle") or ""),
+				"vehicle_type": vehicle.vehicle_type if vehicle else "",
+				"vehicle_number": vehicle.vehicle_number if vehicle else "",
+				"vehicle_status": vehicle.status if vehicle else "",
+				"vehicle_image": vehicle_image or vehicle_type_image,
+				"vehicle_image_source": "vehicle" if vehicle_image else ("type" if vehicle_type_image else "fallback"),
+				"vehicle_movement_count": vehicle_movement_totals.get(row.get("vehicle"), 0),
+				"is_demo_record": bool(row.get("is_demo_record")),
+				"latitude": str(latitude),
+				"longitude": str(longitude),
+			})
 		features.append({
 			"type": "Feature",
 			"properties": properties,
@@ -153,6 +221,13 @@ def get_custom_map_coords(doctype: str, filters=None, type=None) -> dict:
 			},
 		})
 	return {"type": "FeatureCollection", "features": features}
+
+
+def _safe_map_count(value) -> int:
+	try:
+		return max(0, int(value or 0))
+	except (TypeError, ValueError, OverflowError):
+		return 0
 
 
 def _clean_image_url(value: str | None, file_map: dict[str, object]) -> str | None:

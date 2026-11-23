@@ -66,6 +66,36 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn("not cadastral", data_readme.lower())
 		self.assertIn("not legal boundaries or sovereignty", (Path(__file__).parents[1] / "setup" / "seed.py").read_text(encoding="utf-8").lower())
 
+	def test_workspace_dashboard_has_charts_and_shortcuts_for_all_standalone_doctypes(self):
+		workspace_path = Path(__file__).parent / "workspace" / "camera_archive_management" / "camera_archive_management.json"
+		workspace = json.loads(workspace_path.read_text(encoding="utf-8"))
+		links = json.loads(workspace["content"])
+		workspace_link_names = {row.get("link_to") for row in workspace["links"] if row.get("link_type") == "DocType"}
+		standalone_doctypes = {
+			definition["name"]
+			for path in DOCTYPE_DIR.glob("*/*.json")
+			for definition in [json.loads(path.read_text(encoding="utf-8"))]
+			if not definition.get("istable")
+		}
+		self.assertTrue(standalone_doctypes <= workspace_link_names)
+		self.assertIn("camera-archive-overview", {row.get("link_to") for row in workspace["shortcuts"]})
+		self.assertTrue(any(row.get("data", {}).get("shortcut_name") == "Camera Archive Overview" for row in links))
+		overview_dir = Path(__file__).parent / "page" / "camera_archive_overview"
+		self.assertTrue((overview_dir / "camera_archive_overview.json").is_file())
+		overview_script = (overview_dir / "camera_archive_overview.js").read_text(encoding="utf-8")
+		for chart_name in ("daily_movements", "camera_status", "movement_types", "top_vehicles"):
+			self.assertIn(chart_name, overview_script)
+		self.assertIn("get_workspace_summary", overview_script)
+		self.assertIn("Camera Credential", overview_script)
+		self.assertIn("CAM Vehicle", overview_script)
+		chart_names = {row["chart_name"] for row in workspace["charts"]}
+		chart_fixtures = json.loads((Path(__file__).parents[1] / "fixtures" / "dashboard_chart.json").read_text(encoding="utf-8"))
+		self.assertEqual(chart_names, {chart["chart_name"] for chart in chart_fixtures})
+		self.assertEqual(len(chart_names), 4)
+		for chart in chart_fixtures:
+			self.assertTrue(chart["roles"])
+			self.assertIn(chart["document_type"], standalone_doctypes)
+
 	def test_import_permissions_match_doctype_importability(self):
 		definitions = sorted(DOCTYPE_DIR.glob("*/*.json"))
 		for path in definitions:

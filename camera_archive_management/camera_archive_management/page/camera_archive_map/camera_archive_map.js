@@ -1574,7 +1574,11 @@ function vehicle_icon(movement, leaflet, page) {
 	shell.title = `${vehicleName} · ${motionType}`;
 	const image = image_node(movement?.vehicle_image, vehicleName, "cam-pin-image", page);
 	if (image) shell.append(image);
-	else shell.append(node("span", "cam-pin-fallback", "🚘"));
+	else {
+		const point = node("span", "cam-map-user-location-point");
+		point.setAttribute("aria-label", __("No user-configured vehicle image; showing the saved movement point"));
+		shell.append(point);
+	}
 	shell.append(node("span", `cam-vehicle-event-badge cam-vehicle-event-${kind || "other"}`, eventMark));
 	return leaflet.divIcon({ className: "cam-leaflet-icon", html: cam_archive_icon_html(shell), iconSize: [44, 44], iconAnchor: [22, 22], popupAnchor: [0, -22] });
 }
@@ -1774,7 +1778,8 @@ function append_archive_camera_info_group(parent, label, fields) {
 function movement_popup(movement, page) {
 	const root = node("div", "cam-map-popup");
 	const vehicleImage = image_node(movement.vehicle_image, movement.vehicle_name, "cam-vehicle-preview", page);
-	root.append(vehicleImage || node("span", "cam-vehicle-preview-fallback cam-popup-vehicle-fallback", "🚘"));
+	if (vehicleImage) root.append(vehicleImage);
+	else root.append(node("span", "cam-vehicle-preview-fallback cam-popup-vehicle-fallback cam-map-user-location-point"));
 	root.append(node("h4", "", cam_archive_safe_text(movement.vehicle_name) || __("Unidentified vehicle")));
 	if (movement.is_demo_record) root.append(node("span", "cam-demo-badge", __("SYNTHETIC DEMO DATA")));
 	const details = node("dl", "cam-popup-details");
@@ -1801,7 +1806,7 @@ function add_movement_card(page, movement) {
 	const card = node("button", "cam-movement-card");
 	card.type = "button";
 	const image = image_node(movement.vehicle_image, movement.vehicle_name, "cam-movement-image", page);
-	card.append(image || node("span", "cam-movement-image cam-vehicle-preview-fallback", "🚘"));
+	card.append(image || node("span", "cam-movement-image cam-vehicle-preview-fallback cam-map-user-location-point"));
 	const text = node("span", "cam-movement-text");
 	text.append(node("strong", "", cam_archive_safe_text(movement.vehicle_name) || __("Unidentified vehicle")));
 	text.append(node("span", "", `${cam_archive_safe_text(movement.motion_type) || __("Movement")} · ${cam_archive_safe_text(movement.detected_at)}`));

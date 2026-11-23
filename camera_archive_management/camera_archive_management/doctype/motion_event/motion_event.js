@@ -61,14 +61,14 @@ async function show_event_vehicle(frm) {
 			host.append(img);
 		} else {
 			const fallback = document.createElement("div");
-			fallback.className = "cam-vehicle-preview-fallback";
-			fallback.textContent = "🚘";
+			fallback.className = "cam-vehicle-preview-fallback cam-map-user-location-point";
+			fallback.setAttribute("aria-label", __("No user-configured vehicle image"));
 			host.append(fallback);
 		}
 	} catch (error) {
 		const fallback = document.createElement("div");
-		fallback.className = "cam-vehicle-preview-fallback";
-		fallback.textContent = "🚘";
+		fallback.className = "cam-vehicle-preview-fallback cam-map-user-location-point";
+		fallback.setAttribute("aria-label", __("Vehicle image unavailable"));
 		host.append(fallback);
 	}
 }

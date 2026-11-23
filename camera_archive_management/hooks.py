@@ -27,7 +27,14 @@ fixtures = [
 				],
 			]
 		],
-	}
+	},
+	{
+		"dt": "Dashboard Chart",
+		"filters": [["chart_name", "in", [
+			"Camera Archive - Camera Status", "Camera Archive - Daily Movements",
+			"Camera Archive - Movement Direction", "Camera Archive - Vehicles by Type",
+		]]],
+	},
 ]
 
 # Keep map presentation styles global, but load Leaflet only inside our map page.

@@ -1,0 +1,16 @@
+{
+ "doctype": "Page",
+ "module": "Camera Archive Management",
+ "name": "camera-archive-overview",
+ "page_name": "camera-archive-overview",
+ "title": "Camera Archive Overview",
+ "standard": "Yes",
+ "roles": [
+  {"role": "CAM Viewer"},
+  {"role": "CAM Operator"},
+  {"role": "CAM Analyst"},
+  {"role": "CAM Archive Manager"},
+  {"role": "CAM Geo Administrator"},
+  {"role": "System Manager"}
+ ]
+}

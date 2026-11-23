@@ -35,6 +35,6 @@ async function show_vehicle_image(frm) {
 		img.className = "cam-vehicle-preview";
 		host.append(img);
 	} else {
-		host.html(`<div class="cam-vehicle-preview-fallback" aria-label="${frappe.utils.escape_html(__("Vehicle icon fallback"))}">🚘</div>`);
+		host.html(`<div class="cam-vehicle-preview-fallback cam-map-user-location-point" aria-label="${frappe.utils.escape_html(__("No user-configured vehicle image"))}"></div>`);
 	}
 }

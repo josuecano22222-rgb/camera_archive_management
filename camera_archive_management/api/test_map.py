@@ -118,7 +118,54 @@ class TestMapEndpoint(FrappeTestCase):
 			result = map_api.get_custom_map_coords("Motion Event")
 
 		self.assertEqual(result["features"][0]["properties"]["name"], "MOT-1")
-		self.assertEqual(get_list.call_args.kwargs["fields"], ["name", "latitude_snapshot", "longitude_snapshot"])
+		self.assertEqual(
+			get_list.call_args.kwargs["fields"],
+			[
+				"name", "latitude_snapshot", "longitude_snapshot", "camera", "camera_name_snapshot",
+				"camera_type_snapshot", "camera_area_snapshot", "motion_type", "detected_at", "vehicle", "is_demo_record",
+			],
+		)
+
+	def test_motion_event_coords_include_permission_filtered_vehicle_identity_and_icon(self):
+		event = frappe._dict(
+			name="MOT-MAP-1", latitude_snapshot="52.3700000009", longitude_snapshot="4.8900000008",
+			camera="CAM-1", camera_name_snapshot="North Gate", camera_type_snapshot="PTZ",
+			camera_area_snapshot="Harbour", motion_type="Entry", detected_at="2026-05-02 10:30:00",
+			vehicle="VEH-1", is_demo_record=0,
+		)
+		vehicle = frappe._dict(
+			name="VEH-1", vehicle_name="Blue Sprinter", vehicle_type="Van", vehicle_number="NL-01-ABC",
+			vehicle_image="/files/van.png", status="Active",
+		)
+		vehicle_type = frappe._dict(name="Van", vehicle_type_image="/files/van-type.png")
+		file_docs = [
+			frappe._dict(name="FILE-1", file_url="/files/van.png", is_private=0),
+			frappe._dict(name="FILE-2", file_url="/files/van-type.png", is_private=0),
+		]
+		with (
+			patch.object(frappe, "has_permission", return_value=True),
+			patch.object(frappe, "get_list", side_effect=[
+				[event], [frappe._dict(vehicle="VEH-1", total=27)], [vehicle], [vehicle_type],
+			]) as get_list,
+			patch.object(map_api, "_load_file_map", return_value={
+				"/files/van.png": [file_docs[0]], "/files/van-type.png": [file_docs[1]],
+			}),
+		):
+			result = map_api.get_custom_map_coords("Motion Event")
+
+		props = result["features"][0]["properties"]
+		self.assertEqual(props["camera_name"], "North Gate")
+		self.assertEqual(props["vehicle_name"], "Blue Sprinter")
+		self.assertEqual(props["vehicle_type"], "Van")
+		self.assertEqual(props["vehicle_number"], "NL-01-ABC")
+		self.assertEqual(props["vehicle_image"], "/files/van.png")
+		self.assertEqual(props["vehicle_image_source"], "vehicle")
+		self.assertEqual(props["vehicle_movement_count"], 27)
+		self.assertEqual(props["latitude"], "52.3700000009")
+		self.assertEqual(props["longitude"], "4.8900000008")
+		self.assertNotIn("username", props)
+		self.assertNotIn("password", props)
+		self.assertEqual(get_list.call_count, 4)
 
 	def test_camera_main_image_is_returned_from_embedded_gallery(self):
 		camera = frappe._dict(
