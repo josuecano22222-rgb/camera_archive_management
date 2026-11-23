@@ -1,3 +1,18 @@
+/* The Siraj coordinate picker is the visible map UI for Camera records. Keep it
+   on its own full-width form row and hide the stock Geolocation map through the
+   Camera DocType's hidden field metadata to avoid rendering two maps side by side. */
+.form-section.siraj-location-section .siraj-coord-group {
+	flex: 0 0 100%;
+	width: 100%;
+	max-width: 100%;
+}
+.form-section.siraj-location-section .siraj-coordinate-map,
+.form-section.siraj-location-section .siraj-coord-canvas {
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+}
+
 .cam-map-toolbar {
 	display: flex;
 	align-items: end;

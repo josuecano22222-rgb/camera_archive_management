@@ -91,7 +91,9 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 
 	def test_views_are_enabled_only_where_schema_supports_them(self):
 		camera = self.load_doctype("camera")
-		self.assertTrue(any(f["fieldname"] == "location" and f["fieldtype"] == "Geolocation" for f in camera["fields"]))
+		location_field = next(f for f in camera["fields"] if f["fieldname"] == "location")
+		self.assertEqual(location_field["fieldtype"], "Geolocation")
+		self.assertEqual(location_field["hidden"], 1, "Keep the Geolocation data field while avoiding a duplicate native map in the form")
 		self.assertEqual(camera["image_field"], "primary_image")
 		map_script = Path(__file__).parent / "page" / "camera_archive_map" / "camera_archive_map.js"
 		self.assertIn("iconAnchor: [24, 62]", map_script.read_text(encoding="utf-8"))
@@ -157,7 +159,10 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn("Photo gallery", map_script_text)
 		self.assertIn("append_archive_camera_info_group", map_script_text)
 		self.assertIn("cam-camera-gallery", (Path(__file__).parents[1] / "public" / "css" / "camera_archive.css").read_text(encoding="utf-8"))
-		self.assertIn("cam-camera-detail-card", (Path(__file__).parents[1] / "public" / "css" / "camera_archive.css").read_text(encoding="utf-8"))
+		camera_css = (Path(__file__).parents[1] / "public" / "css" / "camera_archive.css").read_text(encoding="utf-8")
+		self.assertIn("cam-camera-detail-card", camera_css)
+		self.assertIn(".form-section.siraj-location-section .siraj-coord-group", camera_css)
+		self.assertIn("flex: 0 0 100%", camera_css)
 		map_css_text = (Path(__file__).parents[1] / "public" / "css" / "camera_archive.css").read_text(encoding="utf-8")
 		self.assertIn(".cam-camera-card-section", map_css_text)
 		self.assertIn(".cam-camera-card-coordinate", map_css_text)

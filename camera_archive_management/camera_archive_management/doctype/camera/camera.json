@@ -138,7 +138,8 @@
   {
    "fieldname": "location",
    "fieldtype": "Geolocation",
-   "label": "Location"
+   "label": "Location",
+   "hidden": 1
   },
   {
    "fieldname": "latitude",
