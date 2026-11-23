@@ -565,3 +565,7 @@ movements,movements
 {0} movements in the chart window,{0} movements in the chart window
 "Movement mix: {0} entries, {1} exits, {2} other","Movement mix: {0} entries, {1} exits, {2} other"
 Other,Other
+Camera status,Camera status
+Active (default),Active (default)
+Camera Area ID,Camera Area ID
+"Showing active cameras by default; no exact camera, vehicle, event, or area filter is active.","Showing active cameras by default; no exact camera, vehicle, event, or area filter is active."

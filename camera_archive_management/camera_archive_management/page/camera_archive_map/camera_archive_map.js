@@ -52,7 +52,7 @@ function initialize_map_page(wrapper, leaflet) {
 	page.cam_leaflet = leaflet;
 	page.set_primary_action(__("Refresh"), () => load_map(page), "refresh");
 	page.cam_map_options = Object.assign(
-		{ camera: null, vehicle: null, event: null },
+		{ camera: null, vehicle: null, event: null, camera_status: null, area: null },
 		page.cam_map_options || {}
 	);
 	page.cam_map_context = {
@@ -68,6 +68,14 @@ function initialize_map_page(wrapper, leaflet) {
 		<label>${__("Camera ID")} <input class="form-control cam-map-camera" type="text" maxlength="140"></label>
 		<label>${__("CAM Vehicle ID")} <input class="form-control cam-map-vehicle" type="text" maxlength="140"></label>
 		<label>${__("Motion Event ID")} <input class="form-control cam-map-event" type="text" maxlength="140"></label>
+		<label>${__("Camera status")} <select class="form-control cam-map-status">
+				<option value="">${__("Active (default)")}</option>
+				<option value="all">${__("All statuses")}</option>
+				<option value="Active">${__("Active")}</option>
+				<option value="Inactive">${__("Inactive")}</option>
+				<option value="Maintenance">${__("Maintenance")}</option>
+		</select></label>
+		<label>${__("Camera Area ID")} <input class="form-control cam-map-area" type="text" maxlength="140"></label>
 		<label>${__("Basemap")} <select class="form-control cam-map-layer">
 				<option value="standard">${__("Standard")}</option>
 				<option value="aerial">${__("Aerial")}</option>
@@ -135,6 +143,8 @@ function initialize_map_page(wrapper, leaflet) {
 	host.querySelector(".cam-map-camera").value = page.cam_map_options.camera || "";
 	host.querySelector(".cam-map-vehicle").value = page.cam_map_options.vehicle || "";
 	host.querySelector(".cam-map-event").value = page.cam_map_options.event || "";
+	host.querySelector(".cam-map-status").value = page.cam_map_options.camera_status || "";
+	host.querySelector(".cam-map-area").value = page.cam_map_options.area || "";
 	if (["standard", "aerial", "hybrid"].includes(route_state.controls.layer)) {
 		host.querySelector(".cam-map-layer").value = route_state.controls.layer;
 	}
@@ -186,6 +196,11 @@ function initialize_map_page(wrapper, leaflet) {
 		load_map(page);
 	});
 	host.querySelector(".cam-map-layer").addEventListener("change", () => set_basemap(page));
+	host.querySelector(".cam-map-status").addEventListener("change", () => {
+		read_filter_controls(page);
+		update_filter_note(page);
+		load_map(page);
+	});
 	host.querySelectorAll(".cam-map-tool").forEach((button) => {
 		button.addEventListener("click", () => start_map_measurement(page, button.dataset.tool));
 	});
@@ -206,7 +221,7 @@ function initialize_map_page(wrapper, leaflet) {
 	});
 	load_tile_config(page);
 	load_country_boundaries(page);
-	for (const selector of [".cam-map-camera", ".cam-map-vehicle", ".cam-map-event"]) {
+	for (const selector of [".cam-map-camera", ".cam-map-vehicle", ".cam-map-event", ".cam-map-area"]) {
 		const input = host.querySelector(selector);
 		input.addEventListener("input", () => {
 			read_filter_controls(page);
@@ -244,6 +259,8 @@ frappe.pages["camera-archive-map"].on_page_show = function (wrapper) {
 	host.querySelector(".cam-map-camera").value = page.cam_map_options.camera || "";
 	host.querySelector(".cam-map-vehicle").value = page.cam_map_options.vehicle || "";
 	host.querySelector(".cam-map-event").value = page.cam_map_options.event || "";
+	host.querySelector(".cam-map-status").value = page.cam_map_options.camera_status || "";
+	host.querySelector(".cam-map-area").value = page.cam_map_options.area || "";
 	const today = new Date();
 	const start = new Date(today);
 	start.setDate(today.getDate() - 30);
@@ -256,7 +273,7 @@ frappe.pages["camera-archive-map"].on_page_show = function (wrapper) {
 	load_map(page);
 };
 
-const CAM_MAP_FILTER_KEYS = ["camera", "vehicle", "event"];
+const CAM_MAP_FILTER_KEYS = ["camera", "vehicle", "event", "camera_status", "area"];
 const CAM_MAP_ROUTE_KEYS = [...CAM_MAP_FILTER_KEYS, "start", "end", "layer"];
 
 function clean_route_value(value) {
@@ -267,7 +284,7 @@ function clean_route_value(value) {
 
 function sync_route_filters_to_page(page, { force = false } = {}) {
 	page.cam_map_options = Object.assign(
-		{ camera: null, vehicle: null, event: null },
+		{ camera: null, vehicle: null, event: null, camera_status: null, area: null },
 		page.cam_map_options || {}
 	);
 	page.cam_map_route_values = Object.assign(
@@ -291,8 +308,8 @@ function sync_route_filters_to_page(page, { force = false } = {}) {
 	const identity = JSON.stringify(route);
 	const route_changed = identity !== page.cam_map_route_identity;
 	const route_was_away = Boolean(page.cam_map_was_away);
-	const has_route_options = Object.keys(route_options).length > 0;
-	let changed = route_changed || route_was_away || has_route_options || force;
+	const has_page_route_options = CAM_MAP_ROUTE_KEYS.some((key) => Object.hasOwn(route_options, key));
+	let changed = route_changed || route_was_away || has_page_route_options || force;
 
 	if (has_route_filters || has_positional_filters) {
 		for (const key of CAM_MAP_FILTER_KEYS) {
@@ -301,14 +318,14 @@ function sync_route_filters_to_page(page, { force = false } = {}) {
 			if (page.cam_map_options[key] !== normalized) changed = true;
 			page.cam_map_options[key] = normalized;
 		}
-	} else if (route_changed || route_was_away || has_route_options || force) {
+	} else if (route_changed || route_was_away || has_page_route_options || force) {
 		for (const key of CAM_MAP_FILTER_KEYS) {
 			if (page.cam_map_options[key] !== null) changed = true;
 			page.cam_map_options[key] = null;
 		}
 	}
 
-	if (has_route_controls || route_changed || route_was_away || has_route_options || force) {
+	if (has_route_controls || route_changed || route_was_away || has_page_route_options || force) {
 		for (const key of ["start", "end", "layer"]) {
 			const value = Object.hasOwn(route_options, key) ? route_options[key] : from_route[key];
 			const normalized = clean_route_value(value);
@@ -318,19 +335,25 @@ function sync_route_filters_to_page(page, { force = false } = {}) {
 	}
 	page.cam_map_route_identity = identity;
 	page.cam_map_was_away = false;
-	if (has_route_options) frappe.route_options = {};
+	if (has_page_route_options) {
+		const remaining_options = { ...route_options };
+		for (const key of CAM_MAP_ROUTE_KEYS) delete remaining_options[key];
+		frappe.route_options = remaining_options;
+	}
 	return { changed, controls: page.cam_map_route_values };
 }
 
 function read_filter_controls(page) {
 	const host = page.main.get(0);
 	page.cam_map_options = Object.assign(
-		{ camera: null, vehicle: null, event: null },
+		{ camera: null, vehicle: null, event: null, camera_status: null, area: null },
 		page.cam_map_options || {}
 	);
 	page.cam_map_options.camera = clean_route_value(host.querySelector(".cam-map-camera").value);
 	page.cam_map_options.vehicle = clean_route_value(host.querySelector(".cam-map-vehicle").value);
 	page.cam_map_options.event = clean_route_value(host.querySelector(".cam-map-event").value);
+	page.cam_map_options.camera_status = clean_route_value(host.querySelector(".cam-map-status").value);
+	page.cam_map_options.area = clean_route_value(host.querySelector(".cam-map-area").value);
 }
 
 function queue_map_reload(page) {
@@ -339,14 +362,16 @@ function queue_map_reload(page) {
 }
 
 function update_filter_note(page) {
-	const { camera, vehicle, event } = page.cam_map_options || {};
+	const { camera, vehicle, event, camera_status, area } = page.cam_map_options || {};
 	const parts = [];
 	if (camera) parts.push(`${__("Camera")}: ${camera}`);
 	if (vehicle) parts.push(`${__("Vehicle")}: ${vehicle}`);
 	if (event) parts.push(`${__("Event")}: ${event}`);
+	if (camera_status) parts.push(`${__("Status")}: ${camera_status === "all" ? __("All statuses") : __(camera_status)}`);
+	if (area) parts.push(`${__("Area")}: ${area}`);
 	const summary = parts.length
 		? `${__("Active filters")} — ${parts.join(" • ")}`
-		: __("Showing all matching records (no camera, vehicle, or event filter active).");
+		: __("Showing active cameras by default; no exact camera, vehicle, event, or area filter is active.");
 	if (page.$filter_note) page.$filter_note.text(summary);
 }
 
@@ -888,6 +913,8 @@ async function load_map(page) {
 		camera: page.cam_map_options.camera || undefined,
 		vehicle: page.cam_map_options.vehicle || undefined,
 		event: page.cam_map_options.event || undefined,
+		camera_status: page.cam_map_options.camera_status || undefined,
+		area: page.cam_map_options.area || undefined,
 		start: host.querySelector(".cam-map-from").value || undefined,
 		end: host.querySelector(".cam-map-to").value || undefined,
 		include_demo: host.querySelector(".cam-map-include-demo").checked ? 1 : 0

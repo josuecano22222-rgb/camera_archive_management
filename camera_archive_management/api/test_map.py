@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from unittest.mock import call, patch
+import json
+from unittest.mock import patch
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
@@ -133,6 +134,110 @@ class TestMapEndpoint(FrappeTestCase):
 		self.assertEqual(camera_filters[1], {"status": "Active"})
 		self.assertEqual(event_filters[0], {"is_demo_record": 0})
 		self.assertEqual(event_filters[1], {})
+
+	def test_map_filters_camera_status_area_and_scopes_movements(self):
+		camera = frappe._dict(
+			name="CAM-AREA-1",
+			camera_name="Maintenance Depot",
+			status="Maintenance",
+			camera_type="Fixed",
+			area="AREA-1",
+			address="",
+			latitude="52.37",
+			longitude="4.89",
+			geo_admin_area=None,
+			geo_boundary=None,
+			primary_image=None,
+			is_demo_record=0,
+			camera_photos_json="[]",
+		)
+		event = frappe._dict(
+			name="MOT-AREA-1",
+			camera=camera.name,
+			motion_type="Entry",
+			detected_at="2026-01-01 10:00:00",
+			vehicle=None,
+			latitude_snapshot="52.37",
+			longitude_snapshot="4.89",
+			address_snapshot="",
+			importance="Low",
+			notes="",
+			is_demo_record=0,
+		)
+		with (
+			patch.object(frappe, "has_permission", return_value=True),
+			patch.object(frappe, "get_list", side_effect=[[camera], [event]]) as get_list,
+		):
+			result = map_api.map_payload(camera_status="Maintenance", area="AREA-1")
+
+		self.assertEqual(result["cameras"][0]["status"], "Maintenance")
+		self.assertEqual(result["movements"][0]["camera"], camera.name)
+		self.assertEqual(get_list.call_args_list[0].kwargs["filters"], {
+			"status": "Maintenance", "area": "AREA-1", "is_demo_record": 0,
+		})
+		self.assertEqual(get_list.call_args_list[1].kwargs["filters"]["camera"], ["in", [camera.name]])
+
+	def test_empty_area_scope_skips_events_even_with_vehicle_filter(self):
+		with (
+			patch.object(frappe, "has_permission", return_value=True),
+			patch.object(frappe, "get_list", return_value=[]) as get_list,
+		):
+			result = map_api.map_payload(area="EMPTY-AREA", vehicle="VEH-1")
+		self.assertEqual(result["movements"], [])
+		self.assertEqual(get_list.call_count, 1)
+
+	def test_map_rejects_invalid_camera_status(self):
+		with self.assertRaises(frappe.ValidationError):
+			map_api.map_payload(camera_status="Broken")
+
+	def test_map_preserves_all_photos_in_large_gallery(self):
+		photos = [
+			{
+				"url": f"/files/gallery-{index:03}.jpg",
+				"caption": f"Photo {index}",
+				"description": "",
+				"is_primary": index == 0,
+				"sort_order": index,
+			}
+			for index in range(251)
+		]
+		camera = frappe._dict(
+			name="CAM-LARGE-GALLERY",
+			camera_name="Large Gallery",
+			status="Active",
+			camera_type="Fixed",
+			area=None,
+			address="",
+			latitude="52.37",
+			longitude="4.89",
+			geo_admin_area=None,
+			geo_boundary=None,
+			primary_image=photos[0]["url"],
+			is_demo_record=0,
+			camera_photos_json=json.dumps(photos),
+		)
+		files = [frappe._dict(name=f"FILE-{index}", file_url=photo["url"], is_private=0) for index, photo in enumerate(photos)]
+		with (
+			patch.object(frappe, "has_permission", return_value=True),
+			patch.object(frappe, "get_list", side_effect=[[camera], []]),
+			patch.object(frappe, "get_all", return_value=files),
+		):
+			result = map_api.map_payload(camera=camera.name)
+		self.assertEqual(len(result["cameras"][0]["photos"]), 251)
+		self.assertEqual(result["cameras"][0]["photos"][-1]["caption"], "Photo 250")
+
+	def test_file_lookup_batches_without_a_gallery_count_cap(self):
+		urls = {f"/files/gallery-{index:04}.jpg" for index in range(1201)}
+
+		def get_all(doctype, filters, **kwargs):
+			self.assertEqual(doctype, "File")
+			return [frappe._dict(name=url.rsplit("/", 1)[-1], file_url=url, is_private=0) for url in filters["file_url"][1]]
+
+		with patch.object(frappe, "get_all", side_effect=get_all) as get_all_mock:
+			file_map = map_api._load_file_map(urls)
+		self.assertEqual(len(file_map), len(urls))
+		self.assertEqual(get_all_mock.call_count, 3)
+		self.assertTrue(all(call.kwargs["limit_page_length"] == 0 for call in get_all_mock.call_args_list))
 
 	def test_map_rejects_invalid_synthetic_data_flag(self):
 		with self.assertRaises(frappe.ValidationError):

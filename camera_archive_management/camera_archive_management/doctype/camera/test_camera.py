@@ -21,7 +21,7 @@ class TestCamera(FrappeTestCase):
 		]
 		self.assertEqual(_gallery_items(valid)[0]["is_primary"], True)
 		with self.assertRaises(frappe.ValidationError):
-			_gallery_items(valid + [{**valid[0], "url": "/private/files/two.jpg", "sort_order": 1}])
+			_gallery_items([*valid, {**valid[0], "url": "/private/files/two.jpg", "sort_order": 1}])
 		with self.assertRaises(frappe.ValidationError):
 			_gallery_items([{**valid[0], "sort_order": 2}])
 

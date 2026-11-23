@@ -8,6 +8,7 @@ import unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from types import SimpleNamespace
+from typing import ClassVar
 from unittest.mock import Mock, patch
 
 from camera_archive_management.geo import tile_cache
@@ -44,7 +45,7 @@ def _try_acquire_tile_lock(private_path, result_queue):
 
 
 class FakeSirajTileModule:
-	LAYERS = {
+	LAYERS: ClassVar[dict[str, dict[str, object]]] = {
 		"standard": {
 			"url": "https://tile.example.test/{z}/{x}/{y}.png",
 			"content_type": "image/png",

@@ -8,18 +8,25 @@ A Frappe v15 application for camera inventory, controlled image galleries, vehic
 - The Camera Archive Map includes configurable basemaps, camera/event/route layer toggles, date and record filters, a movement replay timeline, geodesic distance and area measurements, coordinate copy, and browser-local geolocation.
 - Geographic lookup is local-first and supports imported, attributed GeoJSON datasets. External geocoding remains opt-in. Map tile fetching and shared-cache writes remain governed by the Siraj administrator settings and must not be enabled by this app by default.
 - Camera and vehicle classification catalogs are additive core reference data. After migration, the app creates only missing classifications; it never overwrites site-defined descriptions or records.
-- A separate, explicitly enabled synthetic scenario exercises the map with fictional Amsterdam-area cameras, vehicles, and motion events. It is not installed automatically, is excluded from the map by default, is visibly marked, and is refused on the production site `frappe.com`.
+- A separate, explicitly enabled synthetic scenario exercises the map with fictional Amsterdam-area cameras, vehicles, and motion events. It is never installed or seeded automatically, is excluded from the map by default, and is visibly marked. Production creation requires a deliberate per-site opt-in and explicit administrator command.
 
 ## Data and safety
 
-The reference catalogs in `camera_archive_management/data/core_reference_data.json` are application master data, not demonstrations. Synthetic records are separate and created only by `camera_archive_management.setup.demo_data.create_demo_scenario` on a disposable, non-production site whose config explicitly sets `camera_archive_allow_demo_data=true`. On that disposable site only, enable the Boolean flag and invoke the generator with:
+The reference catalogs in `camera_archive_management/data/core_reference_data.json` are application master data, not demonstrations. Synthetic records are separate, never created by install or migrate, and generated only by an explicit operator command after enabling the per-site Boolean `camera_archive_allow_demo_data=true`. The command works on a disposable test site and, when deliberately authorized, on `frappe.com`:
 
 ```bash
-bench --site <disposable-demo-site> set-config camera_archive_allow_demo_data true --parse
-bench --site <disposable-demo-site> execute camera_archive_management.setup.demo_data.create_demo_scenario
+bench --site <site-name> set-config camera_archive_allow_demo_data true --parse
+bench --site <site-name> execute camera_archive_management.setup.demo_data.create_demo_scenario
 ```
 
-Delete only those generated records with `camera_archive_management.setup.demo_data.delete_demo_scenario` on that same safe site. The generator explicitly refuses `frappe.com`; do not add fictional camera, vehicle, or incident records to production.
+Generated cameras, vehicles, events, and image attachments carry the `CAM-MAP-V1-DEMO` tag and are excluded from the map unless the synthetic-data toggle is selected. Remove only these scenario-tagged records with:
+
+```bash
+bench --site <site-name> execute camera_archive_management.setup.demo_data.delete_demo_scenario
+bench --site <site-name> set-config camera_archive_allow_demo_data false --parse
+```
+
+Do not enable the flag casually: production demo records are fictional and must never be mistaken for operational cameras or incidents.
 
 The core pack includes Natural Earth generalized world country outlines (1:110m, public domain, pinned revision documented in `camera_archive_management/data/README.md`). These support global context and country-level local lookup, but are not legal, municipal, cadastral, or operational boundaries. The seed makes this pack active only when a site has no active dataset. Higher-resolution administrative or gazetteer datasets must be supplied by an administrator with verified provenance and license; the import path retains that attribution separately. The map can also be used for camera coordinates and authorized tile layers without any imported local data.
 
@@ -53,4 +60,4 @@ Also validate Python and JavaScript syntax, build app assets, and review the dat
 
 ## Version
 
-This project declares its first complete release as **1.0.0**. The release is not production-ready until the migration and full Frappe test suite have passed on a disposable site, assets have built successfully, the required backup and maintenance-window procedure has been observed, and the operator explicitly approves deployment. Follow the gated, stop-and-confirm sequence in [`docs/v1.0.0-release-runbook.md`](docs/v1.0.0-release-runbook.md); it is guidance only and no production action is performed by these instructions.
+This project declares its first complete release as **1.0.0**. For this initial build, the operator has explicitly waived backup/staging-clone gates because there is no application data to preserve; schema changes still run in a controlled maintenance window, and the app test suite and asset build must be checked. Follow [`docs/v1.0.0-release-runbook.md`](docs/v1.0.0-release-runbook.md) for update, migration, verification, and explicit sample-data commands. No synthetic records are created automatically.

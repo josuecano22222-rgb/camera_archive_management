@@ -4,6 +4,7 @@ import json
 import tempfile
 from pathlib import Path
 from types import SimpleNamespace
+from typing import ClassVar
 from unittest.mock import Mock, patch
 
 import frappe
@@ -16,8 +17,10 @@ _PNG = b"\x89PNG\r\n\x1a\n" + b"test-tile-payload"
 
 
 class _SirajCatalog:
-	_ENABLE_FLAG = {"standard": "enable_standard", "aerial": "enable_aerial", "hybrid": "enable_hybrid"}
-	LAYERS = {
+	_ENABLE_FLAG: ClassVar[dict[str, str]] = {
+		"standard": "enable_standard", "aerial": "enable_aerial", "hybrid": "enable_hybrid"
+	}
+	LAYERS: ClassVar[dict[str, dict[str, object]]] = {
 		"standard": {
 			"label": "Standard test map",
 			"attribution": "Test provider attribution",

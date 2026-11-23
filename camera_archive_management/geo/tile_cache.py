@@ -391,7 +391,7 @@ def _fetch_image(
 		except TileStorageError as exc:
 			raise InvalidUpstreamTile("Provider body is not a valid tile image") from exc
 		return data, actual_type
-	except (TileCacheError,):
+	except TileCacheError:
 		raise
 	except requests.RequestException as exc:
 		raise TileUpstreamUnavailable("Tile provider request failed or timed out") from exc

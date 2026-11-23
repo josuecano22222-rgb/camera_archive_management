@@ -10,8 +10,8 @@ from camera_archive_management.patches.v1_0 import (
 	ensure_child_table_columns,
 	ensure_unique_keys,
 	isolate_camera_credentials,
-	migrate_camera_photo_gallery,
 	migrate_archive_settings_single,
+	migrate_camera_photo_gallery,
 	rename_geo_settings,
 	rename_vehicle_camera,
 )

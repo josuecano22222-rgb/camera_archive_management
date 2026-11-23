@@ -30,7 +30,6 @@ def execute() -> None:
 	legacy_meta = bool(frappe.db.exists("DocType", LEGACY_DOCTYPE))
 	legacy_table = bool(frappe.db.table_exists(LEGACY_DOCTYPE))
 	intermediate_meta = bool(frappe.db.exists("DocType", INTERMEDIATE_DOCTYPE))
-	intermediate_table = bool(frappe.db.table_exists(INTERMEDIATE_DOCTYPE))
 	target_meta = bool(frappe.db.exists("DocType", TARGET_DOCTYPE))
 	target_table = bool(frappe.db.table_exists(TARGET_DOCTYPE))
 
@@ -50,7 +49,6 @@ def execute() -> None:
 		_rename_metadata(INTERMEDIATE_DOCTYPE)
 		target_meta = True
 		target_table = bool(frappe.db.table_exists(TARGET_DOCTYPE))
-		intermediate_table = False
 
 	if legacy_meta:
 		if target_meta or target_table:

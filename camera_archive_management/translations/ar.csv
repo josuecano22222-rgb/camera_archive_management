@@ -565,3 +565,7 @@ movements,حركات
 {0} movements in the chart window,{0} حركة ضمن نافذة المخطط
 "Movement mix: {0} entries, {1} exits, {2} other",توزيع الحركة: {0} دخول، {1} خروج، {2} أخرى
 Other,أخرى
+Camera status,حالة الكاميرا
+Active (default),نشطة (افتراضي)
+Camera Area ID,معرّف منطقة الكاميرا
+"Showing active cameras by default; no exact camera, vehicle, event, or area filter is active.",يتم عرض الكاميرات النشطة افتراضيًا؛ لا يوجد مرشح محدد للكاميرا أو المركبة أو الحدث أو المنطقة.

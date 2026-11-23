@@ -35,7 +35,7 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 			self.assertEqual(len({row["type_name"] for row in rows}), len(rows))
 		demo_source = (Path(__file__).parents[1] / "setup" / "demo_data.py").read_text(encoding="utf-8")
 		self.assertIn("SYNTHETIC DEMO DATA", demo_source)
-		self.assertIn('== "frappe.com"', demo_source)
+		self.assertIn('frappe.conf.get("camera_archive_allow_demo_data") is not True', demo_source)
 		self.assertIn("save_file(", demo_source)
 		assets = Path(__file__).parents[1] / "data" / "demo_camera_images"
 		images = sorted(assets.glob("camera_*.png"))
@@ -87,6 +87,7 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		for feature in (
 			"Measure distance", "Measure area", "Locate me", "Country borders", "cam-map-time", "include_demo",
 			"cam-map-activity-chart", "render_map_insights", "data-kpi-vehicles",
+			"cam-map-status", "cam-map-area", "camera_status", "has_page_route_options",
 		):
 			self.assertIn(feature, map_script_text)
 

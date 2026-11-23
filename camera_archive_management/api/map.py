@@ -143,18 +143,21 @@ def _camera_gallery(row) -> list[dict]:
 
 
 def _load_file_map(urls: set[str]) -> dict[str, list]:
+	"""Load every referenced File in bounded query batches, without capping gallery size."""
 	if not urls:
 		return {}
-	rows = frappe.get_all(
-		"File",
-		filters={"file_url": ["in", sorted(urls)]},
-		fields=["name", "file_url", "is_private"],
-		order_by="file_url asc, name asc",
-		limit_page_length=min(20000, len(urls) * 2),
-	)
 	result = {}
-	for row in rows:
-		result.setdefault(row.file_url, []).append(row)
+	ordered_urls = sorted(urls)
+	for offset in range(0, len(ordered_urls), 500):
+		rows = frappe.get_all(
+			"File",
+			filters={"file_url": ["in", ordered_urls[offset : offset + 500]]},
+			fields=["name", "file_url", "is_private"],
+			order_by="file_url asc, name asc",
+			limit_page_length=0,
+		)
+		for row in rows:
+			result.setdefault(row.file_url, []).append(row)
 	return result
 
 
@@ -195,13 +198,19 @@ def map_payload(
 	start: str | None = None,
 	end: str | None = None,
 	include_demo=0,
+	camera_status: str | None = None,
+	area: str | None = None,
 ) -> dict:
 	"""Return bounded, permission-filtered camera photos and vehicle movements."""
 	if frappe.session.user == "Guest" or not frappe.has_permission("Camera", "read"):
 		frappe.throw("Sign in with Camera read permission to use the map.", frappe.PermissionError)
-	for value, label in ((camera, "camera"), (vehicle, "vehicle"), (event, "event")):
+	for value, label in ((camera, "camera"), (vehicle, "vehicle"), (event, "event"), (area, "area")):
 		if value is not None and (not isinstance(value, str) or not value or len(value) > 140):
 			frappe.throw(f"Invalid {label} name.", frappe.ValidationError)
+	if camera_status not in (None, "", "all", "Active", "Inactive", "Maintenance"):
+		frappe.throw("Invalid camera status filter.", frappe.ValidationError)
+	if camera_status == "":
+		camera_status = None
 	if include_demo in (True, 1, "1"):
 		include_demo = True
 	elif include_demo in (False, 0, "0", None, ""):
@@ -209,7 +218,13 @@ def map_payload(
 	else:
 		frappe.throw("include_demo must be 0 or 1.", frappe.ValidationError)
 
-	camera_filters = {"status": "Active"} if not camera else {"name": camera}
+	camera_filters = {"name": camera} if camera else {}
+	if camera_status and camera_status != "all":
+		camera_filters["status"] = camera_status
+	elif not camera and camera_status != "all":
+		camera_filters["status"] = "Active"
+	if area:
+		camera_filters["area"] = area
 	if not include_demo:
 		camera_filters["is_demo_record"] = 0
 	camera_rows = frappe.get_list(
@@ -229,22 +244,28 @@ def map_payload(
 		event_filters = _date_filter(start, end)
 		if not include_demo:
 			event_filters["is_demo_record"] = 0
-		if camera:
+		filter_events_by_camera_scope = bool(area or camera_status in {"Active", "Inactive", "Maintenance"})
+		event_camera_names = [row.name for row in camera_rows] if filter_events_by_camera_scope else []
+		empty_camera_scope = filter_events_by_camera_scope and not event_camera_names
+		if filter_events_by_camera_scope and not empty_camera_scope:
+			event_filters["camera"] = ["in", event_camera_names]
+		elif camera:
 			event_filters["camera"] = camera
 		if vehicle:
 			event_filters["vehicle"] = vehicle
 		if event:
 			event_filters["name"] = event
-		event_rows = frappe.get_list(
-			"Motion Event",
-			filters=event_filters,
-			fields=[
-				"name", "camera", "motion_type", "detected_at", "vehicle", "latitude_snapshot",
-				"longitude_snapshot", "address_snapshot", "importance", "notes", "is_demo_record",
-			],
-			order_by="detected_at asc, name asc",
-			limit_page_length=MAX_EVENTS,
-		)
+		if not empty_camera_scope:
+			event_rows = frappe.get_list(
+				"Motion Event",
+				filters=event_filters,
+				fields=[
+					"name", "camera", "motion_type", "detected_at", "vehicle", "latitude_snapshot",
+					"longitude_snapshot", "address_snapshot", "importance", "notes", "is_demo_record",
+				],
+				order_by="detected_at asc, name asc",
+				limit_page_length=MAX_EVENTS,
+			)
 
 	vehicle_names = sorted({row.vehicle for row in event_rows if row.vehicle})
 	vehicles = (
