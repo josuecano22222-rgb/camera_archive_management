@@ -65,11 +65,13 @@ function initialize_map_page(wrapper, leaflet) {
 	const host = page.main.get(0);
 	host.innerHTML = `
 		<div class="cam-map-toolbar">
-		<label>${__("From")} <input class="form-control cam-map-from" type="date"></label>
-		<label>${__("To")} <input class="form-control cam-map-to" type="date"></label>
-		<label>${__("Camera ID")} <input class="form-control cam-map-camera" type="text" maxlength="140"></label>
-		<label>${__("CAM Vehicle ID")} <input class="form-control cam-map-vehicle" type="text" maxlength="140"></label>
-		<label>${__("Motion Event ID")} <input class="form-control cam-map-event" type="text" maxlength="140"></label>
+		<label>${__("Map view")} <select class="form-control cam-map-mode"><option value="movement">${__("Vehicle movements")}</option><option value="camera">${__("Camera locations")}</option></select></label>
+		<label>${__("Start date/time")} <input class="form-control cam-map-from" type="datetime-local"></label>
+		<label>${__("End date/time")} <input class="form-control cam-map-to" type="datetime-local"></label>
+		<label>${__("Date range preset")} <select class="form-control cam-map-date-preset"><option value="custom">${__("Custom range")}</option><option value="24h">${__("Last 24 hours")}</option><option value="7d">${__("Last 7 days")}</option><option value="30d">${__("Last 30 days")}</option><option value="all">${__("All time")}</option></select></label>
+		<div class="cam-map-link-filter" data-cam-link="camera"></div>
+		<div class="cam-map-link-filter" data-cam-link="vehicle"></div>
+		<div class="cam-map-link-filter" data-cam-link="event"></div>
 		<label>${__("Camera status")} <select class="form-control cam-map-status">
 				<option value="">${__("Active (default)")}</option>
 				<option value="all">${__("All statuses")}</option>
@@ -77,7 +79,7 @@ function initialize_map_page(wrapper, leaflet) {
 				<option value="Inactive">${__("Inactive")}</option>
 				<option value="Maintenance">${__("Maintenance")}</option>
 		</select></label>
-		<label>${__("Camera Area ID")} <input class="form-control cam-map-area" type="text" maxlength="140"></label>
+		<div class="cam-map-link-filter" data-cam-link="area"></div>
 		<label>${__("Basemap")} <select class="form-control cam-map-layer">
 				<option value="standard">${__("Standard")}</option>
 				<option value="aerial">${__("Aerial")}</option>
@@ -140,18 +142,18 @@ function initialize_map_page(wrapper, leaflet) {
 			</aside>
 		</div>`;
 
-	const today = new Date();
-	const start = new Date(today);
-	start.setDate(today.getDate() - 30);
-	const default_start = start.toISOString().slice(0, 10);
-	const default_end = today.toISOString().slice(0, 10);
-	host.querySelector(".cam-map-from").value = route_state.controls.start || default_start;
-	host.querySelector(".cam-map-to").value = route_state.controls.end || default_end;
-	host.querySelector(".cam-map-camera").value = page.cam_map_options.camera || "";
-	host.querySelector(".cam-map-vehicle").value = page.cam_map_options.vehicle || "";
-	host.querySelector(".cam-map-event").value = page.cam_map_options.event || "";
+	const now = new Date();
+	const default_start_date = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+	page.cam_map_mode = route_state.controls.view || page.cam_map_mode || "movement";
+	host.querySelector(".cam-map-mode").value = page.cam_map_mode;
+	host.querySelector(".cam-map-from").value = route_datetime_value(route_state.controls.start, local_datetime_value(default_start_date));
+	host.querySelector(".cam-map-to").value = route_datetime_value(route_state.controls.end, local_datetime_value(now), true);
+	initialize_map_link_controls(page);
+	set_map_link_value(page, "camera", page.cam_map_options.camera || "");
+	set_map_link_value(page, "vehicle", page.cam_map_options.vehicle || "");
+	set_map_link_value(page, "event", page.cam_map_options.event || "");
+	set_map_link_value(page, "area", page.cam_map_options.area || "");
 	host.querySelector(".cam-map-status").value = page.cam_map_options.camera_status || "";
-	host.querySelector(".cam-map-area").value = page.cam_map_options.area || "";
 	if (["standard", "aerial", "hybrid"].includes(route_state.controls.layer)) {
 		host.querySelector(".cam-map-layer").value = route_state.controls.layer;
 	}
@@ -267,6 +269,13 @@ function initialize_map_page(wrapper, leaflet) {
 	host.querySelector(".cam-map-show-cameras").addEventListener("change", (event) => set_group_visibility(page, page.cam_camera_markers, event.target.checked));
 	host.querySelector(".cam-map-show-events").addEventListener("change", (event) => set_group_visibility(page, page.cam_event_markers, event.target.checked));
 	host.querySelector(".cam-map-show-tracks").addEventListener("change", (event) => set_group_visibility(page, page.cam_tracks, event.target.checked));
+	host.querySelector(".cam-map-mode").addEventListener("change", () => {
+		page.cam_map_mode = host.querySelector(".cam-map-mode").value;
+		apply_map_mode(page, { fit: true });
+		sync_page_route_to_controls(page);
+		update_filter_note(page);
+	});
+	host.querySelector(".cam-map-date-preset").addEventListener("change", (event) => apply_date_preset(page, event.target.value));
 	host.querySelector(".cam-map-show-countries").addEventListener("change", (event) => set_country_visibility(page, event.target.checked));
 	host.querySelector(".cam-map-time").addEventListener("input", () => render_movement_slice(page));
 	host.querySelector(".cam-map-play").addEventListener("click", () => toggle_movement_playback(page));
@@ -278,30 +287,27 @@ function initialize_map_page(wrapper, leaflet) {
 	});
 	load_tile_config(page);
 	load_country_boundaries(page);
-	for (const selector of [".cam-map-camera", ".cam-map-vehicle", ".cam-map-event", ".cam-map-area"]) {
-		const input = host.querySelector(selector);
-		input.addEventListener("input", () => {
-			read_filter_controls(page);
-			update_filter_note(page);
-			queue_map_reload(page);
-		});
-		input.addEventListener("change", () => {
-			clearTimeout(page.cam_map_reload_timer);
+	for (const control of Object.values(page.cam_link_controls || {})) {
+		control.$input.on("change awesomplete-selectcomplete", () => {
 			read_filter_controls(page);
 			update_filter_note(page);
 			load_map(page);
 		});
-		input.addEventListener("keydown", (event) => {
+		control.$input.on("keydown", (event) => {
 			if (event.key === "Enter") {
-				clearTimeout(page.cam_map_reload_timer);
-				read_filter_controls(page);
-				update_filter_note(page);
-				load_map(page);
+				window.setTimeout(() => {
+					read_filter_controls(page);
+					update_filter_note(page);
+					load_map(page);
+				}, 0);
 			}
 		});
 	}
 	for (const selector of [".cam-map-from", ".cam-map-to"]) {
-		host.querySelector(selector).addEventListener("change", () => load_map(page));
+		host.querySelector(selector).addEventListener("change", () => {
+			host.querySelector(".cam-map-date-preset").value = "custom";
+			load_map(page);
+		});
 	}
 	load_map(page);
 };
@@ -313,16 +319,18 @@ frappe.pages["camera-archive-map"].on_page_show = function (wrapper) {
 	if (!route_state.changed) return;
 	const host = page.main.get(0);
 	page.$filter_note = $(host.querySelector(".cam-map-filter-note"));
-	host.querySelector(".cam-map-camera").value = page.cam_map_options.camera || "";
-	host.querySelector(".cam-map-vehicle").value = page.cam_map_options.vehicle || "";
-	host.querySelector(".cam-map-event").value = page.cam_map_options.event || "";
+	set_map_link_value(page, "camera", page.cam_map_options.camera || "");
+	set_map_link_value(page, "vehicle", page.cam_map_options.vehicle || "");
+	set_map_link_value(page, "event", page.cam_map_options.event || "");
+	set_map_link_value(page, "area", page.cam_map_options.area || "");
 	host.querySelector(".cam-map-status").value = page.cam_map_options.camera_status || "";
-	host.querySelector(".cam-map-area").value = page.cam_map_options.area || "";
-	const today = new Date();
-	const start = new Date(today);
-	start.setDate(today.getDate() - 30);
-	host.querySelector(".cam-map-from").value = route_state.controls.start || start.toISOString().slice(0, 10);
-	host.querySelector(".cam-map-to").value = route_state.controls.end || today.toISOString().slice(0, 10);
+	page.cam_map_mode = route_state.controls.view || "movement";
+	host.querySelector(".cam-map-mode").value = page.cam_map_mode;
+	apply_map_mode(page);
+	const now = new Date();
+	host.querySelector(".cam-map-from").value = route_datetime_value(route_state.controls.start, local_datetime_value(new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)));
+	host.querySelector(".cam-map-to").value = route_datetime_value(route_state.controls.end, local_datetime_value(now), true);
+	host.querySelector(".cam-map-date-preset").value = !host.querySelector(".cam-map-from").value && !host.querySelector(".cam-map-to").value ? "all" : "custom";
 	if (["standard", "aerial", "hybrid"].includes(route_state.controls.layer)) {
 		host.querySelector(".cam-map-layer").value = route_state.controls.layer;
 	}
@@ -331,12 +339,106 @@ frappe.pages["camera-archive-map"].on_page_show = function (wrapper) {
 };
 
 const CAM_MAP_FILTER_KEYS = ["camera", "vehicle", "event", "camera_status", "area"];
-const CAM_MAP_ROUTE_KEYS = [...CAM_MAP_FILTER_KEYS, "start", "end", "layer"];
+const CAM_MAP_ROUTE_KEYS = [...CAM_MAP_FILTER_KEYS, "start", "end", "layer", "view"];
 
 function clean_route_value(value) {
 	if (value === undefined || value === null) return null;
 	const text = String(value).trim();
 	return text || null;
+}
+
+function local_datetime_value(date) {
+	const pad = (value) => String(value).padStart(2, "0");
+	return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function route_datetime_value(value, fallback, end = false) {
+	if (value === "all") return "";
+	if (!value) return fallback;
+	if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return `${value}T${end ? "23:59" : "00:00"}`;
+	return value;
+}
+
+function map_datetime_arg(value) {
+	if (!value) return undefined;
+	const instant = new Date(value);
+	return Number.isNaN(instant.getTime()) ? value : instant.toISOString();
+}
+
+function initialize_map_link_controls(page) {
+	page.cam_link_controls = {};
+	const definitions = [
+		["camera", "Camera ID", "Camera"],
+		["vehicle", "CAM Vehicle ID", "CAM Vehicle"],
+		["event", "Motion Event ID", "Motion Event"],
+		["area", "Camera Area ID", "Camera Area"],
+	];
+	for (const [key, label, doctype] of definitions) {
+		const parent = page.main.get(0).querySelector(`[data-cam-link="${key}"]`);
+		const control = frappe.ui.form.make_control({
+			parent: $(parent),
+			df: { fieldtype: "Link", fieldname: `cam_map_${key}`, label: __(label), options: doctype },
+			render_input: true,
+		});
+		control.$input.addClass(`cam-map-${key}`);
+		control.$input.attr("autocomplete", "off");
+		page.cam_link_controls[key] = control;
+	}
+}
+
+function get_map_link_value(page, key) {
+	return page.cam_link_controls?.[key]?.get_value?.() || "";
+}
+
+function set_map_link_value(page, key, value) {
+	const control = page.cam_link_controls?.[key];
+	if (control) control.set_value(value || "");
+}
+
+function apply_date_preset(page, preset) {
+	const host = page.main.get(0);
+	const end = new Date();
+	let start = null;
+	if (preset === "24h") start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+	else if (preset === "7d") start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
+	else if (preset === "30d") start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+	if (preset === "all") {
+		host.querySelector(".cam-map-from").value = "";
+		host.querySelector(".cam-map-to").value = "";
+	} else if (start) {
+		host.querySelector(".cam-map-from").value = local_datetime_value(start);
+		host.querySelector(".cam-map-to").value = local_datetime_value(end);
+	} else {
+		return;
+	}
+	load_map(page);
+}
+
+function apply_map_mode(page, { fit = false } = {}) {
+	const host = page.main.get(0);
+	const movementMode = (page.cam_map_mode || host.querySelector(".cam-map-mode")?.value) !== "camera";
+	page.cam_map_mode = movementMode ? "movement" : "camera";
+	const cameras = host.querySelector(".cam-map-show-cameras");
+	const events = host.querySelector(".cam-map-show-events");
+	const tracks = host.querySelector(".cam-map-show-tracks");
+	cameras.disabled = movementMode;
+	events.disabled = !movementMode;
+	tracks.disabled = !movementMode;
+	cameras.checked = !movementMode;
+	events.checked = movementMode;
+	tracks.checked = movementMode;
+	host.querySelector(".cam-map-playback").hidden = !movementMode;
+	set_group_visibility(page, page.cam_camera_markers, !movementMode);
+	set_group_visibility(page, page.cam_event_markers, movementMode);
+	set_group_visibility(page, page.cam_tracks, movementMode);
+	if (page.cam_movement_data) render_movement_slice(page);
+	if (fit && page.cam_current_map_data) {
+		const rows = movementMode ? page.cam_movement_data : (page.cam_current_map_data.cameras || []);
+		const positions = rows.map((row) => [Number(row.latitude), Number(row.longitude)])
+			.filter((point) => point.every(Number.isFinite));
+		if (positions.length === 1) page.cam_map.setView(positions[0], 14);
+		else if (positions.length > 1) page.cam_map.fitBounds(page.cam_leaflet.latLngBounds(positions).pad(0.12), { maxZoom: 14 });
+	}
 }
 
 function sync_route_filters_to_page(page, { force = false } = {}) {
@@ -345,7 +447,7 @@ function sync_route_filters_to_page(page, { force = false } = {}) {
 		page.cam_map_options || {}
 	);
 	page.cam_map_route_values = Object.assign(
-		{ start: null, end: null, layer: null },
+		{ start: null, end: null, layer: null, view: null },
 		page.cam_map_route_values || {}
 	);
 	const route = frappe.get_route() || [];
@@ -359,7 +461,7 @@ function sync_route_filters_to_page(page, { force = false } = {}) {
 	}
 	const has_route_filters = CAM_MAP_FILTER_KEYS.some((key) => Object.hasOwn(route_options, key));
 	const has_positional_filters = CAM_MAP_FILTER_KEYS.some((key) => Object.hasOwn(from_route, key));
-	const has_route_controls = ["start", "end", "layer"].some(
+	const has_route_controls = ["start", "end", "layer", "view"].some(
 		(key) => Object.hasOwn(route_options, key) || Object.hasOwn(from_route, key)
 	);
 	const identity = JSON.stringify(route);
@@ -383,7 +485,7 @@ function sync_route_filters_to_page(page, { force = false } = {}) {
 	}
 
 	if (has_route_controls || route_changed || route_was_away || has_page_route_options || force) {
-		for (const key of ["start", "end", "layer"]) {
+		for (const key of ["start", "end", "layer", "view"]) {
 			const value = Object.hasOwn(route_options, key) ? route_options[key] : from_route[key];
 			const normalized = clean_route_value(value);
 			if (page.cam_map_route_values[key] !== normalized) changed = true;
@@ -411,9 +513,10 @@ function sync_page_route_to_controls(page) {
 		event: clean_route_value(page.cam_map_options.event),
 		camera_status: clean_route_value(page.cam_map_options.camera_status),
 		area: clean_route_value(page.cam_map_options.area),
-		start: clean_route_value(host.querySelector(".cam-map-from").value),
-		end: clean_route_value(host.querySelector(".cam-map-to").value),
+		start: clean_route_value(host.querySelector(".cam-map-from").value) || "all",
+		end: clean_route_value(host.querySelector(".cam-map-to").value) || "all",
 		layer: clean_route_value(host.querySelector(".cam-map-layer").value),
+		view: clean_route_value(host.querySelector(".cam-map-mode").value),
 	};
 	for (const key of CAM_MAP_ROUTE_KEYS) {
 		if (values[key] !== null) next.push(key, values[key]);
@@ -434,11 +537,12 @@ function read_filter_controls(page) {
 		{ camera: null, vehicle: null, event: null, camera_status: null, area: null },
 		page.cam_map_options || {}
 	);
-	page.cam_map_options.camera = clean_route_value(host.querySelector(".cam-map-camera").value);
-	page.cam_map_options.vehicle = clean_route_value(host.querySelector(".cam-map-vehicle").value);
-	page.cam_map_options.event = clean_route_value(host.querySelector(".cam-map-event").value);
+	page.cam_map_options.camera = clean_route_value(get_map_link_value(page, "camera"));
+	page.cam_map_options.vehicle = clean_route_value(get_map_link_value(page, "vehicle"));
+	page.cam_map_options.event = clean_route_value(get_map_link_value(page, "event"));
 	page.cam_map_options.camera_status = clean_route_value(host.querySelector(".cam-map-status").value);
-	page.cam_map_options.area = clean_route_value(host.querySelector(".cam-map-area").value);
+	page.cam_map_options.area = clean_route_value(get_map_link_value(page, "area"));
+	page.cam_map_mode = host.querySelector(".cam-map-mode").value || "movement";
 }
 
 function queue_map_reload(page) {
@@ -463,6 +567,7 @@ function update_filter_note(page) {
 	const dateFrom = host?.querySelector(".cam-map-from")?.value;
 	const dateTo = host?.querySelector(".cam-map-to")?.value;
 	if (dateFrom || dateTo) parts.push(`${__("Date range")}: ${dateFrom || "…"} — ${dateTo || "…"}`);
+	parts.push(`${__("View")}: ${__(page.cam_map_mode === "camera" ? "Camera locations" : "Vehicle movements")}`);
 	const layer = host?.querySelector(".cam-map-layer")?.value;
 	if (layer) parts.push(`${__("Basemap")}: ${layer}`);
 	const summary = parts.length
@@ -879,7 +984,9 @@ function bind_tile_status(page, layer) {
 	});
 	layer.on("tileerror", () => {
 		page.cam_tile_errors = (page.cam_tile_errors || 0) + 1;
-		set_tile_status(page, __("A tile is missing or unavailable; cached tiles remain usable and upstream retries are throttled."));
+		set_tile_status(page, page.cam_tile_fetch_enabled
+			? __("A tile is missing or unavailable; cached tiles remain usable and upstream retries are throttled.")
+			: __("This tile is not in the shared Siraj cache; online provider fetching is disabled. Camera and movement markers still work."));
 	});
 	return layer;
 }
@@ -1155,7 +1262,14 @@ function render_map_insights(page, cameras, movements) {
 }
 
 function render_movement_slice(page) {
-	const slider = page.main.get(0).querySelector(".cam-map-time");
+	const host = page.main.get(0);
+	if (page.cam_map_mode === "camera") {
+		page.cam_event_markers.clearLayers();
+		page.cam_tracks.clearLayers();
+		host.querySelector(".cam-map-movement-list").replaceChildren();
+		return;
+	}
+	const slider = host.querySelector(".cam-map-time");
 	const count = Number(slider.value);
 	const rows = page.cam_movement_data.slice(0, count);
 	page.cam_event_markers.clearLayers();
@@ -1254,6 +1368,14 @@ function camera_icon(camera, leaflet, page, selected = false) {
 	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 62], iconAnchor: [24, 62], popupAnchor: [0, -58] });
 }
 
+function schedule_camera_popup_close(page, marker) {
+	clearTimeout(page.cam_camera_popup_timer);
+	page.cam_camera_popup_timer = window.setTimeout(() => {
+		const popupElement = marker.getPopup()?.getElement();
+		if (page.cam_pinned_camera_marker !== marker && !popupElement?.matches(":hover")) marker.closePopup();
+	}, 220);
+}
+
 function select_camera_marker(page, marker) {
 	const previous = page.cam_selected_camera_marker?.getElement()?.querySelector(".cam-camera-pin");
 	if (previous) previous.classList.remove("cam-pin-selected");
@@ -1271,10 +1393,15 @@ function select_camera_marker(page, marker) {
 }
 
 function vehicle_icon(movement, leaflet, page) {
+	const kind = String(movement.motion_type || "").toLowerCase();
+	const eventMark = kind === "entry" ? "E" : kind === "exit" ? "X" : "•";
 	const shell = node("div", "cam-pin cam-vehicle-pin");
+	shell.setAttribute("aria-label", `${movement.vehicle_name || __("Unidentified vehicle")} · ${movement.motion_type || __("Movement")}`);
+	shell.title = `${movement.vehicle_name || __("Unidentified vehicle")} · ${movement.motion_type || __("Movement")}`;
 	const image = image_node(movement.vehicle_image, movement.vehicle_name, "cam-pin-image", page);
 	if (image) shell.append(image);
 	else shell.append(node("span", "cam-pin-fallback", "🚘"));
+	shell.append(node("span", `cam-vehicle-event-badge cam-vehicle-event-${kind || "other"}`, eventMark));
 	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [44, 44], iconAnchor: [22, 22], popupAnchor: [0, -22] });
 }
 
@@ -1293,15 +1420,42 @@ function add_record_link(container, label, doctype, name, primary = false) {
 	container.append(button);
 }
 
+function camera_detail_card(camera, page) {
+	const card = node("section", "cam-camera-detail-card");
+	const avatar = node("div", "cam-camera-card-avatar");
+	const primaryPhoto = (camera.photos || []).find((photo) => photo.primary && photo.url)
+		|| (camera.photos || []).find((photo) => photo.url);
+	const avatarImage = primaryPhoto && image_node(primaryPhoto.url, camera.label, "cam-camera-card-image", page);
+	avatar.append(avatarImage || node("span", "cam-camera-card-fallback", "◉"));
+	const heading = node("div", "cam-camera-card-heading");
+	heading.append(node("strong", "cam-camera-card-title", camera.label));
+	heading.append(node("span", "cam-camera-card-subtitle", [camera.camera_type, camera.status].filter(Boolean).join(" · ") || __("Camera details")));
+	card.append(avatar, heading);
+	if (camera.is_demo_record) card.append(node("span", "cam-demo-badge", __("SYNTHETIC DEMO DATA")));
+	card.append(node("hr", "cam-camera-card-divider"));
+	const sections = node("div", "cam-camera-card-sections");
+	for (const [label, value] of [
+		["Exact coordinates", `${camera.latitude}, ${camera.longitude}`],
+		["Area / category", [camera.area, camera.camera_type].filter(Boolean).join(" · ")],
+		["Operational status", [camera.status, camera.importance].filter(Boolean).join(" · ")],
+		["Coverage / activity", [camera.field_of_view, __("{0} photos", [camera.photos?.length || 0]), __("{0} recent events", [camera.movement_count || 0])].filter(Boolean).join(" · ")],
+	]) {
+		const section = node("div", "cam-camera-card-section");
+		section.append(node("span", "cam-camera-card-label", __(label)));
+		section.append(node("strong", "cam-camera-card-value", value || __("Not recorded")));
+		sections.append(section);
+	}
+	card.append(sections);
+	return card;
+}
+
 function camera_popup(camera, page, movements) {
-	const root = node("div", "cam-map-popup");
-	root.append(node("h4", "", camera.label));
-	if (camera.is_demo_record) root.append(node("span", "cam-demo-badge", __("SYNTHETIC DEMO DATA")));
+	const root = node("div", "cam-map-popup cam-camera-detail-popup");
+	root.append(camera_detail_card(camera, page));
 	const status = node("span", `cam-camera-status-badge cam-camera-status-${String(camera.status || "unknown").toLowerCase()}`, __(camera.status || "Unknown status"));
 	root.append(status);
 	const details = node("dl", "cam-popup-details");
 	for (const [label, value] of [
-		["Camera type", camera.camera_type], ["Importance", camera.importance], ["Area", camera.area],
 		["Serial number", camera.serial_number], ["Camera number", camera.camera_number],
 		["Installation date", camera.installation_date], ["Address", camera.address],
 		["Latitude (exact)", camera.latitude], ["Longitude (exact)", camera.longitude],
@@ -1311,27 +1465,28 @@ function camera_popup(camera, page, movements) {
 		["Lookup ambiguous", camera.lookup_ambiguous ? __("Yes") : __("No")], ["Lookup resolved at", camera.lookup_resolved_at],
 	]) add_popup_detail(details, label, value);
 	root.append(details);
-	if (camera.photos.length) {
-		let index = Math.max(0, camera.photos.findIndex((photo) => photo.primary));
+	const photos = camera.photos || [];
+	if (photos.length) {
+		let index = Math.max(0, photos.findIndex((photo) => photo.primary));
 		const frame = node("div", "cam-gallery-frame");
 		const caption = node("div", "cam-gallery-caption");
 		const count = node("span", "cam-gallery-count");
 		const update = () => {
-			const current = camera.photos[index];
+			const current = photos[index];
 			const image = current.url ? image_node(current.url, camera.label, "cam-gallery-image", page) : null;
 			frame.replaceChildren(image || node("span", "cam-image-unavailable", __("Image unavailable")));
 			caption.textContent = current.caption || current.description || "";
-			count.textContent = `${index + 1} / ${camera.photos.length}`;
+			count.textContent = `${index + 1} / ${photos.length}`;
 		};
-		if (camera.photos.length > 1) {
+		if (photos.length > 1) {
 			const controls = node("div", "cam-gallery-controls");
 			const previous = node("button", "btn btn-xs btn-default", "‹");
 			const next = node("button", "btn btn-xs btn-default", "›");
 			previous.type = next.type = "button";
 			previous.setAttribute("aria-label", __("Previous photo"));
 			next.setAttribute("aria-label", __("Next photo"));
-			previous.addEventListener("click", () => { index = (index - 1 + camera.photos.length) % camera.photos.length; update(); });
-			next.addEventListener("click", () => { index = (index + 1) % camera.photos.length; update(); });
+			previous.addEventListener("click", () => { index = (index - 1 + photos.length) % photos.length; update(); });
+			next.addEventListener("click", () => { index = (index + 1) % photos.length; update(); });
 			controls.append(previous, count, next);
 			root.append(frame, controls, caption);
 		} else {
@@ -1372,9 +1527,13 @@ function movement_popup(movement, page) {
 	const details = node("dl", "cam-popup-details");
 	for (const [label, value] of [
 		["Movement type", movement.motion_type], ["Detected at", movement.detected_at],
-		["Vehicle number", movement.vehicle_number], ["Vehicle type", movement.vehicle_type],
+		["Vehicle number", movement.vehicle_number], ["Vehicle type", movement.vehicle_type], ["Vehicle status", movement.vehicle_status],
+		["Camera", movement.camera_name || movement.camera], ["Camera category", movement.camera_type], ["Camera area", movement.camera_area],
 		["Coordinate latitude snapshot", movement.latitude], ["Coordinate longitude snapshot", movement.longitude],
-		["Address snapshot", movement.address], ["Importance", movement.importance], ["Notes", movement.notes],
+		["Address snapshot", movement.address], ["Nearby cameras", (movement.nearby_cameras || []).map((item) => [item.camera, item.distance_m && `${item.distance_m} m`, item.bearing, item.area, item.camera_status, item.note].filter(Boolean).join(" · ")).join(" | ")],
+		["Location source", movement.location_source], ["Location confidence", movement.location_confidence],
+		["Location ambiguous", movement.location_ambiguous ? __("Yes") : __("No")], ["Resolved at", movement.location_resolved_at],
+		["Importance", movement.importance], ["Notes", movement.notes],
 	]) add_popup_detail(details, label, value);
 	root.append(details);
 	const actions = node("div", "cam-popup-actions");
@@ -1420,16 +1579,33 @@ function render_map_payload(page, data, { offline = false, savedAt = null, fit =
 	);
 	const positions = [];
 	for (const camera of data.cameras || []) {
+		camera.movement_count = page.cam_movement_data.filter((movement) => movement.camera === camera.name).length;
 		const marker = leaflet.marker([Number(camera.latitude), Number(camera.longitude)], { icon: camera_icon(camera, leaflet, page) });
 		marker.cam_record_name = camera.name;
-		marker.on("click", () => select_camera_marker(page, marker));
-		marker.bindPopup(camera_popup(camera, page, page.cam_movement_data), { maxWidth: 340, minWidth: 240 });
-		marker.on("popupopen", () => {
+		marker.on("click", () => {
+			page.cam_pinned_camera_marker = marker;
+			select_camera_marker(page, marker);
+		});
+		marker.on("mouseover", () => {
+			clearTimeout(page.cam_camera_popup_timer);
+			if (!page.cam_pinned_camera_marker) marker.openPopup();
+		});
+		marker.on("mouseout", () => schedule_camera_popup_close(page, marker));
+		marker.bindPopup(camera_popup(camera, page, page.cam_movement_data), {
+			maxWidth: 340, minWidth: 240, autoClose: true, closeOnClick: true,
+		});
+		marker.on("popupopen", (event) => {
 			select_camera_marker(page, marker);
 			cache_viewed_detail(page, "camera", camera);
+			const popupElement = event.popup.getElement();
+			popupElement?.addEventListener("mouseenter", () => clearTimeout(page.cam_camera_popup_timer));
+			popupElement?.addEventListener("mouseleave", () => schedule_camera_popup_close(page, marker));
+		});
+		marker.on("popupclose", () => {
+			if (page.cam_pinned_camera_marker === marker) page.cam_pinned_camera_marker = null;
 		});
 		page.cam_camera_markers.addLayer(marker);
-		positions.push([Number(camera.latitude), Number(camera.longitude)]);
+		if (page.cam_map_mode === "camera") positions.push([Number(camera.latitude), Number(camera.longitude)]);
 	}
 	page.cam_camera_count = (data.cameras || []).length;
 	render_map_insights(page, data.cameras || [], page.cam_movement_data);
@@ -1446,8 +1622,11 @@ function render_map_payload(page, data, { offline = false, savedAt = null, fit =
 		play.textContent = "▶";
 		play.setAttribute("aria-label", __("Play movement timeline"));
 	}
-	for (const movement of page.cam_movement_data) positions.push([Number(movement.latitude), Number(movement.longitude)]);
+	if (page.cam_map_mode !== "camera") {
+		for (const movement of page.cam_movement_data) positions.push([Number(movement.latitude), Number(movement.longitude)]);
+	}
 	render_movement_slice(page);
+	apply_map_mode(page);
 	const baseSummary = __("{0} cameras · {1} vehicle movements", [(data.cameras || []).length, page.cam_movement_data.length]);
 	summary.textContent = offline
 		? `${navigator.onLine ? __("SAVED SNAPSHOT (not live)") : __("OFFLINE CACHED SNAPSHOT")} · ${savedAt ? new Date(savedAt).toLocaleString() : ""} · ${baseSummary}`
@@ -1477,8 +1656,8 @@ async function load_map(page, { force = false } = {}) {
 		event: page.cam_map_options.event || undefined,
 		camera_status: page.cam_map_options.camera_status || undefined,
 		area: page.cam_map_options.area || undefined,
-		start: host.querySelector(".cam-map-from").value || undefined,
-		end: host.querySelector(".cam-map-to").value || undefined,
+		start: map_datetime_arg(host.querySelector(".cam-map-from").value),
+		end: map_datetime_arg(host.querySelector(".cam-map-to").value),
 		include_demo: host.querySelector(".cam-map-include-demo").checked ? 1 : 0
 	};
 	const signature = stable_cache_signature(args);

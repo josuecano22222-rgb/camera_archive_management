@@ -194,6 +194,34 @@ class TestMapEndpoint(FrappeTestCase):
 		})
 		self.assertEqual(get_list.call_args_list[1].kwargs["filters"]["camera"], ["in", [camera.name]])
 
+	def test_movement_payload_includes_camera_snapshots_and_nearby_camera_context(self):
+		event = frappe._dict(
+			name="MOT-CONTEXT-1", camera="CAM-1", camera_name_snapshot="Canal North",
+			camera_type_snapshot="PTZ", camera_area_snapshot="AREA-1", geo_admin_area_snapshot="Amsterdam",
+			motion_type="Entry", detected_at="2026-02-04 10:15:00", vehicle=None,
+			latitude_snapshot="52.3700000001", longitude_snapshot="4.8900000002", address_snapshot="Canal road",
+			importance="High", notes="Observed", is_demo_record=0,
+		)
+		nearby = frappe._dict(
+			parent=event.name, camera="CAM-NEAR-1", distance_m=125.5,
+			bearing_compass="NE", area="AREA-1", camera_status="Active", note="Adjacent",
+		)
+		with (
+			patch.object(frappe, "has_permission", return_value=True),
+			patch.object(frappe, "get_list", side_effect=[[], [event]]),
+			patch.object(frappe, "get_all", return_value=[nearby]),
+		):
+			result = map_api.map_payload(start="2026-02-04T10:00", end="2026-02-04T11:00")
+
+		movement = result["movements"][0]
+		self.assertEqual(movement["camera_name"], "Canal North")
+		self.assertEqual(movement["camera_type"], "PTZ")
+		self.assertEqual(movement["camera_area"], "AREA-1")
+		self.assertEqual(movement["latitude"], "52.3700000001")
+		self.assertEqual(movement["longitude"], "4.8900000002")
+		self.assertEqual(movement["nearby_cameras"][0]["camera"], "CAM-NEAR-1")
+		self.assertEqual(movement["nearby_cameras"][0]["distance_m"], "125.5")
+
 	def test_empty_area_scope_skips_events_even_with_vehicle_filter(self):
 		with (
 			patch.object(frappe, "has_permission", return_value=True),
@@ -206,6 +234,20 @@ class TestMapEndpoint(FrappeTestCase):
 	def test_map_rejects_invalid_camera_status(self):
 		with self.assertRaises(frappe.ValidationError):
 			map_api.map_payload(camera_status="Broken")
+
+	def test_datetime_filters_keep_time_precision_and_accept_date_only_bounds(self):
+		self.assertEqual(
+			map_api._date_filter("2026-01-02T09:15", "2026-01-03"),
+			{"detected_at": ["between", ["2026-01-02 09:15:00", "2026-01-03 23:59:59"]]},
+		)
+		self.assertEqual(
+			map_api._date_filter(None, "2026-01-03T10:30"),
+			{"detected_at": ["<=", "2026-01-03 10:30:00"]},
+		)
+
+	def test_map_rejects_reversed_datetime_range(self):
+		with self.assertRaises(frappe.ValidationError):
+			map_api._date_filter("2026-01-03T10:00", "2026-01-03T09:59")
 
 	def test_map_preserves_all_photos_in_large_gallery(self):
 		photos = [

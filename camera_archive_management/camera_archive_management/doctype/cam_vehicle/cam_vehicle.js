@@ -2,7 +2,7 @@ frappe.ui.form.on("CAM Vehicle", {
 	refresh(frm) {
 		if (frm.is_new()) return;
 		frm.add_custom_button(__("View movements on map"), () => {
-			frappe.route_options = { vehicle: frm.doc.name };
+			frappe.route_options = { vehicle: frm.doc.name, view: "movement" };
 			frappe.set_route("camera-archive-map");
 		}, __("Camera Archive"));
 		show_vehicle_image(frm);

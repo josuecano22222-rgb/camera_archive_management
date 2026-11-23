@@ -667,3 +667,29 @@ Current filters are bypassed: showing only previously viewed saved records.,Curr
 Latest position for {0},Latest position for {0}
 {0} cameras · {1} vehicle movements,{0} cameras · {1} vehicle movements
 This browser does not provide persistent offline storage.,This browser does not provide persistent offline storage.
+Map view,Map view
+Vehicle movements,Vehicle movements
+Camera locations,Camera locations
+Start date/time,Start date/time
+End date/time,End date/time
+Date range preset,Date range preset
+Custom range,Custom range
+Last 24 hours,Last 24 hours
+Last 7 days,Last 7 days
+Last 30 days,Last 30 days
+All time,All time
+Exact coordinates,Exact coordinates
+Area / category,Area / category
+Coverage / activity,Coverage / activity
+{0} photos,{0} photos
+{0} recent events,{0} recent events
+Camera category,Camera category
+Camera area,Camera area
+Nearby cameras,Nearby cameras
+Camera details,Camera details
+Open camera image map,Open camera image map
+Open vehicle movement map,Open vehicle movement map
+Location source,Location source
+Location confidence,Location confidence
+Location ambiguous,Location ambiguous
+Resolved at,Resolved at

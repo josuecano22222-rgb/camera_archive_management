@@ -95,6 +95,12 @@ refresh; cache hits never depend on provider connectivity.
 - Existing tiles are served before any network check. Fresh tiles return
   `X-CAM-Tile-Cache: HIT`; expired but valid tiles return immediately with
   `STALE` while one deduplicated background refresh is queued.
+- A browser `404` from the tile endpoint can be a successful API route with a
+  cache-miss response (`tile_missing`), not a missing Frappe method. When no
+  cached XYZ tile exists and online fetching is disabled by default, Leaflet
+  reports the missing image as a `tileerror`; camera and vehicle markers remain
+  independent of raster availability. Prepopulate the shared private cache or
+  explicitly enable provider fetching only after the policy checks above.
 - On a cache miss, camera requests use a two-second connect timeout and a
   three-second read timeout by default. CAM Geo Settings constrains each to
   1–5 seconds. Simultaneous requests for the same tile share a cross-process

@@ -667,3 +667,29 @@ Current filters are bypassed: showing only previously viewed saved records.,تم
 Latest position for {0},الموقع الأحدث لـ {0}
 {0} cameras · {1} vehicle movements,{0} كاميرا · {1} حركة مركبة
 This browser does not provide persistent offline storage.,هذا المتصفح لا يوفر تخزينًا دائمًا للاستخدام دون اتصال.
+Map view,عرض الخريطة
+Vehicle movements,تحركات المركبات
+Camera locations,مواقع الكاميرات
+Start date/time,تاريخ/وقت البداية
+End date/time,تاريخ/وقت النهاية
+Date range preset,نطاق زمني سريع
+Custom range,نطاق مخصص
+Last 24 hours,آخر 24 ساعة
+Last 7 days,آخر 7 أيام
+Last 30 days,آخر 30 يومًا
+All time,كل الأوقات
+Exact coordinates,الإحداثيات الدقيقة
+Area / category,المنطقة / الفئة
+Coverage / activity,التغطية / النشاط
+{0} photos,{0} صورة
+{0} recent events,{0} حدث حديث
+Camera category,فئة الكاميرا
+Camera area,منطقة الكاميرا
+Nearby cameras,الكاميرات القريبة
+Camera details,تفاصيل الكاميرا
+Open camera image map,فتح خريطة صور الكاميرات
+Open vehicle movement map,فتح خريطة تحركات المركبات
+Location source,مصدر الموقع
+Location confidence,دقة الموقع
+Location ambiguous,التباس الموقع
+Resolved at,وقت تحديد الموقع

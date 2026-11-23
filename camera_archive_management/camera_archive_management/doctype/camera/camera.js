@@ -3,7 +3,7 @@ frappe.ui.form.on("Camera", {
 		render_camera_gallery(frm);
 		if (frm.is_new()) return;
 		frm.add_custom_button(__("Open map"), () => {
-			frappe.route_options = { camera: frm.doc.name };
+			frappe.route_options = { camera: frm.doc.name, view: "camera" };
 			frappe.set_route("camera-archive-map");
 		}, __("Camera Archive"));
 	},

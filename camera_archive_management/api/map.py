@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timedelta, timezone
 
 import frappe
-from frappe.utils import getdate
 
 from camera_archive_management.geo.coordinates import validate_pair
 from camera_archive_management.utils.files import is_safe_frappe_file_url
@@ -161,33 +161,37 @@ def _load_file_map(urls: set[str]) -> dict[str, list]:
 	return result
 
 
+def _parse_map_datetime(value: str, *, end_of_day: bool = False) -> datetime:
+	if not isinstance(value, str) or not value or len(value) > 64:
+		frappe.throw("Map dates must be ISO date or datetime values.", frappe.ValidationError)
+	try:
+		if len(value) == 10:
+			parsed = datetime.strptime(value, "%Y-%m-%d")
+			if end_of_day:
+				parsed = parsed.replace(hour=23, minute=59, second=59)
+		else:
+			parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+		if parsed.tzinfo is not None:
+			parsed = parsed.astimezone(timezone.utc).replace(tzinfo=None)
+		return parsed.replace(microsecond=0)
+	except (TypeError, ValueError, OverflowError):
+		frappe.throw("Map dates must be valid ISO dates or datetimes.", frappe.ValidationError)
+
+
 def _date_filter(start: str | None, end: str | None) -> dict:
-	filters = {}
-	if start:
-		try:
-			start_date = getdate(start)
-		except Exception:
-			frappe.throw("start must be a valid ISO date.", frappe.ValidationError)
-	else:
-		start_date = None
-	if end:
-		try:
-			end_date = getdate(end)
-		except Exception:
-			frappe.throw("end must be a valid ISO date.", frappe.ValidationError)
-	else:
-		end_date = None
-	if start_date and end_date and end_date < start_date:
+	start_datetime = _parse_map_datetime(start) if start else None
+	end_datetime = _parse_map_datetime(end, end_of_day=True) if end else None
+	if start_datetime and end_datetime and end_datetime < start_datetime:
 		frappe.throw("end must be on or after start.", frappe.ValidationError)
-	if start_date and end_date and (end_date - start_date).days > 366:
+	if start_datetime and end_datetime and end_datetime - start_datetime > timedelta(days=367):
 		frappe.throw("Map date range is limited to 367 days.", frappe.ValidationError)
-	if start_date and end_date:
-		filters["detected_at"] = ["between", [f"{start_date} 00:00:00", f"{end_date} 23:59:59"]]
-	elif start_date:
-		filters["detected_at"] = [">=", f"{start_date} 00:00:00"]
-	elif end_date:
-		filters["detected_at"] = ["<=", f"{end_date} 23:59:59"]
-	return filters
+	if start_datetime and end_datetime:
+		return {"detected_at": ["between", [start_datetime.strftime("%Y-%m-%d %H:%M:%S"), end_datetime.strftime("%Y-%m-%d %H:%M:%S")]]}
+	if start_datetime:
+		return {"detected_at": [">=", start_datetime.strftime("%Y-%m-%d %H:%M:%S")]}
+	if end_datetime:
+		return {"detected_at": ["<=", end_datetime.strftime("%Y-%m-%d %H:%M:%S")]}
+	return {}
 
 
 @frappe.whitelist(methods=["GET"])
@@ -262,12 +266,34 @@ def map_payload(
 				"Motion Event",
 				filters=event_filters,
 				fields=[
-					"name", "camera", "motion_type", "detected_at", "vehicle", "latitude_snapshot",
-					"longitude_snapshot", "address_snapshot", "importance", "notes", "is_demo_record",
+					"name", "camera", "camera_name_snapshot", "camera_type_snapshot", "camera_area_snapshot",
+					"geo_admin_area_snapshot", "location_source_snapshot", "location_confidence_snapshot",
+					"location_ambiguous_snapshot", "location_resolved_at_snapshot", "motion_type", "detected_at",
+					"vehicle", "latitude_snapshot", "longitude_snapshot", "address_snapshot", "importance", "notes",
+					"is_demo_record",
 				],
 				order_by="detected_at asc, name asc",
 				limit_page_length=MAX_EVENTS,
 			)
+
+	nearby_by_event: dict[str, list[dict]] = {}
+	if event_rows:
+		nearby_rows = frappe.get_all(
+			"Motion Event Nearby Camera",
+			filters={"parent": ["in", [row.name for row in event_rows]]},
+			fields=["parent", "camera", "distance_m", "bearing_compass", "area", "camera_status", "note"],
+			order_by="parent asc, distance_m asc, idx asc",
+			limit_page_length=MAX_EVENTS * 20,
+		)
+		for row in nearby_rows:
+			nearby_by_event.setdefault(row.parent, []).append({
+				"camera": row.camera or "",
+				"distance_m": str(row.distance_m) if row.distance_m is not None else "",
+				"bearing": row.bearing_compass or "",
+				"area": row.area or "",
+				"camera_status": row.camera_status or "",
+				"note": row.note or "",
+			})
 
 	vehicle_names = sorted({row.vehicle for row in event_rows if row.vehicle})
 	vehicles = (
@@ -370,6 +396,14 @@ def map_payload(
 		movements.append({
 			"name": event.name,
 			"camera": event.camera,
+			"camera_name": event.get("camera_name_snapshot") or event.camera,
+			"camera_type": event.get("camera_type_snapshot") or "",
+			"camera_area": event.get("camera_area_snapshot") or "",
+			"geo_admin_area": event.get("geo_admin_area_snapshot") or "",
+			"location_source": event.get("location_source_snapshot") or "",
+			"location_confidence": event.get("location_confidence_snapshot"),
+			"location_ambiguous": bool(event.get("location_ambiguous_snapshot")),
+			"location_resolved_at": str(event.get("location_resolved_at_snapshot")) if event.get("location_resolved_at_snapshot") else "",
 			"motion_type": event.motion_type,
 			"is_demo_record": bool(event.is_demo_record),
 			"detected_at": str(event.detected_at),
@@ -382,8 +416,10 @@ def map_payload(
 			"vehicle_name": vehicle.vehicle_name if vehicle else event.vehicle,
 			"vehicle_number": vehicle.vehicle_number if vehicle else "",
 			"vehicle_type": vehicle.vehicle_type if vehicle else "",
+			"vehicle_status": vehicle.status if vehicle else "",
 			"vehicle_image": vehicle_image or vehicle_type_image,
 			"vehicle_image_source": "vehicle" if vehicle_image else ("type" if vehicle_type_image else "fallback"),
+			"nearby_cameras": nearby_by_event.get(event.name, []),
 		})
 
 	return {

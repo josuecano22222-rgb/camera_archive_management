@@ -2,7 +2,7 @@ frappe.ui.form.on("Motion Event", {
 	refresh(frm) {
 		if (!frm.is_new()) {
 			frm.add_custom_button(__("Show movement on map"), () => {
-				frappe.route_options = { event: frm.doc.name };
+				frappe.route_options = { event: frm.doc.name, view: "movement" };
 				frappe.set_route("camera-archive-map");
 			}, __("Camera Archive"));
 		}
