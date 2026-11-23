@@ -136,6 +136,51 @@ function schedule_native_camera_popup_close(mapView, marker) {
 	}, 220);
 }
 
+function cam_native_is_object_string(value) {
+	return typeof value === "string" && /\[object (?:Object|[A-Za-z0-9_]*Element)\]/i.test(value);
+}
+
+function cam_native_dom_node(value) {
+	if (!value || typeof value !== "object") return null;
+	if ([1, 3, 11].includes(value.nodeType)) return value;
+	const wrapped = value.jquery || typeof value.length === "number" ? value[0] : null;
+	return wrapped && [1, 3, 11].includes(wrapped.nodeType) ? wrapped : null;
+}
+
+function cam_native_mount_icon_content(container, content) {
+	if (typeof content === "string") {
+		if (!content.trim() || cam_native_is_object_string(content)) return false;
+		container.innerHTML = content;
+		return true;
+	}
+	const element = cam_native_dom_node(content);
+	if (!element || cam_native_is_object_string(element.textContent || "")) return false;
+	if (element.nodeType === 1 && cam_native_is_object_string(element.outerHTML || "")) return false;
+	container.append(element.cloneNode(true));
+	return true;
+}
+
+function cam_native_icon_html(content) {
+	if (typeof content === "string") return content.trim() && !cam_native_is_object_string(content) ? content : "";
+	const element = cam_native_dom_node(content);
+	if (!element) return "";
+	if (element.nodeType === 1 && typeof element.outerHTML === "string") {
+		return cam_native_is_object_string(element.outerHTML) ? "" : element.outerHTML;
+	}
+	const template = document.createElement("template");
+	template.content.append(element.cloneNode(true));
+	return cam_native_is_object_string(template.innerHTML) ? "" : template.innerHTML;
+}
+
+function cam_native_safe_text(value) {
+	if (typeof value === "string") return cam_native_is_object_string(value) ? "" : value;
+	if (["number", "boolean", "bigint"].includes(typeof value)) return String(value);
+	const element = cam_native_dom_node(value);
+	if (!element) return "";
+	const text = element.textContent || "";
+	return cam_native_is_object_string(text) ? "" : text;
+}
+
 function camera_map_icon(camera) {
 	return siraj_camera_pin_icon(camera, L) || camera_map_icon_fallback(camera);
 }
@@ -143,29 +188,36 @@ function camera_map_icon(camera) {
 function siraj_camera_pin_icon(camera, leaflet, selected = false) {
 	if (!window.sirajIcons?.pin || !leaflet?.divIcon) return null;
 	const size = 32;
-	const status = String(camera.status || "").toLowerCase();
+	const status = cam_native_safe_text(camera.status).toLowerCase();
+	const label = cam_native_safe_text(camera.label || camera.name) || __("Camera");
 	const color = window.sirajColours?.Camera || "#3577c0";
 	const ring = status === "active" ? "#16a34a" : status === "inactive" ? "#64748b" : status === "maintenance" ? "#f59e0b" : color;
 	const host = document.createElement("div");
-	host.innerHTML = window.sirajIcons.pin("Camera", color, size, {
-		state: selected ? "selected" : status === "active" ? "active" : status === "inactive" ? "inactive" : undefined,
-		ring,
-		dot: false,
-	});
+	let pinMarkup;
+	try {
+		pinMarkup = window.sirajIcons.pin("Camera", color, size, {
+			state: selected ? "selected" : status === "active" ? "active" : status === "inactive" ? "inactive" : undefined,
+			ring,
+			dot: false,
+		});
+	} catch (_error) {
+		return null;
+	}
+	if (!cam_native_mount_icon_content(host, pinMarkup)) return null;
 	const pin = host.querySelector(".siraj-pin");
 	const body = pin?.querySelector(".siraj-pin-body");
 	if (!pin || !body) return null;
 	pin.classList.add("cam-camera-pin");
-	pin.setAttribute("aria-label", `${camera.label || camera.name} · ${camera.status || __("Unknown status")}`);
+	pin.setAttribute("aria-label", `${label} · ${status || __("Unknown status")}`);
 	if (camera.is_demo_record) pin.classList.add("cam-pin-demo");
 	body.replaceChildren(camera_pin_glyph());
 	const photos = Array.isArray(camera.photos) ? camera.photos : [];
-	const primary = photos.find((photo) => photo.primary && safe_camera_image_url(photo.url))
-		|| photos.find((photo) => safe_camera_image_url(photo.url));
+	const primary = photos.find((photo) => photo?.primary && safe_camera_image_url(photo.url))
+		|| photos.find((photo) => safe_camera_image_url(photo?.url));
 	if (primary) {
 		const image = document.createElement("img");
 		image.className = "cam-siraj-pin-photo";
-		image.alt = camera.label || camera.name || __("Camera image");
+		image.alt = cam_native_safe_text(camera.label || camera.name) || __("Camera image");
 		image.loading = "lazy";
 		image.referrerPolicy = "same-origin";
 		image.src = primary.url;
@@ -185,7 +237,7 @@ function siraj_camera_pin_icon(camera, leaflet, selected = false) {
 		iconAnchor: [size / 2, Math.round(size * 1.15)],
 		popupAnchor: [0, -Math.round(size * 0.8)],
 		tooltipAnchor: [0, -Math.round(size * 0.5)],
-		html: host,
+		html: host.innerHTML,
 	});
 }
 
@@ -197,17 +249,19 @@ function camera_pin_glyph() {
 	return svg;
 }
 
-function camera_map_icon_fallback(camera) {
+function camera_map_icon_fallback(camera = {}) {
 	const shell = document.createElement("div");
-	shell.className = `cam-pin cam-camera-pin cam-camera-status-${String(camera.status || "unknown").toLowerCase()}${camera.is_demo_record ? " cam-pin-demo" : ""}`;
-	shell.setAttribute("aria-label", `${camera.label || camera.name} · ${camera.status || __("Unknown status")}`);
+	const status = cam_native_safe_text(camera.status).toLowerCase() || "unknown";
+	const label = cam_native_safe_text(camera.label || camera.name) || __("Camera");
+	shell.className = `cam-pin cam-camera-pin cam-camera-status-${status}${camera.is_demo_record ? " cam-pin-demo" : ""}`;
+	shell.setAttribute("aria-label", `${label} · ${status === "unknown" ? __("Unknown status") : status}`);
 	const photos = Array.isArray(camera.photos) ? camera.photos : [];
-	const primary = photos.find((photo) => photo.primary && safe_camera_image_url(photo.url))
-		|| photos.find((photo) => safe_camera_image_url(photo.url));
+	const primary = photos.find((photo) => photo?.primary && safe_camera_image_url(photo.url))
+		|| photos.find((photo) => safe_camera_image_url(photo?.url));
 	if (primary) {
 		const image = document.createElement("img");
 		image.className = "cam-pin-image";
-		image.alt = camera.label || camera.name || __("Camera image");
+		image.alt = cam_native_safe_text(camera.label || camera.name) || __("Camera image");
 		image.loading = "lazy";
 		image.referrerPolicy = "same-origin";
 		image.src = primary.url;
@@ -224,27 +278,27 @@ function camera_map_icon_fallback(camera) {
 		count.textContent = String(photos.length);
 		shell.append(count);
 	}
-	return L.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 62], iconAnchor: [24, 62], popupAnchor: [0, -58] });
+	return L.divIcon({ className: "cam-leaflet-icon", html: cam_native_icon_html(shell), iconSize: [48, 62], iconAnchor: [24, 62], popupAnchor: [0, -58] });
 }
 
 function camera_pin_fallback(camera = {}) {
 	const fallback = document.createElement("span");
 	fallback.className = "cam-pin-fallback";
-	fallback.textContent = String(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "◉";
+	fallback.textContent = cam_native_safe_text(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "◉";
 	return fallback;
 }
 
 function camera_card_fallback(camera = {}) {
 	const fallback = document.createElement("span");
 	fallback.className = "cam-camera-card-fallback";
-	fallback.textContent = String(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "◉";
+	fallback.textContent = cam_native_safe_text(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "◉";
 	return fallback;
 }
 
 function camera_image_unavailable() {
 	const unavailable = document.createElement("span");
 	unavailable.className = "cam-image-unavailable";
-	unavailable.textContent = __("Camera image unavailable offline");
+	unavailable.textContent = navigator.onLine ? __("Image unavailable") : __("Not saved for offline use");
 	return unavailable;
 }
 
@@ -252,11 +306,18 @@ function safe_camera_image_url(value) {
 	return typeof value === "string" && /^\/(?:private\/)?files\//.test(value);
 }
 
-function camera_map_popup(camera) {
+function camera_map_popup(camera = {}) {
 	const root = document.createElement("div");
 	root.className = "cam-map-popup cam-camera-detail-popup";
-	const card = camera_map_detail_card(camera);
-	append_camera_gallery(card, camera);
+	const gallery = append_camera_gallery(camera);
+	const openEvents = () => {
+		const name = cam_native_safe_text(camera.name);
+		if (!name) return;
+		frappe.route_options = Object.assign({}, frappe.route_options || {}, { camera: name });
+		frappe.set_route("List", "Motion Event");
+	};
+	const card = camera_map_detail_card(camera, gallery, openEvents);
+	if (gallery) card.append(gallery);
 
 	const more = document.createElement("details");
 	more.className = "cam-popup-more-details";
@@ -275,44 +336,31 @@ function camera_map_popup(camera) {
 		["Lookup ambiguous", camera.lookup_ambiguous ? __("Yes") : __("No")],
 		["Lookup resolved at", camera.lookup_resolved_at],
 	]);
-	if (camera.description) {
+	const descriptionText = cam_native_safe_text(camera.description);
+	if (descriptionText) {
 		const description = document.createElement("p");
 		description.className = "cam-camera-card-description";
-		description.textContent = camera.description;
+		description.textContent = descriptionText;
 		more.append(description);
 	}
-	if (more.querySelector(".cam-card-info-group, .cam-camera-card-description")) card.append(more);
-
-	const actions = document.createElement("div");
-	actions.className = "cam-popup-actions cam-camera-card-actions";
-	const open = document.createElement("button");
-	open.type = "button";
-	open.className = "btn btn-xs btn-primary";
-	open.textContent = __("Open camera");
-	open.addEventListener("click", () => frappe.set_route("Form", "Camera", camera.name));
-	actions.append(open);
-	const events = document.createElement("button");
-	events.type = "button";
-	events.className = "btn btn-xs btn-default";
-	events.textContent = __("View camera events");
-	events.addEventListener("click", () => {
-		frappe.route_options = Object.assign({}, frappe.route_options || {}, { camera: camera.name });
-		frappe.set_route("List", "Motion Event");
-	});
-	actions.append(events);
-	for (const [label, doctype, name] of [
+	const relatedActions = document.createElement("div");
+	relatedActions.className = "cam-camera-card-actions cam-camera-related-actions";
+	for (const [label, doctype, value] of [
 		["Camera type", "Camera Type", camera.camera_type], ["Open area", "Camera Area", camera.area],
 		["Geographic area", "Geo Admin Area", camera.geo_admin_area], ["Boundary", "Geo Boundary", camera.geo_boundary],
 	]) {
+		const name = cam_native_safe_text(value);
 		if (!name) continue;
 		const related = document.createElement("button");
 		related.type = "button";
 		related.className = "btn btn-xs btn-default";
 		related.textContent = __(label);
 		related.addEventListener("click", () => frappe.set_route("Form", doctype, name));
-		actions.append(related);
+		relatedActions.append(related);
 	}
-	card.append(actions);
+	if (relatedActions.childElementCount) more.append(relatedActions);
+	if (more.querySelector(".cam-card-info-group, .cam-camera-card-description, .cam-camera-related-actions button")) card.append(more);
+
 	root.append(card);
 	L.DomEvent.disableClickPropagation(root);
 	L.DomEvent.disableScrollPropagation(root);
@@ -320,7 +368,8 @@ function camera_map_popup(camera) {
 }
 
 function append_camera_info_group(parent, label, fields) {
-	const available = fields.filter(([, value]) => value !== undefined && value !== null && value !== "");
+	const available = fields.map(([fieldLabel, value]) => [fieldLabel, cam_native_safe_text(value)])
+		.filter(([, value]) => value !== "");
 	if (!available.length) return;
 	const group = document.createElement("section");
 	group.className = "cam-card-info-group";
@@ -335,7 +384,7 @@ function append_camera_info_group(parent, label, fields) {
 		const key = document.createElement("dt");
 		key.textContent = __(fieldLabel);
 		const detail = document.createElement("dd");
-		detail.textContent = String(value);
+		detail.textContent = value;
 		row.append(key, detail);
 		details.append(row);
 	}
@@ -343,29 +392,31 @@ function append_camera_info_group(parent, label, fields) {
 	parent.append(group);
 }
 
-function camera_map_detail_card(camera) {
+function camera_map_detail_card(camera = {}, gallery, openEvents = () => {}) {
 	const card = document.createElement("section");
 	card.className = "cam-camera-detail-card";
 	const photos = Array.isArray(camera.photos) ? camera.photos : [];
-	const primary = photos.find((photo) => photo.primary && safe_camera_image_url(photo.url))
-		|| photos.find((photo) => safe_camera_image_url(photo.url));
+	const primary = photos.find((photo) => photo?.primary && safe_camera_image_url(photo.url))
+		|| photos.find((photo) => safe_camera_image_url(photo?.url));
 	const avatar = document.createElement("div");
 	avatar.className = "cam-camera-card-avatar";
-	const hasGallery = photos.length > 0;
-	avatar.setAttribute("aria-label", hasGallery ? __("View camera photo gallery") : __("Camera image unavailable"));
-	if (hasGallery) {
+	avatar.setAttribute("aria-label", photos.length ? __("View camera photo gallery") : __("Camera image unavailable"));
+	if (gallery && photos.length) {
 		avatar.setAttribute("role", "button");
 		avatar.tabIndex = 0;
-		const openGallery = () => card.closest(".cam-map-popup")?.querySelector(".cam-gallery-frame")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-		avatar.addEventListener("click", openGallery);
+		const showGallery = () => {
+			gallery.open = true;
+			window.requestAnimationFrame(() => gallery.querySelector(".cam-gallery-frame")?.scrollIntoView({ block: "nearest", behavior: "smooth" }));
+		};
+		avatar.addEventListener("click", showGallery);
 		avatar.addEventListener("keydown", (event) => {
-			if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openGallery(); }
+			if (event.key === "Enter" || event.key === " ") { event.preventDefault(); showGallery(); }
 		});
 	}
 	if (primary) {
 		const image = document.createElement("img");
 		image.className = "cam-camera-card-image";
-		image.alt = camera.label || camera.name || __("Camera image");
+		image.alt = cam_native_safe_text(camera.label || camera.name) || __("Camera image");
 		image.loading = "lazy";
 		image.referrerPolicy = "same-origin";
 		image.src = primary.url;
@@ -374,84 +425,102 @@ function camera_map_detail_card(camera) {
 	} else {
 		avatar.append(camera_card_fallback(camera));
 	}
-	const heading = document.createElement("div");
+
+	const heading = document.createElement("header");
 	heading.className = "cam-camera-card-heading";
 	const title = document.createElement("strong");
 	title.className = "cam-camera-card-title";
-	title.textContent = camera.label || camera.name || __("Camera details");
+	title.textContent = cam_native_safe_text(camera.label || camera.name) || __("Camera details");
+	const meta = document.createElement("div");
+	meta.className = "cam-camera-card-meta";
 	const subtitle = document.createElement("span");
 	subtitle.className = "cam-camera-card-subtitle";
-	subtitle.textContent = [camera.name, camera.camera_type].filter(Boolean).join(" · ") || __("Camera details");
-	heading.append(title, subtitle);
+	subtitle.textContent = [camera.name, camera.camera_type].map(cam_native_safe_text).filter(Boolean).join(" · ") || __("Camera details");
+	const status = cam_native_safe_text(camera.status);
 	const statusBadge = document.createElement("span");
-	statusBadge.className = `cam-camera-status-badge cam-camera-status-${String(camera.status || "unknown").toLowerCase()}`;
-	statusBadge.textContent = __(camera.status || "Unknown status");
-	card.append(avatar, heading, statusBadge);
+	statusBadge.className = `cam-camera-status-badge cam-camera-status-${(status || "unknown").toLowerCase()}`;
+	statusBadge.textContent = status ? __(status) : __("Unknown status");
+	meta.append(subtitle, statusBadge);
+	heading.append(title, meta);
 	if (camera.is_demo_record) {
 		const badge = document.createElement("span");
 		badge.className = "cam-demo-badge";
 		badge.textContent = __("SYNTHETIC DEMO DATA");
-		card.append(badge);
+		heading.append(badge);
 	}
+	card.append(avatar, heading);
 	const divider = document.createElement("hr");
 	divider.className = "cam-camera-card-divider";
 	card.append(divider);
+
+	const endpoint = cam_native_safe_text(camera.ip_address)
+		? `${cam_native_safe_text(camera.ip_address)}${cam_native_safe_text(camera.port) ? `:${cam_native_safe_text(camera.port)}` : ""}`
+		: cam_native_safe_text(camera.port) ? __("Port {0}", [cam_native_safe_text(camera.port)]) : "";
+	const rows = [
+		["Coordinates", `${cam_native_safe_text(camera.latitude)}, ${cam_native_safe_text(camera.longitude)}`, "cam-camera-card-coordinate"],
+		["Camera Area", [camera.area, camera.address, camera.geo_admin_area].map(cam_native_safe_text).filter(Boolean).join(" · "), ""],
+		["Type & Status", [camera.camera_type, camera.importance, status, endpoint].map(cam_native_safe_text).filter(Boolean).join(" · "), ""],
+		["Gallery & Actions", [__("{0} photos", [photos.length]), cam_native_safe_text(camera.latest_activity) || __("No recent activity")].join(" · "), ""],
+	];
 	const sections = document.createElement("div");
 	sections.className = "cam-camera-card-sections";
-	const endpoint = camera.ip_address
-		? `${camera.ip_address}${camera.port ? `:${camera.port}` : ""}`
-		: camera.port ? __("Port {0}", [camera.port]) : "";
-	const rows = [
-		["Coordinates", `${camera.latitude ?? ""}, ${camera.longitude ?? ""}`],
-		["Camera Area", [camera.area, camera.address].filter(Boolean).join(" · ")],
-		["Type & Endpoint", [camera.camera_type, camera.importance, endpoint].filter(Boolean).join(" · ")],
-	];
-	for (const [label, value] of rows) {
-		const section = document.createElement("div");
+	for (const [label, value, extraClass] of rows) {
+		const section = document.createElement("section");
 		section.className = "cam-camera-card-section";
 		const caption = document.createElement("span");
 		caption.className = "cam-camera-card-label";
 		caption.textContent = __(label);
 		const detail = document.createElement("strong");
-		detail.className = "cam-camera-card-value";
+		detail.className = `cam-camera-card-value ${extraClass}`.trim();
 		detail.textContent = value || __("Not recorded");
 		section.append(caption, detail);
+		if (label === "Gallery & Actions") {
+			const actions = document.createElement("div");
+			actions.className = "cam-camera-card-actions";
+			const open = document.createElement("button");
+			open.type = "button";
+			open.className = "btn btn-xs btn-primary";
+			open.textContent = __("Open camera");
+			open.addEventListener("click", () => {
+				const name = cam_native_safe_text(camera.name);
+				if (name) frappe.set_route("Form", "Camera", name);
+			});
+			actions.append(open);
+			if (gallery) {
+				const galleryButton = document.createElement("button");
+				galleryButton.type = "button";
+				galleryButton.className = "btn btn-xs btn-default";
+				galleryButton.textContent = __("Gallery");
+				galleryButton.addEventListener("click", () => {
+					gallery.open = true;
+					window.requestAnimationFrame(() => gallery.querySelector(".cam-gallery-frame")?.scrollIntoView({ block: "nearest", behavior: "smooth" }));
+				});
+				actions.append(galleryButton);
+			}
+			const events = document.createElement("button");
+			events.type = "button";
+			events.className = "btn btn-xs btn-default";
+			events.textContent = __("Events");
+			events.addEventListener("click", openEvents);
+			actions.append(events);
+			section.append(actions);
+		}
 		sections.append(section);
 	}
-	const activity = document.createElement("div");
-	activity.className = "cam-camera-card-section";
-	const activityLabel = document.createElement("span");
-	activityLabel.className = "cam-camera-card-label";
-	activityLabel.textContent = __("Status & Activity");
-	const activityValue = document.createElement("strong");
-	activityValue.className = "cam-camera-card-value";
-	activityValue.textContent = [camera.status || __("Unknown status"), __("{0} photos", [photos.length]), camera.latest_activity].filter(Boolean).join(" · ");
-	activity.append(activityLabel, activityValue);
-	if (!camera.latest_activity) {
-		const open = document.createElement("button");
-		open.type = "button";
-		open.className = "cam-camera-card-action";
-		open.textContent = __("View camera events");
-		open.addEventListener("click", () => {
-			frappe.route_options = Object.assign({}, frappe.route_options || {}, { camera: camera.name });
-			frappe.set_route("List", "Motion Event");
-		});
-		activity.append(open);
-	}
-	sections.append(activity);
 	card.append(sections);
 	return card;
 }
 
-function append_camera_gallery(root, camera) {
+function append_camera_gallery(camera = {}) {
 	const photos = Array.isArray(camera.photos) ? camera.photos : [];
-	if (!photos.length) return;
-	let index = Math.max(0, photos.findIndex((photo) => photo.primary));
-	const gallery = document.createElement("section");
+	if (!photos.length) return null;
+	let index = Math.max(0, photos.findIndex((photo) => photo?.primary));
+	const gallery = document.createElement("details");
 	gallery.className = "cam-camera-gallery";
-	const heading = document.createElement("div");
+	const heading = document.createElement("summary");
 	heading.className = "cam-camera-gallery-heading";
-	const title = document.createElement("h4");
+	const title = document.createElement("span");
+	title.className = "cam-camera-gallery-title";
 	title.textContent = __("Photo gallery");
 	const total = document.createElement("span");
 	total.className = "cam-gallery-total";
@@ -465,14 +534,16 @@ function append_camera_gallery(root, camera) {
 	frame.setAttribute("aria-label", __("Camera photo"));
 	const caption = document.createElement("div");
 	caption.className = "cam-gallery-caption";
+	const controls = document.createElement("div");
+	controls.className = "cam-gallery-controls";
 	const count = document.createElement("span");
 	count.className = "cam-gallery-count";
 	const update = () => {
-		const photo = photos[index];
+		const photo = photos[index] || {};
 		if (safe_camera_image_url(photo.url)) {
 			const image = document.createElement("img");
 			image.className = "cam-gallery-image";
-			image.alt = photo.caption || camera.label || __("Camera image");
+			image.alt = cam_native_safe_text(photo.caption || camera.label) || __("Camera image");
 			image.loading = "lazy";
 			image.referrerPolicy = "same-origin";
 			image.src = photo.url;
@@ -481,12 +552,10 @@ function append_camera_gallery(root, camera) {
 		} else {
 			frame.replaceChildren(camera_image_unavailable());
 		}
-		caption.textContent = photo.caption || photo.description || "";
+		caption.textContent = cam_native_safe_text(photo.caption || photo.description);
 		count.textContent = `${index + 1} / ${photos.length}`;
 	};
 	if (photos.length > 1) {
-		const controls = document.createElement("div");
-		controls.className = "cam-gallery-controls";
 		for (const [text, delta, label] of [["‹", -1, "Previous photo"], ["›", 1, "Next photo"]]) {
 			const button = document.createElement("button");
 			button.type = "button";
@@ -499,11 +568,9 @@ function append_camera_gallery(root, camera) {
 			});
 			controls.append(button);
 		}
-		controls.append(count);
-		gallery.append(frame, controls, caption);
-	} else {
-		gallery.append(frame, caption);
 	}
-	root.append(gallery);
+	controls.append(count);
+	gallery.append(frame, controls, caption);
 	update();
+	return gallery;
 }
