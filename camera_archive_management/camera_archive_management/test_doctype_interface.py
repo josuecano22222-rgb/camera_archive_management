@@ -44,6 +44,11 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 			with self.subTest(image=image.name):
 				self.assertTrue(image.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
 				self.assertLess(image.stat().st_size, 100_000)
+		vehicle_assets = Path(__file__).parents[1] / "data" / "demo_vehicle_images"
+		vehicle_images = sorted(vehicle_assets.glob("*.png"))
+		self.assertEqual(len(vehicle_images), 4)
+		for image in vehicle_images:
+			self.assertTrue(image.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
 		self.assertNotIn("demo_data", (Path(__file__).parents[1] / "hooks.py").read_text(encoding="utf-8"))
 
 	def test_global_country_core_dataset_is_pinned_and_contains_jordan(self):
@@ -79,7 +84,7 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertEqual(camera_fields["camera_photos_json"]["fieldtype"], "Long Text")
 		self.assertEqual(camera_fields["camera_photo_gallery"]["fieldtype"], "HTML")
 		self.assertFalse((DOCTYPE_DIR / "camera_photo" / "camera_photo.json").exists())
-		for folder in ("camera", "cam_vehicle", "motion_event"):
+		for folder in ("camera", "cam_vehicle", "motion_event", "camera_area", "vehicle_type"):
 			fields = {field["fieldname"]: field for field in self.load_doctype(folder)["fields"]}
 			self.assertEqual(fields["is_demo_record"]["fieldtype"], "Check")
 			self.assertEqual(fields["demo_scenario"]["fieldtype"], "Data")

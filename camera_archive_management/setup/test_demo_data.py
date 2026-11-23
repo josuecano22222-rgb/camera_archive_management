@@ -19,7 +19,7 @@ class TestDemoDataSafety(FrappeTestCase):
 			deleted = demo_data.delete_demo_scenario()
 
 		self.assertFalse(created["created"])
-		self.assertIn("camera_archive_allow_demo_data=true", created["reason"])
+		self.assertIn("camera_archive_allow_demo_data=True", created["reason"])
 		self.assertFalse(deleted["deleted"])
 		self.assertIn("camera_archive_allow_demo_data=true", deleted["reason"])
 		count.assert_not_called()

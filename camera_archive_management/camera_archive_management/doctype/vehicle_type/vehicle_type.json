@@ -23,6 +23,22 @@
    "in_list_view": 1
   },
   {
+   "fieldname": "is_demo_record",
+   "fieldtype": "Check",
+   "label": "Synthetic Demo Record",
+   "default": "0",
+   "read_only": 1,
+   "description": "Identifies a fictional vehicle type created for explicitly requested demonstration and test workflows."
+  },
+  {
+   "fieldname": "demo_scenario",
+   "fieldtype": "Data",
+   "label": "Demo Scenario",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
    "fieldname": "is_active",
    "fieldtype": "Check",
    "label": "Is Active",
@@ -54,6 +70,8 @@
   "layout_tab_1",
   "layout_section_1_1",
   "type_name",
+  "is_demo_record",
+  "demo_scenario",
   "is_active",
   "layout_section_1_2",
   "vehicle_type_image",

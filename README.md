@@ -9,7 +9,7 @@ A Frappe v15 application for camera inventory, controlled image galleries, vehic
 - With explicit browser-profile opt-in, the map can persist the current filtered snapshot, viewed popup details, and viewed images in IndexedDB for offline use. Uncached media and snapshots are visibly marked; storage can be cleared from the map. Raster tiles continue to use the shared Siraj server cache and are not copied into browser storage.
 - Geographic lookup is local-first and supports imported, attributed GeoJSON datasets. External geocoding remains opt-in. Map tile fetching and shared-cache writes remain governed by the Siraj administrator settings and must not be enabled by this app by default.
 - Camera and vehicle classification catalogs are additive core reference data. After migration, the app creates only missing classifications; it never overwrites site-defined descriptions or records.
-- A separate, explicitly enabled synthetic scenario exercises the map with fictional Amsterdam-area cameras, vehicles, and motion events. It is never installed or seeded automatically, is excluded from the map by default, and is visibly marked. Production creation requires a deliberate per-site opt-in and explicit administrator command.
+- A separate, explicitly enabled synthetic scenario exercises the map with fictional Amsterdam-area camera areas, multi-image cameras at precise decimal coordinates, vehicle types and illustrations (including per-vehicle and type-fallback cases), and timestamped Entry/Exit events with replay tracks and nearby-camera context. It is never installed or seeded automatically, is excluded from the map by default, and is visibly marked. Creation requires a deliberate per-site opt-in and explicit administrator command.
 
 ## Data and safety
 
@@ -20,7 +20,7 @@ bench --site <site-name> set-config camera_archive_allow_demo_data True --parse
 bench --site <site-name> execute camera_archive_management.setup.demo_data.create_demo_scenario
 ```
 
-Generated cameras, vehicles, events, and image attachments carry the `CAM-MAP-V1-DEMO` tag and are excluded from the map unless the synthetic-data toggle is selected. Remove only these scenario-tagged records with:
+The generator creates 12 cameras with two attached illustrations each and seven-decimal coordinate strings, four filterable demo areas, eight vehicles across four demo-only vehicle types (half have their own image; the rest exercise type-image fallback), and 72 Entry/Exit events arranged as nine timestamped track points per vehicle. Events carry nearby-camera distances and bearings. Synthetic camera and vehicle illustrations are bundled in `camera_archive_management/data/demo_camera_images/` and `camera_archive_management/data/demo_vehicle_images/`; none are real photographs or surveillance footage. Generated cameras, areas, vehicles, demo-only vehicle types, events, and their attached files carry the `CAM-MAP-V1-DEMO` tag. Demo records are excluded from the map unless the synthetic-data toggle is selected. Remove only this scenario and its owned attachments with:
 
 ```bash
 bench --site <site-name> execute camera_archive_management.setup.demo_data.delete_demo_scenario
