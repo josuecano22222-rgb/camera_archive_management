@@ -35,7 +35,8 @@
     "doctype": "Has Role",
     "role": "System Manager"
    }
-  ]
+  ],
+  "name": "Camera Archive - Camera Status"
  },
  {
   "chart_name": "Camera Archive - Daily Movements",
@@ -74,7 +75,8 @@
     "doctype": "Has Role",
     "role": "System Manager"
    }
-  ]
+  ],
+  "name": "Camera Archive - Daily Movements"
  },
  {
   "chart_name": "Camera Archive - Movement Direction",
@@ -112,7 +114,8 @@
     "doctype": "Has Role",
     "role": "System Manager"
    }
-  ]
+  ],
+  "name": "Camera Archive - Movement Direction"
  },
  {
   "chart_name": "Camera Archive - Vehicles by Type",
@@ -150,6 +153,7 @@
     "doctype": "Has Role",
     "role": "System Manager"
    }
-  ]
+  ],
+  "name": "Camera Archive - Vehicles by Type"
  }
 ]

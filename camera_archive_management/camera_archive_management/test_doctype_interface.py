@@ -93,6 +93,7 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertEqual(chart_names, {chart["chart_name"] for chart in chart_fixtures})
 		self.assertEqual(len(chart_names), 4)
 		for chart in chart_fixtures:
+			self.assertEqual(chart["name"], chart["chart_name"])
 			self.assertTrue(chart["roles"])
 			self.assertIn(chart["document_type"], standalone_doctypes)
 
