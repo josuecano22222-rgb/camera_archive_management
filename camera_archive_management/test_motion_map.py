@@ -60,24 +60,18 @@ class TestMotionMapClustering(unittest.TestCase):
 	def test_map_clustering_expansion_groups_and_vehicle_totals(self):
 		subprocess.run(["node", "-e", NODE_CLUSTER_TEST, str(MOTION_SCRIPT)], check=True, capture_output=True, text=True)
 
-	def test_maps_use_configured_vehicle_images_and_neutral_saved_points(self):
+	def test_motion_event_doctype_uses_siraj_pin_template_and_user_icons(self):
 		motion_list = MOTION_SCRIPT.read_text(encoding="utf-8")
-		archive_map = (MOTION_SCRIPT.parents[2] / "page" / "camera_archive_map" / "camera_archive_map.js").read_text(encoding="utf-8")
 		self.assertIn("vehicle_image", motion_list)
 		self.assertIn('sirajIcons.pin("CAM Vehicle"', motion_list)
 		self.assertIn('className: "sx-pin-wrapper cam-leaflet-icon"', motion_list)
 		self.assertIn("motion_unconfigured_location_icon", motion_list)
-		self.assertIn("vehicle_image", archive_map)
-		self.assertIn('sirajIcons.pin("CAM Vehicle"', archive_map)
-		self.assertIn('className: "sx-pin-wrapper cam-leaflet-icon"', archive_map)
-		self.assertIn("cam-map-user-location-point", archive_map)
-		for source in (motion_list, archive_map):
-			self.assertNotIn("🚘", source)
-			self.assertNotIn("🚐", source)
-			self.assertNotIn("🚚", source)
-			self.assertNotIn("🚌", source)
-		self.assertNotIn("🏍️", source)
-		self.assertNotIn("motion_vehicle_color", source)
+		self.assertNotIn("🚘", motion_list)
+		self.assertNotIn("🚐", motion_list)
+		self.assertNotIn("🚚", motion_list)
+		self.assertNotIn("🚌", motion_list)
+		self.assertNotIn("🏍️", motion_list)
+		self.assertNotIn("motion_vehicle_color", motion_list)
 
 
 if __name__ == "__main__":

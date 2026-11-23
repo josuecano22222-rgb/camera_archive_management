@@ -70,6 +70,10 @@
 .cam-camera-pin::before { bottom: -14px; border-top: 15px solid #fff; filter: drop-shadow(0 2px 2px rgba(0,0,0,.28)); }
 .cam-camera-pin::after { bottom: -10px; border-left-width: 7px; border-right-width: 7px; border-top: 11px solid #0f766e; }
 .cam-camera-pin > * { position: relative; z-index: 2; }
+.cam-vehicle-pin { background: #c2410c; }
+.cam-vehicle-event-badge { position: absolute; right: -5px; bottom: -4px; display: flex; align-items: center; justify-content: center; width: 19px; height: 19px; border: 1px solid #fff; border-radius: 50%; background: #111827; color: #fff; font-size: 9px; font-weight: 800; line-height: 1; }
+.cam-vehicle-event-entry { background: #047857; }
+.cam-vehicle-event-exit { background: #b91c1c; }
 .cam-pin-image { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
 .cam-pin-fallback { color: #fff; font-size: 22px; line-height: 1; text-shadow: 0 1px 2px #222; }
 .cam-pin-count { position: absolute; right: -5px; top: -5px; width: 19px; height: 19px; border-radius: 50%; background: #111827; border: 1px solid #fff; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
