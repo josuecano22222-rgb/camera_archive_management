@@ -21,16 +21,19 @@ def _doctype_app(doctype: str) -> str | None:
 
 
 def _assert_no_references() -> None:
-	for child_doctype in ("DocField", "Custom Field"):
+	# DocField is a child table whose owning DocType is stored in `parent`;
+	# Custom Field is a regular DocType and stores its owner in `dt`.
+	for field_doctype, owner_field in (("DocField", "parent"), ("Custom Field", "dt")):
 		for field in frappe.get_all(
-			child_doctype,
+			field_doctype,
 			filters={"options": LEGACY_DOCTYPE},
-			fields=["parent", "fieldname"],
+			fields=[owner_field, "fieldname"],
 			limit_page_length=0,
 		):
-			if field.parent != LEGACY_DOCTYPE:
+			owner = field.get(owner_field)
+			if owner != LEGACY_DOCTYPE:
 				frappe.throw(
-					f"Cannot remove {LEGACY_DOCTYPE}: {field.parent}.{field.fieldname} still references it.",
+					f"Cannot remove {LEGACY_DOCTYPE}: {owner}.{field.fieldname} still references it.",
 					frappe.ValidationError,
 				)
 

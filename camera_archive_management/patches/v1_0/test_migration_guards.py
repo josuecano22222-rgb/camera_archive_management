@@ -76,6 +76,24 @@ class TestMigrationGuards(FrappeTestCase):
 			migrate_camera_photo_gallery.execute()
 		return set_value.call_args_list, delete_doc
 
+	def test_gallery_reference_scan_uses_the_correct_owner_column_per_doctype(self):
+		with patch.object(frappe, "get_all", return_value=[]) as get_all:
+			migrate_camera_photo_gallery._assert_no_references()
+		self.assertEqual(get_all.call_args_list[0].args[0], "DocField")
+		self.assertEqual(get_all.call_args_list[0].kwargs["fields"], ["parent", "fieldname"])
+		self.assertEqual(get_all.call_args_list[1].args[0], "Custom Field")
+		self.assertEqual(get_all.call_args_list[1].kwargs["fields"], ["dt", "fieldname"])
+
+	def test_gallery_reference_scan_blocks_external_custom_field(self):
+		def get_all(doctype, **kwargs):
+			if doctype == "Custom Field":
+				return [frappe._dict(dt="Camera", fieldname="legacy_photo_link")]
+			return []
+
+		with patch.object(frappe, "get_all", side_effect=get_all):
+			with self.assertRaises(frappe.ValidationError):
+				migrate_camera_photo_gallery._assert_no_references()
+
 	def test_gallery_migration_preserves_metadata_and_reassigns_legacy_file(self):
 		file_doc = frappe._dict(
 			name="FILE-1",
