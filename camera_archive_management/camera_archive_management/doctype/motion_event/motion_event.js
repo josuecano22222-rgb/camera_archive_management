@@ -6,12 +6,39 @@ frappe.ui.form.on("Motion Event", {
 				frappe.set_route("camera-archive-map");
 			}, __("Camera Archive"));
 		}
+		inherit_camera_importance(frm);
 		show_event_vehicle(frm);
+	},
+	camera(frm) {
+		inherit_camera_importance(frm);
+	},
+	importance(frm) {
+		frm.__cam_importance_request = (frm.__cam_importance_request || 0) + 1;
+		frm.__cam_importance_inherited = false;
 	},
 	vehicle(frm) {
 		show_event_vehicle(frm);
 	}
 });
+
+async function inherit_camera_importance(frm) {
+	if (!frm.is_new() || !frm.doc.camera) return;
+	if (frm.doc.importance && !frm.__cam_importance_inherited) return;
+	const existingImportance = frm.doc.importance;
+	const cameraName = frm.doc.camera;
+	const request = (frm.__cam_importance_request || 0) + 1;
+	frm.__cam_importance_request = request;
+	try {
+		const result = await frappe.db.get_value("Camera", cameraName, "importance");
+		if (frm.doc.camera !== cameraName || frm.__cam_importance_request !== request) return;
+		if (frm.doc.importance !== existingImportance && !frm.__cam_importance_inherited) return;
+		const importance = result?.message?.importance || "Medium";
+		if (frm.doc.importance !== importance) await frm.set_value("importance", importance);
+		frm.__cam_importance_inherited = true;
+	} catch (_error) {
+		// The server remains authoritative when an operator saves the event.
+	}
+}
 
 async function show_event_vehicle(frm) {
 	const host = frm.fields_dict.vehicle_visual?.$wrapper;

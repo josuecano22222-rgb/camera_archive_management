@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+from frappe.utils import add_to_date, now_datetime
 
 
 class TestMotionEvent(FrappeTestCase):
@@ -12,6 +13,7 @@ class TestMotionEvent(FrappeTestCase):
 				"naming_series": "CAM-.####",
 				"camera_name": "Snapshot test camera",
 				"status": "Active",
+				"importance": "Critical",
 				"address": "Manual address",
 				"latitude": "52.3",
 				"longitude": "4.9",
@@ -26,7 +28,7 @@ class TestMotionEvent(FrappeTestCase):
 				"naming_series": "MOT-.#####",
 				"camera": camera.name,
 				"motion_type": "Entry",
-				"detected_at": "2026-11-22 12:00:00",
+				"detected_at": add_to_date(now_datetime(), days=-1),
 			}
 		).insert(ignore_permissions=True)
 
@@ -35,6 +37,7 @@ class TestMotionEvent(FrappeTestCase):
 		self.assertEqual(str(event.longitude_snapshot), "4.9")
 		self.assertEqual(event.location_source_snapshot, "manual")
 		self.assertEqual(event.location_snapshot, camera.location)
+		self.assertEqual(event.importance, "Critical")
 		original_location_snapshot = event.location_snapshot
 
 		camera.latitude = "52.4"
@@ -51,3 +54,61 @@ class TestMotionEvent(FrappeTestCase):
 		event.latitude_snapshot = "52.4"
 		with self.assertRaises(frappe.PermissionError):
 			event.save(ignore_permissions=True)
+
+	def test_explicit_importance_is_preserved_and_future_events_are_rejected(self):
+		camera = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Importance and future-time test camera",
+				"status": "Active",
+				"importance": "Critical",
+				"camera_photos_json": "[]",
+			}
+		).insert(ignore_permissions=True)
+		past = add_to_date(now_datetime(), days=-1)
+		event = frappe.get_doc(
+			{
+				"doctype": "Motion Event",
+				"naming_series": "MOT-.#####",
+				"camera": camera.name,
+				"motion_type": "Entry",
+				"detected_at": past,
+				"importance": "Low",
+			}
+		).insert(ignore_permissions=True)
+		self.assertEqual(event.importance, "Low")
+
+		default_camera = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Default importance test camera",
+				"status": "Active",
+				"camera_photos_json": "[]",
+			}
+		).insert(ignore_permissions=True)
+		default_event = frappe.get_doc(
+			{
+				"doctype": "Motion Event",
+				"naming_series": "MOT-.#####",
+				"camera": default_camera.name,
+				"motion_type": "Entry",
+				"detected_at": past,
+			}
+		).insert(ignore_permissions=True)
+		default_importance = frappe.db.get_single_value("Archive Settings", "default_motion_importance") or "Medium"
+		self.assertEqual(default_event.importance, default_importance)
+
+		future = frappe.get_doc(
+			{
+				"doctype": "Motion Event",
+				"naming_series": "MOT-.#####",
+				"camera": camera.name,
+				"motion_type": "Exit",
+				"detected_at": add_to_date(now_datetime(), seconds=60),
+			}
+		)
+		with self.assertRaises(frappe.ValidationError):
+			future.insert(ignore_permissions=True)
+		self.assertFalse(frappe.db.exists("Motion Event", future.name))

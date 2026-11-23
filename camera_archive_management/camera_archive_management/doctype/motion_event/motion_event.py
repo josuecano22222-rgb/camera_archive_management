@@ -6,6 +6,7 @@ import math
 import frappe
 from frappe.model.document import Document
 from frappe.query_builder.functions import Cast
+from frappe.utils import get_datetime, now_datetime
 
 from camera_archive_management.geo.coordinates import validate_pair
 from camera_archive_management.geo.geometry import bearing_degrees, compass_8, haversine_m
@@ -41,6 +42,8 @@ class MotionEvent(Document):
 			validate_pair(self.latitude_snapshot, self.longitude_snapshot)
 		except ValueError as exc:
 			frappe.throw(str(exc), frappe.ValidationError)
+		if self.detected_at and get_datetime(self.detected_at) > now_datetime():
+			frappe.throw("Motion Event detection time cannot be in the future.", frappe.ValidationError)
 		if self.detected_at and not self.camera:
 			frappe.throw("A Motion Event requires a Camera.", frappe.ValidationError)
 
@@ -83,6 +86,10 @@ class MotionEvent(Document):
 		}
 		for target, source in mappings.items():
 			self.set(target, camera.get(source))
+		if not self.importance:
+			self.importance = camera.get("importance") or frappe.db.get_single_value(
+				"Archive Settings", "default_motion_importance"
+			) or "Medium"
 		value = camera.get("location")
 		self.location_snapshot = (
 			value if isinstance(value, str) else json.dumps(value, separators=(",", ":")) if value else None
