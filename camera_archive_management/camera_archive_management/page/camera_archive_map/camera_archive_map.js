@@ -1,5 +1,6 @@
 let cam_map_leaflet;
 let cam_map_leaflet_promise;
+let cam_offline_db_promise;
 
 function require_map_leaflet_css() {
 	const href = new URL("/assets/camera_archive_management/vendor/leaflet/leaflet.css", window.location.origin).href;
@@ -50,7 +51,7 @@ frappe.pages["camera-archive-map"].on_page_load = function (wrapper) {
 function initialize_map_page(wrapper, leaflet) {
 	const page = frappe.ui.make_app_page({ parent: wrapper, title: __("Camera Archive Map"), single_column: true });
 	page.cam_leaflet = leaflet;
-	page.set_primary_action(__("Refresh"), () => load_map(page), "refresh");
+	page.set_primary_action(__("Refresh"), () => load_map(page, { force: true }), "refresh");
 	page.cam_map_options = Object.assign(
 		{ camera: null, vehicle: null, event: null, camera_status: null, area: null },
 		page.cam_map_options || {}
@@ -59,6 +60,7 @@ function initialize_map_page(wrapper, leaflet) {
 		host: window.location.host,
 		origin: window.location.origin || `${window.location.protocol}//${window.location.host}`
 	};
+	page.cam_offline_enabled = read_offline_opt_in(page);
 	const route_state = sync_route_filters_to_page(page, { force: true });
 	const host = page.main.get(0);
 	host.innerHTML = `
@@ -84,6 +86,7 @@ function initialize_map_page(wrapper, leaflet) {
 			<button class="btn btn-primary cam-map-apply">${__("Apply filters")}</button>
 			<span class="cam-map-filter-note"></span>
 			<span class="cam-map-tile-status text-muted" aria-live="polite"></span>
+			<span class="cam-map-tile-telemetry text-muted" data-tile-telemetry aria-live="polite"></span>
 		</div>
 		<div class="cam-map-toolbox" role="toolbar" aria-label="${__("Map tools and layers")}">
 			<div class="cam-map-toolgroup">
@@ -100,6 +103,10 @@ function initialize_map_page(wrapper, leaflet) {
 				<label><input type="checkbox" class="cam-map-show-tracks" checked> ${__("Movement tracks")}</label>
 				<label><input type="checkbox" class="cam-map-show-countries" checked> ${__("Country borders")}</label>
 				<label class="cam-map-demo-toggle"><input type="checkbox" class="cam-map-include-demo"> ${__("Include synthetic demo records")}</label>
+			<label class="cam-map-offline-toggle" title="${__("Stores the current filtered map snapshot, popup details and viewed images in this browser profile until cleared.")}"><input type="checkbox" class="cam-map-save-offline"> ${__("Save map snapshot, details and images offline")}</label>
+			<button class="btn btn-default btn-xs cam-map-show-saved" type="button" ${page.cam_offline_enabled ? "" : "disabled"}>${__("Show saved popup details")}</button>
+			<button class="btn btn-default btn-xs cam-map-clear-offline" type="button">${__("Clear offline data")}</button>
+			<span class="cam-map-offline-status text-muted" aria-live="polite"></span>
 			</div>
 			<span class="cam-map-tool-status" aria-live="polite">${__("Click the map to inspect coordinates, or choose a measurement tool.")}</span>
 			<div class="cam-map-playback">
@@ -117,7 +124,7 @@ function initialize_map_page(wrapper, leaflet) {
 						<span class="cam-map-window" data-insight-window></span>
 					</div>
 					<div class="cam-map-kpis">
-						<article class="cam-map-kpi cam-kpi-camera"><span>${__("Active cameras")}</span><strong data-kpi-cameras>—</strong><small>${__("in this view")}</small></article>
+						<article class="cam-map-kpi cam-kpi-camera"><span>${__("Cameras in view")}</span><strong data-kpi-cameras>—</strong><small>${__("in this view")}</small></article>
 						<article class="cam-map-kpi cam-kpi-movement"><span>${__("Movements")}</span><strong data-kpi-movements>—</strong><small>${__("in selected window")}</small></article>
 						<article class="cam-map-kpi cam-kpi-vehicles"><span>${__("Vehicles tracked")}</span><strong data-kpi-vehicles>—</strong><small>${__("unique records")}</small></article>
 					</div>
@@ -151,12 +158,56 @@ function initialize_map_page(wrapper, leaflet) {
 	page.$filter_note = $(host.querySelector(".cam-map-filter-note"));
 	page.cam_tile_status = host.querySelector(".cam-map-tile-status");
 	page.cam_tile_errors = 0;
+	page.cam_tile_telemetry = host.querySelector("[data-tile-telemetry]");
+	const offlineToggle = host.querySelector(".cam-map-save-offline");
+	offlineToggle.checked = page.cam_offline_enabled;
+	if (!window.indexedDB) {
+		page.cam_offline_enabled = false;
+		offlineToggle.checked = false;
+		offlineToggle.disabled = true;
+		host.querySelector(".cam-map-show-saved").disabled = true;
+		set_offline_status(page, __("This browser does not provide persistent offline storage."));
+	} else {
+		set_offline_status(page);
+	}
+	host.querySelector(".cam-map-save-offline").addEventListener("change", async (event) => {
+		page.cam_offline_enabled = event.target.checked;
+		host.querySelector(".cam-map-show-saved").disabled = !page.cam_offline_enabled;
+		write_offline_opt_in(page, page.cam_offline_enabled);
+		if (!page.cam_offline_enabled) {
+			await clear_offline_namespace(page);
+			page.cam_using_saved_details = false;
+			if (page.cam_current_map_data) render_map_payload(page, page.cam_current_map_data, { fit: false });
+			update_filter_note(page);
+		} else if (navigator.onLine) {
+			load_map(page, { force: true });
+		}
+		set_offline_status(page);
+	});
+	host.querySelector(".cam-map-show-saved").addEventListener("click", () => show_cached_popup_details(page));
+	host.querySelector(".cam-map-clear-offline").addEventListener("click", async () => {
+		page.cam_offline_enabled = false;
+		host.querySelector(".cam-map-save-offline").checked = false;
+		host.querySelector(".cam-map-show-saved").disabled = true;
+		write_offline_opt_in(page, false);
+		await clear_offline_namespace(page);
+		page.cam_using_saved_details = false;
+		if (page.cam_current_map_data) render_map_payload(page, page.cam_current_map_data, { fit: false });
+		update_filter_note(page);
+		set_offline_status(page, __("Offline images and details cleared from this browser profile."));
+	});
 	set_tile_status(page, __("Map tiles use the shared Siraj server cache."));
 	if (!page.cam_network_listener) {
+		page.cam_was_online = navigator.onLine;
 		page.cam_network_listener = () => {
+			const cameOnline = navigator.onLine && !page.cam_was_online;
+			page.cam_was_online = navigator.onLine;
 			set_tile_status(page, navigator.onLine
 				? __("Browser is online; missing tiles use the configured server provider when enabled.")
 				: __("Browser is offline; the Bench server must remain reachable to use cached tiles."));
+			set_offline_status(page);
+			update_tile_telemetry(page);
+			if (cameOnline) load_map(page, { force: true });
 		};
 		window.addEventListener("online", page.cam_network_listener);
 		window.addEventListener("offline", page.cam_network_listener);
@@ -168,6 +219,7 @@ function initialize_map_page(wrapper, leaflet) {
 			const current_route = frappe.get_route() || [];
 			if (current_route[0] !== "camera-archive-map") {
 				page.cam_map_was_away = true;
+				page.cam_route_push_signature = null;
 				if (page.cam_playback_timer) toggle_movement_playback(page);
 			}
 		};
@@ -195,7 +247,11 @@ function initialize_map_page(wrapper, leaflet) {
 		update_filter_note(page);
 		load_map(page);
 	});
-	host.querySelector(".cam-map-layer").addEventListener("change", () => set_basemap(page));
+	host.querySelector(".cam-map-layer").addEventListener("change", () => {
+		set_basemap(page);
+		sync_page_route_to_controls(page);
+		update_filter_note(page);
+	});
 	host.querySelector(".cam-map-status").addEventListener("change", () => {
 		read_filter_controls(page);
 		update_filter_note(page);
@@ -214,6 +270,7 @@ function initialize_map_page(wrapper, leaflet) {
 	host.querySelector(".cam-map-show-countries").addEventListener("change", (event) => set_country_visibility(page, event.target.checked));
 	host.querySelector(".cam-map-time").addEventListener("input", () => render_movement_slice(page));
 	host.querySelector(".cam-map-play").addEventListener("click", () => toggle_movement_playback(page));
+	page.cam_map.on("zoomend", () => update_tile_telemetry(page));
 	page.cam_map.on("mousemove", (event) => update_coordinate_readout(page, event.latlng));
 	page.cam_map.on("click", (event) => handle_map_click(page, event.latlng));
 	page.cam_map.on("dblclick", () => {
@@ -343,6 +400,34 @@ function sync_route_filters_to_page(page, { force = false } = {}) {
 	return { changed, controls: page.cam_map_route_values };
 }
 
+function sync_page_route_to_controls(page) {
+	const current = frappe.get_route() || [];
+	if (current[0] !== "camera-archive-map") return;
+	const host = page.main.get(0);
+	const next = ["camera-archive-map"];
+	const values = {
+		camera: clean_route_value(page.cam_map_options.camera),
+		vehicle: clean_route_value(page.cam_map_options.vehicle),
+		event: clean_route_value(page.cam_map_options.event),
+		camera_status: clean_route_value(page.cam_map_options.camera_status),
+		area: clean_route_value(page.cam_map_options.area),
+		start: clean_route_value(host.querySelector(".cam-map-from").value),
+		end: clean_route_value(host.querySelector(".cam-map-to").value),
+		layer: clean_route_value(host.querySelector(".cam-map-layer").value),
+	};
+	for (const key of CAM_MAP_ROUTE_KEYS) {
+		if (values[key] !== null) next.push(key, values[key]);
+	}
+	if (JSON.stringify(current) === JSON.stringify(next)) {
+		page.cam_route_push_signature = null;
+		return;
+	}
+	const signature = JSON.stringify(next);
+	if (page.cam_route_push_signature === signature) return;
+	page.cam_route_push_signature = signature;
+	frappe.set_route(...next);
+}
+
 function read_filter_controls(page) {
 	const host = page.main.get(0);
 	page.cam_map_options = Object.assign(
@@ -362,17 +447,331 @@ function queue_map_reload(page) {
 }
 
 function update_filter_note(page) {
+	if (page.cam_using_saved_details) {
+		if (page.$filter_note) page.$filter_note.text(__("Current filters are bypassed: showing only previously viewed saved records."));
+		return;
+	}
 	const { camera, vehicle, event, camera_status, area } = page.cam_map_options || {};
 	const parts = [];
 	if (camera) parts.push(`${__("Camera")}: ${camera}`);
 	if (vehicle) parts.push(`${__("Vehicle")}: ${vehicle}`);
 	if (event) parts.push(`${__("Event")}: ${event}`);
 	if (camera_status) parts.push(`${__("Status")}: ${camera_status === "all" ? __("All statuses") : __(camera_status)}`);
+	else parts.push(`${__("Status")}: ${camera ? __("not restricted") : __("Active (default)")}`);
 	if (area) parts.push(`${__("Area")}: ${area}`);
+	const host = page.main?.get(0);
+	const dateFrom = host?.querySelector(".cam-map-from")?.value;
+	const dateTo = host?.querySelector(".cam-map-to")?.value;
+	if (dateFrom || dateTo) parts.push(`${__("Date range")}: ${dateFrom || "…"} — ${dateTo || "…"}`);
+	const layer = host?.querySelector(".cam-map-layer")?.value;
+	if (layer) parts.push(`${__("Basemap")}: ${layer}`);
 	const summary = parts.length
 		? `${__("Active filters")} — ${parts.join(" • ")}`
 		: __("Showing active cameras by default; no exact camera, vehicle, event, or area filter is active.");
 	if (page.$filter_note) page.$filter_note.text(summary);
+}
+
+const CAM_MAP_OFFLINE_DB = "camera_archive_map_offline_v1";
+const CAM_MAP_OFFLINE_STORES = ["snapshots", "images", "details"];
+const CAM_MAP_OFFLINE_SNAPSHOT_LIMIT = 8;
+const CAM_MAP_OFFLINE_PAYLOAD_LIMIT = 4 * 1024 * 1024;
+const CAM_MAP_OFFLINE_IMAGE_LIMIT = 8 * 1024 * 1024;
+
+function offline_namespace(page) {
+	const user = frappe.session?.user || "Guest";
+	return `${page.cam_map_context?.origin || pageOrigin()}|${user}`;
+}
+
+function offline_preference_key(page) {
+	return `cam-map-offline-opt-in:${offline_namespace(page)}`;
+}
+
+function read_offline_opt_in(page) {
+	try {
+		return window.localStorage.getItem(offline_preference_key(page)) === "1";
+	} catch (_error) {
+		return false;
+	}
+}
+
+function write_offline_opt_in(page, enabled) {
+	try {
+		if (enabled) window.localStorage.setItem(offline_preference_key(page), "1");
+		else window.localStorage.removeItem(offline_preference_key(page));
+	} catch (_error) {
+		set_tool_status(page, __("Browser storage settings are unavailable."));
+	}
+}
+
+function offline_db() {
+	if (!window.indexedDB) return Promise.reject(new Error("IndexedDB is unavailable"));
+	if (!cam_offline_db_promise) {
+		cam_offline_db_promise = new Promise((resolve, reject) => {
+			const request = window.indexedDB.open(CAM_MAP_OFFLINE_DB, 1);
+			request.onupgradeneeded = () => {
+				for (const store of CAM_MAP_OFFLINE_STORES) {
+					if (!request.result.objectStoreNames.contains(store)) request.result.createObjectStore(store, { keyPath: "key" });
+				}
+			};
+			request.onsuccess = () => {
+				const database = request.result;
+				database.onversionchange = () => {
+					database.close();
+					cam_offline_db_promise = null;
+				};
+				resolve(database);
+			};
+			request.onerror = () => {
+				cam_offline_db_promise = null;
+				reject(request.error || new Error("Could not open offline storage"));
+			};
+			request.onblocked = () => {
+				cam_offline_db_promise = null;
+				reject(new Error("Offline storage upgrade is blocked by another open tab"));
+			};
+		});
+	}
+	return cam_offline_db_promise;
+}
+
+function offline_get(store_name, key) {
+	return offline_db().then((db) => new Promise((resolve, reject) => {
+		const request = db.transaction(store_name, "readonly").objectStore(store_name).get(key);
+		request.onsuccess = () => resolve(request.result || null);
+		request.onerror = () => reject(request.error || new Error("Offline read failed"));
+	}));
+}
+
+function offline_put(store_name, record) {
+	return offline_db().then((db) => new Promise((resolve, reject) => {
+		const transaction = db.transaction(store_name, "readwrite");
+		transaction.objectStore(store_name).put(record);
+		transaction.oncomplete = () => resolve();
+		transaction.onerror = () => reject(transaction.error || new Error("Offline write failed"));
+		transaction.onabort = () => reject(transaction.error || new Error("Offline write aborted"));
+	}));
+}
+
+function offline_prune(store_name, namespace, keep, limit) {
+	return offline_db().then((db) => new Promise((resolve, reject) => {
+		const transaction = db.transaction(store_name, "readwrite");
+		const store = transaction.objectStore(store_name);
+		const request = store.getAll();
+		request.onsuccess = () => {
+			const rows = request.result.filter((row) => row.namespace === namespace).sort((a, b) => b.savedAt - a.savedAt);
+			let total = 0;
+			rows.forEach((row, index) => {
+				total += row.size || 0;
+				if (index >= keep || total > limit) store.delete(row.key);
+			});
+		};
+		request.onerror = () => reject(request.error || new Error("Offline cache cleanup failed"));
+		transaction.oncomplete = resolve;
+		transaction.onerror = () => reject(transaction.error || new Error("Offline cache cleanup failed"));
+	}));
+}
+
+function offline_clear_namespace(page) {
+	return offline_db().then((db) => new Promise((resolve, reject) => {
+		const namespace = offline_namespace(page);
+		const transaction = db.transaction(CAM_MAP_OFFLINE_STORES, "readwrite");
+		for (const store_name of CAM_MAP_OFFLINE_STORES) {
+			const store = transaction.objectStore(store_name);
+			const request = store.getAll();
+			request.onsuccess = () => request.result
+				.filter((row) => row.namespace === namespace)
+				.forEach((row) => store.delete(row.key));
+		}
+		transaction.oncomplete = resolve;
+		transaction.onerror = () => reject(transaction.error || new Error("Offline cache cleanup failed"));
+	}));
+}
+
+async function clear_offline_namespace(page) {
+	try {
+		await offline_clear_namespace(page);
+		for (const url of page.cam_object_urls || []) URL.revokeObjectURL(url);
+		page.cam_object_urls = [];
+	} catch (_error) {
+		set_tool_status(page, __("Could not clear browser offline storage."));
+	}
+}
+
+function stable_cache_signature(value) {
+	if (Array.isArray(value)) return `[${value.map(stable_cache_signature).join(",")}]`;
+	if (value && typeof value === "object") {
+		return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${stable_cache_signature(value[key])}`).join(",")}}`;
+	}
+	return JSON.stringify(value);
+}
+
+function cache_map_snapshot(page, args, data) {
+	if (!page.cam_offline_enabled) return;
+	try {
+		const serialized = JSON.stringify(data);
+		if (serialized.length > CAM_MAP_OFFLINE_PAYLOAD_LIMIT) {
+			set_offline_status(page, __("Current map snapshot is too large to save offline."));
+			return;
+		}
+		const namespace = offline_namespace(page);
+		const key = `${namespace}|snapshot|${stable_cache_signature(args)}`;
+		offline_put("snapshots", { key, namespace, signature: stable_cache_signature(args), args, data, savedAt: Date.now(), size: serialized.length })
+			.then(() => offline_prune("snapshots", namespace, CAM_MAP_OFFLINE_SNAPSHOT_LIMIT, CAM_MAP_OFFLINE_PAYLOAD_LIMIT * 2))
+			.catch(() => set_offline_status(page, __("Offline snapshot could not be saved; check browser storage.")));
+	} catch (_error) {
+		set_offline_status(page, __("Offline snapshot could not be saved."));
+	}
+}
+
+async function read_map_snapshot(page, args) {
+	if (!page.cam_offline_enabled) return null;
+	try {
+		return await offline_get("snapshots", `${offline_namespace(page)}|snapshot|${stable_cache_signature(args)}`);
+	} catch (_error) {
+		return null;
+	}
+}
+
+async function offline_get_details(page) {
+	try {
+		const db = await offline_db();
+		return await new Promise((resolve, reject) => {
+			const request = db.transaction("details", "readonly").objectStore("details").getAll();
+			request.onsuccess = () => resolve(request.result
+				.filter((row) => row.namespace === offline_namespace(page))
+				.sort((left, right) => right.savedAt - left.savedAt));
+			request.onerror = () => reject(request.error || new Error("Could not read saved popup details"));
+		});
+	} catch (_error) {
+		return [];
+	}
+}
+
+async function show_cached_popup_details(page) {
+	if (!page.cam_offline_enabled) return;
+	const saved = await offline_get_details(page);
+	const cameras = saved.filter((row) => row.kind === "camera").map((row) => row.record);
+	const movements = saved.filter((row) => row.kind === "event").map((row) => row.record);
+	if (!cameras.length && !movements.length) {
+		set_offline_status(page, __("No popup details have been saved on this browser profile."));
+		return;
+	}
+	page.cam_using_saved_details = true;
+	page.cam_map_request_id = (page.cam_map_request_id || 0) + 1;
+	page.cam_inflight_signature = null;
+	page.cam_last_request_signature = null;
+	const data = { cameras, movements };
+	render_map_payload(page, data, { offline: true, savedAt: saved[0]?.savedAt || null });
+	update_filter_note(page);
+	set_offline_status(page, __("Showing previously viewed popup details only; these records are saved and may be stale."));
+}
+
+function cache_viewed_detail(page, kind, record) {
+	if (!page.cam_offline_enabled || !record) return;
+	const namespace = offline_namespace(page);
+	const key = `${namespace}|${kind}|${record.name}`;
+	offline_put("details", { key, namespace, kind, record, savedAt: Date.now(), size: JSON.stringify(record).length })
+		.then(() => offline_prune("details", namespace, 80, CAM_MAP_OFFLINE_PAYLOAD_LIMIT))
+		.catch(() => set_offline_status(page, __("Viewed detail could not be saved for offline use.")));
+}
+
+function set_offline_status(page, override) {
+	const status = page.main?.get(0)?.querySelector(".cam-map-offline-status");
+	if (!status) return;
+	status.textContent = override || (page.cam_offline_enabled
+		? (navigator.onLine
+			? __("Offline saving is enabled for this user on this browser profile.")
+			: __("Offline: showing only previously saved map details and images."))
+		: __("Offline saving is off; viewed imagery and details are not stored on this device."));
+}
+
+function show_image_unavailable(image, page) {
+	const unavailable = node("span", image.classList.contains("cam-pin-image") || image.classList.contains("cam-movement-image")
+		? `${image.className} cam-image-unavailable`
+		: `${image.className} cam-image-unavailable`,
+		navigator.onLine ? __("Image unavailable") : __("Not saved for offline use"));
+	unavailable.setAttribute("role", "img");
+	unavailable.setAttribute("aria-label", unavailable.textContent);
+	unavailable.title = unavailable.textContent;
+	image.replaceWith(unavailable);
+	if (page) set_offline_status(page);
+}
+
+function enqueue_image_task(page, task) {
+	page.cam_image_queue = page.cam_image_queue || [];
+	page.cam_image_active = page.cam_image_active || 0;
+	page.cam_image_queue.push(task);
+	const drain = () => {
+		while (page.cam_image_active < 6 && page.cam_image_queue.length) {
+			const next = page.cam_image_queue.shift();
+			page.cam_image_active += 1;
+			Promise.resolve().then(next).catch(() => {}).finally(() => {
+				page.cam_image_active -= 1;
+				drain();
+			});
+		}
+	};
+	drain();
+}
+
+function set_image_source(image, url, page) {
+	const token = (image.cam_load_token || 0) + 1;
+	const generation = page.cam_image_generation || 0;
+	image.cam_load_token = token;
+	const applyBlob = (blob) => {
+		if (image.cam_load_token !== token || page.cam_image_generation !== generation) return;
+		const objectUrl = URL.createObjectURL(blob);
+		page.cam_object_urls = page.cam_object_urls || [];
+		page.cam_object_urls.push(objectUrl);
+		image.src = objectUrl;
+	};
+	if (!page.cam_offline_enabled) {
+		if (!navigator.onLine) return show_image_unavailable(image, page);
+		image.onerror = () => show_image_unavailable(image, page);
+		image.src = url;
+		return;
+	}
+	const imageKey = `${offline_namespace(page)}|image|${url}`;
+	const loadCached = async () => {
+		try {
+			const cached = await offline_get("images", imageKey);
+			if (cached?.blob) {
+				applyBlob(cached.blob);
+				return true;
+			}
+		} catch (_error) {
+			// Continue to the network path while online.
+		}
+		return false;
+	};
+	if (!navigator.onLine) {
+		loadCached().then((found) => { if (!found) show_image_unavailable(image, page); });
+		return;
+	}
+	enqueue_image_task(page, async () => {
+		if (!page.cam_offline_enabled) {
+			image.onerror = () => show_image_unavailable(image, page);
+			image.src = url;
+			return;
+		}
+		try {
+			const response = await fetch(url, { credentials: "same-origin", cache: "default" });
+			if (!response.ok || !(response.headers.get("content-type") || "").toLowerCase().startsWith("image/")) {
+				throw new Error("Image request failed");
+			}
+			const blob = await response.blob();
+			if (image.cam_load_token !== token || page.cam_image_generation !== generation) return;
+			applyBlob(blob);
+			if (blob.size <= CAM_MAP_OFFLINE_IMAGE_LIMIT) {
+				const namespace = offline_namespace(page);
+				offline_put("images", { key: imageKey, namespace, url, blob, savedAt: Date.now(), size: blob.size })
+					.then(() => offline_prune("images", namespace, 80, CAM_MAP_OFFLINE_PAYLOAD_LIMIT * 3))
+					.catch(() => {});
+			}
+		} catch (_error) {
+			if (!(await loadCached())) show_image_unavailable(image, page);
+		}
+	});
 }
 
 function tile_template(layer, variant, context) {
@@ -388,6 +787,26 @@ function set_tile_status(page, message) {
 	if (page.cam_tile_status && page.cam_tile_status.textContent !== message) {
 		page.cam_tile_status.textContent = message;
 	}
+}
+
+function update_tile_telemetry(page) {
+	if (!page.cam_tile_telemetry || !page.cam_map) return;
+	const layerId = page.cam_selected_tile_layer || page.main.get(0).querySelector(".cam-map-layer")?.value || "—";
+	const config = page.cam_tile_config?.[layerId];
+	const zoom = page.cam_map.getZoom();
+	const nativeZoom = config?.maxZoom;
+	const minNativeZoom = config?.minZoom;
+	const zoomCue = Number.isFinite(nativeZoom) && Number.isFinite(minNativeZoom)
+		? (zoom > nativeZoom
+			? __("upscaled beyond native zoom {0}", [nativeZoom])
+			: __("native zoom range {0}–{1}", [minNativeZoom, nativeZoom]))
+		: __("native zoom limits unavailable");
+	const overlay = page.cam_overlay && page.cam_map.hasLayer(page.cam_overlay) ? __("overlay on") : __("overlay off");
+	const sourceMode = page.cam_tile_fetch_enabled
+		? __("shared cache plus configured provider")
+		: __("shared server cache only");
+	const layerName = config?.label || __("shared Siraj cache/provider");
+	page.cam_tile_telemetry.textContent = `${layerName} · ${__("tile source")}: ${sourceMode} · z${zoom} · ${zoomCue} · ${overlay}`;
 }
 
 function set_country_visibility(page, visible) {
@@ -425,9 +844,11 @@ async function load_tile_config(page) {
 		const layers = Array.isArray(config.layers) ? config.layers : [];
 		if (!layers.length) {
 			set_tile_status(page, __("No enabled Siraj raster layers are available; cached camera markers remain visible."));
+			update_tile_telemetry(page);
 			return;
 		}
 		page.cam_tile_config = Object.fromEntries(layers.map((layer) => [layer.id, layer]));
+		page.cam_tile_fetch_enabled = Boolean(config.fetch_enabled);
 		const select = page.main.get(0).querySelector(".cam-map-layer");
 		const current = select.value;
 		select.replaceChildren(...layers.map((layer) => {
@@ -445,6 +866,7 @@ async function load_tile_config(page) {
 		set_basemap(page);
 	} catch (error) {
 		set_tile_status(page, __("Tile settings could not be loaded; cached map tiles may still be available."));
+		update_tile_telemetry(page);
 	}
 }
 
@@ -480,17 +902,19 @@ function set_basemap(page) {
 	if (page.cam_overlay && map.hasLayer(page.cam_overlay)) map.removeLayer(page.cam_overlay);
 	const base = page.cam_base_layers[selected] || bind_tile_status(page, leaflet.tileLayer(
 		tile_template(selected, "base", page.cam_map_context),
-		{ minZoom: config.minZoom, maxZoom: config.maxZoom, attribution: config.attribution, crossOrigin: false }
+		{ minZoom: config.minZoom, maxNativeZoom: config.maxZoom, maxZoom: 22, attribution: config.attribution, crossOrigin: false }
 	));
 	page.cam_base_layers[selected] = base;
 	base.addTo(map);
+	page.cam_selected_tile_layer = selected;
 	if (selected === "hybrid" && config.overlay !== false) {
 		page.cam_overlay = page.cam_overlay || bind_tile_status(page, leaflet.tileLayer(
 			tile_template("hybrid", "overlay", page.cam_map_context),
-			{ minZoom: config.minZoom, maxZoom: config.maxZoom, attribution: config.attribution, opacity: 1 }
+			{ minZoom: config.minZoom, maxNativeZoom: config.maxZoom, maxZoom: 22, attribution: config.attribution, opacity: 1 }
 		));
 		page.cam_overlay.addTo(map);
 	}
+	update_tile_telemetry(page);
 }
 
 function set_tool_status(page, message) {
@@ -516,6 +940,7 @@ function start_map_measurement(page, mode) {
 
 function handle_map_click(page, latlng) {
 	page.cam_last_coordinate = latlng;
+	page.cam_last_coordinate_text = `${String(latlng.lat)}, ${String(latlng.lng)}`;
 	page.main.get(0).querySelector(".cam-map-copy-coords").disabled = false;
 	if (!page.cam_tool_mode) return;
 	page.cam_measure_points.push(latlng);
@@ -598,15 +1023,16 @@ function clear_map_tools(page) {
 
 function update_coordinate_readout(page, latlng) {
 	page.cam_last_coordinate = latlng;
+	page.cam_last_coordinate_text = `${String(latlng.lat)}, ${String(latlng.lng)}`;
 	page.main.get(0).querySelector(".cam-map-copy-coords").disabled = false;
 	if (!page.cam_tool_mode) {
-		set_tool_status(page, `${latlng.lat.toFixed(6)}, ${latlng.lng.toFixed(6)} · ${__("click to copy")}`);
+		set_tool_status(page, `${page.cam_last_coordinate_text} · ${__("click to copy")}`);
 	}
 }
 
 async function copy_map_coordinates(page) {
 	if (!page.cam_last_coordinate) return;
-	const value = `${page.cam_last_coordinate.lat.toFixed(6)}, ${page.cam_last_coordinate.lng.toFixed(6)}`;
+	const value = page.cam_last_coordinate_text || `${String(page.cam_last_coordinate.lat)}, ${String(page.cam_last_coordinate.lng)}`;
 	try {
 		await navigator.clipboard.writeText(value);
 		set_tool_status(page, __("Copied coordinates: {0}", [value]));
@@ -738,17 +1164,27 @@ function render_movement_slice(page) {
 	const tracks = new Map();
 	for (const movement of rows) {
 		const point = [Number(movement.latitude), Number(movement.longitude)];
-		const marker = page.cam_leaflet.marker(point, { icon: vehicle_icon(movement, page.cam_leaflet), zIndexOffset: 500 });
+		const marker = page.cam_leaflet.marker(point, { icon: vehicle_icon(movement, page.cam_leaflet, page), zIndexOffset: 500 });
 		marker.cam_record_name = movement.name;
-		marker.bindPopup(movement_popup(movement), { maxWidth: 300 });
+		marker.bindPopup(movement_popup(movement, page), { maxWidth: 300 });
+		marker.on("popupopen", () => cache_viewed_detail(page, "event", movement));
 		page.cam_event_markers.addLayer(marker);
 		const key = movement.vehicle || `unassigned:${movement.camera}`;
-		if (!tracks.has(key)) tracks.set(key, []);
-		tracks.get(key).push(point);
+		if (!tracks.has(key)) tracks.set(key, { points: [], latest: movement });
+		tracks.get(key).points.push(point);
+		tracks.get(key).latest = movement;
 		add_movement_card(page, movement);
 	}
-	for (const points of tracks.values()) {
-		if (points.length > 1) page.cam_leaflet.polyline(points, { color: "#f97316", weight: 3, opacity: 0.65 }).addTo(page.cam_tracks);
+	for (const track of tracks.values()) {
+		if (track.points.length > 1) {
+			page.cam_leaflet.polyline(track.points, { color: "#f97316", weight: 3, opacity: 0.65 }).addTo(page.cam_tracks);
+		}
+		const endpoint = page.cam_leaflet.marker(track.points[track.points.length - 1], {
+			icon: vehicle_icon(track.latest, page.cam_leaflet, page),
+			zIndexOffset: 450,
+			interactive: false,
+		}).addTo(page.cam_tracks);
+		endpoint.getElement()?.setAttribute("aria-label", __("Latest position for {0}", [track.latest.vehicle_name || __("unidentified vehicle")]));
 	}
 	page.main.get(0).querySelector(".cam-map-time-label").textContent = rows.length
 		? `${rows.length} / ${page.cam_movement_data.length} ${__("events")} · ${rows[rows.length - 1].detected_at}`
@@ -788,54 +1224,105 @@ function node(tag, class_name, text) {
 	return element;
 }
 
-function image_node(url, alt, class_name) {
+function image_node(url, alt, class_name, page) {
 	if (!url || !/^\/(?:private\/)?files\//.test(url)) return null;
 	const image = node("img", class_name);
-	image.src = url;
 	image.alt = alt || "";
 	image.loading = "lazy";
 	image.referrerPolicy = "same-origin";
+	if (page) set_image_source(image, url, page);
+	else image.src = url;
 	return image;
 }
 
-function camera_icon(camera, leaflet) {
-	const shell = node("div", `cam-pin cam-camera-pin${camera.is_demo_record ? " cam-pin-demo" : ""}`);
-	const primary = camera.photos.find((photo) => photo.primary) || camera.photos[0];
-	const photo = primary && image_node(primary.url, camera.label, "cam-pin-image");
+function camera_icon(camera, leaflet, page, selected = false) {
+	const status = ["Active", "Inactive", "Maintenance"].includes(camera.status) ? camera.status.toLowerCase() : "unknown";
+	const shell = node("div", `cam-pin cam-camera-pin cam-camera-status-${status}${selected ? " cam-pin-selected" : ""}${camera.is_demo_record ? " cam-pin-demo" : ""}`);
+	shell.setAttribute("aria-label", `${camera.label} · ${camera.status || __("Unknown status")}`);
+	const primary = camera.photos.find((photo) => photo.primary && photo.url)
+		|| camera.photos.find((photo) => photo.url)
+		|| camera.photos.find((photo) => photo.primary)
+		|| camera.photos[0];
+	const photo = primary?.url && image_node(primary.url, camera.label, "cam-pin-image", page);
 	if (photo) shell.append(photo);
-	else shell.append(node("span", "cam-pin-fallback", "◉"));
+	else {
+		const fallback = node("span", "cam-pin-fallback", camera.photos.length ? "▧" : "◉");
+		if (camera.photos.length) fallback.title = __("Camera images are unavailable");
+		shell.append(fallback);
+	}
 	if (camera.photos.length > 1) shell.append(node("span", "cam-pin-count", camera.photos.length));
 	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [48, 62], iconAnchor: [24, 62], popupAnchor: [0, -58] });
 }
 
-function vehicle_icon(movement, leaflet) {
+function select_camera_marker(page, marker) {
+	const previous = page.cam_selected_camera_marker?.getElement()?.querySelector(".cam-camera-pin");
+	if (previous) previous.classList.remove("cam-pin-selected");
+	page.cam_selected_camera_marker = marker;
+	const selected = marker.getElement()?.querySelector(".cam-camera-pin");
+	if (selected) selected.classList.add("cam-pin-selected");
+	const camera = page.cam_current_map_data?.cameras?.find((row) => row.name === marker.cam_record_name);
+	if (camera) {
+		page.cam_last_coordinate_text = `${camera.latitude}, ${camera.longitude}`;
+		page.cam_last_coordinate = page.cam_leaflet.latLng(Number(camera.latitude), Number(camera.longitude));
+		const copy = page.main.get(0).querySelector(".cam-map-copy-coords");
+		if (copy) copy.disabled = false;
+		set_tool_status(page, __("Selected camera coordinates: {0}, {1}", [camera.latitude, camera.longitude]));
+	}
+}
+
+function vehicle_icon(movement, leaflet, page) {
 	const shell = node("div", "cam-pin cam-vehicle-pin");
-	const image = image_node(movement.vehicle_image, movement.vehicle_name, "cam-pin-image");
+	const image = image_node(movement.vehicle_image, movement.vehicle_name, "cam-pin-image", page);
 	if (image) shell.append(image);
 	else shell.append(node("span", "cam-pin-fallback", "🚘"));
 	return leaflet.divIcon({ className: "cam-leaflet-icon", html: shell, iconSize: [44, 44], iconAnchor: [22, 22], popupAnchor: [0, -22] });
 }
 
-function camera_popup(camera) {
+function add_popup_detail(root, label, value) {
+	if (value === undefined || value === null || value === "") return;
+	const row = node("div", "cam-popup-detail");
+	row.append(node("dt", "", __(label)), node("dd", "", value));
+	root.append(row);
+}
+
+function add_record_link(container, label, doctype, name, primary = false) {
+	if (!name) return;
+	const button = node("button", `btn btn-xs ${primary ? "btn-primary" : "btn-default"}`, __(label));
+	button.type = "button";
+	button.addEventListener("click", () => frappe.set_route("Form", doctype, name));
+	container.append(button);
+}
+
+function camera_popup(camera, page, movements) {
 	const root = node("div", "cam-map-popup");
 	root.append(node("h4", "", camera.label));
 	if (camera.is_demo_record) root.append(node("span", "cam-demo-badge", __("SYNTHETIC DEMO DATA")));
-	if (camera.address) root.append(node("p", "cam-popup-address", camera.address));
-	root.append(node("p", "cam-popup-meta", [camera.camera_type, camera.area].filter(Boolean).join(" · ") || __("Camera")));
+	const status = node("span", `cam-camera-status-badge cam-camera-status-${String(camera.status || "unknown").toLowerCase()}`, __(camera.status || "Unknown status"));
+	root.append(status);
+	const details = node("dl", "cam-popup-details");
+	for (const [label, value] of [
+		["Camera type", camera.camera_type], ["Importance", camera.importance], ["Area", camera.area],
+		["Serial number", camera.serial_number], ["Camera number", camera.camera_number],
+		["Installation date", camera.installation_date], ["Address", camera.address],
+		["Latitude (exact)", camera.latitude], ["Longitude (exact)", camera.longitude],
+		["Geographic area", camera.geo_admin_area], ["Boundary", camera.geo_boundary],
+		["Field of view", camera.field_of_view], ["Description", camera.description],
+		["Lookup source", camera.lookup_source], ["Lookup confidence", camera.lookup_confidence],
+		["Lookup ambiguous", camera.lookup_ambiguous ? __("Yes") : __("No")], ["Lookup resolved at", camera.lookup_resolved_at],
+	]) add_popup_detail(details, label, value);
+	root.append(details);
 	if (camera.photos.length) {
 		let index = Math.max(0, camera.photos.findIndex((photo) => photo.primary));
 		const frame = node("div", "cam-gallery-frame");
-		const photo = node("img", "cam-gallery-image");
-		photo.alt = camera.label;
 		const caption = node("div", "cam-gallery-caption");
 		const count = node("span", "cam-gallery-count");
 		const update = () => {
 			const current = camera.photos[index];
-			photo.src = current.url;
+			const image = current.url ? image_node(current.url, camera.label, "cam-gallery-image", page) : null;
+			frame.replaceChildren(image || node("span", "cam-image-unavailable", __("Image unavailable")));
 			caption.textContent = current.caption || current.description || "";
 			count.textContent = `${index + 1} / ${camera.photos.length}`;
 		};
-		frame.append(photo);
 		if (camera.photos.length > 1) {
 			const controls = node("div", "cam-gallery-controls");
 			const previous = node("button", "btn btn-xs btn-default", "‹");
@@ -853,33 +1340,55 @@ function camera_popup(camera) {
 		update();
 	}
 	const actions = node("div", "cam-popup-actions");
-	const open = node("button", "btn btn-xs btn-primary", __("Open camera"));
-	open.type = "button";
-	open.addEventListener("click", () => frappe.set_route("Form", "Camera", camera.name));
-	actions.append(open);
+	add_record_link(actions, "Open camera", "Camera", camera.name, true);
+	add_record_link(actions, "Camera type", "Camera Type", camera.camera_type);
+	add_record_link(actions, "Open area", "Camera Area", camera.area);
+	add_record_link(actions, "Geographic area", "Geo Admin Area", camera.geo_admin_area);
+	add_record_link(actions, "Boundary", "Geo Boundary", camera.geo_boundary);
+	const relatedEvents = (movements || []).filter((row) => row.camera === camera.name).slice(-5).reverse();
+	const events = node("div", "cam-popup-related");
+	if (relatedEvents.length) {
+		events.append(node("strong", "", __("Recent motion events")));
+		for (const movement of relatedEvents) add_record_link(events, `${movement.motion_type} · ${movement.detected_at}`, "Motion Event", movement.name);
+	}
+	const allEvents = node("button", "btn btn-xs btn-default", __("View all camera events"));
+	allEvents.type = "button";
+	allEvents.addEventListener("click", () => {
+		frappe.route_options = Object.assign({}, frappe.route_options || {}, { camera: camera.name });
+		frappe.set_route("List", "Motion Event");
+	});
+	events.append(allEvents);
+	actions.append(events);
 	root.append(actions);
 	return root;
 }
 
-function movement_popup(movement) {
+function movement_popup(movement, page) {
 	const root = node("div", "cam-map-popup");
+	const vehicleImage = image_node(movement.vehicle_image, movement.vehicle_name, "cam-vehicle-preview", page);
+	root.append(vehicleImage || node("span", "cam-vehicle-preview-fallback cam-popup-vehicle-fallback", "🚘"));
 	root.append(node("h4", "", movement.vehicle_name || __("Unidentified vehicle")));
 	if (movement.is_demo_record) root.append(node("span", "cam-demo-badge", __("SYNTHETIC DEMO DATA")));
-	root.append(node("p", "cam-popup-meta", `${movement.motion_type} · ${movement.detected_at}`));
-	if (movement.vehicle_number) root.append(node("p", "", `${__("Vehicle number")}: ${movement.vehicle_number}`));
-	if (movement.address) root.append(node("p", "cam-popup-address", movement.address));
-	if (movement.notes) root.append(node("p", "", movement.notes));
-	const open = node("button", "btn btn-xs btn-primary", __("Open motion event"));
-	open.type = "button";
-	open.addEventListener("click", () => frappe.set_route("Form", "Motion Event", movement.name));
-	root.append(open);
+	const details = node("dl", "cam-popup-details");
+	for (const [label, value] of [
+		["Movement type", movement.motion_type], ["Detected at", movement.detected_at],
+		["Vehicle number", movement.vehicle_number], ["Vehicle type", movement.vehicle_type],
+		["Coordinate latitude snapshot", movement.latitude], ["Coordinate longitude snapshot", movement.longitude],
+		["Address snapshot", movement.address], ["Importance", movement.importance], ["Notes", movement.notes],
+	]) add_popup_detail(details, label, value);
+	root.append(details);
+	const actions = node("div", "cam-popup-actions");
+	add_record_link(actions, "Open motion event", "Motion Event", movement.name, true);
+	add_record_link(actions, "Open camera", "Camera", movement.camera);
+	add_record_link(actions, "Open vehicle", "CAM Vehicle", movement.vehicle);
+	root.append(actions);
 	return root;
 }
 
 function add_movement_card(page, movement) {
 	const card = node("button", "cam-movement-card");
 	card.type = "button";
-	const image = image_node(movement.vehicle_image, movement.vehicle_name, "cam-movement-image");
+	const image = image_node(movement.vehicle_image, movement.vehicle_name, "cam-movement-image", page);
 	card.append(image || node("span", "cam-movement-image cam-vehicle-preview-fallback", "🚘"));
 	const text = node("span", "cam-movement-text");
 	text.append(node("strong", "", movement.vehicle_name || __("Unidentified vehicle")));
@@ -894,21 +1403,74 @@ function add_movement_card(page, movement) {
 	page.main.find(".cam-map-movement-list").append(card);
 }
 
-async function load_map(page) {
+function render_map_payload(page, data, { offline = false, savedAt = null, fit = true } = {}) {
+	page.cam_image_generation = (page.cam_image_generation || 0) + 1;
+	for (const url of page.cam_object_urls || []) URL.revokeObjectURL(url);
+	page.cam_object_urls = [];
 	const leaflet = page.cam_leaflet;
-	const request_id = (page.cam_map_request_id || 0) + 1;
-	page.cam_map_request_id = request_id;
-	read_filter_controls(page);
-	update_filter_note(page);
-	set_basemap(page);
+	const host = page.main.get(0);
+	const summary = host.querySelector(".cam-map-summary");
 	page.cam_camera_markers.clearLayers();
 	page.cam_event_markers.clearLayers();
 	page.cam_tracks.clearLayers();
+	host.querySelector(".cam-map-movement-list").replaceChildren();
+	page.cam_current_map_data = data;
+	page.cam_movement_data = (data.movements || []).slice().sort((left, right) =>
+		String(left.detected_at).localeCompare(String(right.detected_at)) || String(left.name).localeCompare(String(right.name))
+	);
+	const positions = [];
+	for (const camera of data.cameras || []) {
+		const marker = leaflet.marker([Number(camera.latitude), Number(camera.longitude)], { icon: camera_icon(camera, leaflet, page) });
+		marker.cam_record_name = camera.name;
+		marker.on("click", () => select_camera_marker(page, marker));
+		marker.bindPopup(camera_popup(camera, page, page.cam_movement_data), { maxWidth: 340, minWidth: 240 });
+		marker.on("popupopen", () => {
+			select_camera_marker(page, marker);
+			cache_viewed_detail(page, "camera", camera);
+		});
+		page.cam_camera_markers.addLayer(marker);
+		positions.push([Number(camera.latitude), Number(camera.longitude)]);
+	}
+	page.cam_camera_count = (data.cameras || []).length;
+	render_map_insights(page, data.cameras || [], page.cam_movement_data);
+	const slider = host.querySelector(".cam-map-time");
+	const play = host.querySelector(".cam-map-play");
+	slider.min = "0";
+	slider.max = String(page.cam_movement_data.length);
+	slider.value = String(page.cam_movement_data.length);
+	slider.disabled = !page.cam_movement_data.length;
+	play.disabled = !page.cam_movement_data.length;
+	if (page.cam_playback_timer) {
+		clearInterval(page.cam_playback_timer);
+		page.cam_playback_timer = null;
+		play.textContent = "▶";
+		play.setAttribute("aria-label", __("Play movement timeline"));
+	}
+	for (const movement of page.cam_movement_data) positions.push([Number(movement.latitude), Number(movement.longitude)]);
+	render_movement_slice(page);
+	const baseSummary = __("{0} cameras · {1} vehicle movements", [(data.cameras || []).length, page.cam_movement_data.length]);
+	summary.textContent = offline
+		? `${navigator.onLine ? __("SAVED SNAPSHOT (not live)") : __("OFFLINE CACHED SNAPSHOT")} · ${savedAt ? new Date(savedAt).toLocaleString() : ""} · ${baseSummary}`
+		: baseSummary;
+	set_offline_status(page, offline
+		? (navigator.onLine
+			? __("Map service unavailable; showing saved data from {0}.", [savedAt ? new Date(savedAt).toLocaleString() : "—"])
+			: __("Offline: this saved snapshot is shown; imagery not saved in this browser is marked unavailable."))
+		: null);
+	if (fit) {
+		if (positions.length === 1) page.cam_map.setView(positions[0], 14);
+		else if (positions.length > 1) page.cam_map.fitBounds(leaflet.latLngBounds(positions).pad(0.12), { maxZoom: 14 });
+		else page.cam_map.setView([52.37, 4.90], 5);
+	}
+}
+
+async function load_map(page, { force = false } = {}) {
+	read_filter_controls(page);
+	page.cam_using_saved_details = false;
+	sync_page_route_to_controls(page);
+	update_filter_note(page);
+	set_basemap(page);
 	const host = page.main.get(0);
-	const summary = host.querySelector(".cam-map-summary");
-	const movementList = host.querySelector(".cam-map-movement-list");
-	movementList.replaceChildren();
-	summary.textContent = __("Loading cameras and movements…");
 	const args = {
 		camera: page.cam_map_options.camera || undefined,
 		vehicle: page.cam_map_options.vehicle || undefined,
@@ -919,45 +1481,47 @@ async function load_map(page) {
 		end: host.querySelector(".cam-map-to").value || undefined,
 		include_demo: host.querySelector(".cam-map-include-demo").checked ? 1 : 0
 	};
+	const signature = stable_cache_signature(args);
+	if (!force && signature === page.cam_last_request_signature && page.cam_current_map_data) return;
+	if (signature === page.cam_inflight_signature) return;
+	const request_id = (page.cam_map_request_id || 0) + 1;
+	page.cam_map_request_id = request_id;
+	page.cam_inflight_signature = signature;
+	host.querySelector(".cam-map-summary").textContent = __("Loading cameras and movements…");
 	try {
 		const response = await frappe.call({ method: "camera_archive_management.api.map.map_payload", args, type: "GET" });
 		if (request_id !== page.cam_map_request_id) return;
 		const data = response.message || { cameras: [], movements: [] };
-		const positions = [];
-		for (const camera of data.cameras || []) {
-			const marker = leaflet.marker([Number(camera.latitude), Number(camera.longitude)], { icon: camera_icon(camera, leaflet) });
-			marker.cam_record_name = camera.name;
-			marker.bindPopup(camera_popup(camera), { maxWidth: 320, minWidth: 220 });
-			page.cam_camera_markers.addLayer(marker);
-			positions.push([Number(camera.latitude), Number(camera.longitude)]);
-		}
-		page.cam_camera_count = (data.cameras || []).length;
-		page.cam_movement_data = (data.movements || []).slice().sort((left, right) =>
-			String(left.detected_at).localeCompare(String(right.detected_at)) || String(left.name).localeCompare(String(right.name))
-		);
-		render_map_insights(page, data.cameras || [], page.cam_movement_data);
-		const slider = host.querySelector(".cam-map-time");
-		const play = host.querySelector(".cam-map-play");
-		slider.min = "0";
-		slider.max = String(page.cam_movement_data.length);
-		slider.value = String(page.cam_movement_data.length);
-		slider.disabled = !page.cam_movement_data.length;
-		play.disabled = !page.cam_movement_data.length;
-		if (page.cam_playback_timer) {
-			clearInterval(page.cam_playback_timer);
-			page.cam_playback_timer = null;
-			play.textContent = "▶";
-			play.setAttribute("aria-label", __("Play movement timeline"));
-		}
-		for (const movement of page.cam_movement_data) positions.push([Number(movement.latitude), Number(movement.longitude)]);
-		render_movement_slice(page);
-		summary.textContent = __("{0} cameras · {1} vehicle movements", [data.cameras.length, page.cam_movement_data.length]);
-		if (positions.length === 1) page.cam_map.setView(positions[0], 14);
-		else if (positions.length > 1) page.cam_map.fitBounds(leaflet.latLngBounds(positions).pad(0.12), { maxZoom: 14 });
-		else page.cam_map.setView([52.37, 4.90], 5);
+		page.cam_last_request_signature = signature;
+		render_map_payload(page, data);
+		cache_map_snapshot(page, args, data);
 	} catch (error) {
 		if (request_id !== page.cam_map_request_id) return;
-		summary.textContent = __("Map data could not be loaded. Check Camera/Motion Event read permissions and the server logs.");
-		frappe.msgprint({ title: __("Camera map"), message: error.message || __("Request failed"), indicator: "red" });
+		const snapshot = await read_map_snapshot(page, args);
+		if (snapshot) {
+			if (!navigator.onLine) page.cam_last_request_signature = signature;
+			render_map_payload(page, snapshot.data, { offline: true, savedAt: snapshot.savedAt });
+		} else {
+			page.cam_camera_markers.clearLayers();
+			page.cam_event_markers.clearLayers();
+			page.cam_tracks.clearLayers();
+			host.querySelector(".cam-map-movement-list").replaceChildren();
+			page.cam_current_map_data = null;
+			page.cam_camera_count = 0;
+			page.cam_movement_data = [];
+			const slider = host.querySelector(".cam-map-time");
+			slider.max = "0";
+			slider.value = "0";
+			slider.disabled = true;
+			host.querySelector(".cam-map-play").disabled = true;
+			render_map_insights(page, [], []);
+			host.querySelector(".cam-map-summary").textContent = __("No exact matching offline snapshot is available; uncached cameras and events are not shown.");
+			set_offline_status(page, navigator.onLine
+				? __("Map request failed; no matching saved snapshot is available.")
+				: __("Offline: no matching saved snapshot. Uncached map records are unavailable."));
+			if (navigator.onLine) frappe.msgprint({ title: __("Camera map"), message: error.message || __("Request failed"), indicator: "red" });
+		}
+	} finally {
+		if (request_id === page.cam_map_request_id) page.cam_inflight_signature = null;
 	}
 }

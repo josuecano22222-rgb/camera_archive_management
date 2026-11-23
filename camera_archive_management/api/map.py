@@ -231,8 +231,10 @@ def map_payload(
 		"Camera",
 		filters=camera_filters,
 		fields=[
-			"name", "camera_name", "status", "camera_type", "area", "address", "latitude", "longitude",
-			"geo_admin_area", "geo_boundary", "camera_photos_json", "primary_image", "is_demo_record",
+			"name", "camera_name", "status", "camera_type", "importance", "area", "serial_number",
+			"camera_number", "installation_date", "address", "latitude", "longitude", "geo_admin_area",
+			"geo_boundary", "field_of_view", "description", "lookup_source", "lookup_confidence",
+			"lookup_ambiguous", "lookup_resolved_at", "camera_photos_json", "primary_image", "is_demo_record",
 		],
 		order_by="camera_name asc, name asc",
 		limit_page_length=MAX_CAMERAS,
@@ -307,14 +309,13 @@ def map_payload(
 		photos = []
 		for item in items:
 			photo_url = _clean_image_url(item["url"], file_map)
-			if not photo_url:
-				continue
 			photos.append(
 				{
 					"url": photo_url,
 					"caption": item.get("caption") or "",
 					"description": item.get("description") or "",
 					"primary": bool(item.get("is_primary")),
+					"unavailable": not bool(photo_url),
 				}
 			)
 		photos_by_camera[camera_name] = photos
@@ -333,12 +334,22 @@ def map_payload(
 			"status": row.status,
 			"is_demo_record": bool(row.is_demo_record),
 			"camera_type": row.camera_type,
+			"importance": row.importance or "",
 			"area": row.area,
+			"serial_number": row.serial_number or "",
+			"camera_number": row.camera_number or "",
+			"installation_date": str(row.installation_date) if row.installation_date else "",
 			"address": row.address or "",
 			"latitude": str(lat),
 			"longitude": str(lon),
 			"geo_admin_area": row.geo_admin_area,
 			"geo_boundary": row.geo_boundary,
+			"field_of_view": row.field_of_view or "",
+			"description": row.description or "",
+			"lookup_source": row.lookup_source or "",
+			"lookup_confidence": row.lookup_confidence,
+			"lookup_ambiguous": bool(row.lookup_ambiguous),
+			"lookup_resolved_at": str(row.lookup_resolved_at) if row.lookup_resolved_at else "",
 			"photos": photos_by_camera.get(row.name, []),
 		})
 

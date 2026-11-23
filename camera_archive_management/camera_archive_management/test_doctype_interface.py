@@ -88,6 +88,11 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 			"Measure distance", "Measure area", "Locate me", "Country borders", "cam-map-time", "include_demo",
 			"cam-map-activity-chart", "render_map_insights", "data-kpi-vehicles",
 			"cam-map-status", "cam-map-area", "camera_status", "has_page_route_options",
+			"CAM_MAP_OFFLINE_DB", "cache_map_snapshot", "cache_viewed_detail", "show_cached_popup_details",
+			"cam-map-save-offline", "cam-map-show-saved", "Not saved for offline use",
+			"maxNativeZoom", "update_tile_telemetry", "cam-map-tile-telemetry", "cam-camera-status-${status}",
+			"cam-pin-selected", "sync_page_route_to_controls", "Cameras in view", "Recent motion events",
+			"Coordinate latitude snapshot",
 		):
 			self.assertIn(feature, map_script_text)
 

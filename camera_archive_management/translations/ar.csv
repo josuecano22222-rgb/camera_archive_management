@@ -569,3 +569,101 @@ Camera status,حالة الكاميرا
 Active (default),نشطة (افتراضي)
 Camera Area ID,معرّف منطقة الكاميرا
 "Showing active cameras by default; no exact camera, vehicle, event, or area filter is active.",يتم عرض الكاميرات النشطة افتراضيًا؛ لا يوجد مرشح محدد للكاميرا أو المركبة أو الحدث أو المنطقة.
+Stores viewed map details and images in this browser profile until cleared.,تُحفظ تفاصيل الخريطة والصور التي تمت مشاهدتها في ملف المتصفح هذا حتى مسحها.
+Save viewed details and images offline,حفظ التفاصيل والصور التي تمت مشاهدتها للاستخدام دون اتصال
+Clear offline data,مسح البيانات المحفوظة دون اتصال
+Cameras in view,الكاميرات ضمن العرض
+Offline images and details cleared from this browser profile.,تم مسح الصور والتفاصيل المحفوظة دون اتصال من ملف المتصفح هذا.
+Browser storage settings are unavailable.,إعدادات تخزين المتصفح غير متاحة.
+Could not clear browser offline storage.,تعذر مسح التخزين دون اتصال في المتصفح.
+Offline snapshot could not be saved; check browser storage.,تعذر حفظ لقطة دون اتصال؛ تحقق من مساحة تخزين المتصفح.
+Offline snapshot could not be saved.,تعذر حفظ اللقطة دون اتصال.
+Viewed detail could not be saved for offline use.,تعذر حفظ التفاصيل المعروضة للاستخدام دون اتصال.
+Offline saving is enabled for this user on this browser profile.,تم تفعيل الحفظ دون اتصال لهذا المستخدم في ملف المتصفح هذا.
+Offline: showing only previously saved map details and images.,دون اتصال: تُعرض فقط تفاصيل الخريطة والصور المحفوظة مسبقًا.
+Offline saving is off; viewed imagery and details are not stored on this device.,الحفظ دون اتصال متوقف؛ لا تُخزن الصور والتفاصيل المعروضة على هذا الجهاز.
+Image unavailable,الصورة غير متاحة
+Not saved for offline use,لم تُحفظ للاستخدام دون اتصال
+native zoom limits unavailable,حدود التكبير الأصلية غير متاحة
+overlay on,الطبقة الإضافية مفعلة
+overlay off,الطبقة الإضافية متوقفة
+shared Siraj cache/provider,ذاكرة Siraj المشتركة أو مزود الخرائط
+upscaled beyond native zoom {0},تكبير مُحسّن رقميًا بعد مستوى التكبير الأصلي {0}
+native zoom up to {0},تكبير أصلي حتى المستوى {0}
+Unknown status,حالة غير معروفة
+Camera type,نوع الكاميرا
+Serial number,الرقم التسلسلي
+Camera number,رقم الكاميرا
+Installation date,تاريخ التركيب
+Latitude (exact),خط العرض (بدقة النص الأصلي)
+Longitude (exact),خط الطول (بدقة النص الأصلي)
+Geographic area,المنطقة الجغرافية
+Boundary,الحد الجغرافي
+Field of view,مجال الرؤية
+Lookup source,مصدر تحديد الموقع
+Lookup confidence,موثوقية تحديد الموقع
+Lookup ambiguous,تحديد الموقع ملتبس
+Lookup resolved at,وقت حسم تحديد الموقع
+Recent motion events,أحداث الحركة الأخيرة
+View all camera events,عرض جميع أحداث الكاميرا
+Movement type,نوع الحركة
+Detected at,وقت الرصد
+Vehicle type,نوع المركبة
+Coordinate latitude snapshot,لقطة خط العرض
+Coordinate longitude snapshot,لقطة خط الطول
+Address snapshot,لقطة العنوان
+"Selected camera coordinates: {0}, {1}",إحداثيات الكاميرا المحددة: {0}، {1}
+OFFLINE CACHED SNAPSHOT,لقطة مخزنة دون اتصال
+Offline: this saved snapshot is shown; imagery not saved in this browser is marked unavailable.,دون اتصال: تُعرض هذه اللقطة المحفوظة؛ وتُعلّم الصور غير المحفوظة في هذا المتصفح بأنها غير متاحة.
+No exact matching offline snapshot is available; uncached cameras and events are not shown.,لا تتوفر لقطة محفوظة تطابق هذه المرشحات تمامًا؛ ولن تُعرض الكاميرات والأحداث غير المخزنة.
+Map request failed; no matching saved snapshot is available.,تعذر طلب بيانات الخريطة ولا توجد لقطة محفوظة مطابقة.
+Offline: no matching saved snapshot. Uncached map records are unavailable.,دون اتصال: لا توجد لقطة محفوظة مطابقة. سجلات الخريطة غير المخزنة غير متاحة.
+"Stores the current filtered map snapshot, popup details and viewed images in this browser profile until cleared.",يُحفظ عرض الخريطة الحالي المصفّى وتفاصيل النوافذ المنبثقة والصور المعروضة في ملف المتصفح هذا حتى مسحها.
+"Save map snapshot, details and images offline",حفظ لقطة الخريطة والتفاصيل والصور دون اتصال
+tile source,مصدر الخرائط
+shared cache plus configured provider,الذاكرة المؤقتة المشتركة ومزود الخرائط المعتمد
+shared server cache only,الذاكرة المؤقتة المشتركة على الخادم فقط
+native zoom range {0}–{1},نطاق التكبير الأصلي من {0} إلى {1}
+Camera images are unavailable,صور الكاميرا غير متاحة
+Current map snapshot is too large to save offline.,لقطة الخريطة الحالية كبيرة جدًا لحفظها دون اتصال.
+Camera map,خريطة الكاميرات
+Camera Archive Map,خريطة أرشيف الكاميرات
+From,من
+To,إلى
+Camera ID,معرّف الكاميرا
+CAM Vehicle ID,معرّف مركبة CAM
+Motion Event ID,معرّف حدث الحركة
+Basemap,الخريطة الأساسية
+Hybrid,هجينة
+Apply filters,تطبيق عوامل التصفية
+Movement timeline,الخط الزمني للحركة
+Camera and vehicle movement map,خريطة حركة الكاميرات والمركبات
+Loading cameras and movements…,جارٍ تحميل الكاميرات والحركات…
+Map tiles use the shared Siraj server cache.,تستخدم مربعات الخريطة ذاكرة التخزين المؤقت المشتركة لخادم Siraj.
+Browser is online; missing tiles use the configured server provider when enabled.,المتصفح متصل؛ تُطلب المربعات المفقودة من مزود الخادم المضبوط عند تفعيله.
+Browser is offline; the Bench server must remain reachable to use cached tiles.,المتصفح غير متصل؛ يجب أن يظل خادم Bench متاحًا لاستخدام المربعات المخزنة.
+Event,الحدث
+Active filters,عوامل التصفية النشطة
+Country boundaries could not be loaded.,تعذر تحميل حدود البلدان.
+No enabled Siraj raster layers are available; cached camera markers remain visible.,لا تتوفر طبقات صور ممكّنة من Siraj؛ وتظل علامات الكاميرات المخزنة ظاهرة.
+Siraj online tile fetch and shared-cache writes are enabled.,تم تفعيل جلب المربعات عبر الإنترنت والكتابة إلى الذاكرة المشتركة في Siraj.
+Using the shared tile cache only; external fetching is disabled by settings.,تُستخدم ذاكرة المربعات المشتركة فقط؛ والجلب الخارجي معطّل في الإعدادات.
+Tile settings could not be loaded; cached map tiles may still be available.,تعذر تحميل إعدادات المربعات؛ وقد تظل المربعات المخزنة متاحة.
+Map tiles loaded from the shared server cache/provider.,تم تحميل مربعات الخريطة من ذاكرة الخادم المشتركة أو مزوده.
+A tile is missing or unavailable; cached tiles remain usable and upstream retries are throttled.,أحد المربعات مفقود أو غير متاح؛ تظل المربعات المخزنة قابلة للاستخدام وتُحدّ محاولات المصدر.
+unidentified vehicle,مركبة غير معرّفة
+Previous photo,الصورة السابقة
+Next photo,الصورة التالية
+Unidentified vehicle,مركبة غير معرّفة
+Request failed,فشل الطلب
+Date range,النطاق الزمني
+not restricted,غير مقيّد
+SAVED SNAPSHOT (not live),لقطة محفوظة (ليست مباشرة)
+Map service unavailable; showing saved data from {0}.,خدمة الخريطة غير متاحة؛ تُعرض البيانات المحفوظة من {0}.
+Show saved popup details,عرض تفاصيل النوافذ المنبثقة المحفوظة
+No popup details have been saved on this browser profile.,لم تُحفظ تفاصيل نوافذ منبثقة في ملف المتصفح هذا.
+Showing previously viewed popup details only; these records are saved and may be stale.,تُعرض تفاصيل النوافذ المنبثقة التي سبق عرضها فقط؛ هذه السجلات محفوظة وقد لا تكون محدثة.
+Current filters are bypassed: showing only previously viewed saved records.,تم تجاوز عوامل التصفية الحالية: تُعرض السجلات المحفوظة التي سبق عرضها فقط.
+Latest position for {0},الموقع الأحدث لـ {0}
+{0} cameras · {1} vehicle movements,{0} كاميرا · {1} حركة مركبة
+This browser does not provide persistent offline storage.,هذا المتصفح لا يوفر تخزينًا دائمًا للاستخدام دون اتصال.

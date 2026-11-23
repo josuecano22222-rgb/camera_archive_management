@@ -96,15 +96,25 @@ class TestMapEndpoint(FrappeTestCase):
 			camera_name="North Gate",
 			status="Active",
 			camera_type="PTZ",
+			importance="High",
 			area="North",
+			serial_number="SN-EXACT-1",
+			camera_number="CAM-01",
+			installation_date="2024-02-03",
 			address="",
-			latitude="52.37",
-			longitude="4.89",
+			latitude="52.370000000",
+			longitude="4.8900",
+			field_of_view="North entrance",
+			description="Exact precision test",
+			lookup_source="manual",
+			lookup_confidence=1.0,
+			lookup_ambiguous=0,
+			lookup_resolved_at=None,
 			geo_admin_area=None,
 			geo_boundary=None,
 			primary_image="/private/files/north-gate.jpg",
 			is_demo_record=0,
-			camera_photos_json='[{"url":"/private/files/north-gate.jpg","caption":"Main","description":"","is_primary":true,"sort_order":0}]',
+			camera_photos_json='[{"url":"/private/files/north-gate.jpg","caption":"Main","description":"","is_primary":true,"sort_order":0},{"url":"/files/missing-side-view.jpg","caption":"Side view","description":"Retained when offline or missing","is_primary":false,"sort_order":1}]',
 		)
 		file_doc = frappe._dict(
 			name="FILE-1", file_url=camera.primary_image, is_private=0
@@ -119,6 +129,13 @@ class TestMapEndpoint(FrappeTestCase):
 		self.assertEqual(result["cameras"][0]["photos"][0]["url"], camera.primary_image)
 		self.assertTrue(result["cameras"][0]["photos"][0]["primary"])
 		self.assertEqual(result["cameras"][0]["photos"][0]["caption"], "Main")
+		self.assertEqual(result["cameras"][0]["latitude"], "52.370000000")
+		self.assertEqual(result["cameras"][0]["longitude"], "4.8900")
+		self.assertEqual(result["cameras"][0]["serial_number"], "SN-EXACT-1")
+		self.assertEqual(result["cameras"][0]["field_of_view"], "North entrance")
+		self.assertEqual(len(result["cameras"][0]["photos"]), 2)
+		self.assertTrue(result["cameras"][0]["photos"][1]["unavailable"])
+		self.assertEqual(result["cameras"][0]["photos"][1]["caption"], "Side view")
 
 	def test_map_hides_synthetic_records_by_default_and_can_include_them_explicitly(self):
 		with (

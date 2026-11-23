@@ -569,3 +569,101 @@ Camera status,Camera status
 Active (default),Active (default)
 Camera Area ID,Camera Area ID
 "Showing active cameras by default; no exact camera, vehicle, event, or area filter is active.","Showing active cameras by default; no exact camera, vehicle, event, or area filter is active."
+Stores viewed map details and images in this browser profile until cleared.,Stores viewed map details and images in this browser profile until cleared.
+Save viewed details and images offline,Save viewed details and images offline
+Clear offline data,Clear offline data
+Cameras in view,Cameras in view
+Offline images and details cleared from this browser profile.,Offline images and details cleared from this browser profile.
+Browser storage settings are unavailable.,Browser storage settings are unavailable.
+Could not clear browser offline storage.,Could not clear browser offline storage.
+Offline snapshot could not be saved; check browser storage.,Offline snapshot could not be saved; check browser storage.
+Offline snapshot could not be saved.,Offline snapshot could not be saved.
+Viewed detail could not be saved for offline use.,Viewed detail could not be saved for offline use.
+Offline saving is enabled for this user on this browser profile.,Offline saving is enabled for this user on this browser profile.
+Offline: showing only previously saved map details and images.,Offline: showing only previously saved map details and images.
+Offline saving is off; viewed imagery and details are not stored on this device.,Offline saving is off; viewed imagery and details are not stored on this device.
+Image unavailable,Image unavailable
+Not saved for offline use,Not saved for offline use
+native zoom limits unavailable,native zoom limits unavailable
+overlay on,overlay on
+overlay off,overlay off
+shared Siraj cache/provider,shared Siraj cache/provider
+upscaled beyond native zoom {0},upscaled beyond native zoom {0}
+native zoom up to {0},native zoom up to {0}
+Unknown status,Unknown status
+Camera type,Camera type
+Serial number,Serial number
+Camera number,Camera number
+Installation date,Installation date
+Latitude (exact),Latitude (exact)
+Longitude (exact),Longitude (exact)
+Geographic area,Geographic area
+Boundary,Boundary
+Field of view,Field of view
+Lookup source,Lookup source
+Lookup confidence,Lookup confidence
+Lookup ambiguous,Lookup ambiguous
+Lookup resolved at,Lookup resolved at
+Recent motion events,Recent motion events
+View all camera events,View all camera events
+Movement type,Movement type
+Detected at,Detected at
+Vehicle type,Vehicle type
+Coordinate latitude snapshot,Coordinate latitude snapshot
+Coordinate longitude snapshot,Coordinate longitude snapshot
+Address snapshot,Address snapshot
+"Selected camera coordinates: {0}, {1}","Selected camera coordinates: {0}, {1}"
+OFFLINE CACHED SNAPSHOT,OFFLINE CACHED SNAPSHOT
+Offline: this saved snapshot is shown; imagery not saved in this browser is marked unavailable.,Offline: this saved snapshot is shown; imagery not saved in this browser is marked unavailable.
+No exact matching offline snapshot is available; uncached cameras and events are not shown.,No exact matching offline snapshot is available; uncached cameras and events are not shown.
+Map request failed; no matching saved snapshot is available.,Map request failed; no matching saved snapshot is available.
+Offline: no matching saved snapshot. Uncached map records are unavailable.,Offline: no matching saved snapshot. Uncached map records are unavailable.
+"Stores the current filtered map snapshot, popup details and viewed images in this browser profile until cleared.","Stores the current filtered map snapshot, popup details and viewed images in this browser profile until cleared."
+"Save map snapshot, details and images offline","Save map snapshot, details and images offline"
+tile source,tile source
+shared cache plus configured provider,shared cache plus configured provider
+shared server cache only,shared server cache only
+native zoom range {0}–{1},native zoom range {0}–{1}
+Camera images are unavailable,Camera images are unavailable
+Current map snapshot is too large to save offline.,Current map snapshot is too large to save offline.
+Camera map,Camera map
+Camera Archive Map,Camera Archive Map
+From,From
+To,To
+Camera ID,Camera ID
+CAM Vehicle ID,CAM Vehicle ID
+Motion Event ID,Motion Event ID
+Basemap,Basemap
+Hybrid,Hybrid
+Apply filters,Apply filters
+Movement timeline,Movement timeline
+Camera and vehicle movement map,Camera and vehicle movement map
+Loading cameras and movements…,Loading cameras and movements…
+Map tiles use the shared Siraj server cache.,Map tiles use the shared Siraj server cache.
+Browser is online; missing tiles use the configured server provider when enabled.,Browser is online; missing tiles use the configured server provider when enabled.
+Browser is offline; the Bench server must remain reachable to use cached tiles.,Browser is offline; the Bench server must remain reachable to use cached tiles.
+Event,Event
+Active filters,Active filters
+Country boundaries could not be loaded.,Country boundaries could not be loaded.
+No enabled Siraj raster layers are available; cached camera markers remain visible.,No enabled Siraj raster layers are available; cached camera markers remain visible.
+Siraj online tile fetch and shared-cache writes are enabled.,Siraj online tile fetch and shared-cache writes are enabled.
+Using the shared tile cache only; external fetching is disabled by settings.,Using the shared tile cache only; external fetching is disabled by settings.
+Tile settings could not be loaded; cached map tiles may still be available.,Tile settings could not be loaded; cached map tiles may still be available.
+Map tiles loaded from the shared server cache/provider.,Map tiles loaded from the shared server cache/provider.
+A tile is missing or unavailable; cached tiles remain usable and upstream retries are throttled.,A tile is missing or unavailable; cached tiles remain usable and upstream retries are throttled.
+unidentified vehicle,unidentified vehicle
+Previous photo,Previous photo
+Next photo,Next photo
+Unidentified vehicle,Unidentified vehicle
+Request failed,Request failed
+Date range,Date range
+not restricted,not restricted
+SAVED SNAPSHOT (not live),SAVED SNAPSHOT (not live)
+Map service unavailable; showing saved data from {0}.,Map service unavailable; showing saved data from {0}.
+Show saved popup details,Show saved popup details
+No popup details have been saved on this browser profile.,No popup details have been saved on this browser profile.
+Showing previously viewed popup details only; these records are saved and may be stale.,Showing previously viewed popup details only; these records are saved and may be stale.
+Current filters are bypassed: showing only previously viewed saved records.,Current filters are bypassed: showing only previously viewed saved records.
+Latest position for {0},Latest position for {0}
+{0} cameras · {1} vehicle movements,{0} cameras · {1} vehicle movements
+This browser does not provide persistent offline storage.,This browser does not provide persistent offline storage.
