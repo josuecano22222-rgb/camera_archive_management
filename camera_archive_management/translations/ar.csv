@@ -693,10 +693,16 @@ Location source,مصدر الموقع
 Location confidence,دقة الموقع
 Location ambiguous,التباس الموقع
 Resolved at,وقت تحديد الموقع
-Area & Address,المنطقة والعنوان
 Type & Endpoint,النوع ونقطة الاتصال
 Status & Activity,الحالة والنشاط
 More camera details,مزيد من تفاصيل الكاميرا
+Camera identity,هوية الكاميرا
+Geographic context,السياق الجغرافي
+Coordinate quality,جودة الإحداثيات
+Photo gallery,معرض الصور
+Camera photo,صورة الكاميرا
+View camera events,عرض أحداث الكاميرا
+Port {0},المنفذ {0}
 View camera photo gallery,عرض معرض صور الكاميرا
 Camera image unavailable,صورة الكاميرا غير متاحة
 Camera image unavailable offline,صورة الكاميرا غير متاحة دون اتصال

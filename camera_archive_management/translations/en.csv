@@ -693,10 +693,16 @@ Location source,Location source
 Location confidence,Location confidence
 Location ambiguous,Location ambiguous
 Resolved at,Resolved at
-Area & Address,Area & Address
 Type & Endpoint,Type & Endpoint
 Status & Activity,Status & Activity
 More camera details,More camera details
+Camera identity,Camera identity
+Geographic context,Geographic context
+Coordinate quality,Coordinate quality
+Photo gallery,Photo gallery
+Camera photo,Camera photo
+View camera events,View camera events
+Port {0},Port {0}
 View camera photo gallery,View camera photo gallery
 Camera image unavailable,Camera image unavailable
 Camera image unavailable offline,Camera image unavailable offline

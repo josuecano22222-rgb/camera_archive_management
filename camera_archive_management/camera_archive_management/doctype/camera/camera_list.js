@@ -255,49 +255,92 @@ function safe_camera_image_url(value) {
 function camera_map_popup(camera) {
 	const root = document.createElement("div");
 	root.className = "cam-map-popup cam-camera-detail-popup";
-	root.append(camera_map_detail_card(camera));
-	append_camera_gallery(root, camera);
+	const card = camera_map_detail_card(camera);
+	append_camera_gallery(card, camera);
 
 	const more = document.createElement("details");
 	more.className = "cam-popup-more-details";
-	const summary = document.createElement("summary");
-	summary.textContent = __("More camera details");
-	more.append(summary);
-	const details = document.createElement("dl");
-	details.className = "cam-popup-details";
-	for (const [label, value] of [
+	const moreSummary = document.createElement("summary");
+	moreSummary.textContent = __("More camera details");
+	more.append(moreSummary);
+	append_camera_info_group(more, "Camera identity", [
 		["Serial number", camera.serial_number], ["Camera number", camera.camera_number],
-		["Installation date", camera.installation_date], ["Address", camera.address],
+		["Installation date", camera.installation_date], ["Field of view", camera.field_of_view],
+	]);
+	append_camera_info_group(more, "Geographic context", [
 		["Geographic area", camera.geo_admin_area], ["Boundary", camera.geo_boundary],
-		["Field of view", camera.field_of_view], ["Description", camera.description],
+	]);
+	append_camera_info_group(more, "Coordinate quality", [
 		["Lookup source", camera.lookup_source], ["Lookup confidence", camera.lookup_confidence],
-		["Lookup ambiguous", camera.lookup_ambiguous ? __("Yes") : __("No")], ["Lookup resolved at", camera.lookup_resolved_at],
-	]) {
-		if (value === undefined || value === null || value === "") continue;
-		const row = document.createElement("div");
-		row.className = "cam-popup-detail";
-		const title = document.createElement("dt");
-		title.textContent = __(label);
-		const valueNode = document.createElement("dd");
-		valueNode.textContent = String(value);
-		row.append(title, valueNode);
-		details.append(row);
+		["Lookup ambiguous", camera.lookup_ambiguous ? __("Yes") : __("No")],
+		["Lookup resolved at", camera.lookup_resolved_at],
+	]);
+	if (camera.description) {
+		const description = document.createElement("p");
+		description.className = "cam-camera-card-description";
+		description.textContent = camera.description;
+		more.append(description);
 	}
-	more.append(details);
-	root.append(more);
+	if (more.querySelector(".cam-card-info-group, .cam-camera-card-description")) card.append(more);
 
 	const actions = document.createElement("div");
-	actions.className = "cam-popup-actions";
+	actions.className = "cam-popup-actions cam-camera-card-actions";
 	const open = document.createElement("button");
 	open.type = "button";
 	open.className = "btn btn-xs btn-primary";
 	open.textContent = __("Open camera");
 	open.addEventListener("click", () => frappe.set_route("Form", "Camera", camera.name));
 	actions.append(open);
-	root.append(actions);
+	const events = document.createElement("button");
+	events.type = "button";
+	events.className = "btn btn-xs btn-default";
+	events.textContent = __("View camera events");
+	events.addEventListener("click", () => {
+		frappe.route_options = Object.assign({}, frappe.route_options || {}, { camera: camera.name });
+		frappe.set_route("List", "Motion Event");
+	});
+	actions.append(events);
+	for (const [label, doctype, name] of [
+		["Camera type", "Camera Type", camera.camera_type], ["Open area", "Camera Area", camera.area],
+		["Geographic area", "Geo Admin Area", camera.geo_admin_area], ["Boundary", "Geo Boundary", camera.geo_boundary],
+	]) {
+		if (!name) continue;
+		const related = document.createElement("button");
+		related.type = "button";
+		related.className = "btn btn-xs btn-default";
+		related.textContent = __(label);
+		related.addEventListener("click", () => frappe.set_route("Form", doctype, name));
+		actions.append(related);
+	}
+	card.append(actions);
+	root.append(card);
 	L.DomEvent.disableClickPropagation(root);
 	L.DomEvent.disableScrollPropagation(root);
 	return root;
+}
+
+function append_camera_info_group(parent, label, fields) {
+	const available = fields.filter(([, value]) => value !== undefined && value !== null && value !== "");
+	if (!available.length) return;
+	const group = document.createElement("section");
+	group.className = "cam-card-info-group";
+	const title = document.createElement("h5");
+	title.textContent = __(label);
+	group.append(title);
+	const details = document.createElement("dl");
+	details.className = "cam-popup-details";
+	for (const [fieldLabel, value] of available) {
+		const row = document.createElement("div");
+		row.className = "cam-popup-detail";
+		const key = document.createElement("dt");
+		key.textContent = __(fieldLabel);
+		const detail = document.createElement("dd");
+		detail.textContent = String(value);
+		row.append(key, detail);
+		details.append(row);
+	}
+	group.append(details);
+	parent.append(group);
 }
 
 function camera_map_detail_card(camera) {
@@ -308,10 +351,18 @@ function camera_map_detail_card(camera) {
 		|| photos.find((photo) => safe_camera_image_url(photo.url));
 	const avatar = document.createElement("div");
 	avatar.className = "cam-camera-card-avatar";
-	avatar.setAttribute("aria-label", primary ? __("View camera photo gallery") : __("Camera image unavailable"));
-	if (primary) {
+	const hasGallery = photos.length > 0;
+	avatar.setAttribute("aria-label", hasGallery ? __("View camera photo gallery") : __("Camera image unavailable"));
+	if (hasGallery) {
 		avatar.setAttribute("role", "button");
 		avatar.tabIndex = 0;
+		const openGallery = () => card.closest(".cam-map-popup")?.querySelector(".cam-gallery-frame")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+		avatar.addEventListener("click", openGallery);
+		avatar.addEventListener("keydown", (event) => {
+			if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openGallery(); }
+		});
+	}
+	if (primary) {
 		const image = document.createElement("img");
 		image.className = "cam-camera-card-image";
 		image.alt = camera.label || camera.name || __("Camera image");
@@ -319,18 +370,9 @@ function camera_map_detail_card(camera) {
 		image.referrerPolicy = "same-origin";
 		image.src = primary.url;
 		image.addEventListener("error", () => image.replaceWith(camera_card_fallback(camera)), { once: true });
-		const openGallery = () => card.closest(".cam-map-popup")?.querySelector(".cam-gallery-frame")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-		avatar.addEventListener("click", openGallery);
-		avatar.addEventListener("keydown", (event) => {
-			if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openGallery(); }
-		});
 		avatar.append(image);
 	} else {
-		const initials = String(camera.label || camera.name || "◉").trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
-		const fallback = document.createElement("span");
-		fallback.className = "cam-camera-card-fallback";
-		fallback.textContent = initials || "◉";
-		avatar.append(fallback);
+		avatar.append(camera_card_fallback(camera));
 	}
 	const heading = document.createElement("div");
 	heading.className = "cam-camera-card-heading";
@@ -339,9 +381,12 @@ function camera_map_detail_card(camera) {
 	title.textContent = camera.label || camera.name || __("Camera details");
 	const subtitle = document.createElement("span");
 	subtitle.className = "cam-camera-card-subtitle";
-	subtitle.textContent = [camera.name, camera.camera_type, camera.status].filter(Boolean).join(" · ") || __("Camera details");
+	subtitle.textContent = [camera.name, camera.camera_type].filter(Boolean).join(" · ") || __("Camera details");
 	heading.append(title, subtitle);
-	card.append(avatar, heading);
+	const statusBadge = document.createElement("span");
+	statusBadge.className = `cam-camera-status-badge cam-camera-status-${String(camera.status || "unknown").toLowerCase()}`;
+	statusBadge.textContent = __(camera.status || "Unknown status");
+	card.append(avatar, heading, statusBadge);
 	if (camera.is_demo_record) {
 		const badge = document.createElement("span");
 		badge.className = "cam-demo-badge";
@@ -353,10 +398,12 @@ function camera_map_detail_card(camera) {
 	card.append(divider);
 	const sections = document.createElement("div");
 	sections.className = "cam-camera-card-sections";
-	const endpoint = [camera.ip_address, camera.port ? `:${camera.port}` : ""].join("");
+	const endpoint = camera.ip_address
+		? `${camera.ip_address}${camera.port ? `:${camera.port}` : ""}`
+		: camera.port ? __("Port {0}", [camera.port]) : "";
 	const rows = [
 		["Coordinates", `${camera.latitude ?? ""}, ${camera.longitude ?? ""}`],
-		["Area & Address", [camera.area, camera.address].filter(Boolean).join(" · ")],
+		["Camera Area", [camera.area, camera.address].filter(Boolean).join(" · ")],
 		["Type & Endpoint", [camera.camera_type, camera.importance, endpoint].filter(Boolean).join(" · ")],
 	];
 	for (const [label, value] of rows) {
@@ -384,8 +431,11 @@ function camera_map_detail_card(camera) {
 		const open = document.createElement("button");
 		open.type = "button";
 		open.className = "cam-camera-card-action";
-		open.textContent = __("Open Camera");
-		open.addEventListener("click", () => frappe.set_route("Form", "Camera", camera.name));
+		open.textContent = __("View camera events");
+		open.addEventListener("click", () => {
+			frappe.route_options = Object.assign({}, frappe.route_options || {}, { camera: camera.name });
+			frappe.set_route("List", "Motion Event");
+		});
 		activity.append(open);
 	}
 	sections.append(activity);
@@ -397,8 +447,22 @@ function append_camera_gallery(root, camera) {
 	const photos = Array.isArray(camera.photos) ? camera.photos : [];
 	if (!photos.length) return;
 	let index = Math.max(0, photos.findIndex((photo) => photo.primary));
+	const gallery = document.createElement("section");
+	gallery.className = "cam-camera-gallery";
+	const heading = document.createElement("div");
+	heading.className = "cam-camera-gallery-heading";
+	const title = document.createElement("h4");
+	title.textContent = __("Photo gallery");
+	const total = document.createElement("span");
+	total.className = "cam-gallery-total";
+	total.textContent = __("{0} photos", [photos.length]);
+	heading.append(title, total);
+	gallery.append(heading);
 	const frame = document.createElement("div");
 	frame.className = "cam-gallery-frame";
+	frame.tabIndex = -1;
+	frame.setAttribute("role", "group");
+	frame.setAttribute("aria-label", __("Camera photo"));
 	const caption = document.createElement("div");
 	caption.className = "cam-gallery-caption";
 	const count = document.createElement("span");
@@ -408,7 +472,7 @@ function append_camera_gallery(root, camera) {
 		if (safe_camera_image_url(photo.url)) {
 			const image = document.createElement("img");
 			image.className = "cam-gallery-image";
-			image.alt = camera.label || __("Camera image");
+			image.alt = photo.caption || camera.label || __("Camera image");
 			image.loading = "lazy";
 			image.referrerPolicy = "same-origin";
 			image.src = photo.url;
@@ -436,9 +500,10 @@ function append_camera_gallery(root, camera) {
 			controls.append(button);
 		}
 		controls.append(count);
-		root.append(frame, controls, caption);
+		gallery.append(frame, controls, caption);
 	} else {
-		root.append(frame, caption);
+		gallery.append(frame, caption);
 	}
+	root.append(gallery);
 	update();
 }
