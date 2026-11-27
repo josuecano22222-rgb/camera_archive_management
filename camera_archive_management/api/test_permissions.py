@@ -64,14 +64,38 @@ class TestCameraCredentialsProtection(FrappeTestCase):
 		frappe.set_user("Administrator")
 		self.addCleanup(frappe.set_user, original_user)
 		camera = self._camera_with_credentials()
+		credential_fields = [
+			"credential_label",
+			"credentials_active",
+			"username",
+			"password",
+			"secondary_secret",
+			"last_rotated_at",
+			"credential_notes",
+		]
+		original = frappe.db.get_value("Camera", camera.name, credential_fields, as_dict=True)
 
+		# The insert above intentionally used ignore_permissions=True. Reload a fresh
+		# document so that privileged flag cannot leak into the operator save path.
+		camera = frappe.get_doc("Camera", camera.name)
 		frappe.set_user("cam-operator@example.invalid")
 		with patch.object(frappe, "get_roles", return_value=["CAM Operator"]):
+			self.assertFalse(camera.flags.ignore_permissions)
 			camera.username = "ATTACKER_USERNAME"
 			camera.credential_label = "ATTACKER_LABEL"
-			camera.validate_higher_perm_levels()
-		self.assertEqual(camera.username, "DO_NOT_EXPOSE_USERNAME")
-		self.assertEqual(camera.credential_label, "Main account")
+			camera.credentials_active = 0
+			camera.password = "ATTACKER_PASSWORD"
+			camera.secondary_secret = "ATTACKER_SECONDARY"
+			camera.last_rotated_at = "2030-01-01 00:00:00"
+			camera.credential_notes = "ATTACKER_NOTES"
+			camera.save(ignore_permissions=False)
+
+		stored = frappe.db.get_value("Camera", camera.name, credential_fields, as_dict=True)
+		self.assertEqual(stored, original)
+		frappe.set_user("Administrator")
+		reloaded = frappe.get_doc("Camera", camera.name)
+		self.assertEqual(reloaded.get_password("password"), "DO_NOT_EXPOSE_PASSWORD")
+		self.assertEqual(reloaded.get_password("secondary_secret"), "DO_NOT_EXPOSE_SECONDARY")
 
 	def test_password_values_are_encrypted_and_not_stored_in_the_column(self):
 		original_user = frappe.session.user
