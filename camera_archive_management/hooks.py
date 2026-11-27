@@ -41,7 +41,10 @@ fixtures = [
 # Keep map presentation styles global, but load Leaflet only inside our map page.
 # The small compatibility script restores Frappe's Draw plugin only for the
 # Camera Geolocation control when another app has replaced the global Leaflet.
-app_include_js = ["/assets/camera_archive_management/js/camera_geolocation_compat.js"]
+app_include_js = [
+	"/assets/camera_archive_management/js/camera_geolocation_compat.js",
+	"/assets/camera_archive_management/js/camera_natural_earth.js",
+]
 app_include_css = ["/assets/camera_archive_management/css/camera_archive.css"]
 
 # Camera credentials live on Camera at permlevel 1: only System Manager holds

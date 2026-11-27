@@ -160,6 +160,40 @@ def point_in_geometry(lon: float, lat: float, value: Any) -> bool:
 	return any(_polygon_contains(lon, lat, polygon) for polygon in geometry["coordinates"])
 
 
+def _ring_area_m2(ring: list) -> float:
+	"""Approximate spherical area of one closed ring (square meters).
+
+	Uses the standard spherical-excess summation; accurate enough for
+	country-scale display, not for cadastral or engineering measurement.
+	"""
+	if not isinstance(ring, list) or len(ring) < 4:
+		return 0.0
+	total = 0.0
+	for index in range(len(ring) - 1):
+		lon1, lat1 = math.radians(float(ring[index][0])), math.radians(float(ring[index][1]))
+		lon2, lat2 = math.radians(float(ring[index + 1][0])), math.radians(float(ring[index + 1][1]))
+		total += (lon2 - lon1) * (2 + math.sin(lat1) + math.sin(lat2))
+	return abs(total) * EARTH_RADIUS_M * EARTH_RADIUS_M / 2.0
+
+
+def geodesic_area_m2(value: Any) -> float:
+	"""Approximate geodesic area of a Polygon/MultiPolygon in square meters.
+
+	Outer rings add area and holes subtract it. This is a cartographic estimate
+	on a sphere, suitable for comparing country sizes, not a legal survey area.
+	"""
+	geometry = load_geometry(value)
+	polygons = [geometry["coordinates"]] if geometry["type"] == "Polygon" else geometry["coordinates"]
+	total = 0.0
+	for polygon in polygons:
+		if not isinstance(polygon, list) or not polygon:
+			continue
+		total += _ring_area_m2(polygon[0])
+		for hole in polygon[1:]:
+			total -= _ring_area_m2(hole)
+	return max(0.0, total)
+
+
 def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 	p1, p2 = math.radians(lat1), math.radians(lat2)
 	dp = math.radians(lat2 - lat1)

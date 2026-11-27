@@ -1,0 +1,602 @@
+{
+ "catalog_version": 1,
+ "dataset_id": "natural-earth-vector-bundle",
+ "label": "Natural Earth Vector — bundled geographic layers",
+ "revision": "ca96624a56bd078437bca8184e78163e5039ad19",
+ "source_repo": "https://github.com/nvkelso/natural-earth-vector",
+ "license": "Public Domain",
+ "attribution": "Natural Earth vector data; public domain. Generalized cartographic data — not legal, cadastral, or authoritative sovereignty boundaries. Revision ca96624a56bd.",
+ "limitations": "Generalized small-scale cartographic data. Not cadastral, not legal boundaries, not live. Roads and railways are not bundled (their 1:10m source files are tens of megabytes). Population and GDP figures are Natural Earth estimates, not a live statistical database.",
+ "layers": [
+  {
+   "id": "countries_110m",
+   "label": "Countries (1:110m)",
+   "category": "cultural",
+   "theme": "countries",
+   "geometry": "polygon",
+   "scale": "110m",
+   "name_field": "NAME",
+   "default_visible": false,
+   "description": "World countries and territories with rich attributes (ISO codes, capital, continent, region, population and GDP estimates).",
+   "style": {
+    "color": "#0f766e",
+    "weight": 1.2,
+    "opacity": 0.8,
+    "fillColor": "#14b8a6",
+    "fillOpacity": 0.04
+   },
+   "source_name": "ne_110m_admin_0_countries",
+   "file": "countries_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+   "feature_count": 177,
+   "geometry_types": [
+    "MultiPolygon",
+    "Polygon"
+   ],
+   "bounds": [
+    -180,
+    -90,
+    180,
+    83.64513
+   ],
+   "sha256": "6fdbda72d9efdad37c9c372929eca85a88dd0b58e3d8c071351b8707675a226a"
+  },
+  {
+   "id": "countries_50m",
+   "label": "Countries (1:50m detail)",
+   "category": "cultural",
+   "theme": "countries",
+   "geometry": "polygon",
+   "scale": "50m",
+   "name_field": "NAME",
+   "default_visible": false,
+   "description": "Higher-detail country boundaries for regional and national maps.",
+   "style": {
+    "color": "#0f766e",
+    "weight": 1.1,
+    "opacity": 0.8,
+    "fillColor": "#14b8a6",
+    "fillOpacity": 0.04
+   },
+   "source_name": "ne_50m_admin_0_countries",
+   "file": "countries_50m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_50m_admin_0_countries.geojson",
+   "feature_count": 242,
+   "geometry_types": [
+    "MultiPolygon",
+    "Polygon"
+   ],
+   "bounds": [
+    -180,
+    -89.998926,
+    180,
+    83.599609
+   ],
+   "sha256": "18062176887f614c4140579261ebf06376ca86a73f044cca6534050ff3fe0be7"
+  },
+  {
+   "id": "admin1_110m",
+   "label": "States / provinces (1:110m)",
+   "category": "cultural",
+   "theme": "administrative",
+   "geometry": "polygon",
+   "scale": "110m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "First-level administrative divisions (states and provinces).",
+   "style": {
+    "color": "#64748b",
+    "weight": 0.7,
+    "opacity": 0.7,
+    "fillColor": "#94a3b8",
+    "fillOpacity": 0.02,
+    "dashArray": "2 3"
+   },
+   "source_name": "ne_110m_admin_1_states_provinces",
+   "file": "admin1_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_1_states_provinces.geojson",
+   "feature_count": 51,
+   "geometry_types": [
+    "MultiPolygon",
+    "Polygon"
+   ],
+   "bounds": [
+    -171.791111,
+    18.91619,
+    -66.96466,
+    71.357764
+   ],
+   "sha256": "fa614654db7aadc40942d601e0512e340c7a376d267c019d6d4c652019898bf9"
+  },
+  {
+   "id": "boundary_lines_110m",
+   "label": "Country boundary lines (1:110m)",
+   "category": "cultural",
+   "theme": "boundaries",
+   "geometry": "line",
+   "scale": "110m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Land boundary lines between countries.",
+   "style": {
+    "color": "#475569",
+    "weight": 1.1,
+    "opacity": 0.8,
+    "dashArray": "4 3"
+   },
+   "source_name": "ne_110m_admin_0_boundary_lines_land",
+   "file": "boundary_lines_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_boundary_lines_land.geojson",
+   "feature_count": 331,
+   "geometry_types": [
+    "LineString",
+    "MultiLineString"
+   ],
+   "bounds": [
+    -140.99778,
+    -54.89681,
+    141.033852,
+    70.16419
+   ],
+   "sha256": "baaf0c1f8381b208d445bc83688983a42596336eec491fa645bcb4e1d4255e1a"
+  },
+  {
+   "id": "disputed_boundaries_50m",
+   "label": "Disputed boundary lines (1:50m)",
+   "category": "cultural",
+   "theme": "boundaries",
+   "geometry": "line",
+   "scale": "50m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Boundary lines in disputed areas; alternative political representations.",
+   "style": {
+    "color": "#dc2626",
+    "weight": 1.2,
+    "opacity": 0.85,
+    "dashArray": "2 3"
+   },
+   "source_name": "ne_50m_admin_0_boundary_lines_disputed_areas",
+   "file": "disputed_boundaries_50m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_50m_admin_0_boundary_lines_disputed_areas.geojson",
+   "feature_count": 34,
+   "geometry_types": [
+    "LineString"
+   ],
+   "bounds": [
+    -58.42741,
+    1.466862,
+    149.358408,
+    48.705613
+   ],
+   "sha256": "e915651835d29f34749d17a61eb7e270136c998335d015a7ae99c78dca13dced"
+  },
+  {
+   "id": "disputed_areas_50m",
+   "label": "Disputed / breakaway areas (1:50m)",
+   "category": "cultural",
+   "theme": "boundaries",
+   "geometry": "polygon",
+   "scale": "50m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Breakaway and disputed territories polygons.",
+   "style": {
+    "color": "#dc2626",
+    "weight": 1,
+    "opacity": 0.8,
+    "fillColor": "#fca5a5",
+    "fillOpacity": 0.12
+   },
+   "source_name": "ne_50m_admin_0_breakaway_disputed_areas",
+   "file": "disputed_areas_50m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_50m_admin_0_breakaway_disputed_areas.geojson",
+   "feature_count": 28,
+   "geometry_types": [
+    "MultiPolygon",
+    "Polygon"
+   ],
+   "bounds": [
+    -58.427307,
+    1.475362,
+    148.837148,
+    48.705613
+   ],
+   "sha256": "63e1267e0fc8bd18c7d5b3544fa5498c6bfba9206d4e53a68276a15799ecdbfb"
+  },
+  {
+   "id": "populated_places_110m",
+   "label": "Cities & populated places (1:110m)",
+   "category": "cultural",
+   "theme": "places",
+   "geometry": "point",
+   "scale": "110m",
+   "name_field": "NAME",
+   "default_visible": false,
+   "description": "Major cities and populated places with population estimates and admin context.",
+   "style": {
+    "radius": 3.5,
+    "color": "#1d4ed8",
+    "weight": 1,
+    "fillColor": "#3b82f6",
+    "fillOpacity": 0.85
+   },
+   "source_name": "ne_110m_populated_places",
+   "file": "populated_places_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_populated_places.geojson",
+   "feature_count": 243,
+   "geometry_types": [
+    "Point"
+   ],
+   "bounds": [
+    -175.220564,
+    -41.292068,
+    179.216647,
+    64.143459
+   ],
+   "sha256": "021008d0d228fcf5e522aac247592269d230527f455654457919b35944fc478c"
+  },
+  {
+   "id": "airports_10m",
+   "label": "Airports (1:10m)",
+   "category": "cultural",
+   "theme": "transport",
+   "geometry": "point",
+   "scale": "10m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Major airports (point locations).",
+   "style": {
+    "radius": 3.5,
+    "color": "#7c3aed",
+    "weight": 1,
+    "fillColor": "#a78bfa",
+    "fillOpacity": 0.9
+   },
+   "source_name": "ne_10m_airports",
+   "file": "airports_10m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_airports.geojson",
+   "feature_count": 893,
+   "geometry_types": [
+    "Point"
+   ],
+   "bounds": [
+    -175.135635,
+    -53.781475,
+    179.195442,
+    78.246717
+   ],
+   "sha256": "e71af7853a07533819baef1e2266cd9b2ae486d02b147bef3591504141ba7241"
+  },
+  {
+   "id": "ports_10m",
+   "label": "Ports (1:10m)",
+   "category": "cultural",
+   "theme": "transport",
+   "geometry": "point",
+   "scale": "10m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Major seaports (point locations).",
+   "style": {
+    "radius": 3.5,
+    "color": "#0891b2",
+    "weight": 1,
+    "fillColor": "#22d3ee",
+    "fillOpacity": 0.9
+   },
+   "source_name": "ne_10m_ports",
+   "file": "ports_10m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_ports.geojson",
+   "feature_count": 1081,
+   "geometry_types": [
+    "Point"
+   ],
+   "bounds": [
+    -171.75795,
+    -54.809444,
+    179.309364,
+    78.226111
+   ],
+   "sha256": "b6eabaf13e5accad9f9355b811442b7cfbe31361d1c37e5356ed1aeee6c2622c"
+  },
+  {
+   "id": "land_110m",
+   "label": "Land (1:110m)",
+   "category": "physical",
+   "theme": "land",
+   "geometry": "polygon",
+   "scale": "110m",
+   "name_field": "featurecla",
+   "default_visible": false,
+   "description": "Global land mass polygons.",
+   "style": {
+    "color": "#d6d3d1",
+    "weight": 0.5,
+    "opacity": 0.6,
+    "fillColor": "#f5f5f4",
+    "fillOpacity": 0.5
+   },
+   "source_name": "ne_110m_land",
+   "file": "land_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_land.geojson",
+   "feature_count": 127,
+   "geometry_types": [
+    "Polygon"
+   ],
+   "bounds": [
+    -180,
+    -90,
+    180,
+    83.64513
+   ],
+   "sha256": "4c8435315639c6cc3a91d7ae737e275f88f87337b850a90138192563dfacb6e9"
+  },
+  {
+   "id": "ocean_110m",
+   "label": "Ocean (1:110m)",
+   "category": "physical",
+   "theme": "water",
+   "geometry": "polygon",
+   "scale": "110m",
+   "name_field": "featurecla",
+   "default_visible": false,
+   "description": "Global ocean polygons.",
+   "style": {
+    "color": "#bfdbfe",
+    "weight": 0.5,
+    "opacity": 0.6,
+    "fillColor": "#dbeafe",
+    "fillOpacity": 0.5
+   },
+   "source_name": "ne_110m_ocean",
+   "file": "ocean_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_ocean.geojson",
+   "feature_count": 2,
+   "geometry_types": [
+    "Polygon"
+   ],
+   "bounds": [
+    -180,
+    -85.609038,
+    180,
+    90
+   ],
+   "sha256": "2ef066945390cae9fa11d6bd9378e6cefc484db9aee181c2d24f9d02d4a363d5"
+  },
+  {
+   "id": "coastline_110m",
+   "label": "Coastline (1:110m)",
+   "category": "physical",
+   "theme": "water",
+   "geometry": "line",
+   "scale": "110m",
+   "name_field": "featurecla",
+   "default_visible": false,
+   "description": "Global coastline lines.",
+   "style": {
+    "color": "#0ea5e9",
+    "weight": 1.2,
+    "opacity": 0.85
+   },
+   "source_name": "ne_110m_coastline",
+   "file": "coastline_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_coastline.geojson",
+   "feature_count": 134,
+   "geometry_types": [
+    "LineString"
+   ],
+   "bounds": [
+    -180,
+    -85.609038,
+    180,
+    83.64513
+   ],
+   "sha256": "3fc0e9542f9a726817e7d3379085bd9b27c307b5a4aa6531167b03e0213e4b5f"
+  },
+  {
+   "id": "rivers_110m",
+   "label": "Rivers (1:110m)",
+   "category": "physical",
+   "theme": "water",
+   "geometry": "line",
+   "scale": "110m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Major river and lake centerlines.",
+   "style": {
+    "color": "#38bdf8",
+    "weight": 1.3,
+    "opacity": 0.85
+   },
+   "source_name": "ne_110m_rivers_lake_centerlines",
+   "file": "rivers_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_rivers_lake_centerlines.geojson",
+   "feature_count": 13,
+   "geometry_types": [
+    "LineString"
+   ],
+   "bounds": [
+    -135.313414,
+    -33.993584,
+    129.956027,
+    72.906506
+   ],
+   "sha256": "248b3646b603c3904a288aef413ada229055ec9000ffcded158478aedfaa1675"
+  },
+  {
+   "id": "lakes_110m",
+   "label": "Lakes (1:110m)",
+   "category": "physical",
+   "theme": "water",
+   "geometry": "polygon",
+   "scale": "110m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Major lake polygons.",
+   "style": {
+    "color": "#7dd3fc",
+    "weight": 0.8,
+    "opacity": 0.8,
+    "fillColor": "#bae6fd",
+    "fillOpacity": 0.6
+   },
+   "source_name": "ne_110m_lakes",
+   "file": "lakes_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_lakes.geojson",
+   "feature_count": 24,
+   "geometry_types": [
+    "Polygon"
+   ],
+   "bounds": [
+    -124.953634,
+    -16.536406,
+    109.929807,
+    66.969298
+   ],
+   "sha256": "d17056ac463b75f3285292a9303adf9cc0856ad9070e0891b4bb37de56c50ebc"
+  },
+  {
+   "id": "glaciated_110m",
+   "label": "Glaciated areas (1:110m)",
+   "category": "physical",
+   "theme": "land",
+   "geometry": "polygon",
+   "scale": "110m",
+   "name_field": "featurecla",
+   "default_visible": false,
+   "description": "Glaciated area polygons (ice sheets).",
+   "style": {
+    "color": "#e0f2fe",
+    "weight": 0.6,
+    "opacity": 0.7,
+    "fillColor": "#f0f9ff",
+    "fillOpacity": 0.7
+   },
+   "source_name": "ne_110m_glaciated_areas",
+   "file": "glaciated_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_glaciated_areas.geojson",
+   "feature_count": 11,
+   "geometry_types": [
+    "Polygon"
+   ],
+   "bounds": [
+    -180,
+    -89.998899,
+    179.999949,
+    83.365067
+   ],
+   "sha256": "7aa0473302f88f93dda098be17ec19a3a82b7b5e1f49c1ed2d8fb16f7b3375c2"
+  },
+  {
+   "id": "physical_points_110m",
+   "label": "Physical features (1:110m)",
+   "category": "physical",
+   "theme": "land",
+   "geometry": "point",
+   "scale": "110m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Named physical points such as mountain peaks and passes.",
+   "style": {
+    "radius": 3.5,
+    "color": "#92400e",
+    "weight": 1,
+    "fillColor": "#d97706",
+    "fillOpacity": 0.9
+   },
+   "source_name": "ne_110m_geography_regions_points",
+   "file": "physical_points_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_geography_regions_points.geojson",
+   "feature_count": 3,
+   "geometry_types": [
+    "Point"
+   ],
+   "bounds": [
+    -79.044118,
+    -25.568292,
+    -54.582997,
+    43.087714
+   ],
+   "sha256": "dae350689ac34b59e9897ee00f64c4522c806421f3d5082fc6e3c2a880642dd9"
+  },
+  {
+   "id": "marine_polys_110m",
+   "label": "Seas & oceans (named, 1:110m)",
+   "category": "physical",
+   "theme": "water",
+   "geometry": "polygon",
+   "scale": "110m",
+   "name_field": "name",
+   "default_visible": false,
+   "description": "Named marine regions (seas, gulfs, oceans).",
+   "style": {
+    "color": "#93c5fd",
+    "weight": 0.5,
+    "opacity": 0.5,
+    "fillColor": "#eff6ff",
+    "fillOpacity": 0.25
+   },
+   "source_name": "ne_110m_geography_marine_polys",
+   "file": "marine_polys_110m.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_geography_marine_polys.geojson",
+   "feature_count": 29,
+   "geometry_types": [
+    "MultiPolygon",
+    "Polygon"
+   ],
+   "bounds": [
+    -180,
+    -85.192061,
+    179.999897,
+    90
+   ],
+   "sha256": "80b835df63c56e32db97c2f9c018f662c59b44dc07a681469f3c979260780f0b"
+  },
+  {
+   "id": "graticules_20",
+   "label": "Graticule (20°)",
+   "category": "physical",
+   "theme": "grid",
+   "geometry": "line",
+   "scale": "110m",
+   "name_field": "degrees",
+   "default_visible": false,
+   "description": "Latitude/longitude graticule grid at 20-degree spacing.",
+   "style": {
+    "color": "#94a3b8",
+    "weight": 0.5,
+    "opacity": 0.5,
+    "dashArray": "1 4"
+   },
+   "source_name": "ne_110m_graticules_20",
+   "file": "graticules_20.geojson",
+   "source": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_graticules_20.geojson",
+   "feature_count": 27,
+   "geometry_types": [
+    "LineString"
+   ],
+   "bounds": [
+    -179.999989,
+    -89.999933,
+    180,
+    90
+   ],
+   "sha256": "99b234519e60e24a5e48b2acf8141d3ec815c2989b08997880b5ef845af22a09"
+  }
+ ],
+ "summary": {
+  "layers": 18,
+  "cultural": 9,
+  "physical": 9,
+  "point": 4,
+  "line": 5,
+  "polygon": 9,
+  "scales": [
+   "10m",
+   "110m",
+   "50m"
+  ],
+  "features": 3450
+ }
+}

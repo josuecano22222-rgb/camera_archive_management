@@ -99,6 +99,7 @@ function initialize_map_page(wrapper, leaflet) {
 				<button class="btn btn-default cam-map-cancel-tool" type="button">${__("Clear tools")}</button>
 				<button class="btn btn-default cam-map-locate" type="button">${__("Locate me")}</button>
 				<button class="btn btn-default cam-map-copy-coords" type="button" disabled>${__("Copy coordinates")}</button>
+				<button class="btn btn-default cam-ne-open" type="button">${__("Geography layers")}</button>
 			</div>
 			<div class="cam-map-toolgroup cam-map-layer-toggles">
 				<label><input type="checkbox" class="cam-map-show-cameras" checked> ${__("Cameras")}</label>
@@ -290,7 +291,10 @@ function initialize_map_page(wrapper, leaflet) {
 	host.querySelector(".cam-map-play").addEventListener("click", () => toggle_movement_playback(page));
 	page.cam_map.on("dragstart", () => { page.cam_map_user_navigated = true; });
 	page.cam_map.on("zoomstart", () => { page.cam_map_user_navigated = true; });
-	page.cam_map.on("zoomend", () => update_tile_telemetry(page));
+	page.cam_map.on("zoomend", () => {
+		update_tile_telemetry(page);
+		window.cam_natural_earth?.on_zoom(page);
+	});
 	page.cam_map.on("mousemove", (event) => update_coordinate_readout(page, event.latlng));
 	page.cam_map.on("click", (event) => handle_map_click(page, event.latlng));
 	page.cam_map.on("dblclick", () => {
@@ -298,6 +302,7 @@ function initialize_map_page(wrapper, leaflet) {
 	});
 	load_tile_config(page);
 	load_country_boundaries(page);
+	window.cam_natural_earth?.initialize(page, leaflet);
 	for (const control of Object.values(page.cam_link_controls || {})) {
 		control.$input.on("change awesomplete-selectcomplete", () => {
 			read_filter_controls(page);
@@ -1090,7 +1095,10 @@ function handle_map_click(page, latlng) {
 	page.cam_last_coordinate = latlng;
 	page.cam_last_coordinate_text = `${String(latlng.lat)}, ${String(latlng.lng)}`;
 	page.main.get(0).querySelector(".cam-map-copy-coords").disabled = false;
-	if (!page.cam_tool_mode) return;
+	if (!page.cam_tool_mode) {
+		window.cam_natural_earth?.inspect_point(page, latlng);
+		return;
+	}
 	page.cam_measure_points.push(latlng);
 	const leaflet = page.cam_leaflet;
 	page.cam_measurements.clearLayers();
