@@ -39,3 +39,5 @@ class CAMGeoSettings(Document):
 			value = getattr(self, fieldname, None)
 			if value is not None and not 1 <= int(value) <= 5:
 				frappe.throw(f"{label} must be between 1 and 5 seconds.", frappe.ValidationError)
+		if self.nearby_camera_radius is not None and not 0 <= int(self.nearby_camera_radius) <= 100_000:
+			frappe.throw("Nearby-camera radius must be between 0 and 100000 meters.", frappe.ValidationError)

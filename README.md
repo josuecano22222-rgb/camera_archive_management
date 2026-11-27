@@ -1,8 +1,15 @@
-# Camera Archive Management · 1.0.0
+# Camera Archive Management · 1.1.0
 
 **العربية:** [دليل التهيئة والتوثيق باللغة العربية](camera_archive_management/docs/ar/onboarding/README.md)
 
 A Frappe v15 application for camera inventory, controlled image galleries, vehicle registers, motion-event review, and permission-aware geospatial operations.
+
+## New in 1.1.0
+
+- **Archive retirement & credential merge.** The `Archive Asset`, `Archive Ingest Batch`, and `Archive Settings` DocTypes and the `Archive Integrity` report are completely removed (including their physical tables), and `Camera Credential` is merged into `Camera` as permlevel-1 fields readable/writable only by System Manager. Migration patches fail closed and require a backup first — see [`docs/v1.0.0-release-runbook.md`](docs/v1.0.0-release-runbook.md) for the destructive-change details.
+- **Natural Earth Vector geography.** A committed, SHA-256-pinned 18-layer public-domain pack (cultural + physical; points, lines, polygons; 1:110m / 1:50m / 1:10m) powers a new **Geography layers** panel on the map: zoom-based country detail switching, click-to-inspect country profiles (capital, population, GDP, area), disputed-boundary overlays, and choropleth theming from cameras, movements, Natural Earth estimates, or custom ISO-keyed data. Everything is self-hosted; no external map or statistics API is contacted. Full guide: [`docs/natural-earth-vector.md`](docs/natural-earth-vector.md).
+- **Complete Arabic/English localization.** Every user-facing string — including the geography UI, layer labels, validation messages, and country/capital names (from Natural Earth `NAME_AR`) — is translated, with an RTL-correct panel layout and a regression test that fails on any untranslated feature string.
+- **Cache-busted assets.** The geography JS/CSS carry a content-hash query (`?v=…`) so browsers always fetch the current version on a normal refresh.
 
 ## Release highlights
 
@@ -50,7 +57,7 @@ The additive reference catalog is seeded after migration. Import boundary or gaz
 Run framework-independent tests from the app repository:
 
 ```bash
-python -m unittest camera_archive_management.geo.test_tile_cache camera_archive_management.geo.test_geometry camera_archive_management.camera_archive_management.test_doctype_interface -v
+python -m unittest camera_archive_management.geo.test_tile_cache camera_archive_management.geo.test_geometry camera_archive_management.geo.test_natural_earth camera_archive_management.camera_archive_management.test_doctype_interface -v
 ```
 
 Run Frappe-dependent tests from a Frappe Bench environment with the app installed:
@@ -63,4 +70,4 @@ Also validate Python and JavaScript syntax, build app assets, and review the dat
 
 ## Version
 
-This project declares its first complete release as **1.0.0**. For this initial build, the operator has explicitly waived backup/staging-clone gates because there is no application data to preserve; schema changes still run in a controlled maintenance window, and the app test suite and asset build must be checked. Follow [`docs/v1.0.0-release-runbook.md`](docs/v1.0.0-release-runbook.md) for update, migration, verification, and explicit sample-data commands. No synthetic records are created automatically.
+The current release is **1.1.0** (`main`, tag `v1.1.0`). Upgrading from `v1.0.0` runs the destructive archive-retirement and credential-merge patches: **take a full backup first** and follow [`docs/v1.1.0-release-runbook.md`](docs/v1.1.0-release-runbook.md) (which references the patch-level detail in [`docs/v1.0.0-release-runbook.md`](docs/v1.0.0-release-runbook.md)). Sites already updated along the release branch only need the standard build/cache/restart verification. The full suite is 153 tests. No synthetic records are created automatically.

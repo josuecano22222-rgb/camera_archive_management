@@ -24,26 +24,31 @@ any production migration.
   diagnostics.
 - `camera_archive_management/api/test_map.py`: map API Camera-read permission,
   filter validation, and separation from Siraj's Place permission model.
-- `camera_archive_management/api/test_permissions.py`: credential query/record
-  authorization and checks that map payloads do not serialize credential
+- `camera_archive_management/api/test_permissions.py`: Camera credential
+  permlevel protection (read stripping, unauthorized-write reset, encrypted
+  Password storage) and checks that map payloads do not serialize credential
   material.
 - `camera_archive_management/geo/test_tile_cache.py`: cache safety, atomic
   writes, Siraj `_`/legacy `base` behavior and canonical precedence, strict
   bounds, image validation, offline behavior, and concurrent miss deduplication.
 - `camera_archive_management/camera_archive_management/doctype/cam_geo_settings/test_cam_geo_settings.py`:
-  default-off fetch/write controls and timeout bounds.
-- Existing Camera, Motion Event, Archive Asset, and Archive Ingest Batch tests
-  now cover exact coordinate strings, historical location snapshots, private
-  Frappe-file versus external-reference validation, and ingest idempotency.
+  default-off fetch/write controls, timeout bounds, and the relocated Motion
+  Event defaults with nearby-camera radius limits.
+- Existing Camera and Motion Event tests cover exact coordinate strings,
+  historical location snapshots, and the merged credential validation.
 - `camera_archive_management/patches/v1_0/test_migration_guards.py`: repeatable
-  no-legacy/no-child-table cases and fail-closed collision checks for migrations.
+  no-legacy/no-child-table cases, fail-closed collision checks, the credential
+  merge into Camera, and the archive DocType retirement with settings
+  preservation.
 
 These tests complement, but do not replace, a staging migration rehearsal on a
 representative copy with legacy data. Review migration output and row counts
-before and after; confirm credential plaintext is absent from legacy columns,
-Siraj's `Geo Settings` metadata and Singles are unchanged, and existing app data
-is retained. Rehearse the second migration pass on the same staging copy and
-confirm it makes no unintended data changes.
+before and after; confirm credential secrets were re-encrypted under Camera and
+no plaintext remains in legacy columns, the retired archive DocTypes and their
+dependent records are gone, the Motion Event defaults survived in CAM Geo
+Settings, Siraj's `Geo Settings` metadata and Singles are unchanged, and
+existing app data is retained. Rehearse the second migration pass on the same
+staging copy and confirm it makes no unintended data changes.
 
 ## Live site evidence required
 
@@ -73,7 +78,7 @@ confirm it makes no unintended data changes.
    rollout. Confirm attribution and layer controls, Desk-host tile URLs, route
    filter state/cleanup, camera image pins, vehicle icons/tracks, and cache/offline
    status. Verify Siraj Draw/map plugins and its own tile endpoint remain intact.
-   Smoke-test Camera, Event, Archive forms and reports without changing records.
+   Smoke-test Camera and Event forms and reports without changing records.
 6. **Operations:** verify the backup archive and restore process, app build and
    migration results, web/worker/scheduler processes, Supervisor/Nginx/Redis
    health, logs, cache filesystem owner/mode, and that production

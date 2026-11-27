@@ -1,0 +1,45 @@
+/* Natural Earth geography panel styles.
+ * Kept in a dedicated file (separate URL) so browsers fetch it fresh;
+ * Frappe serves non-bundle app CSS without a cache-busting version, so
+ * adding rules to an already-cached file would not reach clients.
+ */
+/* Natural Earth geography panel (bundled vector reference layers). */
+.cam-map-shell { position: relative; }
+.cam-ne-open.active { border-color: #0f766e; color: #0f766e; box-shadow: inset 0 0 0 1px #0f766e; }
+.cam-ne-panel { position: absolute; z-index: 1000; top: 10px; inset-inline-end: 344px; display: flex; flex-direction: column; width: 322px; max-height: min(600px, calc(100% - 20px)); border: 1px solid var(--border-color); border-radius: 12px; background: var(--card-bg); box-shadow: 0 8px 28px rgba(15,23,42,.22); font-size: 12px; }
+.cam-ne-panel[hidden] { display: none; }
+.cam-ne-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border-color); }
+.cam-ne-head strong { font-size: 12px; letter-spacing: .01em; }
+.cam-ne-body { flex: 1 1 auto; overflow-y: auto; padding: 4px 12px 10px; }
+.cam-ne-section { padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+.cam-ne-section:last-child { border-bottom: 0; }
+.cam-ne-section h4 { margin: 2px 0 8px; font-size: 11px; font-weight: 750; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); }
+.cam-ne-country-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.cam-ne-country-row label { display: inline-flex; align-items: center; gap: 5px; margin: 0; font-weight: 650; white-space: nowrap; }
+.cam-ne-country-row select { flex: 1; }
+.cam-ne-group h5 { margin: 8px 0 4px; font-size: 10px; font-weight: 750; text-transform: uppercase; letter-spacing: .05em; color: #0f766e; }
+.cam-ne-row { display: flex; align-items: center; gap: 6px; margin: 0; padding: 3px 0; cursor: pointer; }
+.cam-ne-row input { margin: 0; }
+.cam-ne-row-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cam-ne-badge { flex: none; padding: 1px 6px; border-radius: 999px; background: rgba(15,118,110,.1); color: #0f766e; font-size: 9px; font-weight: 750; }
+.cam-ne-count { flex: none; min-width: 34px; color: var(--text-muted); font-size: 10px; text-align: right; }
+.cam-ne-choropleth-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.cam-ne-choropleth-controls label { display: flex; flex-direction: column; gap: 2px; margin: 0; color: var(--text-muted); font-size: 10px; }
+.cam-ne-choropleth-controls label:first-child { grid-column: span 2; }
+.cam-ne-custom-values { margin-top: 6px; font-family: var(--font-monospace, monospace); font-size: 11px; }
+.cam-ne-choropleth-actions { display: flex; gap: 6px; margin-top: 8px; }
+.cam-ne-legend { display: grid; gap: 3px; margin-top: 8px; }
+.cam-ne-legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.cam-ne-legend-row i { width: 16px; height: 12px; border-radius: 3px; }
+.cam-ne-choropleth-note { margin: 6px 0 0; font-size: 10px; line-height: 1.4; }
+.cam-ne-inspector { font-size: 11px; }
+.cam-ne-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.cam-ne-card-head strong { font-size: 13px; }
+.cam-ne-card-sub { margin: 6px 0; font-size: 10px; line-height: 1.4; }
+.cam-ne-props { width: 100%; border-collapse: collapse; margin: 4px 0; }
+.cam-ne-props th { width: 42%; padding: 2px 6px 2px 0; color: var(--text-muted); font-weight: 550; text-align: left; vertical-align: top; }
+.cam-ne-props td { padding: 2px 0; overflow-wrap: anywhere; vertical-align: top; }
+.cam-ne-props tr + tr th, .cam-ne-props tr + tr td { border-top: 1px solid var(--subtle-fg, #f1f5f9); }
+.cam-ne-foot { padding: 8px 12px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 9px; line-height: 1.4; }
+/* inset-inline-end (not right) so the panel docks beside the sidebar in both LTR and RTL. */
+@media (max-width: 900px) { .cam-ne-panel { inset-inline-end: 10px; width: min(322px, calc(100% - 20px)); } }

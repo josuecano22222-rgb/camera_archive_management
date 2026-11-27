@@ -5,7 +5,7 @@
  "module": "Camera Archive Management",
  "action": "Go to Page",
  "action_label": "Open workspace",
- "description": "Start at the workspace: the checklist is your setup sequence, the number cards summarize live records, charts expose operational patterns, and the section cards link to every DocType. The dashboard is initially empty until you add records. Work through the steps in order; use the supporting guide in `camera_archive_management/docs/onboarding/` for detailed field notes.\n\n**Before you begin:** confirm your account has the CAM role needed for your work. CAM Operator enters cameras, vehicles, and events; CAM Archive Manager manages archive assets and ingest; CAM Geo Administrator manages spatial reference data; CAM Analyst reviews reports; CAM Viewer is read-only. System Manager can administer all areas.",
+ "description": "Start at the workspace: the checklist is your setup sequence, the number cards summarize live records, charts expose operational patterns, and the section cards link to every DocType. The dashboard is initially empty until you add records. Work through the steps in order; use the supporting guide in `camera_archive_management/docs/onboarding/` for detailed field notes.\n\n**Before you begin:** confirm your account has the CAM role needed for your work. CAM Operator enters cameras, vehicles, and events; CAM Archive Manager maintains the camera registry and movement records; CAM Geo Administrator manages spatial reference data; CAM Analyst reviews reports; CAM Viewer is read-only. System Manager can administer all areas, including the restricted camera credentials.",
  "is_complete": 0,
  "is_skipped": 0,
  "path": "camera-archive-management"

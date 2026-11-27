@@ -408,4 +408,4 @@ class TestMapEndpoint(FrappeTestCase):
 
 	def test_custom_map_coords_rejects_unsupported_doctypes(self):
 		with self.assertRaises(frappe.ValidationError):
-			map_api.get_custom_map_coords("Camera Credential")
+			map_api.get_custom_map_coords("Camera Type")

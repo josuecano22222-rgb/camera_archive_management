@@ -3,7 +3,7 @@ name = "camera_archive_management"
 authors = [
     { name = "Camera Archive Management", email = "josuecano22222@gmail.com" }
 ]
-description = "Camera inventory, archive management, motion events, and offline-capable geographic tools for Frappe."
+description = "Camera inventory, motion events, vehicle registers, and offline-capable geographic tools for Frappe."
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]

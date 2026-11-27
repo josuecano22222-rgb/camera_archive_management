@@ -67,7 +67,6 @@ def _workspace_widgets_resolve():
 	block_ids = [block.get("id") for block in content]
 	assert len(block_ids) == len(set(block_ids)), "workspace content block IDs must be unique"
 	onboardings = _records("module_onboarding")
-	steps = _records("onboarding_step")
 	cards = _records("number_card")
 	charts = {row["chart_name"] for row in json.loads((ROOT / "fixtures" / "dashboard_chart.json").read_text())}
 
@@ -100,7 +99,7 @@ def _onboarding_is_deep_and_valid():
 		if (data := _json(path)).get("doctype") == "Report"
 	}
 	rows = onboarding.get("steps", [])
-	assert len(rows) >= 18, f"The setup journey is too thin: {len(rows)} steps"
+	assert len(rows) >= 16, f"The setup journey is too thin: {len(rows)} steps"
 	assert [row.get("idx") for row in rows] == list(range(1, len(rows) + 1))
 	assert onboarding.get("allow_roles") and onboarding.get("module")
 	assert len({row.get("step") for row in rows}) == len(rows)
@@ -120,13 +119,13 @@ def _onboarding_is_deep_and_valid():
 		elif action == "Go to Page":
 			assert step.get("path"), step_name
 
-	# Keep the core end-to-end journey explicit: taxonomy → camera → vehicle → movement → archive.
+	# Keep the core end-to-end journey explicit: taxonomy → camera → vehicle → movement → coverage.
 	ordered = [row["step"] for row in rows]
 	for earlier, later in [
 		("Define camera-area taxonomy", "Register a camera"),
 		("Register a camera", "Register a vehicle"),
 		("Register a vehicle", "Record a vehicle movement event"),
-		("Record a vehicle movement event", "Create an archive asset record"),
+		("Record a vehicle movement event", "Explore camera coverage and the map"),
 	]:
 		assert ordered.index(earlier) < ordered.index(later)
 
@@ -149,7 +148,7 @@ def _onboarding_data_fields_fit_frappe_limits():
 def _number_cards_use_real_fields():
 	doctypes = _doctypes()
 	cards = _records("number_card")
-	assert len(cards) >= 7
+	assert len(cards) >= 5
 	for name, card in cards.items():
 		doctype = card["document_type"]
 		assert doctype in doctypes, (name, doctype)
@@ -165,7 +164,7 @@ def _number_cards_use_real_fields():
 def _dashboard_charts_use_real_fields():
 	doctypes = _doctypes()
 	charts = json.loads((ROOT / "fixtures" / "dashboard_chart.json").read_text(encoding="utf-8"))
-	assert len(charts) >= 9
+	assert len(charts) >= 5
 	for chart in charts:
 		doctype = chart["document_type"]
 		assert doctype in doctypes, chart["chart_name"]

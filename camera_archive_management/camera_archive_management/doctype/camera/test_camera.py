@@ -54,6 +54,38 @@ class TestCamera(FrappeTestCase):
 			camera._validate_image_gallery()
 		self.assertEqual(camera.primary_image, "/private/files/main.webp")
 
+	def test_credential_profile_requires_at_least_one_credential_value(self):
+		camera = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "Credential profile validation test",
+				"status": "Active",
+				"camera_photos_json": "[]",
+				"nearby_cameras": [],
+				"credential_label": "Main account",
+			}
+		)
+		with self.assertRaises(frappe.ValidationError):
+			camera.validate()
+		camera.username = "operator"
+		camera.validate()
+
+	def test_camera_without_credentials_stays_valid(self):
+		camera = frappe.get_doc(
+			{
+				"doctype": "Camera",
+				"naming_series": "CAM-.####",
+				"camera_name": "No credentials validation test",
+				"status": "Active",
+				"camera_photos_json": "[]",
+				"nearby_cameras": [],
+			}
+		)
+		camera.validate()
+		self.assertFalse(camera.username)
+		self.assertFalse(camera.password)
+
 	def test_rejects_out_of_range_wgs84_coordinates(self):
 		camera = frappe.get_doc(
 			{

@@ -4,24 +4,23 @@
 
 Set a cadence appropriate to operational volume and legal obligations:
 
-- **Each ingest run:** review queued/running/failed batches, processed counts, error logs, and pending archive indexes.
-- **Daily or per shift:** inspect camera status changes, movement timestamps/direction, and location or ingest exceptions that affect active operations.
-- **Weekly:** use Camera Coverage, Vehicle Movement Timeline, Archive Integrity, and Geo Location Quality to resolve gaps and stale/inconsistent records.
-- **At the approved retention interval:** review expired assets and legal holds through the organization's authorized deletion/retention procedure. A dashboard is not a deletion approval.
+- **Daily or per shift:** inspect camera status changes, movement timestamps/direction, and location exceptions that affect active operations.
+- **Weekly:** use Camera Coverage, Vehicle Movement Timeline, and Geo Location Quality to resolve gaps and stale/inconsistent records.
+- **At the approved retention interval:** review obsolete records through the organization's authorized deletion/retention procedure. A dashboard is not a deletion approval.
 
 ## Interpret dashboard statistics carefully
 
-Number Cards count documents visible under the current user's read permissions. Filtered cards report Active Cameras, Pending Archive Index, and Failed Ingest Batches. Charts show distributions by camera status/area, movement direction, vehicle type, archive retention/index state, batch status, and daily movement/intake trends. The daily movement chart uses the event detection time; the archive intake trend groups created Archive Asset records by creation time. These are different clocks.
+Number Cards count documents visible under the current user's read permissions. Filtered cards report Active Cameras. Charts show distributions by camera status/area, movement direction, and vehicle type, plus the daily movement trend. The daily movement chart uses the event detection time.
 
 A chart count is not an independent audit. Missing records, role-limited visibility, delayed workers, duplicate source events, or the wrong timezone can distort a trend. Compare the aggregate with the report and source records; investigate a sudden jump or drop instead of inferring a cause from the graph alone.
 
 ## Privacy and security checklist
 
 - Assign only the CAM roles needed for each job; test with a non-System-Manager account.
-- Protect Camera Credential values and camera connectivity details; review export, report, backup, and administrator access.
-- Treat movement histories, image/video attachments, manifests, and precise locations as potentially sensitive. Follow purpose limitation, retention, access logging, and legal hold rules.
+- Protect the Camera Access Credentials fields and camera connectivity details; review export, report, backup, and administrator access. Credential fields are permlevel 1 (System Manager only) and Password values are stored encrypted.
+- Treat movement histories, image attachments, and precise locations as potentially sensitive. Follow purpose limitation, retention, access logging, and legal hold rules.
 - Online geocoding and tile requests may disclose locations to a third party. Keep integrations disabled until reviewed, and document the provider and data-flow approval.
-- Use private files for sensitive source manifests and dataset GeoJSON as required by the DocType validation. Never publish secret-bearing manifests or storage references.
+- Use private files for sensitive dataset GeoJSON as required by the DocType validation. Never publish secret-bearing storage references.
 - Preserve provenance and audit history. Do not overwrite source facts to make dashboard totals or reports look tidy.
 
 ## Troubleshooting guide
@@ -30,7 +29,7 @@ A chart count is not an independent audit. Missing records, role-limited visibil
 - **Create step unavailable:** the onboarding entry does not grant access. Ask an administrator to assign the appropriate role rather than weakening DocType permissions.
 - **Workspace card is blank:** verify the Number Card imported during migrate, the linked DocType is readable, and the user's role can read its source records. Check the browser/server logs for import or permission errors.
 - **Map point absent or ambiguous:** verify coordinate order, signs, exact source values, active dataset coverage, and Geo Location Quality. Do not round coordinates to work around a mismatch.
-- **Archive index pending/failed:** inspect the worker queue, asset storage link, batch status/error log, file permissions, and checksum. Follow the approved retry procedure; retain the failure trail.
+- **Credential fields invisible:** they are restricted to System Manager by design. Ask an administrator rather than widening Camera permissions.
 - **Unexpected movement pattern:** validate time zone, camera clock, direction, duplicate events, and data completeness before treating it as a real route.
 
 ## Safe deployment sequence

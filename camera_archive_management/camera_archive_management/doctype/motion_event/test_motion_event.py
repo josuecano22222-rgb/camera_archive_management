@@ -56,7 +56,7 @@ class TestMotionEvent(FrappeTestCase):
 			event.save(ignore_permissions=True)
 
 	def test_event_captures_cameras_within_configured_alert_radius(self):
-		settings = frappe.get_single("Archive Settings")
+		settings = frappe.get_single("CAM Geo Settings")
 		settings.enable_nearby_camera_alerts = 1
 		settings.nearby_camera_radius = 200
 		settings.save(ignore_permissions=True)
@@ -100,7 +100,7 @@ class TestMotionEvent(FrappeTestCase):
 		self.assertFalse(nearby_rows[nearby.name].note)
 
 	def test_event_includes_explicitly_connected_camera_even_outside_radius(self):
-		settings = frappe.get_single("Archive Settings")
+		settings = frappe.get_single("CAM Geo Settings")
 		settings.enable_nearby_camera_alerts = 1
 		settings.nearby_camera_radius = 100
 		settings.save(ignore_permissions=True)
@@ -186,7 +186,7 @@ class TestMotionEvent(FrappeTestCase):
 				"detected_at": past,
 			}
 		).insert(ignore_permissions=True)
-		default_importance = frappe.db.get_single_value("Archive Settings", "default_motion_importance") or "Medium"
+		default_importance = frappe.db.get_single_value("CAM Geo Settings", "default_motion_importance") or "Medium"
 		self.assertEqual(default_event.importance, default_importance)
 
 		future = frappe.get_doc(
