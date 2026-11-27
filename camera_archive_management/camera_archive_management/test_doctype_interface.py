@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import unittest
 from pathlib import Path
@@ -192,8 +193,19 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn('control?.df?.fieldname === "location"', compat_text)
 		self.assertIn("Control.prototype.load_lib", compat_text)
 		self.assertIn("leaflet_draw/leaflet.draw.js", compat_text)
-		self.assertIn('app_include_js = ["/assets/camera_archive_management/js/camera_geolocation_compat.js"]',
-			(Path(__file__).parents[1] / "hooks.py").read_text(encoding="utf-8"))
+		hooks_path = Path(__file__).parents[1] / "hooks.py"
+		hooks_spec = importlib.util.spec_from_file_location("cam_hooks_under_test", hooks_path)
+		hooks_module = importlib.util.module_from_spec(hooks_spec)
+		hooks_spec.loader.exec_module(hooks_module)
+		self.assertIn(
+			"/assets/camera_archive_management/js/camera_geolocation_compat.js", hooks_module.app_include_js
+		)
+		self.assertIn(
+			"/assets/camera_archive_management/js/camera_natural_earth.js", hooks_module.app_include_js
+		)
+		self.assertIn(
+			"/assets/camera_archive_management/css/camera_archive.css", hooks_module.app_include_css
+		)
 		camera_list_script = (DOCTYPE_DIR / "camera" / "camera_list.js").read_text(encoding="utf-8")
 		self.assertIn("get_custom_map_coords", camera_list_script)
 		self.assertIn("render_map_data", camera_list_script)
