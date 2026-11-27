@@ -45,7 +45,10 @@ app_include_js = [
 	"/assets/camera_archive_management/js/camera_geolocation_compat.js",
 	"/assets/camera_archive_management/js/camera_natural_earth.js",
 ]
-app_include_css = ["/assets/camera_archive_management/css/camera_archive.css"]
+app_include_css = [
+	"/assets/camera_archive_management/css/camera_archive.css",
+	"/assets/camera_archive_management/css/camera_natural_earth.css",
+]
 
 # Camera credentials live on Camera at permlevel 1: only System Manager holds
 # permlevel-1 read/write, so Frappe hides the fields in forms, strips them from

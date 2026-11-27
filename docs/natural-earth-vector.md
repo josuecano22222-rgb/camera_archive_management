@@ -49,6 +49,7 @@ api/natural_earth.py                          permission-checked, read-only whit
         │
 public/js/camera_natural_earth.js             map UI: layer panel, scale switching, inspector,
         │                                     choropleth + legend (window.cam_natural_earth)
+public/css/camera_natural_earth.css           panel styles (dedicated file; see deployment note)
 page/camera_archive_map/camera_archive_map.js hosts the panel and forwards zoom/click events
 ```
 
@@ -148,7 +149,9 @@ Run the full app suite on the site (see the deployment commands below).
 
 ## 11. Deploying to `frappe.com`
 
-This change adds bundled files, a read-only API, a global JS asset, and CSS. It introduces **no DocType, schema, or patch changes**, so no data migration is required. The new `app_include_js` asset must be built and caches cleared.
+This change adds bundled files, a read-only API, and two new global assets (`camera_natural_earth.js` and `camera_natural_earth.css`). It introduces **no DocType, schema, or patch changes**, so no data migration is required. Build the assets and clear caches so the new `app_include_js` / `app_include_css` entries are picked up.
+
+> **Why the panel styles live in their own file.** Frappe serves non-`.bundle.` app CSS with a plain `<link href="…">` and **no cache-busting version**. Adding rules to the already-cached `camera_archive.css` would not reach browsers that hold a stale copy. The Natural Earth styles therefore ship in a dedicated `camera_natural_earth.css` (a new URL fetched fresh by every browser), registered separately in `app_include_css`. If the panel ever appears unstyled, confirm that file is listed in `app_include_css` and that caches were cleared after the hooks change.
 
 ```bash
 cd ~/frappe-bench/apps/camera_archive_management

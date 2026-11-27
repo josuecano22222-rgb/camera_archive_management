@@ -206,6 +206,9 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn(
 			"/assets/camera_archive_management/css/camera_archive.css", hooks_module.app_include_css
 		)
+		self.assertIn(
+			"/assets/camera_archive_management/css/camera_natural_earth.css", hooks_module.app_include_css
+		)
 		camera_list_script = (DOCTYPE_DIR / "camera" / "camera_list.js").read_text(encoding="utf-8")
 		self.assertIn("get_custom_map_coords", camera_list_script)
 		self.assertIn("render_map_data", camera_list_script)
