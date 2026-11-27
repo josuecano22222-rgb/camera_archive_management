@@ -263,6 +263,74 @@
    "fieldtype": "Table",
    "label": "Nearby Cameras",
    "options": "Camera Nearby Camera"
+  },
+  {
+   "fieldname": "layout_tab_6",
+   "fieldtype": "Tab Break",
+   "label": "Access Credentials"
+  },
+  {
+   "fieldname": "layout_section_6_1",
+   "fieldtype": "Section Break",
+   "label": "Credential profile"
+  },
+  {
+   "fieldname": "credential_label",
+   "fieldtype": "Data",
+   "label": "Credential Label",
+   "permlevel": 1,
+   "description": "Non-secret label for the camera account; visible only to System Managers."
+  },
+  {
+   "fieldname": "credentials_active",
+   "fieldtype": "Check",
+   "label": "Credentials Active",
+   "default": "1",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "layout_section_6_2",
+   "fieldtype": "Section Break",
+   "label": "Secrets"
+  },
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "label": "Username",
+   "permlevel": 1,
+   "description": "Camera account user name. Restricted to System Managers."
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Password",
+   "label": "Password",
+   "permlevel": 1,
+   "description": "Stored encrypted by Frappe; never exposed in lists, reports, exports, or map payloads."
+  },
+  {
+   "fieldname": "secondary_secret",
+   "fieldtype": "Password",
+   "label": "Secondary Secret",
+   "permlevel": 1,
+   "description": "Optional second secret such as an API key, stored encrypted like the password."
+  },
+  {
+   "fieldname": "layout_section_6_3",
+   "fieldtype": "Section Break",
+   "label": "Rotation & notes"
+  },
+  {
+   "fieldname": "last_rotated_at",
+   "fieldtype": "Datetime",
+   "label": "Last Rotated At",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "credential_notes",
+   "fieldtype": "Small Text",
+   "label": "Credential Notes",
+   "permlevel": 1,
+   "description": "Non-secret handling notes only; never store passwords, tokens, or keys here."
   }
  ],
  "field_order": [
@@ -308,7 +376,18 @@
   "camera_photos_json",
   "camera_photo_gallery",
   "layout_section_5_2",
-  "nearby_cameras"
+  "nearby_cameras",
+  "layout_tab_6",
+  "layout_section_6_1",
+  "credential_label",
+  "credentials_active",
+  "layout_section_6_2",
+  "username",
+  "password",
+  "secondary_secret",
+  "layout_section_6_3",
+  "last_rotated_at",
+  "credential_notes"
  ],
  "permissions": [
   {
@@ -369,6 +448,12 @@
    "share": 1,
    "select": 1,
    "import": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "permlevel": 1
   }
  ],
  "istable": 0,

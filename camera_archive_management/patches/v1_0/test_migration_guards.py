@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
@@ -9,10 +9,10 @@ from camera_archive_management.patches.v1_0 import (
 	assert_doctype_namespace,
 	ensure_child_table_columns,
 	ensure_unique_keys,
-	isolate_camera_credentials,
-	migrate_archive_settings_single,
+	merge_camera_credentials,
 	migrate_camera_photo_gallery,
 	normalize_camera_geolocation,
+	remove_archive_doctypes,
 	rename_geo_settings,
 	rename_vehicle_camera,
 )
@@ -78,12 +78,16 @@ class TestMigrationGuards(FrappeTestCase):
 			return []
 
 		with (
-			patch.object(frappe.db, "exists", side_effect=lambda dt, name: dt == "DocType" and name == "Camera Photo"),
+			patch.object(
+				frappe.db, "exists", side_effect=lambda dt, name: dt == "DocType" and name == "Camera Photo"
+			),
 			patch.object(frappe.db, "table_exists", side_effect=lambda dt: dt == "Camera Photo"),
 			patch.object(
 				frappe.db,
 				"get_value",
-				side_effect=lambda dt, name, field: "Camera Archive Management" if dt == "DocType" else "camera_archive_management",
+				side_effect=lambda dt, name, field: "Camera Archive Management"
+				if dt == "DocType"
+				else "camera_archive_management",
 			),
 			patch.object(frappe.db, "has_column", return_value=True),
 			patch.object(frappe.db, "count", return_value=1),
@@ -190,19 +194,243 @@ class TestMigrationGuards(FrappeTestCase):
 				rename_vehicle_camera.execute()
 		rename_doc.assert_not_called()
 
-	def test_absent_legacy_settings_and_credential_tables_are_repeatable(self):
-		with patch.object(frappe.db, "table_exists", return_value=False), patch.object(
-			frappe, "reload_doc"
-		) as reload_doc:
-			migrate_archive_settings_single.execute()
-			migrate_archive_settings_single.execute()
-			isolate_camera_credentials.execute()
-			isolate_camera_credentials.execute()
-		self.assertEqual(reload_doc.call_count, 2)
+	def test_absent_credential_sources_are_repeatable(self):
+		with (
+			patch.object(frappe.db, "exists", return_value=False),
+			patch.object(frappe.db, "table_exists", return_value=False),
+			patch.object(frappe.db, "has_column", return_value=False),
+			patch.object(frappe, "delete_doc") as delete_doc,
+		):
+			merge_camera_credentials.execute()
+			merge_camera_credentials.execute()
+		delete_doc.assert_not_called()
+
+	def test_credential_merge_moves_secrets_and_retires_the_doctype(self):
+		credential_row = frappe._dict(
+			name="CRED-1",
+			camera="CAM-1",
+			credential_label="Main account",
+			active=1,
+			username="operator",
+			last_rotated_at=None,
+			notes="",
+		)
+		camera_doc = frappe._dict(name="CAM-1")
+		camera_doc.save = Mock()
+		credential_doc = frappe._dict(name="CRED-1", password="*****", secondary_secret=None)
+		credential_doc.get_password = Mock(
+			side_effect=lambda fieldname, raise_exception=True: "s3cret" if fieldname == "password" else None
+		)
+
+		def exists(doctype, name=None):
+			if doctype == "DocType":
+				return name == "Camera Credential"
+			return doctype == "Camera"
+
+		def get_value(doctype, name, fieldname):
+			if doctype == "DocType":
+				return "Camera Archive Management"
+			if doctype == "Module Def":
+				return "camera_archive_management"
+			return None
+
+		def get_doc(doctype, name=None):
+			if doctype == "Camera":
+				return camera_doc
+			if doctype == "Camera Credential":
+				return credential_doc
+			raise AssertionError(doctype)
+
+		with (
+			patch.object(frappe.db, "exists", side_effect=exists),
+			patch.object(
+				frappe.db,
+				"table_exists",
+				side_effect=lambda dt, cached=True: dt in ("Camera", "Camera Credential"),
+			),
+			patch.object(frappe.db, "has_column", return_value=True),
+			patch.object(frappe.db, "sql", return_value=[]),
+			patch.object(frappe.db, "get_value", side_effect=get_value),
+			patch.object(frappe, "get_all", return_value=[credential_row]),
+			patch.object(frappe, "get_doc", side_effect=get_doc),
+			patch.object(frappe.db, "delete") as delete,
+			patch.object(frappe.db, "sql_ddl") as sql_ddl,
+			patch.object(frappe, "delete_doc") as delete_doc,
+			patch.object(frappe, "clear_cache"),
+			patch.object(frappe, "logger"),
+		):
+			merge_camera_credentials.execute()
+
+		self.assertEqual(camera_doc.username, "operator")
+		self.assertEqual(camera_doc.password, "s3cret")
+		self.assertEqual(camera_doc.credential_label, "Main account")
+		self.assertEqual(camera_doc.credentials_active, 1)
+		camera_doc.save.assert_called_once_with(ignore_permissions=True)
+		delete.assert_called_once_with("__Auth", {"doctype": "Camera Credential"})
+		sql_ddl.assert_called_once_with("DROP TABLE IF EXISTS `tabCamera Credential`")
+		delete_doc.assert_called_once_with(
+			"DocType", "Camera Credential", force=True, ignore_permissions=True
+		)
+
+	def test_credential_merge_fails_closed_on_duplicate_camera_credentials(self):
+		rows = [
+			frappe._dict(name="CRED-1", camera="CAM-1"),
+			frappe._dict(name="CRED-2", camera="CAM-1"),
+		]
+		with (
+			patch.object(frappe.db, "exists", return_value=True),
+			patch.object(frappe.db, "table_exists", return_value=True),
+			patch.object(frappe.db, "has_column", return_value=True),
+			patch.object(frappe.db, "sql", return_value=[]),
+			patch.object(
+				frappe.db,
+				"get_value",
+				side_effect=lambda dt, name, field: "Camera Archive Management"
+				if dt == "DocType"
+				else "camera_archive_management",
+			),
+			patch.object(frappe, "get_all", return_value=rows),
+			patch.object(frappe, "delete_doc") as delete_doc,
+		):
+			with self.assertRaises(frappe.ValidationError):
+				merge_camera_credentials.execute()
+		delete_doc.assert_not_called()
+
+	def test_credential_merge_fails_closed_on_foreign_ownership(self):
+		with (
+			patch.object(frappe.db, "exists", return_value=True),
+			patch.object(frappe.db, "table_exists", return_value=True),
+			patch.object(frappe.db, "has_column", return_value=True),
+			patch.object(frappe.db, "sql", return_value=[]),
+			patch.object(
+				frappe.db,
+				"get_value",
+				side_effect=lambda dt, name, field: "Foreign Module" if dt == "DocType" else "another_app",
+			),
+			patch.object(frappe, "delete_doc") as delete_doc,
+		):
+			with self.assertRaises(frappe.PermissionError):
+				merge_camera_credentials.execute()
+		delete_doc.assert_not_called()
+
+	def test_absent_archive_doctypes_are_repeatable(self):
+		with (
+			patch.object(frappe.db, "exists", return_value=False),
+			patch.object(frappe, "get_all", return_value=[]),
+			patch.object(frappe.db, "table_exists", return_value=False),
+			patch.object(frappe.db, "delete"),
+			patch.object(frappe.db, "sql_ddl") as sql_ddl,
+			patch.object(frappe, "delete_doc") as delete_doc,
+		):
+			remove_archive_doctypes.execute()
+			remove_archive_doctypes.execute()
+		delete_doc.assert_not_called()
+		sql_ddl.assert_not_called()
+
+	def test_archive_removal_drops_retired_tables_and_single_values(self):
+		with (
+			patch.object(frappe.db, "exists", return_value=False),
+			patch.object(frappe, "get_all", return_value=[]),
+			patch.object(
+				frappe.db,
+				"table_exists",
+				side_effect=lambda dt, cached=True: dt in ("Archive Asset", "Archive Ingest Batch"),
+			),
+			patch.object(frappe.db, "delete") as delete,
+			patch.object(frappe.db, "sql_ddl") as sql_ddl,
+			patch.object(frappe, "delete_doc") as delete_doc,
+		):
+			remove_archive_doctypes.execute()
+		delete.assert_any_call("Singles", {"doctype": "Archive Settings"})
+		self.assertEqual(sql_ddl.call_count, 2)
+		sql_ddl.assert_any_call("DROP TABLE IF EXISTS `tabArchive Asset`")
+		sql_ddl.assert_any_call("DROP TABLE IF EXISTS `tabArchive Ingest Batch`")
+		delete_doc.assert_not_called()
+
+	def test_archive_removal_fails_closed_on_external_link(self):
+		external_field = frappe._dict(parent="Motion Event", fieldname="asset", options="Archive Asset")
+		with (
+			patch.object(frappe.db, "exists", return_value=True),
+			patch.object(
+				frappe.db,
+				"get_value",
+				side_effect=lambda dt, name, field: "Camera Archive Management"
+				if dt == "DocType"
+				else "camera_archive_management",
+			),
+			patch.object(frappe, "get_all", return_value=[external_field]),
+			patch.object(frappe, "delete_doc") as delete_doc,
+		):
+			with self.assertRaises(frappe.ValidationError):
+				remove_archive_doctypes.execute()
+		delete_doc.assert_not_called()
+
+	def test_archive_removal_preserves_motion_settings_before_deleting(self):
+		singles_rows = [
+			frappe._dict(field="default_motion_importance", value="High"),
+			frappe._dict(field="nearby_camera_radius", value="250"),
+		]
+		with (
+			patch.object(frappe.db, "exists", return_value=True),
+			patch.object(
+				frappe.db,
+				"get_value",
+				side_effect=lambda dt, name, field: "Camera Archive Management"
+				if dt == "DocType"
+				else "camera_archive_management",
+			),
+			patch.object(frappe, "get_all", return_value=[]),
+			patch.object(frappe.db, "table_exists", return_value=False),
+			patch.object(frappe.db, "sql", return_value=singles_rows),
+			patch.object(frappe.db, "set_single_value") as set_single_value,
+			patch.object(frappe.db, "delete"),
+			patch.object(frappe, "delete_doc") as delete_doc,
+			patch.object(frappe, "clear_cache"),
+		):
+			remove_archive_doctypes.execute()
+		set_single_value.assert_any_call(
+			"CAM Geo Settings", "default_motion_importance", "High", update_modified=False
+		)
+		set_single_value.assert_any_call(
+			"CAM Geo Settings", "nearby_camera_radius", "250", update_modified=False
+		)
+		self.assertEqual(delete_doc.call_count, 3)
+		for call in delete_doc.call_args_list:
+			self.assertEqual(call.args[0], "DocType")
+			self.assertIn(call.args[1], ("Archive Asset", "Archive Ingest Batch", "Archive Settings"))
+
+	def test_archive_removal_fails_closed_on_conflicting_legacy_settings(self):
+		legacy_rows = [
+			frappe._dict(
+				default_motion_importance="High", enable_nearby_camera_alerts=1, nearby_camera_radius=250
+			),
+			frappe._dict(
+				default_motion_importance="Low", enable_nearby_camera_alerts=1, nearby_camera_radius=250
+			),
+		]
+		with (
+			patch.object(frappe.db, "exists", return_value=True),
+			patch.object(
+				frappe.db,
+				"get_value",
+				side_effect=lambda dt, name, field: "Camera Archive Management"
+				if dt == "DocType"
+				else "camera_archive_management",
+			),
+			patch.object(frappe, "get_all", return_value=[]),
+			patch.object(frappe.db, "table_exists", return_value=True),
+			patch.object(frappe.db, "get_table_columns", return_value=list(legacy_rows[0].keys())),
+			patch.object(frappe.db, "sql", side_effect=[[], legacy_rows]),
+			patch.object(frappe, "delete_doc") as delete_doc,
+		):
+			with self.assertRaises(frappe.ValidationError):
+				remove_archive_doctypes.execute()
+		delete_doc.assert_not_called()
 
 	def test_absent_child_and_unique_tables_are_repeatable(self):
-		with patch.object(frappe, "get_all", return_value=[]), patch.object(
-			frappe.db, "table_exists", return_value=False
+		with (
+			patch.object(frappe, "get_all", return_value=[]),
+			patch.object(frappe.db, "table_exists", return_value=False),
 		):
 			ensure_child_table_columns.execute()
 			ensure_child_table_columns.execute()

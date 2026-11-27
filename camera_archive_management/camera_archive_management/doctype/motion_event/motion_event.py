@@ -89,7 +89,7 @@ class MotionEvent(Document):
 			self.set(target, camera.get(source))
 		if not self.importance:
 			self.importance = camera.get("importance") or frappe.db.get_single_value(
-				"Archive Settings", "default_motion_importance"
+				"CAM Geo Settings", "default_motion_importance"
 			) or "Medium"
 		value = camera.get("location")
 		self.location_snapshot = (
@@ -104,7 +104,7 @@ class MotionEvent(Document):
 		if self.nearby_cameras or not self.camera:
 			return
 		try:
-			settings = frappe.get_single("Archive Settings")
+			settings = frappe.get_single("CAM Geo Settings")
 		except Exception:
 			return
 		if not settings.enable_nearby_camera_alerts:

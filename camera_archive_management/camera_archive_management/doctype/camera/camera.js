@@ -1,13 +1,51 @@
 frappe.ui.form.on("Camera", {
 	refresh(frm) {
 		render_camera_gallery(frm);
+		render_credential_guard(frm);
 		if (frm.is_new()) return;
 		frm.add_custom_button(__("Open map"), () => {
 			frappe.route_options = { camera: frm.doc.name, view: "camera" };
 			frappe.set_route("camera-archive-map");
 		}, __("Camera Archive"));
+		if (can_manage_credentials(frm) && has_credential_values(frm)) {
+			frm.add_custom_button(__("Record rotation"), () => {
+				frm.set_value("last_rotated_at", frappe.datetime.now_datetime());
+				frappe.show_alert({
+					message: __("Rotation timestamp updated. Save the Camera to keep it."),
+					indicator: "green",
+				});
+			}, __("Access Credentials"));
+		}
 	},
 });
+
+function can_manage_credentials(frm) {
+	return frappe.perm.has_perm(frm.doctype, 1, "write", frm.doc);
+}
+
+function has_credential_values(frm) {
+	// Password fields arrive as Frappe's "*****" placeholder when a secret exists;
+	// the real value is never sent to the browser.
+	return Boolean(frm.doc.username || frm.doc.password || frm.doc.secondary_secret);
+}
+
+function render_credential_guard(frm) {
+	if (!frappe.perm.has_perm(frm.doctype, 1, "read", frm.doc)) {
+		// Operators must not see an empty credentials tab: every field inside it
+		// is permlevel 1 and already stripped from their form by Frappe.
+		frm.set_df_property("layout_tab_6", "hidden", 1);
+		return;
+	}
+	frm.set_df_property("layout_tab_6", "hidden", 0);
+	const wrapper = frm.fields_dict.layout_section_6_1?.$wrapper?.get(0);
+	if (!wrapper || wrapper.querySelector(".cam-credential-note")) return;
+	const note = document.createElement("p");
+	note.className = "text-muted cam-credential-note";
+	note.textContent = __(
+		"Restricted to System Managers. Secrets are encrypted by Frappe and never appear in lists, reports, exports, or map data."
+	);
+	wrapper.append(note);
+}
 
 const CAMERA_IMAGE_EXTENSIONS = new Set([
 	"avif", "bmp", "gif", "jpeg", "jpg", "png", "tif", "tiff", "webp",

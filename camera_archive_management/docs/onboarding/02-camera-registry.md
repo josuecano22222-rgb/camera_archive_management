@@ -20,7 +20,7 @@ Save the record and reopen it. Confirm the pin is where expected, its area and g
 
 ## Credentials and permissions
 
-Camera Credential is a separate restricted DocType, not a general notes field. Only the specifically authorized role should create or read it. Put secrets in the Password fields; keep the label and notes non-secret; record rotation dates. Never put passwords, tokens, or recovery codes in Camera descriptions, event notes, manifests, onboarding text, or screenshots. The onboarding credential action is optional because many deployments do not store credentials in Frappe and most CAM users must not access them.
+Camera credentials live on the Camera record itself, in the restricted **Access Credentials** tab. Every field in that tab is permlevel 1: only System Manager can read or write it, Frappe encrypts the Password values, and the fields are stripped from forms, lists, reports, exports, and API reads for every other role. Put secrets only in the Password fields; keep the label and notes non-secret; record rotation dates. Never put passwords, tokens, or recovery codes in Camera descriptions, event notes, onboarding text, or screenshots. The onboarding credential action is optional because many deployments do not store credentials in Frappe and most CAM users must not access them.
 
 Connectivity metadata can still be sensitive. Use least privilege for IP address, port, and camera identity; check list, export, report, and backup access—not only form visibility.
 

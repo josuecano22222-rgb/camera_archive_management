@@ -10,14 +10,9 @@ Additional observations…,ملاحظات إضافية…
 Address,العنوان
 Adjusted,معدَّل
 Aerial,جوية
-Alert Roles,أدوار التنبيه
 All Day,طوال اليوم
 All areas,كل المناطق
 All statuses,كل الحالات
-Archive Full Data,بيانات الأرشيف الكاملة
-Archive Library,مكتبة الأرشيف
-Archive Settings,إعدادات الأرشيف
-Archive full data,بيانات الأرشيف الكاملة
 Area,المنطقة
 Area Name,اسم المنطقة
 Audit,التدقيق
@@ -60,8 +55,6 @@ Cameras by Type,الكاميرات حسب النوع
 Cameras considered nearby for motion-event context and alerts. Recorded automatically on every Motion Event and used for notifications.,الكاميرات القريبة المعتبرة لسياق أحداث الحركة والتنبيهات. تُسجل تلقائيًا في كل حدث حركة وتُستخدم للإشعارات.
 Cameras on map: {0},الكاميرات على الخريطة: {0}
 Cameras ranked,الكاميرات المرتبة
-"Cameras within the Nearby Camera Radius (Archive Settings), recorded automatically with the precise distance and direction from the detecting camera.",الكاميرات الواقعة ضمن نطاق الكاميرات القريبة (إعدادات الأرشيف)، تُسجَّل تلقائيًا مع المسافة والاتجاه الدقيقين من الكاميرا الراصدة.
-Cameras within this distance of each other are considered nearby.,تُعتبر الكاميرات الواقعة ضمن هذه المسافة من بعضها قريبة.
 Cannot delete Camera Area {0} linked to {1} cameras,لا يمكن حذف منطقة الكاميرا {0} المرتبطة بـ {1} كاميرات
 Cannot delete Camera Type {0} linked to {1} cameras,لا يمكن حذف نوع الكاميرا {0} المرتبط بـ {1} كاميرات
 Cannot delete Camera with {0} linked Motion Events,لا يمكن حذف كاميرا مرتبطة بـ {0} أحداث حركة
@@ -108,9 +101,6 @@ Day (06:00 – 18:00),نهاري (06:00 – 18:00)
 Day / night image acceptable,الصورة نهارًا وليلًا مقبولة
 Days Since Motion,الأيام منذ آخر حركة
 Default Motion Importance,الأهمية الافتراضية للحركة
-Default Report Days,أيام التقارير الافتراضية
-Default lookback window for analytics reports.,نافذة الاسترجاع الافتراضية لتقارير التحليلات.
-Default range uses Archive Settings → Default Report Days.,يستخدم النطاق الافتراضي إعدادات الأرشيف ← أيام التقارير الافتراضية.
 "Describe the area this camera covers and its viewing angle, e.g. ""North gate entrance — wide-angle view over the main driveway.""",صِف المنطقة التي تغطيها هذه الكاميرا وزاوية الرؤية، مثال: «مدخل البوابة الشمالية — رؤية واسعة للممر الرئيسي».
 Description,الوصف
 Details,التفاصيل
@@ -120,7 +110,6 @@ Device,الجهاز
 Device Audit Report,تقرير تدقيق الأجهزة
 Device Description,وصف الجهاز
 Device Identifier,معرّف الجهاز
-Device clock matches the archive server time.,ساعة الجهاز مطابقة لوقت خادم الأرشيف.
 Device mounted and housing sealed,الجهاز مثبّت والهيكل محكم الإغلاق
 "Device technical data sheet — configuration, connectivity, geometry and coverage record.",صحيفة البيانات التقنية للجهاز — سجل الإعدادات والاتصال والشكل الهندسي والتغطية.
 Direction,الاتجاه
@@ -130,7 +119,6 @@ Distance (m),المسافة (متر)
 Documents,المستندات
 "Draw points, lines, polygons, rectangles, or circles on the native map control. Stored as GeoJSON and rendered by the native Map list view.",ارسم نقاطًا أو خطوطًا أو مضلعات أو مستطيلات أو دوائر على عنصر الخريطة. تُحفظ بصيغة GeoJSON وتُعرض في عرض الخريطة الأصلي.
 East,شرق
-Enable Daily Integrity Check,تفعيل فحص التكامل اليومي
 Enable Nearby Camera Alerts,تفعيل تنبيهات الكاميرات القريبة
 Endpoint,نقطة الاتصال
 Endpoint {0} reachable; no packet loss observed.,نقطة الاتصال {0} قابلة للوصول؛ لم يُرصد أي فقدان للحزم.
@@ -289,7 +277,6 @@ Not Permitted,غير مسموح
 Not recorded,غير مسجَّل
 Note,ملاحظة
 Notes,ملاحظات
-"Notify users when a camera is added near existing cameras, or when motion is detected on a camera that has nearby cameras.",إشعار المستخدمين عند إضافة كاميرا بالقرب من كاميرات موجودة، أو عند رصد حركة على كاميرا لديها كاميرات قريبة.
 Number,الرقم
 Offline,دون اتصال
 Offline storage,التخزين دون اتصال
@@ -343,13 +330,11 @@ Related,ذات صلة
 Remarks,ملاحظات
 Replaced,مستبدَل
 Report Print,طباعة التقرير
-Report Schedule Note,ملاحظة جدولة التقارير
 Reports,التقارير
 Restricted,مقيَّد
 Result,النتيجة
 Results are capped at {0} rows; narrow the date range or filters for larger exports.,النتائج محدودة بـ {0} صفًا؛ ضيّق نطاق التاريخ أو عوامل التصفية لتصدير أكبر.
 Right,يمين
-Roles that receive nearby-camera notifications.,الأدوار التي تتلقى إشعارات الكاميرات القريبة.
 Rows,الصفوف
 Scheduled Reports,التقارير المجدولة
 Search,بحث
@@ -391,18 +376,14 @@ Terms,الشروط
 Terrain,التضاريس
 "The offline_maps app is not installed, so basemaps fall back to the online defaults. Install offline_maps (see README → “Offline Maps integration”) for fully offline maps.",تطبيق offline_maps غير مثبّت، لذا تعود الخرائط الأساسية إلى الإعدادات الافتراضية عبر الإنترنت. ثبّت offline_maps (انظر README ← «تكامل خرائط دون اتصال») للحصول على خرائط دون اتصال بالكامل.
 "The receiving party confirms that the device has been inspected, is in the described condition, and custody is transferred under the conditions stated above.",يقرّ الطرف المستلم بأن الجهاز تم فحصه وأنه بالحالة الموصوفة، وأن العهدة انتقلت وفق الشروط المذكورة أعلاه.
-This card identifies the vehicle and its archive record.,تحدد هذه البطاقة المركبة وسجلها في الأرشيف.
 This certificate confirms the transfer of custody of the device between the stated parties under the stated conditions.,تؤكد هذه الشهادة نقل عهدة الجهاز بين الطرفين المذكورين وفق الشروط المذكورة.
 This certificate confirms the transfer of custody of the device described below.,تؤكد هذه الشهادة نقل عهدة الجهاز الموصوف أدناه.
 This document confirms the commissioning of the camera installation and records the verification performed on site.,تؤكد هذه الوثيقة تشغيل تركيب الكاميرا وتسجّل عمليات التحقق المنفذة في الموقع.
-This document contains security-relevant device configuration. Store in a controlled location and destroy superseded copies. Distribution is limited to authorized archive personnel.,تحتوي هذه الوثيقة على إعدادات جهاز ذات صلة بالأمن. احفظها في مكان مراقب وأتلِف النسخ المستبدلة. يقتصر توزيعها على موظفي الأرشيف المصرح لهم.
 "This document is a one-page management summary of the camera's operational posture: status, activity volume, last detection, and coverage statement.",هذه الوثيقة ملخص إداري من صفحة واحدة للوضع التشغيلي للكاميرا: الحالة وحجم النشاط وآخر رصد وبيان التغطية.
 This document is the field inspection form completed during physical checks of the camera installation; file it with the device record.,هذه الوثيقة هي نموذج الفحص الميداني الذي يُستكمل أثناء الفحوصات المادية لتركيب الكاميرا؛ يُحفظ مع سجل الجهاز.
-This document records security-relevant device configuration for authorized archive personnel and is subject to controlled-copy handling.,تسجّل هذه الوثيقة إعدادات الجهاز ذات الصلة بالأمن لموظفي الأرشيف المصرح لهم، وتخضع لمعاملة النسخ المراقبة.
 "This document records the complete technical configuration of the camera device — identity, connectivity, geometry, coverage, and photographs. It is the controlled technical record for this device.",تسجّل هذه الوثيقة الإعدادات التقنية الكاملة لجهاز الكاميرا — الهوية والاتصال والشكل الهندسي والتغطية والصور. وهي السجل التقني المراقب لهذا الجهاز.
 This document reports a single maintenance service visit and the work performed on the camera.,توثق هذه الوثيقة زيارة صيانة واحدة والأعمال المنفذة على الكاميرا.
 This document reports a single motion event and the precise nearby-camera context recorded at detection time.,توثق هذه الوثيقة حدث حركة واحدًا وسياق الكاميرات القريبة الدقيق المسجل لحظة الرصد.
-This label identifies the camera device and its archive record. Affix it to the device housing or cable.,تحدد هذه الملصقة جهاز الكاميرا وسجله في الأرشيف. ألصقها على هيكل الجهاز أو الكابل.
 "This printout audits camera record completeness: photos, coordinates, credentials, coverage, and activity.",تدقق هذه النسخة المطبوعة اكتمال سجلات الكاميرات: الصور والإحداثيات وبيانات الدخول والتغطية والنشاط.
 This printout compares Entry and Exit motion events per period with the computed net flow.,تقارن هذه النسخة المطبوعة أحداث الدخول والخروج لكل فترة مع صافي التدفق المحسوب.
 This printout is the flat export of motion events joined with camera and vehicle details.,هذه النسخة المطبوعة هي التصدير المسطح لأحداث الحركة مضمومًا إلى تفاصيل الكاميرا والمركبة.
@@ -469,7 +450,6 @@ shared cache,ذاكرة تخزين مؤقت مشتركة
 About this report,عن هذا التقرير
 Activity Trend,اتجاه النشاط
 Analytics,التحليلات
-Archive extract,استخراج الأرشيف
 Audit window,نافذة التدقيق
 "Audits each camera for completeness: photographs, coordinates, credentials, and field of view. Cameras missing required data are flagged for attention.",يدقق كل كاميرا من حيث الاكتمال: الصور، الإحداثيات، وبيانات الاعتماد، ومدى الرؤية. يتم وضع علامة على الكاميرات التي تفتقد البيانات المطلوبة للانتباه.
 Auto-generated,يُنشأ تلقائيًا
@@ -727,7 +707,6 @@ Open camera,فتح الكاميرا
 No results in this view have valid coordinates.,لا توجد نتائج صالحة الإحداثيات في هذا العرض.
 There are no loaded map results to fit.,لا توجد نتائج محمّلة على الخريطة لملاءمتها.
 OPERATIONS CENTRE,مركز العمليات
-"Live, permission-aware snapshots of cameras, movement activity, vehicles, archives, and geographic data.",عرض مباشر للكاميرات والحركات والمركبات والأرشيف والبيانات الجغرافية وفق صلاحياتك.
 Loading latest statistics…,جارٍ تحميل أحدث الإحصاءات…
 Refresh statistics,تحديث الإحصاءات
 Open map,فتح الخريطة
@@ -746,12 +725,10 @@ just now,الآن
 Browse workspace,تصفح مساحة العمل
 QUICK ACCESS,وصول سريع
 "Choose a section to open its records, reports, or map.",اختر قسمًا لفتح سجلاته أو تقاريره أو خريطته.
-Statistics follow your Frappe permissions. Sensitive credential records remain protected by their DocType permissions.,تتبع الإحصاءات صلاحيات Frappe الخاصة بك. وتظل بيانات الاعتماد الحساسة محمية بصلاحيات نوع المستند.
 Maps & Analysis,الخرائط والتحليل
 Camera Registry,سجل الكاميرات
 Movements & Vehicles,الحركات والمركبات
 Geographic Reference,المراجع الجغرافية
-Archive & Configuration,الأرشيف والإعدادات
 Unknown camera,كاميرا غير معروفة
 at this camera,عند هذه الكاميرا
 moves,حركات
@@ -765,16 +742,12 @@ Statistics chart,مخطط الإحصاءات
 Camera Coverage,تغطية الكاميرات
 Vehicle Movement Timeline,الخط الزمني لحركة المركبات
 Geo Location Quality,جودة الموقع الجغرافي
-Camera Credential,بيانات اعتماد الكاميرا
 CAM Vehicle,مركبة مراقبة
 Geo Dataset,مجموعة البيانات الجغرافية
 Geo Admin Area,منطقة إدارية جغرافية
 Geo Boundary,حد جغرافي
 Geo Gazetteer Place,موضع في الفهرس الجغرافي
 CAM Geo Settings,إعدادات الخرائط الجغرافية
-Archive Asset,أصل أرشيفي
-Archive Ingest Batch,دفعة استيراد الأرشيف
-Archive Integrity,سلامة الأرشيف
 No user-configured vehicle image; showing the saved movement point,لا توجد صورة مركبة مخصصة من المستخدم؛ يتم عرض نقطة الحركة المحفوظة
 No user-configured vehicle image,لا توجد صورة مركبة مخصصة من المستخدم
 Vehicle image unavailable,صورة المركبة غير متاحة
@@ -791,15 +764,12 @@ Active Dataset,مجموعة البيانات النشطة
 Address Snapshot,لقطة العنوان
 Admin Area,المنطقة الإدارية
 Administrative Hierarchy,التسلسل الإداري
-Allow External Archive References,السماح بمراجع الأرشيف الخارجية
 Allow Online Setup,السماح بالإعداد عبر الإنترنت
 Allow Shared Tile Cache Writes,السماح بالكتابة إلى ذاكرة تخزين البلاطات المشتركة
 Alternate Names,أسماء بديلة
 Ambiguity Threshold M,حد الالتباس (م)
-Archive Record,سجل الأرشيف
 Area M2,المساحة (م²)
 Area Structure,هيكل المنطقة
-Asset properties,خصائص الأصل الأرشيفي
 Attribution,الإسناد والمصدر
 Bearing Compass,اتجاه البوصلة
 Bearing Deg,الاتجاه بالدرجات
@@ -807,19 +777,16 @@ Boundary Code,رمز الحدود
 Boundary Profile,ملف الحدود الجغرافية
 Boundary geometries,أشكال الحدود الهندسية
 Bounding box,مستطيل الإحاطة
-Camera & account,الكاميرا والحساب
 Camera Area Snapshot,لقطة منطقة الكاميرا
 Camera Image Gallery Data,بيانات معرض صور الكاميرا
 Camera Name Snapshot,لقطة اسم الكاميرا
 Camera Profile,ملف الكاميرا
 Camera Type Snapshot,لقطة نوع الكاميرا
 Camera at detection,الكاميرا وقت الرصد
-Capture window,فترة التسجيل
 Catalog details,تفاصيل الفهرس
 Centroid & area,مركز الشكل ومساحته
 Centroid Lat,خط عرض المركز
 Centroid Lon,خط طول المركز
-Checksum Sha256,بصمة SHA-256
 Classification,التصنيف
 Code,الرمز
 Connection details,تفاصيل الاتصال
@@ -827,13 +794,11 @@ Connectivity,الاتصال
 Country Tags,وسوم البلدان
 Coverage & Notes,التغطية والملاحظات
 Credential Label,تسمية بيانات الاعتماد
-Credential Lifecycle,دورة حياة بيانات الاعتماد
 Dataset,مجموعة البيانات
 Dataset & identity,مجموعة البيانات والهوية
 Dataset Id,معرّف مجموعة البيانات
 Dataset Identity,هوية مجموعة البيانات
 Dataset Provenance,مصدر مجموعة البيانات وسجلّها
-Default Retention Days,مدة الاحتفاظ الافتراضية (أيام)
 Default Search Radius M,نطاق البحث الافتراضي (م)
 Demo Scenario,سيناريو العرض التوضيحي
 Deployment,النشر الميداني
@@ -841,17 +806,11 @@ Detection,الرصد
 Distance M,المسافة (م)
 Enable Online Geocoder,تفعيل خدمة الترميز الجغرافي عبر الإنترنت
 Enable Online Tile Fetch,السماح بجلب بلاطات الخريطة عبر الإنترنت
-Error Log,سجل الأخطاء
 Event Overview,نظرة عامة على الحدث
-Extended metadata,بيانات وصفية إضافية
-External Reference,مرجع التخزين الخارجي
-External Storage Scope,نطاق التخزين الخارجي
 Feature Count,عدد المعالم
 Feature Type,نوع المعلم الجغرافي
 Fetch controls,ضوابط الجلب
 Field Of View,مجال الرؤية
-File Url,رابط الملف
-Finished At,وقت الانتهاء
 Geo Admin Area Snapshot,لقطة المنطقة الإدارية الجغرافية
 Geographic extent,النطاق الجغرافي
 Geographic references,المراجع الجغرافية
@@ -859,10 +818,8 @@ Geojson,صيغة GeoJSON
 Geometries,الأشكال الهندسية
 Geometry Role,دور الشكل الهندسي
 Hierarchy,التسلسل الهرمي
-Idempotency Key,مفتاح منع التكرار
 Identification,التعريف
 Identity,الهوية
-Identity & context,الهوية والسياق
 Identity & hierarchy,الهوية والتسلسل الهرمي
 Illustration,الصورة التوضيحية
 Image & status,الصورة والحالة
@@ -872,13 +829,7 @@ Import Error,خطأ الاستيراد
 Import Progress,تقدم الاستيراد
 Import Status,حالة الاستيراد
 Import source,مصدر الاستيراد
-Index Error,خطأ الفهرسة
-Index Status,حالة الفهرسة
 Index Version,إصدار الفهرس
-Indexing,الفهرسة
-Ingest Batch,دفعة الإدخال الأرشيفي
-Ingest Item Key,مفتاح عنصر الإدخال
-Ingest provenance,سجل مصدر الإدخال
 Ip Address,عنوان IP
 Label,التسمية
 Last Dataset Import,آخر استيراد لمجموعة البيانات
@@ -906,14 +857,9 @@ Lookup Source,مصدر البحث
 Lookup provenance,مصدر نتيجة البحث
 Main Image,الصورة الرئيسية
 Manifest,بيان الملفات
-Manifest Json,بيان JSON
 Map Tile Operations,عمليات بلاطات الخريطة
 Media & Proximity,الوسائط والكاميرات القريبة
-Media Type,نوع الوسائط
-Metadata Json,البيانات الوصفية بصيغة JSON
-Monitoring & Alerts,المراقبة والتنبيهات
 Movement Icon Preview,معاينة أيقونة الحركة
-Nearby Alert Roles,الأدوار المستلمة للتنبيه القريب
 Nearby camera alerts,تنبيهات الكاميرات القريبة
 Network timeouts,مهل الشبكة
 Notes & Proximity,الملاحظات والكاميرات القريبة
@@ -922,9 +868,7 @@ Online Provider,مزود الخدمة عبر الإنترنت
 Online Rate Limit Per Min,حد الطلبات عبر الإنترنت في الدقيقة
 Online User Agent,معرّف عميل الخدمة عبر الإنترنت
 Online geocoder,خدمة الترميز الجغرافي عبر الإنترنت
-Operational Defaults,الإعدادات التشغيلية الافتراضية
 Operator notes,ملاحظات المشغل
-Outcome,النتيجة
 Parent Boundary,الحد الجغرافي الأصل
 Parent Camera Area,منطقة الكاميرا الأصل
 Parentage,العلاقة بالأصل
@@ -932,48 +876,27 @@ Place Code,رمز المكان
 Place Name,اسم المكان
 Place Profile,ملف المكان
 Position,الموضع
-Processed Count,عدد العناصر المعالجة
-Processing,المعالجة
 Progress & outcome,التقدم والنتيجة
 Provenance,المصدر وسجلّ التغييرات
-Queued By,أُدرج في قائمة الانتظار بواسطة
-Recorded From,بداية التسجيل
-Recorded To,نهاية التسجيل
-Reporting,التقارير
-Require Archive Checksum,اشتراط بصمة للأرشيف
 Resolved location,الموقع المحسوم
-Retention & integrity,الاحتفاظ والسلامة
-Retention State,حالة الاحتفاظ
 Rgt,الحد الأيمن (rgt)
 Rotation & notes,التدوير والملاحظات
-Run status,حالة التشغيل
-Scheduled checks,الفحوصات المجدولة
 Search & Geocoding,البحث والترميز الجغرافي
 Search precision,دقة البحث
 Secondary Secret,السر الثانوي
 Secrets,الأسرار
 Sha256,SHA-256
-Size Bytes,الحجم (بايت)
 Source,المصدر
 Source & Quality,المصدر والجودة
-Source & idempotency,المصدر ومنع التكرار
 Source File,ملف المصدر
 Source Id,معرّف المصدر
 Source Kind,نوع المصدر
-Source Manifest,بيان المصدر
 Source Notes,ملاحظات المصدر
-Source Scope,نطاق المصدر
 Spatial Extent,الامتداد المكاني
 Srid,معرّف نظام الإسناد المكاني (SRID)
-Started At,وقت البدء
-Storage & Integrity,التخزين والسلامة
-Storage Backend,نظام التخزين
-Storage location,موقع التخزين
-Submission,الإرسال
 Synthetic Demo Record,سجل اصطناعي للعرض
 Tile Connect Timeout Seconds,مهلة الاتصال ببلاطات الخريطة (ثوانٍ)
 Tile Read Timeout Seconds,مهلة قراءة بلاطات الخريطة (ثوانٍ)
-Title,العنوان
 Tree maintenance fields,حقول صيانة الشجرة
 Type Profile,ملف النوع
 Type details,تفاصيل النوع
@@ -986,46 +909,34 @@ Vehicle Type Image,صورة نوع المركبة
 Verification,التحقق
 Version,الإصدار
 Vertex Count,عدد الرؤوس الهندسية
-From reference data and camera registration to verified movements and archive operations,من البيانات المرجعية وتسجيل الكاميرات إلى الحركات المتحقق منها وعمليات الأرشفة
+From reference data and camera registration to verified movements and coverage review,من البيانات المرجعية وتسجيل الكاميرات إلى الحركات المتحقق منها ومراجعة التغطية
 Camera Nearby Camera,كاميرا قريبة من الكاميرا
 Geo Boundary Geometry,هندسة الحدود الجغرافية
 Motion Event Nearby Camera,كاميرا قريبة من حدث الحركة
-Archive Assets,أصول الأرشيف
-Archive Operations,عمليات الأرشيف
 Camera Archive Management Setup,تهيئة إدارة أرشيف الكاميرات
 Camera Archive Management · Operational Control Room,إدارة أرشيف الكاميرات · مركز العمليات
 Camera Registry & Events,سجل الكاميرات والأحداث
 Explore the complete workspace,استكشف مساحة العمل كاملة
-Failed Ingest Batches,دفعات إدخال فاشلة
 Live operational pulse,المؤشرات التشغيلية المباشرة
 Map & Geographic Data,الخريطة والبيانات الجغرافية
-Pending Archive Index,أصول أرشيف بانتظار الفهرسة
 Quick actions,إجراءات سريعة
 Recorded Movements,الحركات المسجلة
 Registered Vehicles,المركبات المسجلة
 Supporting & Spatial Records,السجلات المساندة والمكانية
 Total Cameras,إجمالي الكاميرات
-"Trends, coverage & archive health",الاتجاهات والتغطية وسلامة الأرشيف
+Trends & coverage,الاتجاهات والتغطية
 Vehicle Movements,حركات المركبات
-Camera Archive - Archive Index Status,إدارة أرشيف الكاميرات - حالة فهرسة الأرشيف
-Camera Archive - Archive Intake Trend,إدارة أرشيف الكاميرات - اتجاه إدخال الأرشيف
-Camera Archive - Archive Retention State,إدارة أرشيف الكاميرات - حالة الاحتفاظ بالأرشيف
 Camera Archive - Camera Status,إدارة أرشيف الكاميرات - حالة الكاميرات
 Camera Archive - Cameras by Area,إدارة أرشيف الكاميرات - الكاميرات حسب المنطقة
 Camera Archive - Daily Movements,إدارة أرشيف الكاميرات - الحركات اليومية
-Camera Archive - Ingest Batch Pipeline,إدارة أرشيف الكاميرات - حالات دفعات الإدخال
 Camera Archive - Movement Direction,إدارة أرشيف الكاميرات - اتجاه الحركة
 Camera Archive - Vehicles by Type,إدارة أرشيف الكاميرات - المركبات حسب النوع
-Deleted,محذوف
 Disabled,معطّل
 Display,عرض
 Disputed,متنازع عليه
-Draft,مسودة
-Expired,منتهي الصلاحية
 External,خارجي
 Failed,فشل
 Frappe File,ملف Frappe
-Hold,موقوف للاحتفاظ
 Imported,مستورد
 Manual,يدوي
 Nominatim (OpenStreetMap),خدمة Nominatim التابعة لـ OpenStreetMap
@@ -1039,14 +950,10 @@ Comma-separated ISO country/region tags; not an administrative hierarchy.,وسو
 Exact decimal string; WGS84 is validated server-side.,قيمة عشرية دقيقة كنص؛ يتحقق الخادم من مطابقتها لمعيار WGS84.
 Explicit opt-in. Fetching also requires Siraj Geo Settings > Allow server to fetch from provider. Review provider terms and attribution before enabling.,يتطلب تفعيلًا صريحًا. كما يتطلب الجلب السماح للخادم بجلب البيانات من المزود في إعدادات Siraj Geo Settings. راجع شروط المزود والإسناد قبل التفعيل.
 Fallback movement icon when a vehicle has no primary image.,أيقونة بديلة للحركة عند عدم توفر صورة رئيسية للمركبة.
-Frappe File URL; use for site-managed attachments.,رابط ملف Frappe؛ يُستخدم للمرفقات التي يديرها الموقع.
 Identifies a fictional area created for explicitly requested demonstration and test workflows.,يحدد منطقة افتراضية أُنشئت لسيناريوهات العرض والاختبار بطلب صريح.
 Identifies a fictional vehicle type created for explicitly requested demonstration and test workflows.,يحدد نوع مركبة افتراضياً أُنشئ لسيناريوهات العرض والاختبار بطلب صريح.
 Identifies clearly synthetic records generated only for demonstration and test workflows.,يحدد سجلات اصطناعية بوضوح، أُنشئت حصراً لسيناريوهات العرض والاختبار.
-Opaque external archive URI/reference; never interpreted as a server filesystem path.,مرجع أو URI معتم للتخزين الخارجي؛ لا يُفسر مطلقاً على أنه مسار في نظام ملفات الخادم.
 Operator-entered address. Reverse lookup never replaces this field automatically.,عنوان يدخله المشغل. لا تستبدل هذه القيمة تلقائياً بنتيجة بحث عكسي.
-Operator-provided JSON manifest listing asset metadata; source media remains external/file storage.,بيان JSON يقدمه المشغل ويتضمن بيانات الأصول؛ تبقى الوسائط المصدرية في التخزين الخارجي أو الملفات.
-Optional bounded JSON manifest payload.,حمولة بيان JSON اختيارية ومحدودة الحجم.
 Persist validated provider tiles to the shared private/siraj_tile_cache. Also requires online tile fetching to be enabled.,احفظ بلاطات المزود التي تم التحقق منها في التخزين الخاص المشترك siraj_tile_cache. يتطلب ذلك أيضاً تفعيل جلب البلاطات عبر الإنترنت.
 Primary image used for vehicle movement markers and cards.,الصورة الرئيسية المستخدمة لعلامات حركة المركبات وبطاقاتها.
 Private GeoJSON FeatureCollection for a background import.,مجموعة معالم GeoJSON خاصة لاستيرادها في الخلفية.
@@ -1054,21 +961,15 @@ Required contact identifier when explicitly enabling Nominatim.,معرّف جه�
 "Upload, order, caption, and choose the main camera image.",ارفع صور الكاميرا ورتبها وأضف تعليقاتها واختر الصورة الرئيسية.
 WGS84 latitude in decimal degrees.,خط العرض وفق WGS84 بالدرجات العشرية.
 WGS84 longitude in decimal degrees.,خط الطول وفق WGS84 بالدرجات العشرية.
-ARC-.########,ARC-.########
 CAM-.####,CAM-.####
 CAM-VEH-.####,CAM-VEH-.####
-ING-.#####,ING-.#####
 MOT-.#####,MOT-.#####
 "<span class=""h4""><b>Camera Archive Management · Operational Control Room</b></span>","<span class=""h4""><b>إدارة أرشيف الكاميرات · مركز العمليات</b></span>"
 "<span class=""h4""><b>Explore the complete workspace</b></span>","<span class=""h4""><b>استكشف مساحة العمل كاملة</b></span>"
 "<span class=""h4""><b>Live operational pulse</b></span>","<span class=""h4""><b>المؤشرات التشغيلية المباشرة</b></span>"
 "<span class=""h4""><b>Quick actions</b></span>","<span class=""h4""><b>إجراءات سريعة</b></span>"
-"<span class=""h4""><b>Trends, coverage &amp; archive health</b></span>","<span class=""h4""><b>الاتجاهات والتغطية وسلامة الأرشيف</b></span>"
-Archive Index Status,حالة فهرسة الأرشيف
-Archive Intake Trend,اتجاه إدخال الأرشيف
-Archive Retention State,حالة الاحتفاظ بالأرشيف
+"<span class=""h4""><b>Trends &amp; coverage</b></span>","<span class=""h4""><b>الاتجاهات والتغطية</b></span>"
 Daily movements,الحركات اليومية
-Ingest Batch Pipeline,حالات دفعات الإدخال
 Movement direction,اتجاه الحركة
 Vehicles by type,المركبات حسب النوع
 Add Geo Admin Area,أضف منطقة إدارية جغرافية
@@ -1077,19 +978,11 @@ Add Geo Dataset,أضف مجموعة بيانات جغرافية
 Add a vehicle,أضف مركبة
 Add secure credential,أضف بيانات اعتماد آمنة
 Build the administrative area hierarchy,أنشئ التسلسل الهرمي للمناطق الإدارية
-Check archive integrity and indexing,افحص سلامة الأرشيف وفهرسته
 "Check camera status, type, area, and coordinate coverage. Use filters that match your operational scope, then follow up on cameras with missing or ambiguous locations. Coverage is only as good as the inventory and boundary sources supplied.",راجع حالة الكاميرا ونوعها ومنطقتها وتغطية إحداثياتها. استخدم عوامل تصفية تناسب النطاق التشغيلي، ثم تابع الكاميرات ذات المواقع المفقودة أو الملتبسة. وتعتمد دقة التغطية على اكتمال سجل الكاميرات ومصادر الحدود.
 "Check event times, direction, camera, and vehicle links; verify timezone and chronology.",تحقق من وقت الحدث واتجاهه والكاميرا وروابط المركبة، وراجع المنطقة الزمنية والتسلسل الزمني.
 "Compare camera location and status by area; investigate gaps, duplicates, and stale devices.",قارن مواقع الكاميرات وحالاتها حسب المنطقة، وتحقق من الفجوات والتكرارات والأجهزة القديمة.
 Confirm camera types,راجع أنواع الكاميرات
 Create Camera Area,أنشئ منطقة كاميرات
-Create an archive asset record,أنشئ سجل أصل أرشيفي
-Create ingest batch,أنشئ دفعة إدخال
-"Create a batch only after agreeing the source scope and a stable idempotency key with the ingest operator. Attach a private manifest or provide the supported manifest JSON, validate item keys and storage references, and check archive settings before queueing. The idempotency key prevents retries from creating duplicate assets.
-
-Use a small test batch first, then inspect status, processed count, timestamps, and error log. A failed batch should be investigated and safely retried using the same idempotency identity where the ingestion contract says it is safe. Avoid placing credentials in manifests or error text.","أنشئ الدفعة بعد الاتفاق مع مشغل الإدخال على نطاق المصدر ومفتاح ثابت لمنع التكرار. أرفق بياناً خاصاً أو أدخل JSON المدعوم، وتحقق من مفاتيح العناصر ومراجع التخزين وإعدادات الأرشيف قبل الإدراج في قائمة الانتظار. يمنع المفتاح إعادة المحاولة من إنشاء أصول مكررة.
-
-ابدأ بدفعة اختبار صغيرة، ثم راجع الحالة وعدد العناصر المعالجة والطوابع الزمنية وسجل الأخطاء. افحص الدفعة الفاشلة وأعد تشغيلها بأمان باستخدام مفتاح منع التكرار نفسه عندما يسمح عقد الإدخال بذلك. لا تضع بيانات اعتماد في البيان أو نصوص الأخطاء."
 "Create a reusable vehicle identity with a clear display name, vehicle type, and a stable registration/identifier only where collection and retention are authorized. Status should reflect the record's operational state. Vehicle images are optional and should have an approved source.
 
 Do not create a duplicate vehicle for every detection. A Motion Event can remain unlinked when the vehicle cannot be identified; use uncertainty rather than a speculative identity. Reopen the vehicle and verify its type and identifier before linking events.","أنشئ هوية قابلة لإعادة الاستخدام للمركبة باسم واضح ونوع محدد، وأضف رقم تسجيل أو معرّفاً ثابتاً فقط إذا كان جمعه والاحتفاظ به مصرحاً بهما. اجعل الحالة معبرة عن الوضع التشغيلي الفعلي. صورة المركبة اختيارية ويجب أن يكون مصدرها معتمداً.
@@ -1112,35 +1005,27 @@ A Camera Area is the operational inventory taxonomy; it is distinct from Geo Adm
 منطقة الكاميرا تصنيف تشغيلي للمخزون، وهي تختلف عن المنطقة الإدارية الجغرافية والحد الجغرافي. قد ترتبط الكاميرا بمنطقة تشغيلية وبمراجع جغرافية مستقلة. تحقق من التنقل بين الأصل والابن قبل إسناد الكاميرات."
 "Create the physical camera record after its area and type exist. Enter a stable camera name, active status, type, operational area, installation/serial identifiers where appropriate, and exact latitude/longitude. Add address and jurisdiction/boundary links only when supported by your source. Record location source and confidence; resolve ambiguous lookups instead of treating a guess as verified.
 
-Connectivity fields can reveal infrastructure; follow your access policy and do not put passwords here. Add a main image only when authorized and useful. Save, reopen, and verify the marker, coverage, location snapshots, and related area on the Camera Archive Map.","أنشئ سجل الكاميرا الفعلية بعد إضافة منطقتها ونوعها. أدخل اسماً ثابتاً، وحالة صحيحة، ونوعاً ومنطقة تشغيلية، ومعرّفات التركيب أو الرقم التسلسلي عند الحاجة، وإحداثيي خط العرض والطول بدقتهما الأصلية. أضف العنوان وروابط المنطقة الإدارية والحدود فقط عندما يدعمها المصدر. سجّل مصدر الموقع ودرجة موثوقيته، واحسم نتائج البحث الملتبسة بدلاً من اعتبار التخمين حقيقة مؤكدة.
+Connectivity fields can reveal infrastructure; follow your access policy. Store account secrets only in the restricted Access Credentials tab, never in free-text descriptions or notes. Add a main image only when authorized and useful. Save, reopen, and verify the marker, coverage, location snapshots, and related area on the Camera Archive Map.","أنشئ سجل الكاميرا الفعلية بعد وجود منطقتها ونوعها. أدخل اسم كاميرا ثابتاً وحالة نشاط ونوعاً ومنطقة تشغيلية ومعرّفات التركيب/الرقم التسلسلي عند الاقتضاء، وخط عرض وطول دقيقين. أضف العنوان وروابط الاختصاص/الحدود فقط عندما يسندها مصدرك. سجّل مصدر الموقع ودرجة الثقة؛ واحسم عمليات البحث الملتبسة بدلاً من اعتبار التخمين متحققاً.
 
-قد تكشف حقول الاتصال معلومات عن البنية التحتية؛ التزم بسياسة الوصول ولا تضع كلمات المرور هنا. أضف صورة رئيسية عند التصريح والحاجة فقط. احفظ السجل ثم أعد فتحه وتحقق من العلامة والتغطية ولقطات الموقع والمنطقة المرتبطة على خريطة أرشيف الكاميرات."
+قد تكشف حقول الاتصال تفاصيل البنية التحتية؛ اتبع سياسة الوصول. خزّن أسرار الحساب فقط في تبويب Access Credentials المقيد، ولا تضعها أبداً في الأوصاف أو الملاحظات الحرة. أضف صورة رئيسية فقط عند التصريح والفائدة. احفظ السجل وأعد فتحه وتحقق من العلامة والتغطية ولقطات المواقع والمنطقة المرتبطة على خريطة أرشيف الكاميرات."
 Define camera-area taxonomy,عرّف تصنيف مناطق الكاميرات
 Explore camera coverage and the map,استكشف تغطية الكاميرات والخريطة
 Find missing or ambiguous camera locations; correct source records and rerun this report.,اعثر على مواقع الكاميرات المفقودة أو الملتبسة، وصحح السجلات المصدرية ثم أعد تشغيل التقرير.
-"Index a recording or evidence asset against its camera and, where applicable, Motion Event and ingest batch. Record the capture window, media type, byte size, storage backend, retention state, and a SHA-256 checksum when available/required. For Frappe File storage attach the approved file; for external storage, use the configured scope/reference and never expose a private URL.
-
-Check that capture start is not after capture end, the camera/event association is correct, and the checksum describes the exact stored bytes. The index status is managed by the indexing workflow—do not mark an unverified asset complete by hand.","اربط سجل التسجيل أو مادة الإثبات بالكاميرا، وبحدث الحركة ودفعة الإدخال عند انطباق ذلك. سجّل فترة الالتقاط ونوع الوسائط والحجم بالبايت ونظام التخزين وحالة الاحتفاظ وبصمة SHA-256 متى كانت متاحة أو مطلوبة. عند استخدام ملفات Frappe أرفق الملف المعتمد؛ وعند التخزين الخارجي استخدم النطاق والمرجع المهيأين ولا تكشف رابطاً خاصاً.
-
-تحقق من أن بداية التسجيل لا تأتي بعد نهايته، ومن صحة ربط الكاميرا والحدث، ومن أن البصمة تطابق البايتات المخزنة تماماً. تدير آلية الفهرسة حالة الفهرس؛ لا تضع الأصل يدوياً في حالة مكتمل قبل التحقق منه."
 "Inspect registered cameras and recorded movement locations spatially. Confirm markers match the exact saved coordinates, active camera filters behave as expected, and no unexpected network tile/geocoder request occurs under your privacy policy. A missing background tile is not proof that a camera coordinate is missing; use the coordinate and location-quality reports too.
 
 The map is a discovery/operations aid, not a substitute for source verification or authoritative boundary data. If the basemap is offline, review the offline tile/cache guide and its provider/license constraints.","افحص مواقع الكاميرات المسجلة والحركات المرصودة مكانياً. تحقق من مطابقة العلامات للإحداثيات المحفوظة بدقة، ومن عمل عوامل تصفية الكاميرات النشطة كما هو متوقع، ومن عدم إرسال طلبات غير متوقعة للبلاطات أو الترميز الجغرافي بما يخالف سياسة الخصوصية. غياب بلاطة الخلفية لا يعني أن إحداثيات الكاميرا مفقودة؛ راجع تقارير الإحداثيات وجودة المواقع أيضاً.
 
 الخريطة أداة للاستكشاف والتشغيل وليست بديلاً عن التحقق من المصدر أو البيانات الحدودية المعتمدة. إذا كانت الخريطة الأساسية غير متصلة، راجع دليل البلاطات والتخزين المؤقت دون اتصال وشروط المزود والترخيص."
 Load and verify boundary geometry,حمّل هندسة الحدود وتحقق منها
-"Only users with the restricted Camera Credential permission should do this step. Create a credential record linked to the camera and store username/password/secondary secret only in the protected password fields. Use a non-secret label, rotate and record the rotation date, and keep notes free of passwords, tokens, and keys.
+"Only a System Manager should do this step. Open the camera and use the restricted Access Credentials tab: store username/password/secondary secret only in the protected permlevel-1 fields, which Frappe encrypts and hides from every other role. Use a non-secret label, rotate and record the rotation date, and keep notes free of passwords, tokens, and keys.
 
-Never paste credentials into a camera description, event, screenshot, CSV, ticket, or onboarding note. Verify that access is limited to authorized System Managers and that backups/logs follow your secret-handling policy. Skip this optional step if the integration does not need stored credentials.","ينفذ هذه الخطوة المستخدمون المخولون فقط بصلاحية بيانات اعتماد الكاميرا المقيدة. أنشئ سجل اعتماد مرتبطاً بالكاميرا، واحفظ اسم المستخدم وكلمة المرور والسر الثانوي في حقول كلمات المرور المحمية فقط. استخدم تسمية لا تتضمن سراً، وسجّل تاريخ التدوير، وأبقِ الملاحظات خالية من كلمات المرور والرموز والمفاتيح.
+Never paste credentials into a camera description, event, screenshot, CSV, ticket, or onboarding note. Verify that access is limited to authorized System Managers and that backups/logs follow your secret-handling policy. Skip this optional step if the integration does not need stored credentials.","على System Manager فقط تنفيذ هذه الخطوة. افتح الكاميرا واستخدم تبويب Access Credentials المقيد: خزّن اسم المستخدم/كلمة المرور/السر الثانوي فقط في حقول permlevel-1 المحمية، والتي يشفرها Frappe ويخفيها عن كل دور آخر. استخدم تسمية غير سرية، ودوّر الأسرار وسجّل تاريخ التدوير، وأبقِ الملاحظات خالية من كلمات المرور والرموز والمفاتيح.
 
-لا تلصق بيانات الاعتماد مطلقاً في وصف كاميرا أو حدث أو لقطة شاشة أو CSV أو تذكرة أو ملاحظة تهيئة. تحقق من قصر الوصول على مديري النظام المخولين ومن خضوع النسخ الاحتياطية والسجلات لسياسة التعامل مع الأسرار. تخطَّ هذه الخطوة الاختيارية إذا لم يتطلب التكامل تخزين بيانات اعتماد."
-Open Archive Settings,افتح إعدادات الأرشيف
+لا تلصق بيانات الاعتماد أبداً في وصف الكاميرا أو حدث أو لقطة شاشة أو CSV أو تذكرة أو ملاحظة تهيئة. تحقق من اقتصار الوصول على مديري النظام المخولين وأن النسخ الاحتياطية/السجلات تتبع سياسة التعامل مع الأسرار. تخطَّ هذه الخطوة الاختيارية إذا لم يكن التكامل بحاجة إلى بيانات اعتماد مخزنة."
 Open Geo Settings,افتح الإعدادات الجغرافية
-Open archive map,افتح خريطة الأرشيف
 Open movement timeline,افتح الخط الزمني للحركات
 Open the Camera Archive workspace,افتح مساحة عمل أرشيف الكاميرات
 Open workspace,افتح مساحة العمل
-Prepare an idempotent ingest batch,جهّز دفعة إدخال تمنع التكرار
 Record a movement,سجّل حركة
 Record a vehicle movement event,سجّل حدث حركة مركبة
 "Record one observation with the camera, Entry/Exit direction, and the detected-at timestamp in the correct timezone. Link a CAM Vehicle only when identity is sufficiently supported; add importance and concise, factual notes. The event captures camera/location snapshots so later camera edits do not rewrite the observation context.
@@ -1156,20 +1041,16 @@ Register Camera,سجّل كاميرا
 Register a camera,سجّل كاميرا
 Register a geographic dataset,سجّل مجموعة بيانات جغرافية
 Register a vehicle,سجّل مركبة
-Register archive asset,سجّل أصلاً أرشيفياً
-Review archive integrity,راجع سلامة الأرشيف
-Review archive policy and defaults,راجع سياسة الأرشيف والإعدادات الافتراضية
 Review camera coverage report,راجع تقرير تغطية الكاميرات
 Review camera types,راجع أنواع الكاميرات
-"Review checksum, retention, ingest, and index health; investigate failures and invalid references.",راجع سلامة البصمات والاحتفاظ والإدخال والفهرسة، وتحقق من حالات الفشل والمراجع غير الصالحة.
 Review geographic settings,راجع الإعدادات الجغرافية
 Review location quality,راجع جودة المواقع
 Review location quality and close the loop,راجع جودة المواقع وأكمل دورة المعالجة
 "Review the active dataset and spatial lookup policy before entering locations. The install seeds a coarse Natural Earth world-country dataset; it is a generalized cartographic reference, not a legal boundary layer or detailed street map. Set the active dataset deliberately, check that online geocoding and tile fetching match your privacy policy, and prefer local/offline data where external disclosure is not approved.
 
-Use exact WGS84 decimal-degree coordinates (latitude −90…90, longitude −180…180). Do not round precise source coordinates. A blank active dataset or missing regional coverage is not fixed by creating a camera; import an authorized dataset first.","راجع مجموعة البيانات النشطة وسياسة البحث المكاني قبل إدخال المواقع. يضيف التثبيت بيانات دول العالم من Natural Earth بدقة عامة؛ وهي مرجع خرائطي مبسط وليست طبقة حدود قانونية أو خريطة شوارع تفصيلية. اختر مجموعة البيانات النشطة بعناية، وتأكد من توافق الترميز الجغرافي وجلب البلاطات عبر الإنترنت مع سياسة الخصوصية، وفضّل البيانات المحلية أو غير المتصلة عندما لا يكون الإفصاح الخارجي مصرحاً.
+The Motion Events tab holds the default event importance and the nearby-camera alert radius used when movement events are recorded. Use exact WGS84 decimal-degree coordinates (latitude −90…90, longitude −180…180). Do not round precise source coordinates. A blank active dataset or missing regional coverage is not fixed by creating a camera; import an authorized dataset first.","راجع مجموعة البيانات النشطة وسياسة البحث المكاني قبل إدخال المواقع. يضيف التثبيت بيانات دول العالم من Natural Earth بدقة عامة؛ وهي مرجع خرائطي مبسط وليست طبقة حدود قانونية أو خريطة شوارع تفصيلية. اختر مجموعة البيانات النشطة بعناية، وتأكد من توافق الترميز الجغرافي وجلب البلاطات عبر الإنترنت مع سياسة الخصوصية، وفضّل البيانات المحلية أو غير المتصلة عندما لا يكون الإفصاح الخارجي مصرحاً.
 
-استخدم إحداثيات WGS84 الدقيقة بالدرجات العشرية (خط العرض من ‎−90 إلى 90، وخط الطول من ‎−180 إلى 180). لا تقرّب إحداثيات المصدر الدقيقة. لا تعالج غياب مجموعة نشطة أو نقص التغطية الإقليمية بمجرد إنشاء كاميرا؛ استورد أولاً مجموعة بيانات مصرحاً بها."
+يتضمن تبويب Motion Events أهمية الحدث الافتراضية ونصف قطر تنبيه الكاميرات القريبة المستخدمين عند تسجيل أحداث الحركة. استخدم إحداثيات WGS84 الدقيقة بالدرجات العشرية (خط العرض من ‎−90 إلى 90، وخط الطول من ‎−180 إلى 180). لا تقرّب إحداثيات المصدر الدقيقة. لا تعالج غياب مجموعة نشطة أو نقص التغطية الإقليمية بمجرد إنشاء كاميرا؛ استورد أولاً مجموعة بيانات مصرحاً بها."
 "Review the seeded camera classifications first; the app installs missing core types additively and does not overwrite local edits. Add only types your organization actually uses, with consistent names, an active flag, and a short definition (for example, fixed, PTZ, ANPR, thermal). Deactivate obsolete types rather than silently reusing their meaning.
 
 This vocabulary drives the camera inventory and coverage analysis. Keep device capabilities in the type description and per-camera fields, not as near-duplicate categories.","راجع تصنيفات الكاميرات المضافة مسبقاً أولاً؛ يضيف التطبيق الأنواع الأساسية المفقودة دون استبدال التعديلات المحلية. أضف الأنواع التي تستخدمها مؤسستك فعلياً فقط، بأسماء متسقة وحالة نشاط وتعريف موجز، مثل ثابتة أو PTZ أو ANPR أو حرارية. عطّل الأنواع القديمة بدلاً من إعادة استخدامها بمعنى مختلف دون تنبيه.
@@ -1182,31 +1063,35 @@ Vehicle Type is a reference record; the individual CAM Vehicle record stores the
 نوع المركبة سجل مرجعي؛ أما سجل CAM Vehicle فيحفظ هوية المركبة نفسها وصورتها إن وجدت. تجنب إنشاء نوع لكل طراز أو شركة مصنعة ما لم يكن هذا التفصيل مستخدماً فعلياً في التحليل."
 Review vehicle movement timeline,راجع الخط الزمني لحركة المركبات
 Review vehicle types,راجع أنواع المركبات
-"Set archive defaults and alerts before ingest: retention period and state policy, checksum requirement, whether external storage references are allowed, integrity-check schedule, and nearby-camera alert radius/roles. Confirm the storage backend choice and ownership responsibilities with your records/privacy lead.
-
-A retention default is not a substitute for an approved retention schedule, legal hold, or deletion procedure. Enable external references only if the corresponding storage scope and access controls are documented. Do not put secrets in free-text notes.","اضبط افتراضيات الأرشيف وتنبيهاته قبل الإدخال: مدة الاحتفاظ وسياسة الحالة، واشتراط البصمة، والسماح بمراجع التخزين الخارجي، وجدولة فحوص السلامة، ونطاق تنبيه الكاميرات القريبة والأدوار المعنية. اتفق مع مسؤول السجلات والخصوصية على نظام التخزين والمسؤوليات.
-
-مدة الاحتفاظ الافتراضية لا تحل محل جدول احتفاظ معتمد أو أمر حفظ قانوني أو إجراء حذف. لا تفعّل المراجع الخارجية إلا بعد توثيق نطاق التخزين وضوابط الوصول. لا تضع أسراراً في الملاحظات النصية."
 Set vehicle classifications,اضبط تصنيفات المركبات
 "Start at the workspace: the checklist is your setup sequence, the number cards summarize live records, charts expose operational patterns, and the section cards link to every DocType. The dashboard is initially empty until you add records. Work through the steps in order; use the supporting guide in `camera_archive_management/docs/onboarding/` for detailed field notes.
 
-**Before you begin:** confirm your account has the CAM role needed for your work. CAM Operator enters cameras, vehicles, and events; CAM Archive Manager manages archive assets and ingest; CAM Geo Administrator manages spatial reference data; CAM Analyst reviews reports; CAM Viewer is read-only. System Manager can administer all areas.","ابدأ من مساحة العمل: يحدد دليل التهيئة تسلسل الإعداد، وتلخص بطاقات الأرقام السجلات المباشرة، وتعرض المخططات الأنماط التشغيلية، وتفتح بطاقات الأقسام جميع أنواع المستندات. ستكون لوحة المعلومات فارغة في البداية إلى أن تضيف سجلات. اتبع الخطوات بالترتيب، واستخدم الدليل المساند في `camera_archive_management/docs/onboarding/` للتفاصيل الدقيقة للحقول.
+**Before you begin:** confirm your account has the CAM role needed for your work. CAM Operator enters cameras, vehicles, and events; CAM Archive Manager maintains the camera registry and movement records; CAM Geo Administrator manages spatial reference data; CAM Analyst reviews reports; CAM Viewer is read-only. System Manager can administer all areas, including the restricted camera credentials.","ابدأ من مساحة العمل: يحدد دليل التهيئة تسلسل الإعداد، وتلخص بطاقات الأرقام السجلات المباشرة، وتعرض المخططات الأنماط التشغيلية، وتفتح بطاقات الأقسام جميع أنواع المستندات. ستكون لوحة المعلومات فارغة في البداية إلى أن تضيف سجلات. اتبع الخطوات بالترتيب، واستخدم الدليل المساند في `camera_archive_management/docs/onboarding/` للتفاصيل الدقيقة للحقول.
 
-**قبل البدء:** تحقق من أن حسابك يحمل دور CAM المناسب. يُدخل CAM Operator الكاميرات والمركبات والأحداث؛ ويدير CAM Archive Manager أصول الأرشيف والإدخال؛ ويدير CAM Geo Administrator البيانات المكانية المرجعية؛ ويراجع CAM Analyst التقارير؛ أما CAM Viewer فصلاحياته للقراءة فقط. يستطيع System Manager إدارة جميع المجالات."
+**قبل البدء:** تحقق من أن حسابك يحمل دور CAM المناسب. يُدخل CAM Operator الكاميرات والمركبات والأحداث؛ ويصون CAM Archive Manager سجل الكاميرات وسجلات الحركة؛ ويدير CAM Geo Administrator البيانات المكانية المرجعية؛ ويراجع CAM Analyst التقارير؛ أما CAM Viewer فصلاحياته للقراءة فقط. يستطيع System Manager إدارة جميع المجالات، بما فيها بيانات اعتماد الكاميرا المقيدة."
 Store camera credentials securely (optional),خزّن بيانات اعتماد الكاميرا بأمان (اختياري)
-"This is the operational quality loop: inspect missing/ambiguous locations, failed datasets, unindexed archive assets, and ingest errors on a regular cadence. Correct issues at the source record, keep provenance, and re-run the relevant report. As your inventory grows, use the workspace cards and charts to spot changes, then drill into records instead of drawing conclusions from an aggregate alone.",هذه هي دورة الجودة التشغيلية: افحص دورياً المواقع المفقودة أو الملتبسة ومجموعات البيانات الفاشلة وأصول الأرشيف غير المفهرسة وأخطاء الإدخال. صحح المشكلة في سجل المصدر، واحتفظ بمعلومات المصدر، ثم أعد تشغيل التقرير المناسب. ومع نمو المخزون، استخدم بطاقات ومخططات مساحة العمل لاكتشاف التغيرات، ثم ارجع إلى السجلات الأصلية بدلاً من الاستنتاج من المجاميع وحدها.
+"This is the operational quality loop: inspect missing/ambiguous locations, failed datasets, and stale movement records on a regular cadence. Correct issues at the source record, keep provenance, and re-run the relevant report. As your inventory grows, use the workspace cards and charts to spot changes, then drill into records instead of drawing conclusions from an aggregate alone.",هذه هي دورة الجودة التشغيلية: افحص دورياً المواقع المفقودة أو الملتبسة ومجموعات البيانات الفاشلة وسجلات الحركة المتقادمة. صحح المشكلة في سجل المصدر، واحتفظ بمعلومات المصدر، ثم أعد تشغيل التقرير المناسب. ومع نمو المخزون، استخدم بطاقات ومخططات مساحة العمل لاكتشاف التغيرات، ثم ارجع إلى السجلات الأصلية بدلاً من الاستنتاج من المجاميع وحدها.
 Use the timeline to inspect one vehicle or time period across cameras. Check the source event records before acting on an apparent route; timestamps and camera locations must be independently reliable.,استخدم الخط الزمني لفحص مركبة واحدة أو فترة زمنية عبر عدة كاميرات. راجع سجلات الأحداث المصدرية قبل التصرف بناءً على مسار ظاهر؛ ويجب التحقق بصورة مستقلة من الطوابع الزمنية ومواقع الكاميرات.
-"Use this as a routine archive-control check. Investigate failed/missing checksum or index states, expired assets, and ingest failures. Do not delete or overwrite evidence to make a report clean; preserve audit trail and escalate according to policy.",استخدم هذا التقرير كفحص دوري لضوابط الأرشيف. تحقق من البصمات أو حالات الفهرسة الفاشلة أو المفقودة، والأصول المنتهية، وفشل الإدخال. لا تحذف الأدلة أو تستبدلها لجعل التقرير يبدو سليماً؛ حافظ على سجل التدقيق وصعّد الحالة وفق السياسة.
 View coverage,اعرض التغطية
-"Your Camera Archive workspace is ready. Keep the location, movement, and archive-integrity checks in your operating routine.",أصبحت مساحة عمل أرشيف الكاميرات جاهزة. أدرج فحوص المواقع والحركات وسلامة الأرشيف ضمن روتين التشغيل.
+"Your Camera Archive workspace is ready. Keep the location, movement, and coverage checks in your operating routine.",أصبحت مساحة عمل أرشيف الكاميرات جاهزة. أدرج فحوص المواقع والحركات والتغطية ضمن روتين التشغيل.
 "A boundary links to its dataset and may link to a parent boundary and an administrative area. Use a stable boundary code, source ID, label, level, and source classification; include all four west/south/east/north bounds and valid WGS84 geometry rows. Geometry input is not a place to simplify away licensing or provenance.
 
 Start with a small, authorized test dataset. Confirm the importer reports successful features, that the geometry renders in the map and bounds contain the expected region, and that parent/area links are coherent. Keep the bundled coarse world-country shapes clearly distinguished from authoritative operational boundaries.","يرتبط الحد بمجموعة بياناته، وقد يرتبط بحد أصل ومنطقة إدارية. استخدم رمز حد ثابتاً ومعرّف المصدر والتسمية والمستوى وتصنيف المصدر، وأدخل حدود الغرب والجنوب والشرق والشمال كاملة وصفوف هندسة WGS84 صالحة. لا تختزل متطلبات الترخيص أو مصدر البيانات عند إدخال الهندسة.
 
 ابدأ بمجموعة اختبار صغيرة ومصرح بها. تحقق من تسجيل المستورد للمعالم الناجحة، وظهور الهندسة على الخريطة، واحتواء الحدود للمنطقة المتوقعة، واتساق روابط الأصل والمنطقة. ميّز بوضوح الأشكال العامة لدول العالم المضمنة عن الحدود التشغيلية المعتمدة."
-"A practical home for camera inventory, geographic context, vehicle observations, and accountable archive operations. Follow the setup checklist from reference data to a verified movement; use the live counts and charts as signals, then inspect the underlying records. Map tiles and location services follow the site’s configured privacy and offline policy.",مساحة عملية لإدارة مخزون الكاميرات والسياق الجغرافي ورصد المركبات وعمليات الأرشيف الخاضعة للمساءلة. اتبع قائمة الإعداد من البيانات المرجعية إلى حركة متحقق منها؛ واستخدم الأعداد والمخططات المباشرة كمؤشرات ثم افحص السجلات الأساسية. تخضع بلاطات الخريطة وخدمات الموقع لسياسة الخصوصية والعمل دون اتصال المهيأة للموقع.
-"Set archive defaults before ingest: retention period and state policy, checksum requirement, whether external storage references are allowed, integrity-check schedule, and nearby-camera alert radius/roles. Confirm the storage backend choice and ownership responsibilities with your records/privacy lead.
-
-A retention default is not a substitute for an approved retention schedule, legal hold, or deletion procedure. Enable external references only if the corresponding storage scope and access controls are documented. Do not put secrets in free-text notes.","اضبط الإعدادات الافتراضية للأرشيف قبل الإدخال: مدة الاحتفاظ وسياسة الحالة واشتراط البصمة والسماح بمراجع التخزين الخارجي وجدولة فحوص السلامة ونطاق تنبيه الكاميرات القريبة والأدوار المستلمة له. اتفق مع مسؤول السجلات والخصوصية على نظام التخزين ومسؤوليات الملكية.
-
-لا تحل مدة الاحتفاظ الافتراضية محل جدول احتفاظ معتمد أو أمر حفظ قانوني أو إجراء حذف. لا تفعّل المراجع الخارجية إلا بعد توثيق نطاق التخزين وضوابط الوصول المقابلة. لا تضع أسراراً في الملاحظات النصية."
+"A practical home for camera inventory, geographic context, and vehicle observations. Follow the setup checklist from reference data to a verified movement; use the live counts and charts as signals, then inspect the underlying records. Map tiles and location services follow the site’s configured privacy and offline policy.",مساحة عملية لإدارة مخزون الكاميرات والسياق الجغرافي ورصد المركبات. اتبع قائمة الإعداد من البيانات المرجعية إلى حركة متحقق منها؛ واستخدم الأعداد والمخططات المباشرة كمؤشرات ثم افحص السجلات الأساسية. تخضع بلاطات الخريطة وخدمات الموقع لسياسة الخصوصية والعمل دون اتصال المهيأة للموقع.
+Credential profile,ملف بيانات الاعتماد
+Credentials Active,بيانات الاعتماد نشطة
+Credential Notes,ملاحظات بيانات الاعتماد
+Event defaults,افتراضيات الأحداث
+Non-secret label for the camera account; visible only to System Managers.,تسمية غير سرية لحساب الكاميرا؛ تظهر لمديري النظام فقط.
+Camera account user name. Restricted to System Managers.,اسم مستخدم حساب الكاميرا. مقيد بمديري النظام.
+"Stored encrypted by Frappe; never exposed in lists, reports, exports, or map payloads.",يُخزن مشفراً بواسطة Frappe؛ ولا يظهر أبداً في القوائم أو التقارير أو التصدير أو حمولات الخريطة.
+"Optional second secret such as an API key, stored encrypted like the password.",سر ثانٍ اختياري مثل مفتاح API، يُخزن مشفراً مثل كلمة المرور.
+"Non-secret handling notes only; never store passwords, tokens, or keys here.",ملاحظات تعامل غير سرية فقط؛ لا تخزن كلمات المرور أو الرموز أو المفاتيح هنا.
+Fallback importance for a Motion Event when the camera has none set.,الأهمية الاحتياطية لحدث الحركة عندما لا تكون محددة في الكاميرا.
+Snapshot active cameras near a Motion Event and alert the operator on save/submit.,التقط الكاميرات النشطة القريبة من حدث الحركة ونبّه المشغل عند الحفظ/الإرسال.
+Cameras within this distance of the detecting camera are considered nearby.,تُعتبر الكاميرات الواقعة ضمن هذه المسافة من الكاميرا الراصدة قريبة.
+"Restricted to System Managers. Secrets are encrypted by Frappe and never appear in lists, reports, exports, or map data.",مقيد بمديري النظام. تُشفّر الأسرار بواسطة Frappe ولا تظهر أبداً في القوائم أو التقارير أو التصدير أو بيانات الخريطة.
+Record rotation,تسجيل التدوير
+Rotation timestamp updated. Save the Camera to keep it.,تم تحديث طابع وقت التدوير. احفظ الكاميرا للاحتفاظ به.

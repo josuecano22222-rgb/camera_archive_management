@@ -10,14 +10,9 @@ Additional observations…,Additional observations…
 Address,Address
 Adjusted,Adjusted
 Aerial,Aerial
-Alert Roles,Alert Roles
 All Day,All Day
 All areas,All areas
 All statuses,All statuses
-Archive Full Data,Archive Full Data
-Archive Library,Archive Library
-Archive Settings,Archive Settings
-Archive full data,Archive full data
 Area,Area
 Area Name,Area Name
 Audit,Audit
@@ -60,8 +55,6 @@ Cameras by Type,Cameras by Type
 Cameras considered nearby for motion-event context and alerts. Recorded automatically on every Motion Event and used for notifications.,Cameras considered nearby for motion-event context and alerts. Recorded automatically on every Motion Event and used for notifications.
 Cameras on map: {0},Cameras on map: {0}
 Cameras ranked,Cameras ranked
-"Cameras within the Nearby Camera Radius (Archive Settings), recorded automatically with the precise distance and direction from the detecting camera.","Cameras within the Nearby Camera Radius (Archive Settings), recorded automatically with the precise distance and direction from the detecting camera."
-Cameras within this distance of each other are considered nearby.,Cameras within this distance of each other are considered nearby.
 Cannot delete Camera Area {0} linked to {1} cameras,Cannot delete Camera Area {0} linked to {1} cameras
 Cannot delete Camera Type {0} linked to {1} cameras,Cannot delete Camera Type {0} linked to {1} cameras
 Cannot delete Camera with {0} linked Motion Events,Cannot delete Camera with {0} linked Motion Events
@@ -108,9 +101,6 @@ Day (06:00 – 18:00),Day (06:00 – 18:00)
 Day / night image acceptable,Day / night image acceptable
 Days Since Motion,Days Since Motion
 Default Motion Importance,Default Motion Importance
-Default Report Days,Default Report Days
-Default lookback window for analytics reports.,Default lookback window for analytics reports.
-Default range uses Archive Settings → Default Report Days.,Default range uses Archive Settings → Default Report Days.
 "Describe the area this camera covers and its viewing angle, e.g. ""North gate entrance — wide-angle view over the main driveway.""","Describe the area this camera covers and its viewing angle, e.g. ""North gate entrance — wide-angle view over the main driveway."""
 Description,Description
 Details,Details
@@ -120,7 +110,6 @@ Device,Device
 Device Audit Report,Device Audit Report
 Device Description,Device Description
 Device Identifier,Device Identifier
-Device clock matches the archive server time.,Device clock matches the archive server time.
 Device mounted and housing sealed,Device mounted and housing sealed
 "Device technical data sheet — configuration, connectivity, geometry and coverage record.","Device technical data sheet — configuration, connectivity, geometry and coverage record."
 Direction,Direction
@@ -130,7 +119,6 @@ Distance (m),Distance (m)
 Documents,Documents
 "Draw points, lines, polygons, rectangles, or circles on the native map control. Stored as GeoJSON and rendered by the native Map list view.","Draw points, lines, polygons, rectangles, or circles on the native map control. Stored as GeoJSON and rendered by the native Map list view."
 East,East
-Enable Daily Integrity Check,Enable Daily Integrity Check
 Enable Nearby Camera Alerts,Enable Nearby Camera Alerts
 Endpoint,Endpoint
 Endpoint {0} reachable; no packet loss observed.,Endpoint {0} reachable; no packet loss observed.
@@ -289,7 +277,6 @@ Not Permitted,Not Permitted
 Not recorded,Not recorded
 Note,Note
 Notes,Notes
-"Notify users when a camera is added near existing cameras, or when motion is detected on a camera that has nearby cameras.","Notify users when a camera is added near existing cameras, or when motion is detected on a camera that has nearby cameras."
 Number,Number
 Offline,Offline
 Offline storage,Offline storage
@@ -343,13 +330,11 @@ Related,Related
 Remarks,Remarks
 Replaced,Replaced
 Report Print,Report Print
-Report Schedule Note,Report Schedule Note
 Reports,Reports
 Restricted,Restricted
 Result,Result
 Results are capped at {0} rows; narrow the date range or filters for larger exports.,Results are capped at {0} rows; narrow the date range or filters for larger exports.
 Right,Right
-Roles that receive nearby-camera notifications.,Roles that receive nearby-camera notifications.
 Rows,Rows
 Scheduled Reports,Scheduled Reports
 Search,Search
@@ -391,18 +376,14 @@ Terms,Terms
 Terrain,Terrain
 "The offline_maps app is not installed, so basemaps fall back to the online defaults. Install offline_maps (see README → “Offline Maps integration”) for fully offline maps.","The offline_maps app is not installed, so basemaps fall back to the online defaults. Install offline_maps (see README → “Offline Maps integration”) for fully offline maps."
 "The receiving party confirms that the device has been inspected, is in the described condition, and custody is transferred under the conditions stated above.","The receiving party confirms that the device has been inspected, is in the described condition, and custody is transferred under the conditions stated above."
-This card identifies the vehicle and its archive record.,This card identifies the vehicle and its archive record.
 This certificate confirms the transfer of custody of the device between the stated parties under the stated conditions.,This certificate confirms the transfer of custody of the device between the stated parties under the stated conditions.
 This certificate confirms the transfer of custody of the device described below.,This certificate confirms the transfer of custody of the device described below.
 This document confirms the commissioning of the camera installation and records the verification performed on site.,This document confirms the commissioning of the camera installation and records the verification performed on site.
-This document contains security-relevant device configuration. Store in a controlled location and destroy superseded copies. Distribution is limited to authorized archive personnel.,This document contains security-relevant device configuration. Store in a controlled location and destroy superseded copies. Distribution is limited to authorized archive personnel.
 "This document is a one-page management summary of the camera's operational posture: status, activity volume, last detection, and coverage statement.","This document is a one-page management summary of the camera's operational posture: status, activity volume, last detection, and coverage statement."
 This document is the field inspection form completed during physical checks of the camera installation; file it with the device record.,This document is the field inspection form completed during physical checks of the camera installation; file it with the device record.
-This document records security-relevant device configuration for authorized archive personnel and is subject to controlled-copy handling.,This document records security-relevant device configuration for authorized archive personnel and is subject to controlled-copy handling.
 "This document records the complete technical configuration of the camera device — identity, connectivity, geometry, coverage, and photographs. It is the controlled technical record for this device.","This document records the complete technical configuration of the camera device — identity, connectivity, geometry, coverage, and photographs. It is the controlled technical record for this device."
 This document reports a single maintenance service visit and the work performed on the camera.,This document reports a single maintenance service visit and the work performed on the camera.
 This document reports a single motion event and the precise nearby-camera context recorded at detection time.,This document reports a single motion event and the precise nearby-camera context recorded at detection time.
-This label identifies the camera device and its archive record. Affix it to the device housing or cable.,This label identifies the camera device and its archive record. Affix it to the device housing or cable.
 "This printout audits camera record completeness: photos, coordinates, credentials, coverage, and activity.","This printout audits camera record completeness: photos, coordinates, credentials, coverage, and activity."
 This printout compares Entry and Exit motion events per period with the computed net flow.,This printout compares Entry and Exit motion events per period with the computed net flow.
 This printout is the flat export of motion events joined with camera and vehicle details.,This printout is the flat export of motion events joined with camera and vehicle details.
@@ -469,7 +450,6 @@ shared cache,shared cache
 About this report,About this report
 Activity Trend,Activity Trend
 Analytics,Analytics
-Archive extract,Archive extract
 Audit window,Audit window
 "Audits each camera for completeness: photographs, coordinates, credentials, and field of view. Cameras missing required data are flagged for attention.","Audits each camera for completeness: photographs, coordinates, credentials, and field of view. Cameras missing required data are flagged for attention."
 Auto-generated,Auto-generated
@@ -727,7 +707,6 @@ Open camera,Open camera
 No results in this view have valid coordinates.,No results in this view have valid coordinates.
 There are no loaded map results to fit.,There are no loaded map results to fit.
 OPERATIONS CENTRE,OPERATIONS CENTRE
-"Live, permission-aware snapshots of cameras, movement activity, vehicles, archives, and geographic data.","Live, permission-aware snapshots of cameras, movement activity, vehicles, archives, and geographic data."
 Loading latest statistics…,Loading latest statistics…
 Refresh statistics,Refresh statistics
 Open map,Open map
@@ -746,12 +725,10 @@ just now,just now
 Browse workspace,Browse workspace
 QUICK ACCESS,QUICK ACCESS
 "Choose a section to open its records, reports, or map.","Choose a section to open its records, reports, or map."
-Statistics follow your Frappe permissions. Sensitive credential records remain protected by their DocType permissions.,Statistics follow your Frappe permissions. Sensitive credential records remain protected by their DocType permissions.
 Maps & Analysis,Maps & Analysis
 Camera Registry,Camera Registry
 Movements & Vehicles,Movements & Vehicles
 Geographic Reference,Geographic Reference
-Archive & Configuration,Archive & Configuration
 Unknown camera,Unknown camera
 at this camera,at this camera
 moves,moves
@@ -765,16 +742,12 @@ Statistics chart,Statistics chart
 Camera Coverage,Camera Coverage
 Vehicle Movement Timeline,Vehicle Movement Timeline
 Geo Location Quality,Geo Location Quality
-Camera Credential,Camera Credential
 CAM Vehicle,CAM Vehicle
 Geo Dataset,Geo Dataset
 Geo Admin Area,Geo Admin Area
 Geo Boundary,Geo Boundary
 Geo Gazetteer Place,Geo Gazetteer Place
 CAM Geo Settings,CAM Geo Settings
-Archive Asset,Archive Asset
-Archive Ingest Batch,Archive Ingest Batch
-Archive Integrity,Archive Integrity
 No user-configured vehicle image; showing the saved movement point,No user-configured vehicle image; showing the saved movement point
 No user-configured vehicle image,No user-configured vehicle image
 Vehicle image unavailable,Vehicle image unavailable
@@ -786,3 +759,8 @@ and {0} more camera(s),and {0} more camera(s)
 submitted,submitted
 saved,saved
 Movement {0}. Other camera coverage is available for this location:,Movement {0}. Other camera coverage is available for this location:
+Trends & coverage,Trends & coverage
+"Restricted to System Managers. Secrets are encrypted by Frappe and never appear in lists, reports, exports, or map data.","Restricted to System Managers. Secrets are encrypted by Frappe and never appear in lists, reports, exports, or map data."
+Record rotation,Record rotation
+Rotation timestamp updated. Save the Camera to keep it.,Rotation timestamp updated. Save the Camera to keep it.
+Access Credentials,Access Credentials

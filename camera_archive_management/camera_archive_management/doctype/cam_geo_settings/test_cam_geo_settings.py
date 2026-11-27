@@ -31,3 +31,18 @@ class TestCAMGeoSettings(FrappeTestCase):
 				setattr(settings, fieldname, invalid_value)
 				with self.assertRaises(frappe.ValidationError):
 					settings.validate()
+
+	def test_motion_event_defaults_and_nearby_radius_bounds(self):
+		settings = frappe.new_doc("CAM Geo Settings")
+		self.assertEqual(settings.default_motion_importance, "Medium")
+		self.assertTrue(settings.enable_nearby_camera_alerts)
+		self.assertEqual(settings.nearby_camera_radius, 500)
+		settings.nearby_camera_radius = 0
+		settings.validate()
+		settings.nearby_camera_radius = 100000
+		settings.validate()
+		for invalid_value in (-1, 100001):
+			with self.subTest(value=invalid_value):
+				settings.nearby_camera_radius = invalid_value
+				with self.assertRaises(frappe.ValidationError):
+					settings.validate()

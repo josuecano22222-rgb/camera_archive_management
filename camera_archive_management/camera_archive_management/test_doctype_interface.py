@@ -16,7 +16,7 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 
 	def test_all_doctype_field_orders_match_definitions(self):
 		definitions = sorted(DOCTYPE_DIR.glob("*/*.json"))
-		self.assertEqual(len(definitions), 18)
+		self.assertEqual(len(definitions), 14)
 
 		for path in definitions:
 			with self.subTest(doctype=path.parent.name):
@@ -89,7 +89,7 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		chart_names = {row["chart_name"] for row in workspace["charts"]}
 		chart_fixtures = json.loads((Path(__file__).parents[1] / "fixtures" / "dashboard_chart.json").read_text(encoding="utf-8"))
 		self.assertEqual(chart_names, {chart["chart_name"] for chart in chart_fixtures})
-		self.assertEqual(len(chart_names), 4)
+		self.assertEqual(len(chart_names), 5)
 		for chart in chart_fixtures:
 			self.assertEqual(chart["name"], chart["chart_name"])
 			self.assertTrue(chart["roles"])
@@ -106,9 +106,54 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 					self.assertFalse(definition.get("issingle"), "Single DocTypes cannot be imported")
 					self.assertFalse(definition.get("istable"), "Child DocTypes are not independently imported")
 		self.assertTrue(self.load_doctype("camera").get("allow_import"))
-		credential = self.load_doctype("camera_credential")
-		self.assertFalse(credential.get("allow_import"))
-		self.assertFalse(any(perm.get("import") for perm in credential.get("permissions", [])))
+
+	def test_retired_archive_and_credential_doctypes_leave_no_trace(self):
+		for folder in ("archive_asset", "archive_ingest_batch", "archive_settings", "camera_credential"):
+			self.assertFalse((DOCTYPE_DIR / folder).exists(), f"{folder} must stay removed")
+		self.assertFalse((Path(__file__).parent / "report" / "archive_integrity").exists())
+		for folder in ("archive_assets", "pending_archive_index", "failed_ingest_batches"):
+			self.assertFalse((Path(__file__).parent / "number_card" / folder).exists())
+		hooks = (Path(__file__).parents[1] / "hooks.py").read_text(encoding="utf-8")
+		for retired in ("Archive Asset", "Archive Ingest Batch", "Archive Settings", "Camera Credential"):
+			self.assertNotIn(retired, hooks)
+		patches = (Path(__file__).parents[1] / "patches.txt").read_text(encoding="utf-8")
+		self.assertIn("camera_archive_management.patches.v1_0.merge_camera_credentials", patches)
+		self.assertIn("camera_archive_management.patches.v1_0.remove_archive_doctypes", patches)
+
+	def test_camera_credentials_are_permlevel_protected(self):
+		camera = self.load_doctype("camera")
+		fields = {field["fieldname"]: field for field in camera["fields"]}
+		credential_fields = (
+			"credential_label",
+			"credentials_active",
+			"username",
+			"password",
+			"secondary_secret",
+			"last_rotated_at",
+			"credential_notes",
+		)
+		for fieldname in credential_fields:
+			self.assertEqual(fields[fieldname].get("permlevel"), 1, f"{fieldname} must be permlevel 1")
+		self.assertEqual(fields["password"]["fieldtype"], "Password")
+		self.assertEqual(fields["secondary_secret"]["fieldtype"], "Password")
+		high_perm = [perm for perm in camera["permissions"] if perm.get("permlevel")]
+		self.assertEqual(len(high_perm), 1)
+		self.assertEqual(high_perm[0]["role"], "System Manager")
+		self.assertTrue(high_perm[0].get("read"))
+		self.assertTrue(high_perm[0].get("write"))
+		self.assertFalse(any(perm.get("import") or perm.get("export") for perm in high_perm))
+		# The credential tab is the only place secrets may live; keep it out of search/list surfaces.
+		self.assertNotIn("username", camera["search_fields"])
+		self.assertNotIn("password", camera["search_fields"])
+		for fieldname in credential_fields:
+			self.assertFalse(fields[fieldname].get("in_list_view"))
+			self.assertFalse(fields[fieldname].get("in_global_search"))
+			self.assertFalse(fields[fieldname].get("in_standard_filter"))
+		camera_script = (DOCTYPE_DIR / "camera" / "camera.js").read_text(encoding="utf-8")
+		self.assertIn('frappe.perm.has_perm(frm.doctype, 1, "read", frm.doc)', camera_script)
+		self.assertIn('frm.set_df_property("layout_tab_6", "hidden", 1)', camera_script)
+		self.assertIn('__("Record rotation")', camera_script)
+		self.assertIn("frappe.datetime.now_datetime()", camera_script)
 
 	def test_nested_table_targets_exist(self):
 		for path in sorted(DOCTYPE_DIR.glob("*/*.json")):
@@ -229,13 +274,6 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		for folder in ("geo_admin_area", "geo_gazetteer_place"):
 			fields = {field["fieldname"] for field in self.load_doctype(folder)["fields"]}
 			self.assertTrue({"latitude", "longitude"} <= fields)
-
-		asset_dir = DOCTYPE_DIR / "archive_asset"
-		calendar_script = (asset_dir / "archive_asset_calendar.js").read_text(encoding="utf-8")
-		list_script = (asset_dir / "archive_asset_list.js").read_text(encoding="utf-8")
-		self.assertIn('start: "recorded_from"', calendar_script)
-		self.assertIn('end: "recorded_to"', calendar_script)
-		self.assertIn('"recorded_from", "recorded_to"', list_script)
 
 		boundary = self.load_doctype("geo_boundary")
 		boundary_fields = {field["fieldname"] for field in boundary["fields"]}

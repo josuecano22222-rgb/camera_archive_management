@@ -103,19 +103,3 @@ def queue_geo_dataset_import(dataset_name):
 	doc.import_error = None
 	doc.save()
 	return {"queued": True, "dataset": doc.name}
-
-
-@frappe.whitelist(methods=["POST"])
-def queue_archive_ingest(batch_name):
-	if not isinstance(batch_name, str) or len(batch_name) > 140:
-		frappe.throw("Invalid ingest batch name.", frappe.ValidationError)
-	if not frappe.has_permission("Archive Ingest Batch", "write", batch_name):
-		frappe.throw("Only Archive Managers may queue ingest batches.", frappe.PermissionError)
-	doc = frappe.get_doc("Archive Ingest Batch", batch_name)
-	if doc.status not in {"Draft", "Failed", "Queued"}:
-		frappe.throw("Only Draft, Failed, or already Queued batches may be queued.", frappe.ValidationError)
-	doc.status = "Queued"
-	doc.queued_by = frappe.session.user
-	doc.error_log = None
-	doc.save()
-	return {"queued": True, "batch": doc.name}

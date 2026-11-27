@@ -5,7 +5,7 @@
  "module": "Camera Archive Management",
  "action": "View Report",
  "action_label": "Review location quality",
- "description": "This is the operational quality loop: inspect missing/ambiguous locations, failed datasets, unindexed archive assets, and ingest errors on a regular cadence. Correct issues at the source record, keep provenance, and re-run the relevant report. As your inventory grows, use the workspace cards and charts to spot changes, then drill into records instead of drawing conclusions from an aggregate alone.",
+ "description": "This is the operational quality loop: inspect missing/ambiguous locations, failed datasets, and stale movement records on a regular cadence. Correct issues at the source record, keep provenance, and re-run the relevant report. As your inventory grows, use the workspace cards and charts to spot changes, then drill into records instead of drawing conclusions from an aggregate alone.",
  "is_complete": 0,
  "is_skipped": 0,
  "reference_report": "Geo Location Quality",

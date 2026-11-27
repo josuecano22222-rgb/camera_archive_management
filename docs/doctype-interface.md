@@ -6,7 +6,6 @@ The app enables other views only where the DocType has the data shape they need:
 
 | DocType | Additional view(s) | Basis |
 | --- | --- | --- |
-| Archive Asset | Calendar, Gantt | `recorded_from` / `recorded_to` are a meaningful capture interval; the list query also loads those dates for Gantt. |
 | CAM Vehicle | Image | Existing `vehicle_list_image` image field. |
 | Vehicle Type | Image | Existing `vehicle_type_image` attachment. |
 | Camera | Image, Map | Main image is stored on Camera for the native Image view; location and coordinates support Map view. |

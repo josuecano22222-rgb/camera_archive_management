@@ -130,6 +130,43 @@
    "fieldtype": "Datetime",
    "label": "Last Dataset Import",
    "read_only": 1
+  },
+  {
+   "fieldname": "layout_tab_4",
+   "fieldtype": "Tab Break",
+   "label": "Motion Events"
+  },
+  {
+   "fieldname": "layout_section_4_1",
+   "fieldtype": "Section Break",
+   "label": "Event defaults"
+  },
+  {
+   "fieldname": "default_motion_importance",
+   "fieldtype": "Select",
+   "label": "Default Motion Importance",
+   "options": "Low\nMedium\nHigh\nCritical",
+   "default": "Medium",
+   "description": "Fallback importance for a Motion Event when the camera has none set."
+  },
+  {
+   "fieldname": "layout_section_4_2",
+   "fieldtype": "Section Break",
+   "label": "Nearby camera alerts"
+  },
+  {
+   "fieldname": "enable_nearby_camera_alerts",
+   "fieldtype": "Check",
+   "label": "Enable Nearby Camera Alerts",
+   "default": "1",
+   "description": "Snapshot active cameras near a Motion Event and alert the operator on save/submit."
+  },
+  {
+   "fieldname": "nearby_camera_radius",
+   "fieldtype": "Int",
+   "label": "Nearby Camera Radius (m)",
+   "default": "500",
+   "description": "Cameras within this distance of the detecting camera are considered nearby."
   }
  ],
  "field_order": [
@@ -154,7 +191,13 @@
   "tile_read_timeout_seconds",
   "layout_tab_3",
   "layout_section_3_1",
-  "last_dataset_import"
+  "last_dataset_import",
+  "layout_tab_4",
+  "layout_section_4_1",
+  "default_motion_importance",
+  "layout_section_4_2",
+  "enable_nearby_camera_alerts",
+  "nearby_camera_radius"
  ],
  "permissions": [
   {

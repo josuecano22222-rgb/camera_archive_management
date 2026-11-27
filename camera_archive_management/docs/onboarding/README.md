@@ -2,41 +2,40 @@
 
 **العربية:** [دليل التهيئة باللغة العربية](../ar/onboarding/README.md)
 
-This guide follows the native Frappe **Module Onboarding → Onboarding Step** framework, as implemented in the public Siraj-Research app. The in-app checklist is called **Camera Archive Management Setup** and is embedded in the Camera Archive Management workspace. It walks from geographic and classification reference data to a camera, a vehicle, a movement observation, and an indexed/verified archive asset. The JSON records live under `camera_archive_management/camera_archive_management/module_onboarding/` and `onboarding_step/`; the workspace embeds the named onboarding block and tests verify every step target.
+This guide follows the native Frappe **Module Onboarding → Onboarding Step** framework, as implemented in the public Siraj-Research app. The in-app checklist is called **Camera Archive Management Setup** and is embedded in the Camera Archive Management workspace. It walks from geographic and classification reference data to a camera, a vehicle, and a verified movement observation. The JSON records live under `camera_archive_management/camera_archive_management/module_onboarding/` and `onboarding_step/`; the workspace embeds the named onboarding block and tests verify every step target.
 
 ## Show the checklist
 
 Frappe v15 hides onboarding when the global **Enable Onboarding** setting is off. A System Manager should open **System Settings**, enable **Enable Onboarding**, and save. This app deliberately does not toggle that global setting during installation: doing so could also expose onboarding flows belonging to other apps. Reload Desk and open `/app/camera-archive-management`.
 
-The checklist is shown to System Manager, CAM Operator, CAM Archive Manager, and CAM Geo Administrator. Read-only CAM Viewer and CAM Analyst roles still use the workspace, live cards, charts, and reports; the create-heavy setup checklist is not shown to them. Some steps are marked optional because permissions are intentionally split across geo, operations, and archive roles. The onboarding checklist does not grant permissions. Ask a System Manager to assign the minimum needed CAM roles before starting:
+The checklist is shown to System Manager, CAM Operator, CAM Archive Manager, and CAM Geo Administrator. Read-only CAM Viewer and CAM Analyst roles still use the workspace, live cards, charts, and reports; the create-heavy setup checklist is not shown to them. Some steps are marked optional because permissions are intentionally split across geo and operations roles. The onboarding checklist does not grant permissions. Ask a System Manager to assign the minimum needed CAM roles before starting:
 
 | Role | Typical work |
 |---|---|
 | CAM Viewer | Read workspace, map, reports, and records |
 | CAM Operator | Maintain camera/vehicle/event operational records |
 | CAM Analyst | Review authorized reports and movement data |
-| CAM Archive Manager | Manage archive assets and ingest operations |
+| CAM Archive Manager | Maintain the camera registry and movement records |
 | CAM Geo Administrator | Maintain geographic datasets, areas, and boundaries |
-| System Manager | Site-wide configuration and restricted credentials |
+| System Manager | Site-wide configuration and restricted camera credentials |
 
-Some records have narrower permissions than the general onboarding. In particular, Camera Credential is restricted. The credential step is optional and should only be opened by an authorized user. If a step is inaccessible, request the correct role; do not broaden DocType permissions just to make onboarding clickable.
+Camera credentials are narrower than the general onboarding: they live on the Camera form's restricted **Access Credentials** tab (permlevel 1), which only System Manager can read or write. The credential step is optional and should only be opened by an authorized user. If a step is inaccessible, request the correct role; do not broaden DocType permissions just to make onboarding clickable.
 
 ## Recommended sequence
 
 1. **Workspace and access** — identify the responsible operator, analyst, archive manager, and geo administrator.
-2. **Geographic settings and source** — decide whether local/offline data is required; review the active dataset, tile policy, online geocoder, and source licensing.
+2. **Geographic settings and source** — decide whether local/offline data is required; review the active dataset, tile policy, online geocoder, and source licensing. The Motion Events tab holds the default event importance and nearby-camera alert radius.
 3. **Geographic reference data** — register a dataset, build administrative areas, then import/verify boundary geometry. The install includes generalized Natural Earth country outlines only; these are not legal boundaries or detailed local coverage.
 4. **Operational taxonomies** — create Camera Areas (operational hierarchy), review Camera Types, and review Vehicle Types. The app seeds missing core camera/vehicle classifications additively and preserves local changes.
-5. **Archive policy** — review retention, checksum, external-reference, integrity-check, and alert defaults before archiving real material.
-6. **Inventory** — register the camera with precise coordinates and provenance; store credentials only in the protected credential DocType when genuinely needed. Add vehicle identities only when supported and authorized.
-7. **Observation and archive** — record a movement event with accurate time/direction; link it to a vehicle only when supported. Index the recording as an Archive Asset, then use a stable idempotency key for a batch ingest where the ingest pipeline applies.
-8. **Quality loop** — inspect the map, Camera Coverage, Vehicle Movement Timeline, Archive Integrity, and Geo Location Quality reports. Fix issues in the source records and re-run the relevant report.
+5. **Inventory** — register the camera with precise coordinates and provenance; store account secrets only in the protected Access Credentials fields when genuinely needed. Add vehicle identities only when supported and authorized.
+6. **Observation** — record a movement event with accurate time/direction; link it to a vehicle only when supported by the observation.
+7. **Quality loop** — inspect the map, Camera Coverage, Vehicle Movement Timeline, and Geo Location Quality reports. Fix issues in the source records and re-run the relevant report.
 
-Detailed notes: [01 — Geographic reference data](01-reference-data.md), [02 — Camera registry](02-camera-registry.md), [03 — Movements and archive](03-movements-archive.md), and [04 — Operations and privacy](04-operations.md).
+Detailed notes: [01 — Geographic reference data](01-reference-data.md), [02 — Camera registry](02-camera-registry.md), [03 — Movements](03-movements.md), and [04 — Operations and privacy](04-operations.md).
 
 ## How to read the live dashboard
 
-The workspace includes eight live Number Cards: total/active cameras, camera areas, recorded movements, registered vehicles, archive assets, pending archive indexing, and failed ingest batches. The charts cover camera status, daily movements, Entry/Exit direction, vehicle type, cameras by area, archive retention state, archive index status, ingest-batch pipeline status, and the archive-intake trend.
+The workspace includes five live Number Cards: total/active cameras, camera areas, recorded movements, and registered vehicles. The charts cover camera status, daily movements, Entry/Exit direction, vehicle type, and cameras by area.
 
 These are triage indicators, not evidence by themselves. A zero can mean no records, insufficient permission, or an incomplete import; charts aggregate records visible to the current user. Always drill into the source list/report, verify date/time zones and source coverage, and account for role permissions before making operational conclusions.
 

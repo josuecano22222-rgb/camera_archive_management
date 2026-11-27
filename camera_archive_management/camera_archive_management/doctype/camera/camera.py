@@ -17,6 +17,11 @@ from camera_archive_management.utils.files import is_safe_frappe_file_url
 MAX_PHOTO_CAPTION_LENGTH = 240
 MAX_PHOTO_DESCRIPTION_LENGTH = 1200
 _ALLOWED_IMAGE_SUFFIXES = {".avif", ".bmp", ".gif", ".jpeg", ".jpg", ".png", ".tif", ".tiff", ".webp"}
+# Credential values live on Camera at permlevel 1 (System Manager only). Frappe
+# encrypts Password fields, strips them from reads without permlevel access, and
+# resets unauthorized writes; this list documents the protected surface.
+CREDENTIAL_VALUE_FIELDS = ("username", "password", "secondary_secret")
+CREDENTIAL_PROFILE_FIELDS = ("credential_label", "last_rotated_at", "credential_notes")
 
 
 def _gallery_items(value) -> list[dict]:
@@ -104,6 +109,7 @@ class Camera(Document):
 		if self.port and not 1 <= int(self.port) <= 65535:
 			frappe.throw("Port must be between 1 and 65535.", frappe.ValidationError)
 		self._validate_image_gallery()
+		self._validate_credentials()
 
 		nearby_names = [row.camera for row in self.nearby_cameras if row.camera]
 		if self.name in nearby_names or len(nearby_names) != len(set(nearby_names)):
@@ -115,6 +121,19 @@ class Camera(Document):
 			parent = frappe.db.get_value("Camera Area", self.area, "is_group")
 			if parent is None:
 				frappe.throw("Selected Camera Area does not exist.", frappe.ValidationError)
+
+	def _validate_credentials(self) -> None:
+		"""Storing credential details is optional, but a credential profile
+		without any credential value is rejected. Secret fields themselves are
+		protected by permlevel 1 (System Manager only).
+		"""
+		has_value = any(self.get(field) for field in CREDENTIAL_VALUE_FIELDS)
+		has_profile = any(self.get(field) for field in CREDENTIAL_PROFILE_FIELDS)
+		if has_profile and not has_value:
+			frappe.throw(
+				"At least one credential value (username, password, or secondary secret) is required.",
+				frappe.ValidationError,
+			)
 
 	def _validate_image_gallery(self) -> None:
 		photos = _gallery_items(self.camera_photos_json)

@@ -2,7 +2,7 @@ app_name = "camera_archive_management"
 app_title = "Camera Archive Management"
 app_publisher = "Camera Archive Management"
 app_description = (
-	"Camera inventory, archive management, motion events, and offline-capable geographic tools for Frappe."
+	"Camera inventory, motion events, vehicle registers, and offline-capable geographic tools for Frappe."
 )
 app_email = "josuecano22222@gmail.com"
 app_license = "mit"
@@ -33,9 +33,7 @@ fixtures = [
 		"filters": [["chart_name", "in", [
 			"Camera Archive - Camera Status", "Camera Archive - Daily Movements",
 			"Camera Archive - Movement Direction", "Camera Archive - Vehicles by Type",
-			"Camera Archive - Cameras by Area", "Camera Archive - Archive Retention State",
-			"Camera Archive - Archive Index Status", "Camera Archive - Ingest Batch Pipeline",
-			"Camera Archive - Archive Intake Trend",
+			"Camera Archive - Cameras by Area",
 		]]],
 	},
 ]
@@ -46,23 +44,14 @@ fixtures = [
 app_include_js = ["/assets/camera_archive_management/js/camera_geolocation_compat.js"]
 app_include_css = ["/assets/camera_archive_management/css/camera_archive.css"]
 
-# Sensitive credentials are protected independently of future DocType metadata.
-permission_query_conditions = {
-	"Camera Credential": "camera_archive_management.api.permissions.camera_credential_query_conditions",
-}
-has_permission = {
-	"Camera Credential": "camera_archive_management.api.permissions.camera_credential_has_permission",
-}
+# Camera credentials live on Camera at permlevel 1: only System Manager holds
+# permlevel-1 read/write, so Frappe hides the fields in forms, strips them from
+# API/list/report reads, and resets unauthorized writes. Password values are
+# encrypted by Frappe's standard __Auth lifecycle.
 
 doc_events = {
-	"Archive Ingest Batch": {
-		"on_update": "camera_archive_management.jobs.dispatch.queue_ingest_batch",
-	},
 	"Geo Dataset": {
 		"on_update": "camera_archive_management.jobs.dispatch.queue_geo_dataset_import",
-	},
-	"Archive Asset": {
-		"on_update": "camera_archive_management.jobs.dispatch.queue_archive_asset_index",
 	},
 }
 
