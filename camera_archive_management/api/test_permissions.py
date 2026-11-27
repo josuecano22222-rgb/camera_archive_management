@@ -13,11 +13,13 @@ class TestCameraCredentialsProtection(FrappeTestCase):
 	"""Credentials merged into Camera stay System Manager-only at permlevel 1."""
 
 	def _camera_with_credentials(self):
-		return frappe.get_doc(
+		# camera_name is unique; give every test its own value so repeated inserts
+		# never collide, and clean the record up even if the transaction commits.
+		camera = frappe.get_doc(
 			{
 				"doctype": "Camera",
 				"naming_series": "CAM-.####",
-				"camera_name": "Credential protection test camera",
+				"camera_name": f"Credential protection {frappe.generate_hash(length=10)}",
 				"status": "Active",
 				"latitude": "52.3",
 				"longitude": "4.9",
@@ -29,6 +31,8 @@ class TestCameraCredentialsProtection(FrappeTestCase):
 				"secondary_secret": "DO_NOT_EXPOSE_SECONDARY",
 			}
 		).insert(ignore_permissions=True)
+		self.addCleanup(frappe.delete_doc, "Camera", camera.name, force=True, ignore_permissions=True)
+		return camera
 
 	def test_credential_fields_are_stripped_for_non_admin_reads(self):
 		original_user = frappe.session.user
@@ -41,7 +45,7 @@ class TestCameraCredentialsProtection(FrappeTestCase):
 			camera.apply_fieldlevel_read_permissions()
 		for fieldname in ("credential_label", "username", "password", "secondary_secret", "credential_notes"):
 			self.assertFalse(hasattr(camera, fieldname), f"{fieldname} leaked to a CAM Viewer read")
-		self.assertEqual(camera.camera_name, "Credential protection test camera")
+		self.assertTrue(camera.camera_name.startswith("Credential protection"))
 
 	def test_system_manager_keeps_credential_fields_on_read(self):
 		original_user = frappe.session.user
