@@ -46,6 +46,16 @@
 		return page.cam_ne;
 	}
 
+	function is_arabic() {
+		const lang = (frappe.boot && frappe.boot.lang) || (frappe.session && frappe.session.lang) || "";
+		return String(lang).toLowerCase().startsWith("ar");
+	}
+
+	function localized_name(properties, fallback) {
+		if (is_arabic() && properties && !SKIP_VALUES.has(properties.NAME_AR)) return String(properties.NAME_AR);
+		return fallback;
+	}
+
 	function iso_code(properties) {
 		const iso = properties?.ISO_A3;
 		if (typeof iso === "string" && /^[A-Za-z]{3}$/.test(iso)) return iso.toUpperCase();
@@ -57,7 +67,8 @@
 	function feature_label(spec, feature) {
 		const properties = feature.properties || {};
 		const value = properties[spec.name_field] || properties.NAME || properties.name || properties.ADMIN || properties.featurecla;
-		return SKIP_VALUES.has(value) ? "" : String(value);
+		const fallback = SKIP_VALUES.has(value) ? "" : String(value);
+		return localized_name(properties, fallback);
 	}
 
 	// ------------------------------------------------------------------ panel
@@ -163,7 +174,7 @@
 			ne.specs = Object.fromEntries(catalog.layers.map((layer) => [layer.id, layer]));
 			render_layer_rows(page);
 			const foot = ne.panel.querySelector(".cam-ne-foot");
-			foot.textContent = `${catalog.license} · ${__("revision")} ${String(catalog.revision).slice(0, 12)} · ${catalog.limitations}`;
+			foot.textContent = `${__(catalog.license)} · ${__("revision")} ${String(catalog.revision).slice(0, 12)} · ${__(catalog.limitations)}`;
 		} catch (error) {
 			ne.panel.querySelector(".cam-ne-groups").innerHTML = `<p class="text-danger">${esc(error.message || __("Layer catalog could not be loaded."))}</p>`;
 		}
@@ -184,7 +195,7 @@
 			for (const spec of layers) {
 				const row = document.createElement("label");
 				row.className = "cam-ne-row";
-				row.title = spec.description || "";
+				row.title = spec.description ? __(spec.description) : "";
 				const checkbox = document.createElement("input");
 				checkbox.type = "checkbox";
 				checkbox.dataset.layer = spec.id;
@@ -192,7 +203,7 @@
 				checkbox.addEventListener("change", (event) => set_layer_enabled(page, spec.id, event.target.checked));
 				const label = document.createElement("span");
 				label.className = "cam-ne-row-label";
-				label.textContent = spec.label;
+				label.textContent = __(spec.label);
 				const badge = document.createElement("span");
 				badge.className = "cam-ne-badge";
 				badge.textContent = spec.scale;
@@ -316,7 +327,7 @@
 	function add_attribution(page) {
 		const ne = state(page);
 		if (ne.attribution_added || !page.cam_map.attributionControl) return;
-		page.cam_map.attributionControl.addAttribution("Natural Earth · public domain");
+		page.cam_map.attributionControl.addAttribution(__("Natural Earth · public domain"));
 		ne.attribution_added = true;
 	}
 
@@ -359,7 +370,7 @@
 		const ne = state(page);
 		highlight(page, spec, feature, child);
 		const inspector = ne.panel.querySelector(".cam-ne-inspector");
-		const label = feature_label(spec, feature) || spec.label;
+		const label = feature_label(spec, feature) || __(spec.label);
 		if (spec.theme === "countries") {
 			const code = iso_code(feature.properties);
 			inspector.innerHTML = `<p class="text-muted">${__("Loading country profile…")}</p>`;
@@ -372,7 +383,7 @@
 		}
 		inspector.innerHTML = `
 			<div class="cam-ne-card-head"><strong>${esc(label)}</strong><span class="cam-ne-badge">${esc(spec.scale)} · ${esc(spec.geometry)}</span></div>
-			<p class="text-muted cam-ne-card-sub">${esc(spec.label)}</p>
+			<p class="text-muted cam-ne-card-sub">${esc(__(spec.label))}</p>
 			${properties_table(feature)}
 			<button class="btn btn-default btn-xs cam-ne-zoom" type="button">${__("Zoom to feature")}</button>`;
 		bind_zoom(page, inspector, child);
@@ -384,17 +395,22 @@
 			inspector.innerHTML = `<strong>${esc(fallback_label)}</strong><p class="text-muted">${__("No bundled profile is available for this feature.")}</p>`;
 			return;
 		}
+		const display_name = is_arabic() && profile.name_ar ? profile.name_ar : profile.name;
 		const rows = PROFILE_FIELDS.map((key) => {
 			const label = __(PROFILE_LABELS[key]);
 			let value = profile[key];
-			if (key === "capital") value = profile.capital ? `${profile.capital.name}${profile.capital.admin1 ? " · " + profile.capital.admin1 : ""}` : null;
+			if (key === "name") value = display_name;
+			if (key === "capital" && profile.capital) {
+				const capital_name = is_arabic() && profile.capital.name_ar ? profile.capital.name_ar : profile.capital.name;
+				value = `${capital_name}${profile.capital.admin1 ? " · " + profile.capital.admin1 : ""}`;
+			}
 			if (SKIP_VALUES.has(value)) return "";
 			if (["population_estimate", "gdp_million_usd", "area_km2"].includes(key)) value = number(value);
 			return `<tr><th>${esc(label)}</th><td>${esc(value)}</td></tr>`;
 		}).join("");
 		const estimates = [profile.population_year, profile.gdp_year].filter(Boolean);
 		inspector.innerHTML = `
-			<div class="cam-ne-card-head"><strong>${esc(profile.name)}</strong><span class="cam-ne-badge">${esc(profile.code)}</span></div>
+			<div class="cam-ne-card-head"><strong>${esc(display_name)}</strong><span class="cam-ne-badge">${esc(profile.code)}</span></div>
 			<table class="cam-ne-props">${rows}</table>
 			<p class="text-muted cam-ne-card-sub">${__("Bundled Natural Earth estimates")}${estimates.length ? " · " + esc([...new Set(estimates)].join("/")) : ""} · ${__("generalized boundaries, not legal or cadastral.")}</p>
 			<button class="btn btn-default btn-xs cam-ne-zoom" type="button">${__("Zoom to country")}</button>`;

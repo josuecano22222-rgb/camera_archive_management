@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import csv
 import importlib.util
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -297,6 +299,26 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		for folder in ("geo_boundary", "motion_event"):
 			list_script = (DOCTYPE_DIR / folder / f"{folder}_list.js").read_text(encoding="utf-8")
 			self.assertIn("get_custom_map_coords", list_script)
+
+	def test_natural_earth_ui_strings_have_arabic_translations(self):
+		app_root = Path(__file__).parents[1]
+		with open(app_root / "translations" / "ar.csv", encoding="utf-8") as handle:
+			arabic = {row[0]: row[1] for row in csv.reader(handle) if len(row) > 1}
+		script = (app_root / "public" / "js" / "camera_natural_earth.js").read_text(encoding="utf-8")
+		literals = set(re.findall(r'__\(\s*"((?:[^"\\]|\\.)*)"\s*[,)]', script))
+		literals |= set(re.findall(r"__\(\s*'((?:[^'\\]|\\.)*)'\s*[,)]", script))
+		label_block = re.search(r"PROFILE_LABELS = \{(.*?)\};", script, re.S).group(1)
+		literals |= set(re.findall(r':\s*"([^"]+)"', label_block))
+		catalog = json.loads(
+			(app_root / "data" / "natural_earth" / "catalog.json").read_text(encoding="utf-8")
+		)
+		for layer in catalog["layers"]:
+			literals.add(layer["label"])
+			literals.add(layer["description"])
+		literals.add(catalog["license"])
+		literals.add(catalog["limitations"])
+		missing = sorted(text for text in literals if not arabic.get(text, "").strip())
+		self.assertEqual(missing, [], f"Untranslated Natural Earth strings: {missing}")
 
 
 if __name__ == "__main__":

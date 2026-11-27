@@ -6,7 +6,7 @@
 /* Natural Earth geography panel (bundled vector reference layers). */
 .cam-map-shell { position: relative; }
 .cam-ne-open.active { border-color: #0f766e; color: #0f766e; box-shadow: inset 0 0 0 1px #0f766e; }
-.cam-ne-panel { position: absolute; z-index: 1000; top: 10px; right: 344px; display: flex; flex-direction: column; width: 322px; max-height: min(600px, calc(100% - 20px)); border: 1px solid var(--border-color); border-radius: 12px; background: var(--card-bg); box-shadow: 0 8px 28px rgba(15,23,42,.22); font-size: 12px; }
+.cam-ne-panel { position: absolute; z-index: 1000; top: 10px; inset-inline-end: 344px; display: flex; flex-direction: column; width: 322px; max-height: min(600px, calc(100% - 20px)); border: 1px solid var(--border-color); border-radius: 12px; background: var(--card-bg); box-shadow: 0 8px 28px rgba(15,23,42,.22); font-size: 12px; }
 .cam-ne-panel[hidden] { display: none; }
 .cam-ne-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border-color); }
 .cam-ne-head strong { font-size: 12px; letter-spacing: .01em; }
@@ -41,4 +41,5 @@
 .cam-ne-props td { padding: 2px 0; overflow-wrap: anywhere; vertical-align: top; }
 .cam-ne-props tr + tr th, .cam-ne-props tr + tr td { border-top: 1px solid var(--subtle-fg, #f1f5f9); }
 .cam-ne-foot { padding: 8px 12px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 9px; line-height: 1.4; }
-@media (max-width: 900px) { .cam-ne-panel { right: 10px; width: min(322px, calc(100% - 20px)); } }
+/* inset-inline-end (not right) so the panel docks beside the sidebar in both LTR and RTL. */
+@media (max-width: 900px) { .cam-ne-panel { inset-inline-end: 10px; width: min(322px, calc(100% - 20px)); } }

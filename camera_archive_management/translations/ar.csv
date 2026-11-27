@@ -1095,3 +1095,259 @@ Cameras within this distance of the detecting camera are considered nearby.,تُ
 "Restricted to System Managers. Secrets are encrypted by Frappe and never appear in lists, reports, exports, or map data.",مقيد بمديري النظام. تُشفّر الأسرار بواسطة Frappe ولا تظهر أبداً في القوائم أو التقارير أو التصدير أو بيانات الخريطة.
 Record rotation,تسجيل التدوير
 Rotation timestamp updated. Save the Camera to keep it.,تم تحديث طابع وقت التدوير. احفظ الكاميرا للاحتفاظ به.
+1:110m overview,نظرة عامة 1:110m
+1:50m detail,تفاصيل 1:50m
+A Camera Area cannot be its own parent.,لا يمكن أن تكون منطقة الكاميرا أصلاً لنفسها.
+A Camera cannot be listed as its own nearby camera.,لا يمكن إدراج الكاميرا ضمن الكاميرات القريبة من نفسها.
+A Motion Event requires a Camera.,يتطلب حدث الحركة كاميرا.
+A Resolution geometry is required for spatial lookup.,يلزم هندسة من نوع Resolution للبحث المكاني.
+A boundary cannot be its own parent.,لا يمكن أن يكون الحد الجغرافي أصلاً لنفسه.
+A bundled world boundary has no stable code or label.,أحد الحدود العالمية المضمّنة بلا رمز أو تسمية ثابتة.
+A camera image cannot appear more than once in its gallery.,لا يمكن أن تظهر صورة الكاميرا أكثر من مرة في معرضها.
+A valid layer id is required.,يلزم معرّف طبقة صالح.
+Add image,إضافة صورة
+Administrative area code and label are required.,رمز المنطقة الإدارية وتسميتها مطلوبان.
+Airports (1:10m),المطارات (1:10m)
+An administrative area cannot be its own parent.,لا يمكن أن تكون المنطقة الإدارية أصلاً لنفسها.
+Apply theme,تطبيق السمة
+"Area, km² (approx.)",المساحة، كم² (تقريباً)
+At least one boundary geometry is required.,يلزم هندسة حد جغرافي واحدة على الأقل.
+"At least one credential value (username, password, or secondary secret) is required.",يلزم إدخال قيمة واحدة على الأقل من بيانات الدخول (اسم المستخدم أو كلمة المرور أو السر الثانوي).
+Attach a private GeoJSON FeatureCollection before importing.,أرفق مجموعة معالم GeoJSON خاصة قبل الاستيراد.
+Auto detail by zoom,تفاصيل تلقائية حسب التكبير
+"Bearing must be in the range [0, 360).",يجب أن يكون الاتجاه ضمن النطاق [0، 360).
+Both CAM Geo Settings and this app's legacy Geo Settings exist; resolve the conflict.,توجد كل من CAM Geo Settings وإعدادات Geo Settings القديمة لهذا التطبيق؛ عالج التعارض.
+Both CAM Vehicle and legacy DocType metadata exist; resolve the conflict before migration.,توجد كل من CAM Vehicle وبيانات DocType القديمة؛ عالج التعارض قبل الترحيل.
+Both CAM Vehicle and legacy vehicle tables exist; no rows were merged or deleted.,توجد كل من جداول CAM Vehicle وجداول المركبات القديمة؛ لم تُدمج أو تُحذف أي صفوف.
+Both legacy and target vehicle tables exist; no rows were merged or deleted.,توجد جداول المركبات القديمة والهدف معاً؛ لم تُدمج أو تُحذف أي صفوف.
+Boundary centroid requires both latitude and longitude.,يتطلب مركز الحد الجغرافي كلاً من خط العرض وخط الطول.
+Boundary code already exists in this dataset.,رمز الحد الجغرافي موجود مسبقاً في مجموعة البيانات هذه.
+Boundary code and label are required.,رمز الحد الجغرافي وتسميته مطلوبان.
+Boundary latitude bounds must contain the full resolution geometry.,يجب أن تحتوي حدود خط العرض للحد الجغرافي على كامل هندسة Resolution.
+Boundary latitude bounds must have south <= north.,يجب أن يكون الجنوب <= الشمال في حدود خط العرض للحد الجغرافي.
+Boundary lines in disputed areas; alternative political representations.,خطوط حدودية في المناطق المتنازع عليها؛ تمثيلات سياسية بديلة.
+Boundary longitude bounds must contain the full resolution geometry.,يجب أن تحتوي حدود خط الطول للحد الجغرافي على كامل هندسة Resolution.
+Breakaway and disputed territories polygons.,مضلعات الأقاليم الانفصالية والمتنازع عليها.
+Bundled Natural Earth estimates,تقديرات Natural Earth المضمّنة
+Bundled country boundary count exceeded its safe map payload limit.,تجاوز عدد الحدود الوطنية المضمّنة الحد الآمن لحمولة الخريطة.
+CAM Geo Settings is already owned by another app; refusing to modify it.,CAM Geo Settings مملوكة بالفعل لتطبيق آخر؛ يُرفض تعديلها.
+CAM Vehicle is already owned by another app; refusing to modify it.,CAM Vehicle مملوكة بالفعل لتطبيق آخر؛ يُرفض تعديلها.
+Camera Archive,أرشيف الكاميرات
+Camera Location point and latitude/longitude disagree. Update them together explicitly.,نقطة موقع الكاميرا لا تتطابق مع خط العرض/خط الطول. حدّثهما معاً بشكل صريح.
+Camera Type name is required.,اسم نوع الكاميرا مطلوب.
+Camera gallery data must be a JSON array.,يجب أن تكون بيانات معرض الكاميرا مصفوفة JSON.
+Camera gallery fields are not present after model sync; no images were migrated.,حقول معرض الكاميرا غير موجودة بعد مزامنة النموذج؛ لم تُرحّل أي صور.
+Camera gallery files must be recognized image formats.,يجب أن تكون ملفات معرض الكاميرا بصيغ صور معروفة.
+Camera image gallery data must be valid JSON.,يجب أن تكون بيانات معرض صور الكاميرا JSON صالحاً.
+"Camera image order must be a unique, contiguous sequence starting at zero.",يجب أن يكون ترتيب صور الكاميرا تسلسلاً فريداً ومتصلاً يبدأ من الصفر.
+Camera images must use a safe local Frappe file URL.,يجب أن تستخدم صور الكاميرا رابط ملف Frappe محلياً آمناً.
+"Camera, event time, and motion type are required before submission.",الكاميرا ووقت الحدث ونوع الحركة مطلوبة قبل الإرسال.
+Cameras per country,الكاميرات لكل دولة
+Cannot migrate Vehicle Camera: CAM Vehicle already exists.,تعذّر ترحيل Vehicle Camera: CAM Vehicle موجودة بالفعل.
+Cannot rename this app's Vehicle: CAM Vehicle already exists.,تعذّرت إعادة تسمية Vehicle لهذا التطبيق: CAM Vehicle موجودة بالفعل.
+Capital,العاصمة
+Choose a provider before enabling online geocoding.,اختر مزوّداً قبل تفعيل الترميز الجغرافي عبر الإنترنت.
+"Choose a supported image file (JPEG, PNG, WebP, GIF, TIFF, BMP, or AVIF).",اختر ملف صورة مدعوماً (JPEG أو PNG أو WebP أو GIF أو TIFF أو BMP أو AVIF).
+Choose exactly one main image for a camera with gallery images.,اختر صورة رئيسية واحدة بالضبط للكاميرا ذات صور المعرض.
+Cities & populated places (1:110m),المدن والأماكن المأهولة (1:110m)
+Classes,الفئات
+Classes must be an integer.,يجب أن يكون عدد الفئات عدداً صحيحاً.
+Clear theme,مسح السمة
+"Click a country, city, river, airport or any bundled feature — or click the map — to inspect it.",انقر على دولة أو مدينة أو نهر أو مطار أو أي معلم مضمّن — أو انقر على الخريطة — لفحصه.
+Close geography panel,إغلاق لوحة الجغرافيا
+Coastline (1:110m),الساحل (1:110m)
+Computing thematic classes…,جارٍ حساب الفئات الموضوعية…
+Continent,القارة
+Countries,الدول
+Countries (1:110m),الدول (1:110m)
+Countries (1:50m detail),الدول (تفاصيل 1:50m)
+Country,الدولة
+Country boundary lines (1:110m),خطوط الحدود الوطنية (1:110m)
+Country code must be a short ISO identifier.,يجب أن يكون رمز الدولة معرّف ISO قصيراً.
+Country detail scale,مقياس تفاصيل الدولة
+"Coverage bounds require W, S, E, and N values.","تتطلب حدود التغطية قيم الغرب والجنوب والشرق والشمال (W, S, E, N)."
+Credential merge did not account for every source record; the legacy DocType was kept.,لم يشمل دمج بيانات الدخول كل سجل مصدر؛ أُبقي على DocType القديم.
+Cultural,ثقافية
+Custom ISO country values as JSON,قيم دول ISO مخصصة بصيغة JSON
+Custom data (ISO → number),بيانات مخصصة (من ISO إلى رقم)
+Custom value keys must be short ISO country codes.,يجب أن تكون مفاتيح القيم المخصصة رموز دول ISO قصيرة.
+Custom values must be a JSON object of ISO code to number.,يجب أن تكون القيم المخصصة كائن JSON يربط رمز ISO برقم.
+Custom values must be an object with at most 300 entries.,يجب أن تكون القيم المخصصة كائناً بـ 300 إدخال كحد أقصى.
+Custom values must be finite numbers.,يجب أن تكون القيم المخصصة أرقاماً منتهية.
+Dataset GeoJSON source must be a private Frappe attachment.,يجب أن يكون مصدر GeoJSON لمجموعة البيانات مرفق Frappe خاصاً.
+Dataset GeoJSON source must be a registered private File.,يجب أن يكون مصدر GeoJSON لمجموعة البيانات ملفاً خاصاً مسجلاً.
+"Dataset ID must match [a-z0-9][a-z0-9._-]{0,63}.","يجب أن يطابق معرّف مجموعة البيانات النمط [a-z0-9][a-z0-9._-]{0,63}."
+Dataset latitude bounds must have south <= north.,يجب أن يكون الجنوب <= الشمال في حدود خط العرض لمجموعة البيانات.
+Default search radius must be between 1 and 100000 meters.,يجب أن يكون نصف قطر البحث الافتراضي بين 1 و100000 متر.
+Disputed / breakaway areas (1:50m),المناطق المتنازع عليها / الانفصالية (1:50m)
+Disputed boundary lines (1:50m),خطوط الحدود المتنازع عليها (1:50m)
+Duplicate camera names are not allowed.,لا يُسمح بتكرار أسماء الكاميرات.
+Each camera gallery item must be an object.,يجب أن يكون كل عنصر في معرض الكاميرا كائناً.
+Economy group,مجموعة الاقتصاد
+Enable online tile fetching before allowing shared cache writes.,فعّل جلب البلاطات عبر الإنترنت قبل السماح بالكتابة في الذاكرة المشتركة.
+End date must not be earlier than start date.,يجب ألا يكون تاريخ الانتهاء أسبق من تاريخ البدء.
+Entity type,نوع الكيان
+Equal interval,فترات متساوية
+Every camera image requires a non-negative integer sort order.,تتطلب كل صورة كاميرا ترتيب فرز عدداً صحيحاً غير سالب.
+Every camera name must be a non-empty string of at most 140 characters.,يجب أن يكون كل اسم كاميرا نصاً غير فارغ بـ 140 حرفاً كحد أقصى.
+Every gallery image must be attached to this Camera as a Frappe File.,يجب إرفاق كل صورة معرض بهذه الكاميرا كملف Frappe.
+External geocoder is rate limited; retry shortly.,معدل طلبات المرمّز الجغرافي الخارجي مقيّد؛ أعد المحاولة بعد قليل.
+External geocoder per-minute limit reached.,بلغ المرمّز الجغرافي الخارجي حدّه في الدقيقة.
+External geocoding is enabled without a contact-bearing User-Agent.,الترميز الجغرافي الخارجي مفعّل دون User-Agent يتضمن معلومات تواصل.
+External geocoding requires a POST request.,يتطلب الترميز الجغرافي الخارجي طلب POST.
+First-level administrative divisions (states and provinces).,التقسيمات الإدارية من المستوى الأول (الولايات والمقاطعات).
+GDP (NE estimate),الناتج المحلي (تقدير NE)
+"GDP, million USD (estimate)",الناتج المحلي، مليون دولار أمريكي (تقدير)
+Gallery changes save with the Camera record. Removing an image here does not delete its Frappe File.,تُحفظ تغييرات المعرض مع سجل الكاميرا. إزالة صورة هنا لا تحذف ملف Frappe الخاص بها.
+Gazetteer admin area must belong to the same dataset.,يجب أن تنتمي المنطقة الإدارية للفهرس الجغرافي إلى مجموعة البيانات نفسها.
+Gazetteer place code already exists in this dataset.,رمز موضع الفهرس الجغرافي موجود مسبقاً في مجموعة البيانات هذه.
+Gazetteer place code and name are required.,رمز موضع الفهرس الجغرافي واسمه مطلوبان.
+Gazetteer place requires latitude and longitude.,يتطلب موضع الفهرس الجغرافي خط العرض وخط الطول.
+"Generalized small-scale cartographic data. Not cadastral, not legal boundaries, not live. Roads and railways are not bundled (their 1:10m source files are tens of megabytes). Population and GDP figures are Natural Earth estimates, not a live statistical database.",بيانات كارتوغرافية معمّمة صغيرة المقياس. ليست عقارية ولا حدوداً قانونية ولا بيانات حية. الطرق والسكك الحديدية غير مضمّنة (ملفات مصدرها بمقياس 1:10m بعشرات الميغابايت). أرقام السكان والناتج المحلي هي تقديرات Natural Earth وليست قاعدة إحصائية حية.
+GeoJSON file exceeds the 25 MiB import limit.,يتجاوز ملف GeoJSON حد الاستيراد البالغ 25 MiB.
+GeoJSON source is not registered as a Frappe File.,مصدر GeoJSON غير مسجل كملف Frappe.
+GeoJSON source must be a private Frappe File.,يجب أن يكون مصدر GeoJSON ملف Frappe خاصاً.
+Geography layers,طبقات الجغرافيا
+Geography · Natural Earth,الجغرافيا · Natural Earth
+Glaciated area polygons (ice sheets).,مضلعات المناطق الجليدية (الصفائح الجليدية).
+Glaciated areas (1:110m),المناطق الجليدية (1:110m)
+Global coastline lines.,خطوط السواحل العالمية.
+Global land mass polygons.,مضلعات كتل اليابسة العالمية.
+Global ocean polygons.,مضلعات المحيطات العالمية.
+Graticule (20°),شبكة الإحداثيات (20°)
+Higher-detail country boundaries for regional and national maps.,حدود وطنية أعلى تفصيلاً للخرائط الإقليمية والوطنية.
+Income group,مجموعة الدخل
+Inspector,الفاحص
+Invalid Geo Dataset name.,اسم مجموعة البيانات الجغرافية غير صالح.
+Invalid camera batch size.,حجم دفعة الكاميرات غير صالح.
+Invalid camera status filter.,عامل تصفية حالة الكاميرا غير صالح.
+Invalid dataset name.,اسم مجموعة البيانات غير صالح.
+Lakes (1:110m),البحيرات (1:110m)
+Land (1:110m),اليابسة (1:110m)
+Land boundary lines between countries.,خطوط الحدود البرية بين الدول.
+Latitude and longitude are required.,خط العرض وخط الطول مطلوبان.
+Latitude/longitude graticule grid at 20-degree spacing.,شبكة إحداثيات خطوط العرض/الطول بفارق 20 درجة.
+Layer catalog could not be loaded.,تعذّر تحميل فهرس الطبقات.
+Layer could not be loaded.,تعذّر تحميل الطبقة.
+Loading country profile…,جارٍ تحميل ملف الدولة…
+Loading layer catalog…,جارٍ تحميل فهرس الطبقات…
+Lookup radius must be a whole number of meters.,يجب أن يكون نصف قطر البحث عدداً صحيحاً من الأمتار.
+Lookup radius must be between 1 and 100000 meters.,يجب أن يكون نصف قطر البحث بين 1 و100000 متر.
+MAIN IMAGE,الصورة الرئيسية
+Major airports (point locations).,المطارات الرئيسية (مواقع نقطية).
+Major cities and populated places with population estimates and admin context.,المدن الكبرى والأماكن المأهولة مع تقديرات السكان والسياق الإداري.
+Major lake polygons.,مضلعات البحيرات الرئيسية.
+Major river and lake centerlines.,الخطوط المركزية للأنهار والبحيرات الرئيسية.
+Major seaports (point locations).,الموانئ البحرية الرئيسية (مواقع نقطية).
+Make main,اجعلها رئيسية
+Map coordinates are not available for this DocType.,إحداثيات الخريطة غير متاحة لهذا DocType.
+Map date range is limited to 367 days.,نطاق تواريخ الخريطة محدود بـ 367 يوماً.
+Map dates must be ISO date or datetime values.,يجب أن تكون تواريخ الخريطة قيم ISO لتاريخ أو تاريخ ووقت.
+Map dates must be valid ISO dates or datetimes.,يجب أن تكون تواريخ الخريطة تواريخ أو تواريخ وأوقات ISO صالحة.
+Map filters must be a list or object.,يجب أن تكون عوامل تصفية الخريطة قائمة أو كائناً.
+Map tiles use Siraj Research's configured provider catalog and shared private/siraj_tile_cache. Online fetching requires both CAM online-fetch/cache-write flags and Siraj Geo Settings > Allow server to fetch from provider. Review provider terms and attribution before enabling.,تستخدم بلاطات الخريطة فهرس المزوّدين المُعدّ في Siraj Research والذاكرة المشتركة private/siraj_tile_cache. يتطلب الجلب عبر الإنترنت كلاً من رايتَي الجلب/الكتابة في ذاكرة CAM وخيار Siraj Geo Settings > Allow server to fetch from provider. راجع شروط المزوّد والعزو قبل التفعيل.
+Method,الطريقة
+Metric,المقياس
+Metric: {0},المقياس: {0}
+Missing requesting user.,المستخدم الطالب مفقود.
+Motion Event camera/location snapshots are immutable.,لقطات الكاميرا/الموقع في حدث الحركة غير قابلة للتغيير.
+Motion Event detection time cannot be in the future.,لا يمكن أن يكون وقت رصد حدث الحركة في المستقبل.
+Movement report range cannot exceed 367 days.,لا يمكن أن يتجاوز نطاق تقرير الحركة 367 يوماً.
+Movements per country,الحركات لكل دولة
+"Named marine regions (seas, gulfs, oceans).",المناطق البحرية المسماة (بحار، خلجان، محيطات).
+Named physical points such as mountain peaks and passes.,نقاط طبيعية مسماة مثل القمم الجبلية والممرات.
+Natural Earth,Natural Earth
+Natural Earth geography layers,طبقات الجغرافيا من Natural Earth
+Natural Earth · public domain,Natural Earth · ملك عام
+Nearby cameras must be unique and cannot include this camera.,يجب أن تكون الكاميرات القريبة فريدة ولا يمكن أن تتضمن هذه الكاميرا.
+Nearby-camera distance cannot be negative.,لا يمكن أن تكون مسافة الكاميرا القريبة سالبة.
+Nearby-camera radius must be between 0 and 100000 meters.,يجب أن يكون نصف قطر الكاميرات القريبة بين 0 و100000 متر.
+No active Geo Dataset is configured.,لا توجد مجموعة بيانات جغرافية نشطة مُعدّة.
+No bundled profile is available for this feature.,لا يتوفر ملف مضمّن لهذا المعلم.
+No camera images yet. Add a photo to create the map pin portrait.,لا توجد صور للكاميرا بعد. أضف صورة لإنشاء صورة دبوس الخريطة.
+No country at this point — open ocean or outside the bundled coverage.,لا توجد دولة عند هذه النقطة — محيط مفتوح أو خارج التغطية المضمّنة.
+No data,لا توجد بيانات
+No values are available for this metric.,لا تتوفر قيم لهذا المقياس.
+Ocean (1:110m),المحيط (1:110m)
+Official name,الاسم الرسمي
+Online geocoder rate limit must be between 1 and 60 per minute.,يجب أن يكون حد معدل المرمّز الجغرافي عبر الإنترنت بين 1 و60 في الدقيقة.
+Only Geo Administrators may import geographic datasets.,يمكن لمسؤولي الجغرافيا فقط استيراد مجموعات البيانات الجغرافية.
+Only Geo Administrators may queue bulk location updates.,يمكن لمسؤولي الجغرافيا فقط جدولة تحديثات المواقع الجماعية.
+Only GeoJSON FeatureCollection inputs are supported.,لا تُدعم إلا مدخلات GeoJSON من نوع FeatureCollection.
+Only ambiguous,الملتبسة فقط
+"Only the dataset importer may set Running, Complete, or Failed status.",يمكن لمستورد مجموعة البيانات فقط تعيين حالة Running أو Complete أو Failed.
+Open shared-cache map,فتح خريطة الذاكرة المشتركة
+Parent Camera Area does not exist.,منطقة الكاميرا الأصل غير موجودة.
+Parent Camera Area must be a group.,يجب أن تكون منطقة الكاميرا الأصل مجموعة.
+Parent administrative area must be a group.,يجب أن تكون المنطقة الإدارية الأصل مجموعة.
+Parent administrative area must belong to the same dataset.,يجب أن تنتمي المنطقة الإدارية الأصل إلى مجموعة البيانات نفسها.
+Parent boundary level must be lower than its child level.,يجب أن يكون مستوى الحد الجغرافي الأصل أدنى من مستوى فرعه.
+Physical,طبيعية
+Physical features (1:110m),المعالم الطبيعية (1:110m)
+Population (NE estimate),عدد السكان (تقدير NE)
+Population (estimate),عدد السكان (تقدير)
+Port must be between 1 and 65535.,يجب أن يكون المنفذ بين 1 و65535.
+Ports (1:10m),الموانئ (1:10m)
+Provide a contact-bearing User-Agent before enabling Nominatim.,وفّر User-Agent يتضمن معلومات تواصل قبل تفعيل Nominatim.
+Provide a country code or a latitude/longitude pair.,وفّر رمز دولة أو زوج خط عرض/خط طول.
+Provide between 1 and 250 camera names.,وفّر ما بين 1 و250 اسم كاميرا.
+Public Domain,ملك عام
+Quantile,التجزئة الكمية
+Reference layers,الطبقات المرجعية
+Region,الإقليم
+Remove,إزالة
+Rivers (1:110m),الأنهار (1:110m)
+Save the Camera before uploading images.,احفظ الكاميرا قبل رفع الصور.
+Saved movement point,نقطة حركة محفوظة
+"Seas & oceans (named, 1:110m)",البحار والمحيطات (المسماة، 1:110m)
+Selected Camera Area does not exist.,منطقة الكاميرا المحددة غير موجودة.
+Selected Camera does not exist.,الكاميرا المحددة غير موجودة.
+Show movement on map,عرض الحركة على الخريطة
+Sign in with Camera read permission to access map tiles.,سجّل الدخول بصلاحية قراءة الكاميرا للوصول إلى بلاطات الخريطة.
+Sign in with Camera read permission to use the map.,سجّل الدخول بصلاحية قراءة الكاميرا لاستخدام الخريطة.
+Sovereign,الدولة ذات السيادة
+Spatial Tools,الأدوات المكانية
+Spatial geometry must use WGS84 / EPSG:4326 (SRID 4326).,يجب أن تستخدم الهندسة المكانية نظام WGS84 / EPSG:4326 (SRID 4326).
+States / provinces (1:110m),الولايات / المقاطعات (1:110m)
+Subregion,الإقليم الفرعي
+The Camera Archive core reference catalog is missing.,فهرس المراجع الأساسي لأرشيف الكاميرات مفقود.
+The bundled Natural Earth core boundary dataset is invalid.,مجموعة بيانات الحدود الأساسية المضمّنة من Natural Earth غير صالحة.
+The bundled Natural Earth core boundary dataset is missing.,مجموعة بيانات الحدود الأساسية المضمّنة من Natural Earth مفقودة.
+The bundled Natural Earth dataset failed its integrity check.,أخفقت مجموعة بيانات Natural Earth المضمّنة في فحص السلامة.
+The camera image main-image flag must be true or false.,يجب أن تكون علامة الصورة الرئيسية لصورة الكاميرا true أو false.
+The requested Geo Dataset does not exist.,مجموعة البيانات الجغرافية المطلوبة غير موجودة.
+The thematic map could not be computed.,تعذّر حساب الخريطة الموضوعية.
+Thematic map (choropleth),الخريطة الموضوعية (choropleth)
+This area code already exists within the dataset.,رمز المنطقة هذا موجود مسبقاً ضمن مجموعة البيانات.
+Unknown Natural Earth layer.,طبقة Natural Earth غير معروفة.
+Unknown choropleth metric.,مقياس choropleth غير معروف.
+Unsupported external geocoder provider.,مزوّد الترميز الجغرافي الخارجي غير مدعوم.
+User-Agent must be a single-line contact email or HTTPS contact URL (max 250 chars).,يجب أن يكون User-Agent بريد تواصل من سطر واحد أو رابط تواصل HTTPS (بحد أقصى 250 حرفاً).
+Vehicle Camera table exists without DocType metadata. Restore metadata or perform reviewed recovery.,جدول Vehicle Camera موجود دون بيانات DocType الوصفية. استعد البيانات الوصفية أو نفّذ استعادة مُراجَعة.
+Vehicle Type name is required.,اسم نوع المركبة مطلوب.
+Vehicle image must reference a registered Frappe File.,يجب أن تشير صورة المركبة إلى ملف Frappe مسجل.
+Vehicle image must use a local Frappe File URL.,يجب أن تستخدم صورة المركبة رابط ملف Frappe محلياً.
+Vehicle movement,حركة المركبة
+Vehicle movement icon,أيقونة حركة المركبة
+Vehicle name is required.,اسم المركبة مطلوب.
+Vehicle type image must reference a registered Frappe File.,يجب أن تشير صورة نوع المركبة إلى ملف Frappe مسجل.
+Vehicle type image must use a local Frappe File URL.,يجب أن تستخدم صورة نوع المركبة رابط ملف Frappe محلياً.
+View movements on map,عرض الحركات على الخريطة
+"World countries and territories with rich attributes (ISO codes, capital, continent, region, population and GDP estimates).",دول العالم وأقاليمه بسمات غنية (رموز ISO، العاصمة، القارة، الإقليم، تقديرات السكان والناتج المحلي).
+You do not have permission to read Motion Event.,ليست لديك صلاحية قراءة حدث الحركة.
+You do not have permission to read the requested geographic dataset.,ليست لديك صلاحية قراءة مجموعة البيانات الجغرافية المطلوبة.
+You do not have permission to read this DocType.,ليست لديك صلاحية قراءة هذا DocType.
+You do not have permission to use geographic lookup.,ليست لديك صلاحية استخدام البحث الجغرافي.
+Zoom to country,التكبير إلى الدولة
+Zoom to feature,التكبير إلى المعلم
+camera scan truncated at the safe limit,اقتُطع فحص الكاميرات عند الحد الآمن
+camera_names must be a JSON array.,يجب أن تكون camera_names مصفوفة JSON.
+end must be on or after start.,يجب أن يكون end مساوياً لـ start أو بعده.
+"generalized boundaries, not legal or cadastral.",حدود معمّمة، وليست قانونية أو عقارية.
+include_demo must be 0 or 1.,يجب أن تكون include_demo بقيمة 0 أو 1.
+method: {0},الطريقة: {0}
+revision,المراجعة
+{0} images · choose one main image,{0} صور · اختر صورة رئيسية واحدة
+{0} located cameras,{0} كاميرات محددة الموقع
+{0} movements,{0} حركات
+Cannot retire Archive Settings: legacy settings rows contain different Motion Event defaults. Consolidate them before retrying.,تعذّر إيقاف Archive Settings: صفوف الإعدادات القديمة تحتوي على قيم افتراضية مختلفة لـ Motion Event. وحّدها قبل إعادة المحاولة.

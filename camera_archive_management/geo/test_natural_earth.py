@@ -93,6 +93,8 @@ class TestCountryIntelligence(unittest.TestCase):
 		self.assertGreater(profile["area_km2"], 10_000)
 		self.assertIsNotNone(profile["capital"])
 		self.assertEqual(profile["capital"]["name"], "Amsterdam")
+		self.assertEqual(profile["name_ar"], "هولندا")
+		self.assertEqual(profile["capital"]["name_ar"], "أمستردام")
 		self.assertEqual(profile["provenance"], "natural_earth_bundle")
 
 	def test_country_profile_by_coordinate_matches_code(self):

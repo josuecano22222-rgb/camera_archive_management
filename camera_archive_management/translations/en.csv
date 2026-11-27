@@ -764,3 +764,260 @@ Trends & coverage,Trends & coverage
 Record rotation,Record rotation
 Rotation timestamp updated. Save the Camera to keep it.,Rotation timestamp updated. Save the Camera to keep it.
 Access Credentials,Access Credentials
+1:110m overview,1:110m overview
+1:50m detail,1:50m detail
+A Camera Area cannot be its own parent.,A Camera Area cannot be its own parent.
+A Camera cannot be listed as its own nearby camera.,A Camera cannot be listed as its own nearby camera.
+A Motion Event requires a Camera.,A Motion Event requires a Camera.
+A Resolution geometry is required for spatial lookup.,A Resolution geometry is required for spatial lookup.
+A boundary cannot be its own parent.,A boundary cannot be its own parent.
+A bundled world boundary has no stable code or label.,A bundled world boundary has no stable code or label.
+A camera image cannot appear more than once in its gallery.,A camera image cannot appear more than once in its gallery.
+A valid layer id is required.,A valid layer id is required.
+Add image,Add image
+Administrative area code and label are required.,Administrative area code and label are required.
+Airports (1:10m),Airports (1:10m)
+An administrative area cannot be its own parent.,An administrative area cannot be its own parent.
+Apply theme,Apply theme
+"Area, km² (approx.)","Area, km² (approx.)"
+At least one boundary geometry is required.,At least one boundary geometry is required.
+"At least one credential value (username, password, or secondary secret) is required.","At least one credential value (username, password, or secondary secret) is required."
+Attach a private GeoJSON FeatureCollection before importing.,Attach a private GeoJSON FeatureCollection before importing.
+Auto detail by zoom,Auto detail by zoom
+"Bearing must be in the range [0, 360).","Bearing must be in the range [0, 360)."
+Both CAM Geo Settings and this app's legacy Geo Settings exist; resolve the conflict.,Both CAM Geo Settings and this app's legacy Geo Settings exist; resolve the conflict.
+Both CAM Vehicle and legacy DocType metadata exist; resolve the conflict before migration.,Both CAM Vehicle and legacy DocType metadata exist; resolve the conflict before migration.
+Both CAM Vehicle and legacy vehicle tables exist; no rows were merged or deleted.,Both CAM Vehicle and legacy vehicle tables exist; no rows were merged or deleted.
+Both legacy and target vehicle tables exist; no rows were merged or deleted.,Both legacy and target vehicle tables exist; no rows were merged or deleted.
+Boundary centroid requires both latitude and longitude.,Boundary centroid requires both latitude and longitude.
+Boundary code already exists in this dataset.,Boundary code already exists in this dataset.
+Boundary code and label are required.,Boundary code and label are required.
+Boundary latitude bounds must contain the full resolution geometry.,Boundary latitude bounds must contain the full resolution geometry.
+Boundary latitude bounds must have south <= north.,Boundary latitude bounds must have south <= north.
+Boundary lines in disputed areas; alternative political representations.,Boundary lines in disputed areas; alternative political representations.
+Boundary longitude bounds must contain the full resolution geometry.,Boundary longitude bounds must contain the full resolution geometry.
+Breakaway and disputed territories polygons.,Breakaway and disputed territories polygons.
+Bundled Natural Earth estimates,Bundled Natural Earth estimates
+Bundled country boundary count exceeded its safe map payload limit.,Bundled country boundary count exceeded its safe map payload limit.
+CAM Geo Settings is already owned by another app; refusing to modify it.,CAM Geo Settings is already owned by another app; refusing to modify it.
+CAM Vehicle is already owned by another app; refusing to modify it.,CAM Vehicle is already owned by another app; refusing to modify it.
+Camera Archive,Camera Archive
+Camera Location point and latitude/longitude disagree. Update them together explicitly.,Camera Location point and latitude/longitude disagree. Update them together explicitly.
+Camera Type name is required.,Camera Type name is required.
+Camera gallery data must be a JSON array.,Camera gallery data must be a JSON array.
+Camera gallery fields are not present after model sync; no images were migrated.,Camera gallery fields are not present after model sync; no images were migrated.
+Camera gallery files must be recognized image formats.,Camera gallery files must be recognized image formats.
+Camera image gallery data must be valid JSON.,Camera image gallery data must be valid JSON.
+"Camera image order must be a unique, contiguous sequence starting at zero.","Camera image order must be a unique, contiguous sequence starting at zero."
+Camera images must use a safe local Frappe file URL.,Camera images must use a safe local Frappe file URL.
+"Camera, event time, and motion type are required before submission.","Camera, event time, and motion type are required before submission."
+Cameras per country,Cameras per country
+Cannot migrate Vehicle Camera: CAM Vehicle already exists.,Cannot migrate Vehicle Camera: CAM Vehicle already exists.
+Cannot rename this app's Vehicle: CAM Vehicle already exists.,Cannot rename this app's Vehicle: CAM Vehicle already exists.
+Capital,Capital
+Choose a provider before enabling online geocoding.,Choose a provider before enabling online geocoding.
+"Choose a supported image file (JPEG, PNG, WebP, GIF, TIFF, BMP, or AVIF).","Choose a supported image file (JPEG, PNG, WebP, GIF, TIFF, BMP, or AVIF)."
+Choose exactly one main image for a camera with gallery images.,Choose exactly one main image for a camera with gallery images.
+Cities & populated places (1:110m),Cities & populated places (1:110m)
+Classes,Classes
+Classes must be an integer.,Classes must be an integer.
+Clear theme,Clear theme
+"Click a country, city, river, airport or any bundled feature — or click the map — to inspect it.","Click a country, city, river, airport or any bundled feature — or click the map — to inspect it."
+Close geography panel,Close geography panel
+Coastline (1:110m),Coastline (1:110m)
+Computing thematic classes…,Computing thematic classes…
+Continent,Continent
+Countries,Countries
+Countries (1:110m),Countries (1:110m)
+Countries (1:50m detail),Countries (1:50m detail)
+Country,Country
+Country boundary lines (1:110m),Country boundary lines (1:110m)
+Country code must be a short ISO identifier.,Country code must be a short ISO identifier.
+Country detail scale,Country detail scale
+"Coverage bounds require W, S, E, and N values.","Coverage bounds require W, S, E, and N values."
+Credential merge did not account for every source record; the legacy DocType was kept.,Credential merge did not account for every source record; the legacy DocType was kept.
+Cultural,Cultural
+Custom ISO country values as JSON,Custom ISO country values as JSON
+Custom data (ISO → number),Custom data (ISO → number)
+Custom value keys must be short ISO country codes.,Custom value keys must be short ISO country codes.
+Custom values must be a JSON object of ISO code to number.,Custom values must be a JSON object of ISO code to number.
+Custom values must be an object with at most 300 entries.,Custom values must be an object with at most 300 entries.
+Custom values must be finite numbers.,Custom values must be finite numbers.
+Dataset GeoJSON source must be a private Frappe attachment.,Dataset GeoJSON source must be a private Frappe attachment.
+Dataset GeoJSON source must be a registered private File.,Dataset GeoJSON source must be a registered private File.
+"Dataset ID must match [a-z0-9][a-z0-9._-]{0,63}.","Dataset ID must match [a-z0-9][a-z0-9._-]{0,63}."
+Dataset latitude bounds must have south <= north.,Dataset latitude bounds must have south <= north.
+Default search radius must be between 1 and 100000 meters.,Default search radius must be between 1 and 100000 meters.
+Disputed / breakaway areas (1:50m),Disputed / breakaway areas (1:50m)
+Disputed boundary lines (1:50m),Disputed boundary lines (1:50m)
+Duplicate camera names are not allowed.,Duplicate camera names are not allowed.
+Each camera gallery item must be an object.,Each camera gallery item must be an object.
+Economy group,Economy group
+Enable online tile fetching before allowing shared cache writes.,Enable online tile fetching before allowing shared cache writes.
+End date must not be earlier than start date.,End date must not be earlier than start date.
+Entity type,Entity type
+Equal interval,Equal interval
+Every camera image requires a non-negative integer sort order.,Every camera image requires a non-negative integer sort order.
+Every camera name must be a non-empty string of at most 140 characters.,Every camera name must be a non-empty string of at most 140 characters.
+Every gallery image must be attached to this Camera as a Frappe File.,Every gallery image must be attached to this Camera as a Frappe File.
+External geocoder is rate limited; retry shortly.,External geocoder is rate limited; retry shortly.
+External geocoder per-minute limit reached.,External geocoder per-minute limit reached.
+External geocoding is enabled without a contact-bearing User-Agent.,External geocoding is enabled without a contact-bearing User-Agent.
+External geocoding requires a POST request.,External geocoding requires a POST request.
+First-level administrative divisions (states and provinces).,First-level administrative divisions (states and provinces).
+GDP (NE estimate),GDP (NE estimate)
+"GDP, million USD (estimate)","GDP, million USD (estimate)"
+Gallery changes save with the Camera record. Removing an image here does not delete its Frappe File.,Gallery changes save with the Camera record. Removing an image here does not delete its Frappe File.
+Gazetteer admin area must belong to the same dataset.,Gazetteer admin area must belong to the same dataset.
+Gazetteer place code already exists in this dataset.,Gazetteer place code already exists in this dataset.
+Gazetteer place code and name are required.,Gazetteer place code and name are required.
+Gazetteer place requires latitude and longitude.,Gazetteer place requires latitude and longitude.
+"Generalized small-scale cartographic data. Not cadastral, not legal boundaries, not live. Roads and railways are not bundled (their 1:10m source files are tens of megabytes). Population and GDP figures are Natural Earth estimates, not a live statistical database.","Generalized small-scale cartographic data. Not cadastral, not legal boundaries, not live. Roads and railways are not bundled (their 1:10m source files are tens of megabytes). Population and GDP figures are Natural Earth estimates, not a live statistical database."
+GeoJSON file exceeds the 25 MiB import limit.,GeoJSON file exceeds the 25 MiB import limit.
+GeoJSON source is not registered as a Frappe File.,GeoJSON source is not registered as a Frappe File.
+GeoJSON source must be a private Frappe File.,GeoJSON source must be a private Frappe File.
+Geography layers,Geography layers
+Geography · Natural Earth,Geography · Natural Earth
+Glaciated area polygons (ice sheets).,Glaciated area polygons (ice sheets).
+Glaciated areas (1:110m),Glaciated areas (1:110m)
+Global coastline lines.,Global coastline lines.
+Global land mass polygons.,Global land mass polygons.
+Global ocean polygons.,Global ocean polygons.
+Graticule (20°),Graticule (20°)
+Higher-detail country boundaries for regional and national maps.,Higher-detail country boundaries for regional and national maps.
+Income group,Income group
+Inspector,Inspector
+Invalid Geo Dataset name.,Invalid Geo Dataset name.
+Invalid camera batch size.,Invalid camera batch size.
+Invalid camera status filter.,Invalid camera status filter.
+Invalid dataset name.,Invalid dataset name.
+Lakes (1:110m),Lakes (1:110m)
+Land (1:110m),Land (1:110m)
+Land boundary lines between countries.,Land boundary lines between countries.
+Latitude and longitude are required.,Latitude and longitude are required.
+Latitude/longitude graticule grid at 20-degree spacing.,Latitude/longitude graticule grid at 20-degree spacing.
+Layer catalog could not be loaded.,Layer catalog could not be loaded.
+Layer could not be loaded.,Layer could not be loaded.
+Loading country profile…,Loading country profile…
+Loading layer catalog…,Loading layer catalog…
+Lookup radius must be a whole number of meters.,Lookup radius must be a whole number of meters.
+Lookup radius must be between 1 and 100000 meters.,Lookup radius must be between 1 and 100000 meters.
+MAIN IMAGE,MAIN IMAGE
+Major airports (point locations).,Major airports (point locations).
+Major cities and populated places with population estimates and admin context.,Major cities and populated places with population estimates and admin context.
+Major lake polygons.,Major lake polygons.
+Major river and lake centerlines.,Major river and lake centerlines.
+Major seaports (point locations).,Major seaports (point locations).
+Make main,Make main
+Map coordinates are not available for this DocType.,Map coordinates are not available for this DocType.
+Map date range is limited to 367 days.,Map date range is limited to 367 days.
+Map dates must be ISO date or datetime values.,Map dates must be ISO date or datetime values.
+Map dates must be valid ISO dates or datetimes.,Map dates must be valid ISO dates or datetimes.
+Map filters must be a list or object.,Map filters must be a list or object.
+Map tiles use Siraj Research's configured provider catalog and shared private/siraj_tile_cache. Online fetching requires both CAM online-fetch/cache-write flags and Siraj Geo Settings > Allow server to fetch from provider. Review provider terms and attribution before enabling.,Map tiles use Siraj Research's configured provider catalog and shared private/siraj_tile_cache. Online fetching requires both CAM online-fetch/cache-write flags and Siraj Geo Settings > Allow server to fetch from provider. Review provider terms and attribution before enabling.
+Method,Method
+Metric,Metric
+Metric: {0},Metric: {0}
+Missing requesting user.,Missing requesting user.
+Motion Event camera/location snapshots are immutable.,Motion Event camera/location snapshots are immutable.
+Motion Event detection time cannot be in the future.,Motion Event detection time cannot be in the future.
+Movement report range cannot exceed 367 days.,Movement report range cannot exceed 367 days.
+Movements per country,Movements per country
+"Named marine regions (seas, gulfs, oceans).","Named marine regions (seas, gulfs, oceans)."
+Named physical points such as mountain peaks and passes.,Named physical points such as mountain peaks and passes.
+Natural Earth,Natural Earth
+Natural Earth geography layers,Natural Earth geography layers
+Natural Earth · public domain,Natural Earth · public domain
+Nearby cameras must be unique and cannot include this camera.,Nearby cameras must be unique and cannot include this camera.
+Nearby-camera distance cannot be negative.,Nearby-camera distance cannot be negative.
+Nearby-camera radius must be between 0 and 100000 meters.,Nearby-camera radius must be between 0 and 100000 meters.
+No active Geo Dataset is configured.,No active Geo Dataset is configured.
+No bundled profile is available for this feature.,No bundled profile is available for this feature.
+No camera images yet. Add a photo to create the map pin portrait.,No camera images yet. Add a photo to create the map pin portrait.
+No country at this point — open ocean or outside the bundled coverage.,No country at this point — open ocean or outside the bundled coverage.
+No data,No data
+No values are available for this metric.,No values are available for this metric.
+Ocean (1:110m),Ocean (1:110m)
+Official name,Official name
+Online geocoder rate limit must be between 1 and 60 per minute.,Online geocoder rate limit must be between 1 and 60 per minute.
+Only Geo Administrators may import geographic datasets.,Only Geo Administrators may import geographic datasets.
+Only Geo Administrators may queue bulk location updates.,Only Geo Administrators may queue bulk location updates.
+Only GeoJSON FeatureCollection inputs are supported.,Only GeoJSON FeatureCollection inputs are supported.
+Only ambiguous,Only ambiguous
+"Only the dataset importer may set Running, Complete, or Failed status.","Only the dataset importer may set Running, Complete, or Failed status."
+Open shared-cache map,Open shared-cache map
+Parent Camera Area does not exist.,Parent Camera Area does not exist.
+Parent Camera Area must be a group.,Parent Camera Area must be a group.
+Parent administrative area must be a group.,Parent administrative area must be a group.
+Parent administrative area must belong to the same dataset.,Parent administrative area must belong to the same dataset.
+Parent boundary level must be lower than its child level.,Parent boundary level must be lower than its child level.
+Physical,Physical
+Physical features (1:110m),Physical features (1:110m)
+Population (NE estimate),Population (NE estimate)
+Population (estimate),Population (estimate)
+Port must be between 1 and 65535.,Port must be between 1 and 65535.
+Ports (1:10m),Ports (1:10m)
+Provide a contact-bearing User-Agent before enabling Nominatim.,Provide a contact-bearing User-Agent before enabling Nominatim.
+Provide a country code or a latitude/longitude pair.,Provide a country code or a latitude/longitude pair.
+Provide between 1 and 250 camera names.,Provide between 1 and 250 camera names.
+Public Domain,Public Domain
+Quantile,Quantile
+Reference layers,Reference layers
+Region,Region
+Remove,Remove
+Rivers (1:110m),Rivers (1:110m)
+Save the Camera before uploading images.,Save the Camera before uploading images.
+Saved movement point,Saved movement point
+"Seas & oceans (named, 1:110m)","Seas & oceans (named, 1:110m)"
+Selected Camera Area does not exist.,Selected Camera Area does not exist.
+Selected Camera does not exist.,Selected Camera does not exist.
+Show movement on map,Show movement on map
+Sign in with Camera read permission to access map tiles.,Sign in with Camera read permission to access map tiles.
+Sign in with Camera read permission to use the map.,Sign in with Camera read permission to use the map.
+Sovereign,Sovereign
+Spatial Tools,Spatial Tools
+Spatial geometry must use WGS84 / EPSG:4326 (SRID 4326).,Spatial geometry must use WGS84 / EPSG:4326 (SRID 4326).
+States / provinces (1:110m),States / provinces (1:110m)
+Subregion,Subregion
+The Camera Archive core reference catalog is missing.,The Camera Archive core reference catalog is missing.
+The bundled Natural Earth core boundary dataset is invalid.,The bundled Natural Earth core boundary dataset is invalid.
+The bundled Natural Earth core boundary dataset is missing.,The bundled Natural Earth core boundary dataset is missing.
+The bundled Natural Earth dataset failed its integrity check.,The bundled Natural Earth dataset failed its integrity check.
+The camera image main-image flag must be true or false.,The camera image main-image flag must be true or false.
+The requested Geo Dataset does not exist.,The requested Geo Dataset does not exist.
+The thematic map could not be computed.,The thematic map could not be computed.
+Thematic map (choropleth),Thematic map (choropleth)
+This area code already exists within the dataset.,This area code already exists within the dataset.
+Unknown Natural Earth layer.,Unknown Natural Earth layer.
+Unknown choropleth metric.,Unknown choropleth metric.
+Unsupported external geocoder provider.,Unsupported external geocoder provider.
+User-Agent must be a single-line contact email or HTTPS contact URL (max 250 chars).,User-Agent must be a single-line contact email or HTTPS contact URL (max 250 chars).
+Vehicle Camera table exists without DocType metadata. Restore metadata or perform reviewed recovery.,Vehicle Camera table exists without DocType metadata. Restore metadata or perform reviewed recovery.
+Vehicle Type name is required.,Vehicle Type name is required.
+Vehicle image must reference a registered Frappe File.,Vehicle image must reference a registered Frappe File.
+Vehicle image must use a local Frappe File URL.,Vehicle image must use a local Frappe File URL.
+Vehicle movement,Vehicle movement
+Vehicle movement icon,Vehicle movement icon
+Vehicle name is required.,Vehicle name is required.
+Vehicle type image must reference a registered Frappe File.,Vehicle type image must reference a registered Frappe File.
+Vehicle type image must use a local Frappe File URL.,Vehicle type image must use a local Frappe File URL.
+View movements on map,View movements on map
+"World countries and territories with rich attributes (ISO codes, capital, continent, region, population and GDP estimates).","World countries and territories with rich attributes (ISO codes, capital, continent, region, population and GDP estimates)."
+You do not have permission to read Motion Event.,You do not have permission to read Motion Event.
+You do not have permission to read the requested geographic dataset.,You do not have permission to read the requested geographic dataset.
+You do not have permission to read this DocType.,You do not have permission to read this DocType.
+You do not have permission to use geographic lookup.,You do not have permission to use geographic lookup.
+Zoom to country,Zoom to country
+Zoom to feature,Zoom to feature
+camera scan truncated at the safe limit,camera scan truncated at the safe limit
+camera_names must be a JSON array.,camera_names must be a JSON array.
+end must be on or after start.,end must be on or after start.
+"generalized boundaries, not legal or cadastral.","generalized boundaries, not legal or cadastral."
+include_demo must be 0 or 1.,include_demo must be 0 or 1.
+method: {0},method: {0}
+revision,revision
+{0} images · choose one main image,{0} images · choose one main image
+{0} located cameras,{0} located cameras
+{0} movements,{0} movements
+Provenance,Provenance
+Cannot retire Archive Settings: legacy settings rows contain different Motion Event defaults. Consolidate them before retrying.,Cannot retire Archive Settings: legacy settings rows contain different Motion Event defaults. Consolidate them before retrying.

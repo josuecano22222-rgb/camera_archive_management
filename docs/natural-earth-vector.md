@@ -104,6 +104,9 @@ In **Auto** mode the country layer uses 1:110m below zoom 5 and switches to 1:50
 ### Attribution
 The panel footer shows the license, pinned revision, and limitations. The first time a layer is enabled, "Natural Earth · public domain" is added to the map's attribution control.
 
+### Localization (English / Arabic)
+The entire feature is bilingual. Every panel label, control, message, layer label, layer description, and the license/limitations text is registered in `translations/ar.csv` (and `en.csv`) and rendered through `__()`. Country and capital names are localized from Natural Earth's built-in `NAME_AR` attributes: when the user's language is Arabic (`frappe.boot.lang`), the inspector card, tooltips, and feature labels show the Arabic names (e.g. هولندا / أمستردام), falling back to English where no Arabic name exists. The panel docks with the logical `inset-inline-end` property so it sits beside the sidebar correctly in both LTR and RTL layouts. A regression test (`test_natural_earth_ui_strings_have_arabic_translations`) fails if any feature string lacks an Arabic translation.
+
 ## 5. Disputed boundaries and point of view
 
 The `disputed_boundaries_50m` (lines) and `disputed_areas_50m` (polygons) layers expose Natural Earth's disputed/breakaway representation as distinct, optionally-enabled red-dashed overlays. They are **off by default** and labeled as disputed. Natural Earth ships a single default point of view; these layers reflect that default and are **not** an authoritative or selectable sovereignty determination. For alternative political worldviews, import a dataset with its own provenance through the existing Geo Dataset pipeline.

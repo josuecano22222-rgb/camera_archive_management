@@ -143,6 +143,14 @@ def iso_code(properties: dict) -> str:
 	return ""
 
 
+def _clean_label(value: Any) -> str:
+	"""Return a trimmed label, treating Natural Earth placeholders as empty."""
+	if value is None:
+		return ""
+	text = str(value).strip()
+	return "" if text in ("", "-99", "null", "None") else text
+
+
 def _clean_number(value: Any) -> float | int | None:
 	if value is None or isinstance(value, bool):
 		return None
@@ -243,6 +251,7 @@ def country_profile(
 		"code": iso_a3,
 		"iso_a2": properties.get("ISO_A2") or "",
 		"name": properties.get("NAME") or properties.get("ADMIN") or "",
+		"name_ar": _clean_label(properties.get("NAME_AR")),
 		"name_long": properties.get("NAME_LONG") or properties.get("FORMAL_EN") or "",
 		"sovereign": properties.get("SOVEREIGNT") or "",
 		"type": properties.get("TYPE") or "",
@@ -261,6 +270,7 @@ def country_profile(
 		"capital": (
 			{
 				"name": capital.get("NAME"),
+				"name_ar": _clean_label(capital.get("NAME_AR")),
 				"admin1": capital.get("ADM1NAME") or "",
 				"latitude": _clean_number(capital.get("LATITUDE")),
 				"longitude": _clean_number(capital.get("LONGITUDE")),
