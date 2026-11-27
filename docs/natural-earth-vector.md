@@ -154,7 +154,7 @@ Run the full app suite on the site (see the deployment commands below).
 
 This change adds bundled files, a read-only API, and two new global assets (`camera_natural_earth.js` and `camera_natural_earth.css`). It introduces **no DocType, schema, or patch changes**, so no data migration is required. Build the assets and clear caches so the new `app_include_js` / `app_include_css` entries are picked up.
 
-> **Why the panel styles live in their own file.** Frappe serves non-`.bundle.` app CSS with a plain `<link href="…">` and **no cache-busting version**. Adding rules to the already-cached `camera_archive.css` would not reach browsers that hold a stale copy. The Natural Earth styles therefore ship in a dedicated `camera_natural_earth.css` (a new URL fetched fresh by every browser), registered separately in `app_include_css`. If the panel ever appears unstyled, confirm that file is listed in `app_include_css` and that caches were cleared after the hooks change.
+> **Asset cache-busting.** Frappe serves non-`.bundle.` app JS/CSS as a plain URL with **no version parameter**, so a browser would otherwise keep a stale copy after a file changes. The Natural Earth assets ship in dedicated files (`camera_natural_earth.js` / `.css`) and `hooks.py` appends a **content-hash query** (`?v=<sha256[:12]>`) computed from each source file. Any edit changes the hash and therefore the URL, so every browser fetches the fresh copy on a normal refresh — no hard refresh or manual version bump needed. After deploying, run `bench build` (compiles translations and links assets), `clear-cache`, and `bench restart` so the updated hooks take effect.
 
 ```bash
 cd ~/frappe-bench/apps/camera_archive_management

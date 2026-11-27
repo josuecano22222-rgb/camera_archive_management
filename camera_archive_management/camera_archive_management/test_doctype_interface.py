@@ -202,14 +202,22 @@ class TestDocTypeInterfaceMetadata(unittest.TestCase):
 		self.assertIn(
 			"/assets/camera_archive_management/js/camera_geolocation_compat.js", hooks_module.app_include_js
 		)
-		self.assertIn(
-			"/assets/camera_archive_management/js/camera_natural_earth.js", hooks_module.app_include_js
+		self.assertTrue(
+			any(
+				url.startswith("/assets/camera_archive_management/js/camera_natural_earth.js?v=")
+				for url in hooks_module.app_include_js
+			),
+			"Natural Earth JS must carry a content-hash cache-busting query",
 		)
 		self.assertIn(
 			"/assets/camera_archive_management/css/camera_archive.css", hooks_module.app_include_css
 		)
-		self.assertIn(
-			"/assets/camera_archive_management/css/camera_natural_earth.css", hooks_module.app_include_css
+		self.assertTrue(
+			any(
+				url.startswith("/assets/camera_archive_management/css/camera_natural_earth.css?v=")
+				for url in hooks_module.app_include_css
+			),
+			"Natural Earth CSS must carry a content-hash cache-busting query",
 		)
 		camera_list_script = (DOCTYPE_DIR / "camera" / "camera_list.js").read_text(encoding="utf-8")
 		self.assertIn("get_custom_map_coords", camera_list_script)
